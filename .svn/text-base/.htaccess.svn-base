@@ -1,6 +1,0 @@
-<IfModule mod_rewrite.c>
-RewriteEngine On
-
-RewriteCond %{query_string} ^(.*)
-RewriteRule (.*) _japp/controller.php?__r=$1&%1
-</IfModule>
