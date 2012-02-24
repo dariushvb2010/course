@@ -78,7 +78,7 @@ class ReviewProgressStartRepository extends EntityRepository
 				
 				$start=new ReviewProgressStart($File,$thisUser,$IsPrint);
 				ORM::Persist($start);   
-				$start->Alarm(); 		
+				$start->CheckAlarm(); 		
 				return true;
 			}
 			else

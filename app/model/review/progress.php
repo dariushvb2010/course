@@ -297,10 +297,14 @@ abstract class ReviewProgress
 // 			throw new Exception("Cannot create AlarmAuto at ReviewProgress class!");
 		}
 	}
-	function Alarm()
+	function CheckAlarm()
 	{
 		$this->KillAlarm();
 		$this->MakeAlarm();
+	}
+	function CheckFileState()
+	{
+		$EName=$this->Event();
 	}
 }
 
