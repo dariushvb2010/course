@@ -58,12 +58,12 @@
 ViewAlarmPlugin::GroupShow($this->Alarm_Personal,"پیام های فردی");
 ViewAlarmPlugin::GroupShow($this->Alarm_Group,"پیام های مربوط به واحد".$this->GroupTitle);
 ?>
-<!--  
+  
  	<div class="jChat">
  	<p class="iframeclose" ><span>X</span></p>
- 	<iframe class="jChat" src=" echo SiteRoot;?>/jchat/iframe"></iframe>
+ 	<iframe class="jChat" src="<?php  echo SiteRoot;?>/jchat/iframe"></iframe>
  	</div> 
--->
+
 <script>
 <?php ViewAlarmPlugin::PresentScritp();?>
 $("iframe.jChat").css("top",top+"px");
