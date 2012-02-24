@@ -1,0 +1,26 @@
+<?php
+class RakedReceivefromreviewController extends JControl
+{
+	function Start()
+	{
+		j::Enforce("Raked");
+		
+		if (count($_POST))
+		{
+			$Cotag=$_POST['Cotag']*1;
+			$Res=ORM::Query(new ReviewProgressRegisterraked())->AddToFile($Cotag);
+			if(is_string($Res))
+			{
+				$Error[]=$Res;
+			}
+			else 
+			{
+				$this->Result=true;
+				$this->Result="اظهارنامه با شماره کوتاژ ".$Cotag."با موفقیت وصول گردید.";
+			}
+		}
+		$this->Error=$Error;
+		if (count($Error)) $this->Result=false;
+		return $this->Present();
+	}
+}

@@ -1,0 +1,171 @@
+<?php
+class ManagerBazbinsSinglereassignController extends JControl
+{
+	function Start()
+	{
+		j::Enforce("MasterHand");
+		$this->MakeAddList();
+		if (isset($_POST['Cotag']))
+		{
+			$Cotag=$_POST['Cotag']*1;
+			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+			$Reviewer=ORM::Find("MyUser",$_POST['ID']);
+			$Comment=$_POST['Comment'];
+			$this->Comment=$Comment;
+			
+			//-------too short comment
+			if(strlen($Comment)<6){
+				$Error[]='متن توضیحات بسیار کوتاه است.';
+			}
+			//--------REASSIGN
+			
+			//-------CANCELASSIGN
+			else if(isset($_POST['Cancel']))
+			{
+				$CancelassignResult=ORM::Query(new ReviewProgressCancelassign())->AddToFile($File,$Comment);
+				if(is_string($CancelassignResult))
+				{
+					$Error[]=$CancelassignResult;
+				}
+				else
+				{
+					$this->Result='لغو تخصیص';
+				}
+			}
+			
+		}
+		else if(isset($_POST['Reassign']))
+		{
+			$res=$this->AddList->GetRequest();
+			foreach ($res as $Data)
+			{
+				$this->Reassign($Data, $Error);
+			}
+		}
+		
+
+		$this->Cotag=$Cotag;
+		
+		//---REASSIGN PART: List of enable reviewers to be shown in drop box in the form
+		$reviewers = ORM::Query(new MyUser())->Reviewers(true);
+		foreach($reviewers as $r){
+			$x[$r->ID]=$r->getFullName();
+		}
+		$this->ListOfBazbins=$x;
+		//----------------------------------------------------------------------------
+		
+		$this->Error=$Error;
+		$this->makeForm();
+		return $this->Present();
+	}
+	function MakeAddList()
+	{
+		///----inner form-----
+		$f=new AutoformPlugin();
+		$f->HasFormTag=false;
+		$f->AddElement(array(
+			"Type"=>"submit",
+			"Value"=>"تخصیص مجدد",
+			"Name"=>"Reassign"
+		));
+		$f->Style="border:none;";
+		//-------list----------
+		$al=new DynamiclistPlugin();
+		$al->HasTier=true;
+		$al->TierLabel="ردیف";
+		$al->RemoveLabel="حذف";
+		$al->HasFormTag=true;
+		$al->_Button="div.autoform button";
+		//--------al custom javascript code for validating the format of the Cotag-------------
+		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
+		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
+		//----------A C J C------------------------------
+		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
+		$CommentCode="var patt=/.{".b::$CommentMinLength."}/;";//patt=/.{6}/
+		$CommentCode.="if(patt.test(?)); else {alert('توضیحات کامل بنویسید.'); return false;}";
+		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
+		$al->SetHeader("ID", "کارشناس", "div.autoform select[name=ID] option:selected","Select");
+		$al->SetHeader("Comment", "توضیحات", "div.autoform textarea[name=Comment]","Textarea",array("CustomValidation"=>$CommentCode));
+		$al->Autoform=$f;
+		$al->AutoformAfter=true;
+		$this->AddList=$al;
+	}
+	/**
+	 * 
+	 * @param $Data a 1D array of Data
+	 */
+	private function Reassign($Data, &$Error)
+	{
+		$Cotag=$Data['Cotag']*1;
+		$RID=$Data['ID'];
+		$Comment=$Data['Comment'];
+		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$Reviewer=ORM::Find("MyUser",$RID);
+		$this->Comment=$Comment;
+			
+		$str="کوتاژ:".$Cotag." ";
+		$str.="کارشناس:".($Reviewer ? $Reviewer->getFullName() : "یافت نشد")." ";
+		//-------too short comment
+		if(strlen($Comment)<6){
+			$Error[]='متن توضیحات بسیار کوتاه است.'."<br/>".$str;
+		}
+		//--------REASSIGN
+		else
+		{
+			$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($File,$Reviewer,$Comment);
+			if(is_string($AssignResult))
+			{
+				$Error[]=$AssignResult."<br/>".$str;
+			}
+			else
+			{
+				$this->Result.="تخصیص مجدد ".$str."<br/>";
+				//$this->Reviewers[]=$AssignResult->Reviewer();
+			}
+		}
+	}
+	function makeForm()
+	{
+		$MyComment=ORM::Find(new ReviewTopic,"Type","comment");
+		foreach ($MyComment as $c)
+		{
+			$com[]=$c->Topic();
+		}
+		$f=new AutoformPlugin("post");
+		//------place the list into the form-----
+		$f->HasFormTag=false;
+		$f->List=$this->AddList;
+		//------P T L I T F----------
+		$f->AddElement(array(
+			"Type"=>"text",
+			"Name"=>"Cotag",
+			"Label"=>"کوتاژ",
+			"Value"=>$this->Cotag,
+		));
+		$f->AddElement(array(
+			"Name"=>"ID",
+			"Type"=>"select",
+			"Options"=>$this->ListOfBazbins,
+			"Label"=>"کارشناس بازبینی",
+		));
+		$f->AddElement(array(
+			"Name"=>"CommentBox",
+			"ID"=>"CommentBox",
+			"Width"=>"60%",
+			"Type"=>"select",
+			"Label"=>"توضیحات",
+			"Options"=>$com,
+		));
+		$f->AddElement(array(
+			"Name"=>"Comment",
+			"ID"=>"Comment",
+			"Type"=>"textarea",
+			"Value"=>$this->Comment,
+			"Label"=>"توضیحات",
+		));
+		$f->AddElement(array(
+			"Type"=>"button"
+		));
+		$this->Form=$f;
+	}
+}

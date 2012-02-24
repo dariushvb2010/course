@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+
+@media print {
+	.sortbox {
+		display: none;
+	}
+	#smenuBar {
+		display: none;
+	}
+	#body {
+		background-color: white;
+		width:10cm;
+		border:none;
+	}
+	#Tracker {
+		display: none;
+	}
+	.noprint {
+		display: none;
+	}
+	body {
+		width:10cm;
+	}
+	input[type=button]{
+		display: none;
+	}
+	#Copyright.Footer {
+		color:gray;
+		display:none;
+	}
+	#Copyright.Footer a {
+		color:black;
+		font-decoration:none;
+	}
+	#datetime.Footer {
+		display:block;
+	}
+	.security {
+		display:none !important;
+	}
+	.autolist thead {
+	background-color:#444444;
+	color:white;
+	}
+	.autolist tr:nth-child(even) {
+		background-color:#CCCCCC;
+	}
+	td.radif{
+	width:15px;
+	}
+	td.cotags{
+	width:50px;
+	}
+}
+@media screen {
+	#datetime.Footer {
+		display:none;
+	}
+}

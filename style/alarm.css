@@ -1,0 +1,33 @@
+
+div.alarm div, .alarm div div, .alarm div p, .alarm div span{margin:0; padding:0}
+div.alarm{padding: 4px; margin: 3px; margin-top:25px; border-radius:4px;}
+div.live{background:#ddf; border: 1px dotted #cce;}
+div.live:hover{background:#eef; border: 1px dotted #99a;}
+
+div.dead{background:#fdf; border: 1px dotted #dcd;}
+div.dead:hover{background:#fef; border:1px dotted #a9a;}
+
+div.alarm p.label{margin:0; padding: 0; background:#88b; color:white; font-size:11pt; line-height: 17px; height:20px;}
+div.alarm p.label:hover{cursor: pointer; }
+
+div.alarm div.info {max-height: 120px; overflow: auto;}
+div.alarm div.info p{margin-right: 7px;}
+div.alarm div.info p:hover{}
+div.alarm span.moredetails{font-size:13pt; font-family:'B Kamran'; color:blue;}
+div.alarm span.moredetails:hover{cursor:pointer; color:#247}
+
+div.alarm p.cotag{ margin-top:-20px; margin-right:-22px; width:auto;}
+div.alarm p.cotag span{background:teal; color:white; -moz-border-radius:0 4px; padding:0 5px;}
+div.alarm div.title{font-weight:bold; color:#446}
+
+div.alarm div.partition{ display:inline-block; vertical-align: top;}
+
+div.alarm div.delete{float:left;  margin:-5px; color:red;}
+
+div.alarm div.more{display:none;}
+
+table.alarm{ background:#59c url('../img1/alarm/alarm-back.png'); border-radius:4px;}
+table.alarm tr td{vertical-align: top; background:transparent; border-collapse: collapse;}
+
+
+div.alarmtoggle{cursor:pointer; color:navy;}
