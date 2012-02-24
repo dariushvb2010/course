@@ -305,6 +305,17 @@ abstract class ReviewProgress
 	function CheckFileState()
 	{
 		$EName=$this->Event();
+		$CurrentState=$this->File->State();
+		$NewState=FileFsm::NextState($CurresntState, $EName);
+		if(!isset($NewState))
+		{
+			$str="از شماره حالت ".$CurrentState;
+			$str="پلی با نام رویداد ".$EName;
+			$str="ثبت نشده است.";
+			return $str;
+		}
+		$this->File()->SetState($NewState);
+		return $NewState;
 	}
 }
 

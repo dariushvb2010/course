@@ -17,13 +17,29 @@ class FileFsm extends JModel
 	 */
 	
 	Public static $StateGraph=array(
+	//-----------------------Review---------------------
+	1=>array('Start'=>2),
+	2=>array('Cotag_to_archive'=>3),
+	3=>array('Archive_from_cotag'),
+	4=>array('Assign'=>5),
+	5=>array('Review_nok'=>6, 'Review_ok'=>7),
+	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
+	7=>array('Review_nok'=>6, 'Review_to_Archive'),
+	10=>array('Review_ok'=>6, 'Review_nok'=>7),
+	11=>array('Assign_by_manager'=>5, 'Archive_to_raked'=>13, 'Send_to_out'=>12),
+	12=>array('Archive_from_out'=>11),
+	13=>array('Raked_from_Archive'=>14),
+	14=>array('Raked_to_out'=>15, 'Raked_to_archive'=>16),
+	15=>array('Raked_from_out'=>14),
+	16=>array('Arhive_from_raked'=>4),
+	//--------------------------Correspondence-----------
 	9=>array('ProcessRegister'=>18),
 	18=>array('Senddemand_demand'=>40),
 	40=>array('Protest'=>42,'Prophecy_first'=>41),
 	41=>array('Protest'=>42),
 	42=>array('ProcessAssign'=>43),
 	43=>array('Judgement_ok'=>44,'Judgement_nok'=>45,'Judgement_commission'=>59,'Judgement_setad'=>55),
-	44=>array('Processconfirm_ok'=>80,'Processconfirm_nok'=>45),
+	44=>array('ProcessConfirm_ok'=>80,'ProcessConfirm_nok'=>45),
 	45=>array('Senddemand_karshenas'=>46),
 	46=>array('Prophecy_second'=>47,'Protest'=>49),
 	47=>array('Payment'=>80,'Protest'=>49),
