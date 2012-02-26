@@ -65,7 +65,59 @@ class ReviewProgressPost extends ReviewProgress
 	{
 		return "فرستادن پرونده";
 	}
-
+	function Event()
+	{
+		$sender=$this->Mail->Sender()->Topic();
+		$receiver=$this->Mail->Receiver()->Topic();
+		if(!isset($sender) or !isset($receiver))
+			throw new Exception(" Sender of Receiver is not set");
+		$issend=$this->IsSend;
+		if(!isset($issend))
+			throw new Exception("IsSend for progressPost is not set");
+		if($sender=='archive' and $receiver=="raked")
+		{
+			if($issend)
+				return "Archive_to_raked";
+			else 
+				return "Raked_from_archive";
+		}
+		elseif ($sender=='raked' and $receiver=="archive")
+		{
+			if($issend)
+				return "Raked_to_archive";
+			else 
+				return "Archive_from_raked";
+		}
+		elseif ($sender=='CotagBook' and $receiver=="archive")
+		{
+			if($issend)
+				return "Cotag_to_archive";
+			else 
+				return "Archive_from_cotag";
+		}
+		elseif ($sender=="archive")
+		{
+			if(!$issend)
+				throw new Exception("this is not possible!");
+			return "Archive_to_out";
+		}
+		elseif ($receiver=="archive")
+		{
+			return "Archive_from_out";
+		}
+		elseif($sender=="raked")
+		{
+			if(!$issend)
+			throw new Exception("this is not possible!");
+			return "Raked_to_out";
+		}
+		elseif ($receiver=="raked")
+		{
+			return "Raked_from_out";
+		}
+		else 
+			throw new Exception("this is not possible for post!");
+	}
 }
 
 
@@ -88,7 +140,7 @@ class ReviewProgressPostRepository extends EntityRepository
 		}
 		if($IsSend==0)
 		{
-			$Last=$File->LastProgress();
+			$Last=$File->LLP();
 			if(!$Last)
 			{
 				$Error="اظهارنامه با کوتاژ ".$File->Cotag()."هیچ فرایندی ندارد.";
@@ -124,7 +176,7 @@ class ReviewProgressPostRepository extends EntityRepository
 		}
 		else
 		{
-			$Last=$File->LastProgress();
+			$Last=$File->LLP();
 			if(!$Last)
 			{
 				$Error="اظهارنامه با کوتاژ ".$File->Cotag()."هیچ فرایندی ندارد.";
@@ -149,6 +201,9 @@ class ReviewProgressPostRepository extends EntityRepository
 		}
 		$User=MyUser::CurrentUser();
 		$R=new ReviewProgressPost($File,$User,$Mail,$IsSend);
+		$ch=$R->Check();
+		if(is_string($ch))
+			return $ch;
 		ORM::Persist($R);
 		ORM::Flush();
 		return true;

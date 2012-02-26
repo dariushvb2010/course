@@ -73,7 +73,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 			return $Error;
 		}
 		else{
-			$lp = $File->LastProgress();
+			$lp = $File->LLP();
 			if(($lp instanceof ReviewProgressRegisterarchive)OR ($lp instanceof ReviewProgressReturn))
 			{
 				return $this->finalization($File,$CurrentUser,$Reviewer,$Comment);
@@ -95,9 +95,10 @@ class ReviewProgressAssignRepository extends EntityRepository
 	function finalization($File,$CurrentUser,$Reviewer,$Comment){
 		$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer);
 		$R->setComment(($Comment==null?"":$Comment));
+		$ch=$R->Check();
+		if(is_string($ch))
+			return $ch;
 		ORM::Persist($R);
-		$R->CheckAlarm();
-		
 		return $R;
 	}
 }

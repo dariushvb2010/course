@@ -21,10 +21,9 @@ class ReviewProcessRegister extends ReviewProgress
 		parent::__construct($File,$User);
 		if($File)
 		{
-			if($File->LastProgress("Review"))
+			if($File->LLP("Review"))
 			{
-				$Pre=$File->LastProgress("Review")->Provision();
-//				ORM::Dump($File->LastProgress("Review"));
+				$Pre=$File->LLP("Review")->Provision();
 				$Classe=b::GenerateClassNum($Pre);
 				$File->SetClass($Classe);
 				

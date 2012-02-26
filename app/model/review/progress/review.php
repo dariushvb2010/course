@@ -11,15 +11,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ReviewProgressReview extends ReviewProgress
 {
 	/**
+	 * true= بدون مشکل
+	 * false=مشکل دار
 	 * @Column(type="boolean")
 	 * @var boolean
 	 */
 	protected $Result;
 	function SetResult($value){
 		$this->Result=$value;
-		if (!$value AND $this->File){
-			$this->File->SetState(9);
-		}
 	}
 	function Result(){
 		return $this->Result;
@@ -103,7 +102,15 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		return "بازبینی";
 	}
-
+	function Event()
+	{
+		if(!isset($this->Result))
+			throw new Exception("Result is not set!");
+		if($this->Result)
+			return "Review_ok";
+		else 
+			return "Review_nok";
+	}
 }
 
 use \Doctrine\ORM\EntityRepository;
@@ -138,7 +145,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 			{
 				$lastreviewer=$File->LastReviewer();
 				$ProgReview=$File->LastReview();
-				$LastProgress=$File->LastProgress();
+				$LLP=$File->LLP();
 				$Reviewer=MyUser::CurrentUser();
 				if ($lastreviewer==null)
 				{
@@ -155,7 +162,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 					$Error="کارشناس بازبینی این اظهارنامه شما نیستید.";
 					return $Error;
 				}
-				else if(!($LastProgress instanceof ReviewProgressReivew || $LastProgress instanceof ReviewProgressAssign))
+				else if(!($LLP instanceof ReviewProgressReivew || $LLP instanceof ReviewProgressAssign))
 				{
 					$Error="کارشناس هنوز تخصیص نیافته است یا اینکه از تاریخ بازبینی اظهارنامه گذشته است.";
 					return $Error;
@@ -179,8 +186,9 @@ class ReviewProgressReviewRepository extends EntityRepository
 							$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 							$R->SetResult($_POST['Result']);
 							$R->SetProvision($Provision);
-							//echo "review:<br>";
-							//ORM::Dump($R);echo "<br>";
+							$ch=$R->Check();
+							if(is_string($ch))
+								return $ch;
 							ORM::Persist($R);
 							return true;
 							
@@ -244,6 +252,9 @@ class ReviewProgressReviewRepository extends EntityRepository
 						$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 						$R->SetResult($_POST['Result']);
 						$R->SetProvision($Provision);
+						$ch=$R->Check();
+						if(is_string($ch))
+							return $ch;
 						ORM::Persist($R);
 						return $R;
 					}

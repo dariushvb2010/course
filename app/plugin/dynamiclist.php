@@ -47,7 +47,29 @@ class DynamiclistPlugin extends AutolistPlugin
 	 */
 	public $HasRemove=true;
 	public $RemoveLabel="Remove";
+	/**
+	 * <p>
+	 * name of the header that is related to a textbox
+	 * and you want to add a new row in the list by pressing enter key on that textbox.
+	 * the value of this parameter must be in HeaderArray keys
+	 * </p>
+	 * @var string
+	 */
+	public $EnterTextName;
+	/**
+	 * 
+	 * prefix for naming the hidden inputs of the list
+	 * @var string
+	 */
 	public $NamePrefix="dyn_";
+	/**
+	 * 
+	 * for adding at the end of DList(javascript name of the list)
+	 * @example
+	 * 		DList_yikjkdslj (yikjkdslj is $this->ID)
+	 * @var unknown_type
+	 */
+	public $ID;
 	/**
 	 * $Selector help:
 	 * example: 
@@ -141,6 +163,7 @@ class DynamiclistPlugin extends AutolistPlugin
 	public function __construct()
 	{
 		parent::__construct();
+		$this->ID=FPlugin::RandomString();
 	}
 	private function EchoCustomValidation($name, $i)
 	{
@@ -153,7 +176,7 @@ class DynamiclistPlugin extends AutolistPlugin
 			if($n>1)
 			{
 				echo $arr[0];
-				echo "DList.IPT[".$i."]";
+				echo "DList_".$this->ID.".IPT[".$i."]";
 				echo $arr[1];
 			}
 			else 
@@ -165,35 +188,35 @@ class DynamiclistPlugin extends AutolistPlugin
 		parent::PresentScript();
 		?>
 		
-	var DList;
-	DList = {
+	var DList_<?php echo $this->ID;?>;
+	DList_<?php echo $this->ID;?> = {
     	AddRow: function() {
-	        if(!DList.Tier)
+	        if(!DList_<?php echo $this->ID;?>.Tier)
 	        {
-	            if(DList.List)
-	            if(DList.List.children("tr:last"))
-	            if(DList.List.children("tr:last").children("td.tier"))
-	                DList.Tier=DList.List.children("tr:last").children("td.tier").html()*1;
-	            else DList.Tier=0;
-	            else DList.Tier = 0;
-	            else DList.Tier = 0;
+	            if(DList_<?php echo $this->ID;?>.List)
+	            if(DList_<?php echo $this->ID;?>.List.children("tr:last"))
+	            if(DList_<?php echo $this->ID;?>.List.children("tr:last").children("td.tier"))
+	                DList_<?php echo $this->ID;?>.Tier=DList_<?php echo $this->ID;?>.List.children("tr:last").children("td.tier").html()*1;
+	            else DList_<?php echo $this->ID;?>.Tier=0;
+	            else DList_<?php echo $this->ID;?>.Tier = 0;
+	            else DList_<?php echo $this->ID;?>.Tier = 0;
 	        }
-		    DList.GetData();
-		    if(!DList.Validation())
+		    DList_<?php echo $this->ID;?>.GetData();
+		    if(!DList_<?php echo $this->ID;?>.Validation())
 		    	return;
-	        DList.List.append("<tr></tr>");
-	        var row = $(DList._List + " tr:last");
-	        DList.Tier++;
-	        if(DList.HasTier)
-	        	row.append("<td class='tier'>"+DList.Tier+"</td>");
-	        if(DList.HasSelect)
+	        DList_<?php echo $this->ID;?>.List.append("<tr></tr>");
+	        var row = $(DList_<?php echo $this->ID;?>._List + " tr:last");
+	        DList_<?php echo $this->ID;?>.Tier++;
+	        if(DList_<?php echo $this->ID;?>.HasTier)
+	        	row.append("<td class='tier'>"+DList_<?php echo $this->ID;?>.Tier+"</td>");
+	        if(DList_<?php echo $this->ID;?>.HasSelect)
 	        {
-		        val=$(DList._Select).attr("value");
+		        val=$(DList_<?php echo $this->ID;?>._Select).attr("value");
 		        row.append("<td ><input type='checkbox' name='<?php echo $this->SelectName;?>[]' value='"+ val +"' class='<?php echo $this->SelectClass; ?>' /></td>");
 			}
-	        DList.WriteRecord(row);
-	        if(DList.HasRemove)
-	        	row.append("<td class='remove' onclick='DList.Remove($(this));'><a><img style='height:100%; vertical-align:middle;' src='/img/delete-blue-20.png'/> </a> </td>");
+	        DList_<?php echo $this->ID;?>.WriteRecord(row);
+	        if(DList_<?php echo $this->ID;?>.HasRemove)
+	        	row.append("<td class='remove' onclick='DList_<?php echo $this->ID;?>.Remove($(this));'><a><img style='height:100%; vertical-align:middle;' src='/img/delete-blue-20.png'/> </a> </td>");
 	    },
 	    _List:"<?php echo $this->_List?>",
 	    List: $("<?php echo $this->_List; ?>"),
@@ -213,15 +236,15 @@ class DynamiclistPlugin extends AutolistPlugin
 	    	var i=0;
 	        <?php 
 	        foreach($this->HeaderArray as $name=>$label):
-		        ?> selector=DList.MDS[i];<?php
+		        ?> selector=DList_<?php echo $this->ID;?>.MDS[i];<?php
 	        	$clear=$this->MetaData[$name]['Clear'];
         		if($clear):
         		?> $(selector).val(""); <?php
 	        	endif;?>
 	        	var str="<td header='<?php echo $name;?>' >";
-	        	str+="<span class='data'>" + DList.IPT[i] + "</span>";
+	        	str+="<span class='data'>" + DList_<?php echo $this->ID;?>.IPT[i] + "</span>";
 	        	str+="<input type='hidden' name='<?php echo $this->FullInputName($name);?>[]' value='";
-	        	str+=DList.IPV[i];
+	        	str+=DList_<?php echo $this->ID;?>.IPV[i];
 	        	str+="' />";
 	        	str+="</td>";
 	            row.append(str);
@@ -233,31 +256,31 @@ class DynamiclistPlugin extends AutolistPlugin
 	    GetData:function(){
 	    	var x;
 	    	var selector;
-	    	DList.IPT=[];
-	    	DList.IPV=[];
+	    	DList_<?php echo $this->ID;?>.IPT=[];
+	    	DList_<?php echo $this->ID;?>.IPV=[];
 	    	var i=0;
-	        for(i; i< DList.HAN.length; i++)
+	        for(i; i< DList_<?php echo $this->ID;?>.HAN.length; i++)
 	        {
-	         	selector=DList.MDS[i];
-	        	if(DList.MDT[i]=="Text")
+	         	selector=DList_<?php echo $this->ID;?>.MDS[i];
+	        	if(DList_<?php echo $this->ID;?>.MDT[i]=="Text")
 	        	{
 	        		x=$(selector).val();
-	        		DList.IPT.push(x);
-	        		DList.IPV.push(x);
+	        		DList_<?php echo $this->ID;?>.IPT.push(x);
+	        		DList_<?php echo $this->ID;?>.IPV.push(x);
 	        	}
 	        	 	
-	        	else if(DList.MDT[i]=="Select")
+	        	else if(DList_<?php echo $this->ID;?>.MDT[i]=="Select")
 	        	{
 	        		x=$(selector).text();
-	        		DList.IPT.push(x);
+	        		DList_<?php echo $this->ID;?>.IPT.push(x);
 	        	   	y=$(selector).attr("value");
-	        	   	DList.IPV.push(y);
+	        	   	DList_<?php echo $this->ID;?>.IPV.push(y);
 	        	}
-	        	else if(DList.MDT[i]=="Textarea")
+	        	else if(DList_<?php echo $this->ID;?>.MDT[i]=="Textarea")
 	        	{
 	        		x=$(selector).val();
-	        		DList.IPT.push(x);
-	        		DList.IPV.push(x);
+	        		DList_<?php echo $this->ID;?>.IPT.push(x);
+	        		DList_<?php echo $this->ID;?>.IPV.push(x);
 				}
 	        }
 	    },
@@ -272,11 +295,11 @@ class DynamiclistPlugin extends AutolistPlugin
 	    		//-------------------------C J C--------------------------------
 	    		if($this->MetaData[$name]['Unique']===true):
 	    	?>
-	    		otherTDs=$(DList._List +" tr td[header=<?php echo $name;?>]");
+	    		otherTDs=$(DList_<?php echo $this->ID;?>._List +" tr td[header=<?php echo $name;?>]");
 	    		$.each(otherTDs, function(i,n){
 	    			td=$(this);
 	    			tdData=td.children("span.data").text();
-	    			if(tdData==DList.IPT[<?php echo $i;?>])
+	    			if(tdData==DList_<?php echo $this->ID;?>.IPT[<?php echo $i;?>])
 	    			{
 	    				str="<?php echo $label;?>";
 	    				str+="تکراری است";
@@ -295,42 +318,46 @@ class DynamiclistPlugin extends AutolistPlugin
 	    },
 	    Init:function()
 	    {
-    		DList._Select="<?php echo $this->_Select;?>";
-    		DList._List="<?php echo $this->_List; ?>";
-    		DList.HasTier=<?php echo $this->HasTier ? 1:0;?>;
-    		DList.HasSelect=<?php echo $this->HasSelect ? 1:0;?>;
-    		DList.HasRemove=<?php echo $this->HasRemove ? 1:0;?>;
+    		DList_<?php echo $this->ID;?>._Select="<?php echo $this->_Select;?>";
+    		DList_<?php echo $this->ID;?>._List="<?php echo $this->_List; ?>";
+    		DList_<?php echo $this->ID;?>.HasTier=<?php echo $this->HasTier ? 1:0;?>;
+    		DList_<?php echo $this->ID;?>.HasSelect=<?php echo $this->HasSelect ? 1:0;?>;
+    		DList_<?php echo $this->ID;?>.HasRemove=<?php echo $this->HasRemove ? 1:0;?>;
     		
-	    	DList.MDS=[];
-	    	DList.MDT=[]
-	    	DList.HAN=[];
+	    	DList_<?php echo $this->ID;?>.MDS=[];
+	    	DList_<?php echo $this->ID;?>.MDT=[]
+	    	DList_<?php echo $this->ID;?>.HAN=[];
 	    	var i=0;
 	    <?php 
 	    	foreach ($this->HeaderArray as $name=>$label):?>
-	    		DList.HAN[i]="<?php echo $name;?>";
-	    		DList.MDS[i]="<?php echo $this->MetaData[$name]['Selector'];?>";
-	    		DList.MDT[i]="<?php echo $this->MetaData[$name]['Type']; ?>";
+	    		DList_<?php echo $this->ID;?>.HAN[i]="<?php echo $name;?>";
+	    		DList_<?php echo $this->ID;?>.MDS[i]="<?php echo $this->MetaData[$name]['Selector'];?>";
+	    		DList_<?php echo $this->ID;?>.MDT[i]="<?php echo $this->MetaData[$name]['Type']; ?>";
 	    		i++;
 	    	<?php
 	    	endforeach;?>
 	    },
 	    Remove:function(rem){
 	    	tr=rem.parent("tr");
-	    	$.each(tr.nextAll(DList._List + " tr"), function(i,n){
+	    	$.each(tr.nextAll(DList_<?php echo $this->ID;?>._List + " tr"), function(i,n){
 	    		t=$(this).children("td.tier").text();
 	    		t=t*1-1;
 	    		$(this).children("td.tier").text(t);
 	    	});
 	    	tr.remove();
-	    	DList.Tier--;
+	    	DList_<?php echo $this->ID;?>.Tier--;
 	    }
-	}; //end of DList
+	}; //end of DList_<?php echo $this->ID;?>
 		
-	DList.Init();
+	DList_<?php echo $this->ID;?>.Init();
 	$("<?php echo $this->_Button;?>").click(function(){
-		DList.AddRow();
+		DList_<?php echo $this->ID;?>.AddRow();
 	});
-	var rem=$(DList._List + " tr td.remove a");
+	$("<?php echo $this->MetaData[$this->EnterTextName]['Selector'];?>").keydown(function(event){
+	  if(event.keyCode==13)
+		  DList_<?php echo $this->ID;?>.AddRow();
+	});
+	var rem=$(DList_<?php echo $this->ID;?>._List + " tr td.remove a");
 	
 		<?php 
 	}//PresentScript

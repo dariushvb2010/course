@@ -62,8 +62,8 @@ class RakedReceiveController extends JControl
 				$this->Posts=$Mail->Post();
 				foreach($this->Posts as $i=>$p)
 				{
-					if($p->File()->LastProgress() instanceof ReviewProgressPost)
-					if($p->File()->LastProgress()->IsSend()==1)
+					if($p->File()->LLP() instanceof ReviewProgressPost)
+					if($p->File()->LLP()->IsSend()==1)
 					{
 						$Cotages[$i]["Cotag"]= $p->File()->Cotag();
 						$Cotages[$i]["Select"]=$p->File()->ID();

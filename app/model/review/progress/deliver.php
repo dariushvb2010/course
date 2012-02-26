@@ -22,6 +22,10 @@ class ReviewProgressDeliver extends ReviewProgress
 	{
 		return "تحویل بایگانی بازبینی";
 	}
+	function Event()
+	{
+		return "Cotag_to_archive";
+	}
 }
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressDeliverRepository extends EntityRepository
@@ -42,8 +46,11 @@ class ReviewProgressDeliverRepository extends EntityRepository
 		}	
 		foreach ($Files as $F)
 		{
-			if($F->LastProgress('Start'))
-				$F->LastProgress('Start')->SetMailNum($MailNum);
+			if($F->LLP('Start'))
+			{
+				$F->LLP('Start')->SetMailNum($MailNum);
+				$F->SetState(3);
+			}
 		}
 		return $Files;
 		

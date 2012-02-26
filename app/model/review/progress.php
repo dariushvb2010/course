@@ -305,17 +305,27 @@ abstract class ReviewProgress
 	function CheckFileState()
 	{
 		$EName=$this->Event();
+		if(!isset($EName))
+			throw new Exception("Event Not Set for Progress ".get_class($this));
 		$CurrentState=$this->File->State();
-		$NewState=FileFsm::NextState($CurresntState, $EName);
+		$NewState=FileFsm::NextState($CurrentState, $EName);
 		if(!isset($NewState))
 		{
+			
 			$str="از شماره حالت ".$CurrentState;
-			$str="پلی با نام رویداد ".$EName;
-			$str="ثبت نشده است.";
+			$str.="پلی با نام رویداد ".$EName;
+			$str.="ثبت نشده است.";
+			$str.=" حالت جدید:".$NewState;
 			return $str;
 		}
+		$this->SetPrevState($CurrentState);
 		$this->File()->SetState($NewState);
 		return $NewState;
+	}
+	function Check()
+	{
+		$this->CheckAlarm();
+		return $this->CheckFileState();
 	}
 }
 

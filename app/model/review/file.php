@@ -139,7 +139,7 @@ class ReviewFile
     	$this->Progress= new ArrayCollection();
     	$this->Class=0;
     	$this->Gatecode=50100;
-    	$this->State=0;
+    	$this->State=1;
     	
     }
     
@@ -154,7 +154,10 @@ class ReviewFile
 	{
 		return ORM::Query($this)->GetLastProgress($this,$Type,$IsProcess);		
 	}
-    
+    function LLP($Type='all',$IsProcess=false)
+    {
+    	return ORM::Query($this)->LastLiveProgress($this,$Type,$IsProcess);
+    }
 	function LastReviewer()
 	{
 		$ProgAssign= $this->LastProgress('Assign');
@@ -198,6 +201,27 @@ class ReviewFileRepository extends EntityRepository
 			return $r[0];
 		else 
 			return null;
+	}
+	/**
+	*
+	* @param integer or reviewfile $Cotag
+	*/
+	public function LastLiveProgress($Cotag,$Type='all',$IsProcess=false)
+	{
+		if($Cotag instanceof ReviewFile)
+		{
+			$Cotag=$Cotag->Cotag();
+		}
+		if($IsProcess) $T="Process";
+		else  $T="Progress";
+		if (strtolower($Type)!=="all")
+			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
+			AND P INSTANCE OF Review{$T}{$Type} 
+			ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
+		else 
+			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
+			ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
+		return $r[0];
 	}
 	public function GetOnlyProgressStart($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
@@ -450,20 +474,7 @@ class ReviewFileRepository extends EntityRepository
 					 FROM ReviewProgress AS P2 WHERE P2.File=F) AND P INSTANCE OF ReviewProgressStart    ORDER BY F.Cotag",$TimeStart,$TimeEnd);
 		return $r;
 	}
-	/**
-	 * 
-	 * @param integer or reviewfile $Cotag
-	 */
-	public function LastLiveProgress($Cotag)
-	{
-		if($Cotag instanceof ReviewFile)
-		{
-			$Cotag=$Cotag->Cotag();
-		}
-		$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ? ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
-		
-		return $r[0];
-	}
+	
 	/**
 	 * used in correspondence
 	 */

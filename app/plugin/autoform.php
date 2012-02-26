@@ -11,6 +11,11 @@ class AutoformPlugin extends JPlugin
 	public $labelNames=array();
 	public $formAttribs;
 	/**
+	 * custom attributes of the form  : <form name="formattribs['name']"> 
+	 * @var array that its keys are the names of attribs and its values are the values of attribs
+	 */
+	public $CustomAttribs;
+	/**
 	 * 
 	 * invoke that you want to have form tag for you form(<form method='post'></form>
 	 * @var boolean
@@ -265,12 +270,18 @@ $(function(){
 				method='<?php echo $this->formAttribs['Method'];?>' 
 				action='<?php echo $this->formAttribs['Action'];?>'
 				style='<?php echo $this->Style;?>'
-				onsubmit="setCheckboxNames('<?php echo $this->CheckboxClass;?>')">
+				onsubmit="setCheckboxNames('<?php echo $this->CheckboxClass;?>')"
+				<?php if($this->CustomAttribs) foreach ($this->CustomAttribs as $name=>$value)
+						echo "{$name}='{$value}' ";?>
+				>
 		<?php 
 		//-------------------div tag--------------no form tag------
 		else:
 			?><div class='autoform' id="<?php echo $this->formAttribs['Id']; ?>"
-				   style='<?php echo $this->Style; ?>'> <?php 
+				   style='<?php echo $this->Style; ?>'
+				   <?php if($this->CustomAttribs) foreach ($this->CustomAttribs as $name=>$value)
+						echo "{$name}='{$value}' ";?>
+				   > <?php 
 		endif;
 		$OddEvenBack=0;  //odd containers apeare with different background of even ones
 		foreach ($this->formElements as $E)

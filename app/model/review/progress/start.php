@@ -77,11 +77,11 @@ class ReviewProgressStartRepository extends EntityRepository
 				ORM::Persist($File);
 				
 				$start=new ReviewProgressStart($File,$thisUser,$IsPrint);
-				$ch=$start->CheckFileState();
+				$ch=$start->Check();
 				if(is_string($ch))
 					return $ch;
 				ORM::Persist($start);   
-				$start->CheckAlarm(); 		
+				//$start->CheckAlarm(); 		
 				return true;
 			}
 			else
@@ -115,7 +115,7 @@ class ReviewProgressStartRepository extends EntityRepository
 			}
 			else 
 			{
-				$LastProg=$File->LastProgress();
+				$LastProg=$File->LLP();
 				if(!($LastProg instanceof ReviewProgressStart))
 				{
 					$Error="شما اجازه لغو این کوتاژ را ندارید.";

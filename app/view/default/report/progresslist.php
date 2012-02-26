@@ -48,8 +48,9 @@ span.footinfo{
 <?php 
 if (is_array($this->Data)){?>
 	<div id="fileinfo">
+		<p style="float:left;">وضعیت: <?php echo $this->File->State();?></p>
 		شماره کوتاژ: <?php echo $this->Cotag;?><br>
-		تاریخ وصول: <span dir=ltr><?php echo $this->File->CreateTime();?></span><br>
+		تاریخ وصول: <span dir=ltr><?php echo $this->File->CreateTime();?></span>
 	</div>
 	<?php if(count($this->Data)==0){?>
 	هیچ گزارشی موجود نیست 

@@ -92,7 +92,7 @@ div#http{display:table-cell; width:30%;}
 }
 <?php CotagflowPlugin::PresentCSS();?>
 </style>
-<div id="top">
+<div id="top" class="noprint">
 <?php if (j::UserID()&&$Me=ORM::find(new MyUser,j::UserID())) :?>
 	<div id="topright">
 		<span title="صفحه اصلی">

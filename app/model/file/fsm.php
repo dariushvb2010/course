@@ -20,7 +20,7 @@ class FileFsm extends JModel
 	//-----------------------Review---------------------
 	1=>array('Start'=>2),
 	2=>array('Cotag_to_archive'=>3),
-	3=>array('Archive_from_cotag'),
+	3=>array('Archive_from_cotag'=>4),
 	4=>array('Assign'=>5),
 	5=>array('Review_nok'=>6, 'Review_ok'=>7),
 	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
@@ -144,6 +144,7 @@ class FileFsm extends JModel
 	 * @return integer
 	 */
 	static function NextState($currentstate,$progressname){
+		$currentstate=$currentstate*1;
 		$ar=FileFsm::$StateGraph[$currentstate];
 		if(array_key_exists($progressname,$ar)){
 			return $ar[$progressname];

@@ -24,7 +24,7 @@ class ReviewProgressRegisterarchive extends ReviewProgress
 	}
 	function Event()
 	{
-		return "Registerarchive";
+		return "Archive_from_cotag";
 	}
 }
 use \Doctrine\ORM\EntityRepository;
@@ -47,21 +47,23 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 			if ($File)
 			{
-				if($File->LastProgress() instanceof ReviewProgressRegisterarchive)
+				if($File->LLP() instanceof ReviewProgressRegisterarchive)
 				{
 					$Error="یک بار وصول شده است .";
 					return $Error;
 				}
 				else
 				{
-					$lp=$File->LastProgress() ;
+					$lp=$File->LLP() ;
 					if($lp instanceof ReviewProgressDeliver or $lp =null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
 					{
 						$thisUser=MyUser::CurrentUser();
 						$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
 						if($Time)$Registerarchive->SetCreateTimestamp($Time);
+						$ch=$Registerarchive->Check();
+						if(is_string($ch))
+							return $ch;
 						ORM::Persist($Registerarchive);  
-						$Registerarchive->Alarm();  		
 						return true;
 					}
 					else 
@@ -83,14 +85,14 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 		
 		if ($File)
 		{
-			if($File->LastProgress() instanceof ReviewProgressRegisterarchive)
+			if($File->LLP() instanceof ReviewProgressRegisterarchive)
 			{
 				$Error="اظهارنامه با کوتاژ".$File->Cotag()."یک بار وصول شده است .";
 				return $Error;
 			}
 			else
 			{
-				$lp=$File->LastProgress() ;
+				$lp=$File->LLP() ;
 				if($lp instanceof ReviewProgressDeliver or $lp =null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
 				{
 					$thisUser=MyUser::CurrentUser();
@@ -130,7 +132,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 			}
 			else 
 			{
-				$LastProg=$File->LastProgress();
+				$LastProg=$File->LLP();
 				if(!($LastProg instanceof ReviewProgressRegisterarchive))
 				{
 					$Error="آخرین فرایند روی این کوتاژ وصول بایگانی بازبینی نبوده است.";
