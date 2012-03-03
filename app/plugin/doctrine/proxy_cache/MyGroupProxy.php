@@ -88,10 +88,34 @@ class MyGroupProxy extends \MyGroup implements \Doctrine\ORM\Proxy\Proxy
         return parent::AddConfigAlarm($ConfigAlarm);
     }
 
+    public function MailGive()
+    {
+        $this->__load();
+        return parent::MailGive();
+    }
+
+    public function MailGet()
+    {
+        $this->__load();
+        return parent::MailGet();
+    }
+
+    public function MailReceive()
+    {
+        $this->__load();
+        return parent::MailReceive();
+    }
+
+    public function MailSend()
+    {
+        $this->__load();
+        return parent::MailSend();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'ID', 'Title', 'PersianTitle', 'Description', 'User', 'AlarmFree', 'ConfigAlarm');
+        return array('__isInitialized__', 'ID', 'Title', 'PersianTitle', 'Description', 'User', 'AlarmFree', 'ConfigAlarm', 'MailGive', 'MailGet', 'MailReceive', 'MailSend');
     }
 
     public function __clone()

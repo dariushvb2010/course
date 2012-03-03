@@ -112,6 +112,24 @@ class ReviewFileProxy extends \ReviewFile implements \Doctrine\ORM\Proxy\Proxy
         return parent::Dossier();
     }
 
+    public function Alarm()
+    {
+        $this->__load();
+        return parent::Alarm();
+    }
+
+    public function Stock()
+    {
+        $this->__load();
+        return parent::Stock();
+    }
+
+    public function SetStock(\FileStock $Stock)
+    {
+        $this->__load();
+        return parent::SetStock($Stock);
+    }
+
     public function Finish()
     {
         $this->__load();
@@ -122,6 +140,12 @@ class ReviewFileProxy extends \ReviewFile implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::LastProgress($Type, $IsProcess);
+    }
+
+    public function LLP($Type = 'all', $IsProcess = false)
+    {
+        $this->__load();
+        return parent::LLP($Type, $IsProcess);
     }
 
     public function LastReviewer()
@@ -145,7 +169,7 @@ class ReviewFileProxy extends \ReviewFile implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'ID', 'Cotag', 'CreateTimestamp', 'FinishTimestamp', 'Progress', 'Class', 'Gatecode', 'State', 'Dossier', 'Alarm');
+        return array('__isInitialized__', 'ID', 'Cotag', 'CreateTimestamp', 'FinishTimestamp', 'Progress', 'Class', 'Gatecode', 'State', 'Dossier', 'Alarm', 'Stock');
     }
 
     public function __clone()
