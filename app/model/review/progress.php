@@ -24,6 +24,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * 	"RegisterInRaked"="ReviewProgressRegisterraked",
  * 	"ReturnFromRaked"="ReviewProgressReturn",
  * 	"Post"="ReviewProgressPost",
+ *  "Give"="ReviewProgressGive",
+ *  "Get"="ReviewProgressGet",
+ *  "Send"="ReviewProgressSend",
+ *  "Receive"="ReviewProgressReceive",
  * 	"Cancelassign"="ReviewProgressCancelassign",
  * 	"Remove"="ReviewProgressRemove",
  * 	"AssignProtest"="ReviewProcessAssign",
@@ -225,17 +229,18 @@ abstract class ReviewProgress
 	 * @param ReviewFile $File
 	 * @param MyUser $User
 	 */
-	function __construct(ReviewFile $File=null,MyUser $User=null)
+	function __construct(ReviewFile $File=null,MyUser $User=null,$IfPersist=true)
 	{
 		$this->CreateTimestamp=time();
 		$this->EditTimestamp=0;
-		if ($File) $this->AssignFile($File);
-		if ($User) $this->AssignUser($User);
+		if($File)
+			$IfPersist ? $this->AssignFile($File) : $this->SetFile($File);
+		if ($User) 
+			$IfPersist ? $this->AssignUser($User) : $this->SetUser($User);
 		$this->Comment="";
 		$this->MailNum="";
 		$this->PrevState=0;
 		$this->Dead=0;
-		
 	}
 
 	/**
@@ -297,12 +302,12 @@ abstract class ReviewProgress
 // 			throw new Exception("Cannot create AlarmAuto at ReviewProgress class!");
 		}
 	}
-	function CheckAlarm()
+	private function ApplyAlarm()
 	{
 		$this->KillAlarm();
 		$this->MakeAlarm();
 	}
-	function CheckFileState()
+	private function ApplyFileState()
 	{
 		$EName=$this->Event();
 		if(!isset($EName))
@@ -322,16 +327,40 @@ abstract class ReviewProgress
 		$this->File()->SetState($NewState);
 		return $NewState;
 	}
+	private function CheckFileState()
+	{
+		$EName=$this->Event();
+		if(!isset($EName))
+		throw new Exception("Event Not Set for Progress ".get_class($this));
+		$CurrentState=$this->File->State();
+		$NewState=FileFsm::NextState($CurrentState, $EName);
+		if(!isset($NewState))
+		{
+				
+			$str="از شماره حالت ".$CurrentState;
+			$str.="پلی با نام رویداد ".$EName;
+			$str.="ثبت نشده است.";
+			$str.=" حالت جدید:".$NewState;
+			return $str;
+		}
+		return $NewState;
+	}
+	/**
+	 * Has to check the situations and apply the changes and make the entities
+	 */
+	function Apply()
+	{
+		$this->ApplyAlarm();
+		return $this->ApplyFileState();
+	}
+	/**
+	 * Only Has to check the situations and return the Errors and not perform any changes
+	 */
 	function Check()
 	{
-		$this->CheckAlarm();
 		return $this->CheckFileState();
 	}
 }
 
 
 use \Doctrine\ORM\EntityRepository;
-class ReviewProgressRepository extends EntityRepository
-{
-	
-}

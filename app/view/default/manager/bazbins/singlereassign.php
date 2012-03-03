@@ -31,8 +31,8 @@ h3{
 <p>وارد کردن توضیحات الزامی است.</p>
 <!-- ----------------------------------------cancel assign------------- -->
 <h3>لغو تخصیص اظهارنامه</h3>
-<?php if (isset($this->Result) && isset($_POST['Cancel']))
-ViewResultPlugin::Show($this->Result,$this->Error);
+<?php if (isset($_POST['CancelAssign']))
+ViewResultPlugin::Show($this->CancelResult,$this->CancelError);
 $this->CancelForm->presentHTML();
 ?>
 
@@ -40,7 +40,7 @@ $this->CancelForm->presentHTML();
 <!-- ----------------------------------------reassign----------------- -->
 <h3>تخصیص مجدد اظهارنامه</h3>
 <?php if (isset($_POST['Reassign']))
-ViewResultPlugin::Show($this->Result,$this->Error);
+ViewResultPlugin::Show($this->ReassignResult,$this->ReassignError);
 ?>
 <?php $this->ReassignForm->PresentHTML(); ?>
 

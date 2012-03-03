@@ -45,6 +45,18 @@ class ReviewTopic
 	{
 		return $this->Type;
 	}
+	/**
+	* @OneToMany(targetEntity="MailReceive", mappedBy="SenderTopic")
+	* @var arrayCollectionOfMailReceive
+	*/
+	protected $MailReceive;
+	function MailReceive(){ return $this->MailReceive; }
+	/**
+	* @OneToMany(targetEntity="MailSend", mappedBy="ReceiverTopic")
+	* @var arrayCollectionOfMailSend
+	*/
+	protected $MailSend;
+	function MailSend(){ return $this->MailSend; }
 	
 	function __construct($topic=null,$comment='',$type='')
 	{
@@ -52,8 +64,9 @@ class ReviewTopic
 			$this->Topic=$topic;
 
 		$this->Comment=$comment;
-		
 		$this->Type=$type;
+		$this->MailReceive= new ArrayCollection();
+		$this->MailSend= new ArrayCollection();
 	}
 	
 	public static function Topics($type='*')

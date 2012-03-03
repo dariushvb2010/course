@@ -79,7 +79,7 @@ class MyGroup
 	}
 	/**
 	*
-	* @ManyToMany(targetEntity="ConfigAlarm", mappedBy="Group1")
+	* @ManyToMany(targetEntity="ConfigAlarm", mappedBy="Group")
 	* @var ConfigAlarm
 	*/
 	protected $ConfigAlarm;
@@ -91,6 +91,32 @@ class MyGroup
 	{
 		$this->ConfigAlarm[]=$ConfigAlarm;
 	}
+	/**
+	 * Mails given by this group
+	* @OneToMany(targetEntity="MailGive", mappedBy="GiverGroup")
+	* @var arrayCollectionOfMailGive
+	*/
+	protected $MailGive;
+	function MailGive(){ return $this->MailGive;}
+	/**
+	 * Mails got by this group
+	* @OneToMany(targetEntity="MailGive", mappedBy="GetterGroup")
+	* @var arrayCollectionOfMailGive
+	*/
+	protected $MailGet;
+	function MailGet(){ return $this->MailGet;}
+	/**
+	* @OneToMany(targetEntity="MailReceive", mappedBy="ReceiverGroup")
+	* @var arrayCollectionOfMailReceive
+	*/
+	protected $MailReceive;
+	function MailReceive(){ return $this->MailReceive; }
+	/**
+	* @OneToMany(targetEntity="MailSend", mappedBy="SenderGroup")
+	* @var arrayCollectionOfMailSend
+	*/
+	protected $MailSend;
+	function MailSend(){ return $this->MailSend; }
 	
 	function __construct($Title=null, $PersianTitle=null, $Description=null)
 	{
@@ -98,6 +124,10 @@ class MyGroup
 			$this->PersianTitle=$PersianTitle;
 			$this->Description=$Description;
 			$this->User=new ArrayCollection();
+			$this->MailReceive=new ArrayCollection();
+			$this->MailSend=new ArrayCollection();
+			$this->MailGive=new ArrayCollection();
+			$this->MailGet= new ArrayCollection();
 	}
 	
 }

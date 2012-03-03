@@ -186,7 +186,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 							$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 							$R->SetResult($_POST['Result']);
 							$R->SetProvision($Provision);
-							$ch=$R->Check();
+							$ch=$R->Apply();
 							if(is_string($ch))
 								return $ch;
 							ORM::Persist($R);
@@ -252,7 +252,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 						$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 						$R->SetResult($_POST['Result']);
 						$R->SetProvision($Provision);
-						$ch=$R->Check();
+						$ch=$R->Apply();
 						if(is_string($ch))
 							return $ch;
 						ORM::Persist($R);

@@ -34,7 +34,9 @@ class MyUser extends Xuser
 		return (mb_strlen($r,'utf-8')>15?mb_substr($r, 0,12,'utf-8').'...':mb_substr($r, 0,15,'utf-8'));
 	}
 	
-	
+	const STATE_VACATION=0;
+	const STATE_WORK=1;
+	const STATE_RETIRED=2;
 	/**
 	* @Column(type="integer")
 	* @var integer

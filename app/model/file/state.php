@@ -64,6 +64,17 @@ class FileState extends JModel
 		 $this->Summary=$Summary;
 		 $this->Place=$Place;
 	}
+	public static $Status=array(
+	"Cotag/Started"=>2,
+	"Cotag/SendedToArchive"=>3,
+	"Archive/Raw"=>4,
+	"Review/Raw"=>5,
+	"Review|Manager/Reviewed/Nok"=>6,
+	"Review/Reviewed/Ok"=>7,
+	"Manager/Confirmed/Ok"=>9,
+	"Manager|Review/Confirmed/Nok"=>10,
+	"Archive/Reviewed"=>11
+	);
 }
 
 use \Doctrine\ORM\EntityRepository;

@@ -24,7 +24,7 @@ class ReviewProgressDeliver extends ReviewProgress
 	}
 	function Event()
 	{
-		return "Cotag_to_archive";
+		return "Give_cotag_to_archive";
 	}
 }
 use \Doctrine\ORM\EntityRepository;

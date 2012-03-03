@@ -201,7 +201,7 @@ class ReviewProgressPostRepository extends EntityRepository
 		}
 		$User=MyUser::CurrentUser();
 		$R=new ReviewProgressPost($File,$User,$Mail,$IsSend);
-		$ch=$R->Check();
+		$ch=$R->Apply();
 		if(is_string($ch))
 			return $ch;
 		ORM::Persist($R);

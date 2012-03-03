@@ -13,7 +13,6 @@ class AlarmTest extends JTest
 	}
 	function testStart()
 	{
-		$this->assertTrue(true);
 		
 	}
 	function testAdd()
@@ -38,8 +37,7 @@ class AlarmTest extends JTest
 	function testSeeAlarm()
 	{
 		
-		$alarms=ORM::Query("Alarm")->CurrentUserAlarms();
-		ORM::Dump($alarms);
+		
 	}
 	
 

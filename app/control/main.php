@@ -5,6 +5,14 @@ class MainController extends BaseControllerClass
 
 	function Start()
 	{
+		echo b::CotagValidation(1234567);
+		echo b::CotagValidation('1234567');
+		echo b::CotagValidation('123.567');
+		echo b::CotagValidation("0111111");
+// 		var_dump(strval(123));
+// 		echo b::GenerateClassNum(248);
+// 		file_put_contents("a.txt", "salam", FILE_APPEND | LOCK_EX);
+		
 		//		phpinfo();
 //$subject = "Registration completed !!!! ";
 //$from= "From: admin@xxxx.com\n";

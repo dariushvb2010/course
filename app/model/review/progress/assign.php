@@ -95,7 +95,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 	function finalization($File,$CurrentUser,$Reviewer,$Comment){
 		$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer);
 		$R->setComment(($Comment==null?"":$Comment));
-		$ch=$R->Check();
+		$ch=$R->Apply();
 		if(is_string($ch))
 			return $ch;
 		ORM::Persist($R);

@@ -35,14 +35,23 @@ class ManagerBazbinsSinglereassignController extends JControl
 			}
 			
 		}
-		else if(isset($_POST['Reassign']))
+		else if(isset($_POST['CancelAssign']))
 		{
-			$res=$this->AddList->GetRequest();
+			$res=$this->CancelList->GetRequest();
 			foreach ($res as $Data)
 			{
-				$this->Reassign($Data, $Error);
+				$this->CancelAssign($Data, $CancelError);
 			}
 		}
+		else if(isset($_POST['Reassign']))
+		{
+			$res=$this->ReassignList->GetRequest();
+			foreach ($res as $Data)
+			{
+				$this->Reassign($Data, $ReassignError);
+			}
+		}
+		
 		
 		$this->Cotag=$Cotag;
 		
@@ -54,7 +63,8 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$this->ListOfBazbins=$x;
 		//----------------------------------------------------------------------------
 		
-		$this->Error=$Error;
+		$this->ReassignError=$ReassignError;
+		$this->CancelError=$CancelError;
 		$this->MakeCancelForm();
 		$this->MakeReassignForm();
 		return $this->Present();
@@ -126,7 +136,40 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$al->AutoformAfter=true;
 		$this->ReassignList=$al;
 	}
-	
+	/**
+	*
+	* @param $Data a 1D array of Data
+	*/
+	private function CancelAssign($Data, &$Error)
+	{
+		$Cotag=$Data['Cotag']*1;
+		$Comment=$Data['Comment'];
+		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$this->Comment=$Comment;
+		$str="کوتاژ:".$Cotag." ";
+		//-------too short comment
+		if(strlen($Comment)<6){
+			$Error[]='متن توضیحات بسیار کوتاه است.'."<br/>".$str;
+		}
+		//--------REASSIGN
+		else
+		{
+			if(!$File->LLP() instanceof ReviewProgressAssign)
+			{
+				$Error[]="تخصیص داده نشده است. ".$str;
+				return;
+			}
+			$CancelResult=ORM::Query(new ReviewProgressRemove())->AddToFile($File,$Comment);
+			if(is_string($CancelResult))
+			{
+				$Error[]=$CancelResult."<br/>".$str;
+			}
+			else
+			{
+				$this->CancelResult.=" لغو تخصیص ".$str."<br/>";
+			}
+		}
+	}
 	/**
 	 * 
 	 * @param $Data a 1D array of Data
@@ -156,7 +199,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 			}
 			else
 			{
-				$this->Result.="تخصیص مجدد ".$str."<br/>";
+				$this->ReassignResult.="تخصیص مجدد ".$str."<br/>";
 			}
 		}
 	}

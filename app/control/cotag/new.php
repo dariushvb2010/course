@@ -8,7 +8,7 @@ class CotagNewController extends JControl
 		if (count($_POST))
 		{
 			$Cotag=$_POST['Cotag'];
-			$Res=ORM::Query(new ReviewProgressStart())->StartFile($Cotag,(isset($_POST['print']))?true:false);
+			$Res=ORM::Query("ReviewProgressStart")->AddToFile($Cotag,(isset($_POST['print']))?true:false);
 			if(is_string($Res))
 			{
 				$Error[]=$Res;

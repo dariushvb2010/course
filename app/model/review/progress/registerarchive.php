@@ -24,7 +24,7 @@ class ReviewProgressRegisterarchive extends ReviewProgress
 	}
 	function Event()
 	{
-		return "Archive_from_cotag";
+		return "Get_archive_from_cotag";
 	}
 }
 use \Doctrine\ORM\EntityRepository;
@@ -60,7 +60,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 						$thisUser=MyUser::CurrentUser();
 						$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
 						if($Time)$Registerarchive->SetCreateTimestamp($Time);
-						$ch=$Registerarchive->Check();
+						$ch=$Registerarchive->Apply();
 						if(is_string($ch))
 							return $ch;
 						ORM::Persist($Registerarchive);  

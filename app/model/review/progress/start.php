@@ -48,56 +48,42 @@ class ReviewProgressStartRepository extends EntityRepository
 	 * @param integer $Cotag
 	 * @return string for error boolean for true;
 	 */
-	public function StartFile($Cotag,$IsPrint=false)
+	public function AddToFile($Cotag,$IsPrint=false)
 	{
-		if(strlen($Cotag)!=CotagLength)
-		{
-				$Error=" کوتاژ ناصحیح است.کوتاژ باید هفت رقمی باشد.";
-				return $Error;
-			
-		}
-		$Cotag=$Cotag*1;
-		if ($Cotag<1)
-		{
-				$Error="کوتاژ ناصحیح است.";
-				return $Error;
-		}
+		if(b::CotagValidation($Cotag)==false)
+		return "کوتاژ ناصحیح است.";
 //		else if(! j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag)))
 //		{
 //			$Error="کوتاژ در سرور اسیکودا ثبت نشده , خطا در ارتباط با سرور اسیکودا .";
 //			return $Error;
 //		}
-		else 
+		
+		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		if($File==null)
 		{
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-			if ($File==null)
-			{
-				$thisUser=MyUser::CurrentUser();
-				$File=new ReviewFile($Cotag);
-				ORM::Persist($File);
-				
-				$start=new ReviewProgressStart($File,$thisUser,$IsPrint);
-				$ch=$start->Check();
-				if(is_string($ch))
-					return $ch;
-				ORM::Persist($start);   
-				//$start->CheckAlarm(); 		
-				return true;
-			}
-			else
-			{
-				$Error="اظهارنامه قبلا وصول گردیده است!";
-				return $Error;
-			}
+			$thisUser=MyUser::CurrentUser();
+			$File=new ReviewFile($Cotag);
+			ORM::Persist($File);
+			$start=new ReviewProgressStart($File,$thisUser,$IsPrint);
+			$ch=$start->Apply();
+			if(is_string($ch))
+				return $ch;
+			ORM::Persist($start);   
+			return $start;
 		}
+		else
+		{
+			$Error="اظهارنامه قبلا وصول گردیده است!";
+			return $Error;
+		}
+		
 	}
 	public function CancelCotag($Cotag)
 	{
-		if(strlen($Cotag)!=CotagLength)
+		if(b::CotagValidation($Cotag)==false)
 		{
-				$Error=" کوتاژ ناصحیح است.کوتاژ باید هفت رقمی باشد.";
-				return $Error;
-			
+			$Error=" کوتاژ ناصحیح است.کوتاژ باید هفت رقمی باشد.";
+			return $Error;
 		}
 		$Cotag=$Cotag*1;
 		if ($Cotag<1)
@@ -128,6 +114,7 @@ class ReviewProgressStartRepository extends EntityRepository
 					$A=$File->Alarm();
 					if(count($A))
 					{
+						echo "raft to count";
 						foreach ($A as $a)
 							ORM::Delete($a);
 					}

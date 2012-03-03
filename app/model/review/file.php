@@ -131,12 +131,41 @@ class ReviewFile
     * @var Alarm
     */
     protected $Alarm;
+    function Alarm(){ return $this->Alarm;}
+    /**
+     * 
+     * @OneToOne(targetEntity="FileStock", mappedBy="File")
+     * @var FileStock
+     */
+    protected $Stock;
+    function Stock(){ return $this->Stock;}
+    function SetStock(FileStock $Stock){ $this->Stock=$Stock; }
+    /**
+     * returns the recent file
+     * @param  integer or string or ReviewFile
+     */
+    static function GetRecentFile($File)
+    {
+    	if($File instanceof ReviewFile)
+    	return $File;
+    	elseif(b::CotagValidation($File))
+    	{
+    		$File=ORM::Query("ReviewFile")->GetRecentFile($File);
+    		if($File instanceof ReviewFile)
+    		return $File;
+    		else
+    		return false;
+    	}
+    	else 
+    	return false;
+    }
     function __construct($Cotag=null)
     {
     	$this->CreateTimestamp=time();
     	$this->FinishTimestamp=0;
 		$this->Cotag=$Cotag;    		
     	$this->Progress= new ArrayCollection();
+    	$this->Alarm=new ArrayCollection();
     	$this->Class=0;
     	$this->Gatecode=50100;
     	$this->State=1;
@@ -149,6 +178,16 @@ class ReviewFile
 		$p=new ReviewProgressFinish($this,$thisUser);
 		ORM::Persist($p);
     	$this->FinishTimestamp=time();
+    }
+    static function Regulate($Files)
+    {
+    	$res=array();
+    	if($Files)
+    	foreach ($Files as $File)
+    	{
+    		$res[]=self::GetRecentFile($File);
+    	}
+    	return $res;
     }
 	function LastProgress($Type="all",$IsProcess=false)
 	{

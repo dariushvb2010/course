@@ -157,12 +157,11 @@ class ConfigAlarm extends Config
 	}
 	/**
 	 * 
-	 * Enter description here ...
-	 * @param unknown_type $Title
-	 * @param unknown_type $Context
-	 * @param unknown_type $Moratorium
-	 * @param unknown_type $DeleteAccess
-	 * @param unknown_type $Comment
+	 * @param string $Title
+	 * @param string $Context
+	 * @param string $Moratorium
+	 * @param boolean $DeleteAccess
+	 * @param string $Comment
 	 * @param string $Style recognize type of ConfigAlarm
 	 */
 	function __construct($Title=null, $Context=null, $Moratorium=null, $DeleteAccess=false, $Comment=null, $Style=null)
