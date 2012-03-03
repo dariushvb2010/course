@@ -21,14 +21,15 @@ if ($Extra)
 <link rel="stylesheet" href="/script/calendar/skins/calendar-blue.css" />
 
 <link rel="stylesheet" href="/script/jqueryui/themes/base/jquery.ui.all.css" />
+
 <script src='/script/jquery/ui1.8.14/js/jquery-1.5.1.min.js'></script>
+<script src='/script/jquery/ui1.8.14/js/jquery-ui-1.8.14.custom.min.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.core.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.position.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.widget.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.button.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.autocomplete.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.datepicker.js'></script>
-<script src='/script/jqueryui/ui/i18n/jquery.ui.datepicker-fa.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.dialog.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.menu.js'></script>
 <script src='/script/jqueryui/ui/jquery.ui.menubar.js'></script>
@@ -46,8 +47,6 @@ if ($Extra)
 <script src='/script/calendar/lang/calendar-fa.js'></script>
 
 
-<link rel="stylesheet" href="#/script/jquery/ui1.8.14/css/gray-elegant/jquery-ui-1.8.14.custom.css" />
-<script src='#/script/jquery/ui1.8.14/js/jquery-ui-1.8.14.custom.min.js'></script>
 </head>
 <body>
 <a name='top'></a>
