@@ -55,6 +55,8 @@ class HandleTransferPublic extends HandleTransfer
 		}
 		else
 		{
+			if(!$this->TransferorGroup OR !$this->CatcherGroup)
+			$this->Error[]="گروه یافت نشد.";
 			$this->Mail=ORM::Query("Mail".$this->Action)->LastMail($this->TransferorGroup, $this->CatcherGroup);
 		}
 		
