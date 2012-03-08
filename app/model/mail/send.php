@@ -40,9 +40,10 @@ class MailSend extends Mail
 	protected $ProgressSend;
 	function ProgressSend(){ return $this->ProgressSend; }
 	
-	function __construct($Num=null, $SenderGroup=null, $ReceiverTopic=null, $Comment=null)
+	function Save($Files){}
+	function __construct($Num=null, $Subject=null, $SenderGroup=null, $ReceiverTopic=null, $Description=null)
 	{
-		parent::__construct($Num, $Comment);
+		parent::__construct($Num, $Subject, $Description);
 		if($SenderGroup) $this->AssignSenderGroup($SenderGroup);
 		if($ReceiverTopic) $this->AssignReceiverTopic($ReceiverTopic);
 		$this->ProgressSend= new ArrayCollection();

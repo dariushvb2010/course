@@ -32,9 +32,9 @@ class AlarmAuto extends Alarm
 	{
 		if($this->ConfigAlarm) return $this->ConfigAlarm->Context();
 	}
-	function Moratorium()
+	function MoratoriumToDays()
 	{
-		if($this->ConfigAlarm) return $this->ConfigAlarm->Moratorium();
+		if($this->ConfigAlarm) return $this->ConfigAlarm->MoratoriumToDays();
 	}
 	function User()
 	{

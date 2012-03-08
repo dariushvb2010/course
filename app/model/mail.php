@@ -28,34 +28,163 @@ abstract class Mail
 	*/
 	protected $Num;
 	public function Num(){ return $this->Num; }
+	static function MailNumValidation($Num)
+	{
+		if($Num)
+			return true;
+		else
+			return false;
+	}
 	/**
-	* 
+	* @Column(type="string", nullable="true")
+	* @var string
+	*/
+	protected $Subject;
+	public function Subject(){ return $this->Subject; }
+	/**
+	 * state of editting the mail,
+	 * mail has not been transfered yet, it just has been saved to be transfered in the future
+	 * @var integer
+	 */
+	const STATE_EDITING=1;//--------------------1-------------
+	protected function StateEditing()
+	{
+		if($this->CanIGoTo(self::STATE_EDITING))
+		{
+			$this->State=self::STATE_EDITING;
+			$this->RetouchTimestamp=time();
+		}
+		else 
+			throw new Exception();
+	}
+	/**
+	 * state of editing the mail, some of files has been stransfered and some not.
+	 * this case is very scarse
+	 * @var integer
+	 */
+	const STATE_EDITING_FAULTY=2;//-------------2-------------
+	protected function StateEditingFaulty()
+	{
+		if($this->CanIGoTo(self::STATE_EDITING_FAULTY))
+		{
+			$this->State=self::STATE_EDITING_FAULTY;
+			j::Log("Strange", "mail went to STATE_EDITING_FAULTY, mailID=".$this->ID." at <br/>model/mail");
+		}	
+		else
+			throw new Exception();
+	}
+	/**
+	 * 
+	 * mail has been transfered, and the man in the destination can open the mail
+	 * @var integer
+	 */
+	const STATE_INWAY=4;//----------------------4---------------
+	protected function StateInway()
+	{
+		if($this->CanIGoTo(self::STATE_INWAY))
+		{
+			$this->State=self::STATE_INWAY;
+		}
+		else
+			throw new Exception();
+	}
+	/**
+	 * the man at the destination unit catched the mail, and can catch the files of the mail
+	 * @var integer
+	 */
+	const STATE_GETTING=6;//---------------------6-----------------
+	protected function StateGetting()
+	{
+		if($this->CanIGoTo(self::STATE_GETTING))
+		{
+			$this->State=self::STATE_GETTING;
+		}
+		else
+			throw new Exception();
+	}
+	/**
+	* the man at the destination unit catched the mail, but catched uncompletely,
+	* e.t some of files has been catched and set their progress and some not
+	* @var integer
+	*/
+	const STATE_GETTING_FAULTY=7;//---------------------7-----------------
+	protected function StateGettingFaulty()
+	{
+		if($this->CanIGoTo(self::STATE_GETTING_FAULTY))
+		{
+			$this->State=self::STATE_GETTING_FAULTY;
+		}
+		else
+			throw new Exception();
+	}
+	/**
+	 * all of the operations have been done and mail has been closed
+	 * @var integer
+	 */
+	const STATE_CLOSED=9;//---------------------9-------------------
+	protected function StateClosed()
+	{
+		if($this->CanIGoTo(self::STATE_CLOSED))
+		{
+			$this->State=self::STATE_CLOSED;
+		}
+		else
+			throw new Exception();
+	}
+	/**
+	 * I have My own state, can I go to new State
+	 * @param integer $S1
+	 * @param integer $S2
+	 * @return Boolean
+	 */
+	private function CanIGoTo($NewState)
+	{
+		if(!isset($this->State) OR !isset($NewState))
+			return false;
+		return $this->State<$NewState;
+	}
+	function PersianState()
+	{
+		switch($this->State)
+		{
+			case self::STATE_EDITING: return "در حال ویرایش";
+			case self::STATE_EDITING_FAULTY: return "ارسال شده ناقص، در حال ویرایش";
+			case self::STATE_INWAY: return "در راه";
+			case self::STATE_GETTING: return "در حال تحویل گیری";
+			case self::STATE_GETTING_FAULTY: return "تحویل گیری ناقص";
+			case self::STATE_CLOSED: return "مختومه";
+		}
+	}
+	/**
 	* @Column(type="integer")
 	* @var integer
 	*/
-	protected $State;
+	private $State;
 	function State(){return $this->State;}
-	function SetState($state){ $this->State=$state; }
+	//please dont Declare SetState function, we have alternative safe functions for that 
 	/**
+	 * Time of send or receive or give or get
 	* @Column(type="integer", nullable=true)
 	* @var integer
 	*/
 	protected $EventTimestamp;
 	function EventTimestamp(){ return $this->EventTimestamp;}
 	/**
-	 * the last save timestamp
-	* @Column(type="integer", nullable=true)
+	* the last Retouch timestamp.
+	* Retouch=action(give or get or send or receive) | save
+	* if mail is closed the retouchtimestamp will hold the last action
+	* @Column(type="integer") 
 	* @var integer
 	*/
-	protected $SaveTimestamp;
-	function SaveTimestamp(){return $this->SaveTimestamp;}
+	protected $RetouchTimestamp;
+	function RetouchTimestamp(){return $this->RetouchTimestamp;}
 	
 	/**
 	* @Column(type="string",nullable=true)
 	* @var string
 	*/
-	protected $Comment;
-	public function Comment() { return $this->Comment; }
+	protected $Description;
+	public function Description() { return $this->Description; }
 	/**
 	* @OneToMany(targetEntity="FileStock", mappedBy="Mail", cascade={"remove"})
 	* @var arrayCollectionOfFileStock
@@ -72,6 +201,21 @@ abstract class Mail
 			$Stock->SetMail($this);
 		}
 	}
+	function Box()
+	{
+		$s=$this->State;
+		if($s==self::STATE_EDITING)
+			return $this->Stock;
+		elseif($s=self::STATE_INWAY)
+			return $this->ProgressGive();
+		elseif ($s=self::STATE_GETTING);
+		elseif ($s=self::STATE_CLOSED);
+	}
+	/**
+	 * 
+	 * @param ReviewFile $File
+	 * @param string $Error
+	 */
 	protected function UpdateStock(ReviewFile $File,$Error)
 	{
 		if(!$File->Stock())
@@ -81,15 +225,38 @@ abstract class Mail
 		}
 		else
 		{
-			$File->Stock()->SetError($Error);
+			if($File->Stock()->Mail()->ID()!=$this->ID())
+				j::Log("Unexpected", "Stock from another mail exists . Cotag:".$File->Cotag().", StockID:".$File->Stock()->ID().". at model/mail");
+			$File->Stock()->Update($Error);
 			$this->AddStock($File->Stock());
 		}
+		//ORM::Flush();
 	}
-	function __construct($Num=null,$Comment=null)
+	protected function RemoveOldStocks($time)
+	{
+		foreach($this->Stock as $s)
+		if($s->EditTimestamp()<$time)
+		{
+			$s->File()->SetStock(null);
+			$this->Stock->removeElement($s);
+			$s->SetMail(null);
+			ORM::Delete($s);
+		}
+	}
+	function __construct($Num=null, $Subject=null, $Description=null)
 	{
 		$this->Num=$Num;
-		$this->Comment=$Comment;
-		$this->State=1;
+		$this->Subject=$Subject;
+		$this->Description=$Description;
+		$this->State=0;
+		$this->StateEditing();
 		$this->Stock= new ArrayCollection();
 	}
+	//abstract function Save($Files, $RemoveCalled);
+}
+
+use \Doctrine\ORM\EntityRepository;
+class MailRepository extends EntityRepository
+{
+		
 }

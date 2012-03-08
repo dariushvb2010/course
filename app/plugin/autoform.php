@@ -259,7 +259,8 @@ $(function(){
 	$(".autoform input:first").focus();
 });
 		<?php 
-		
+	if($this->List)
+		$this->List->PresentScript();
 	}
 	function PresentHTML()
 	{
@@ -390,6 +391,10 @@ $(function(){
 				<?php
 					} ?></select>
 			<?php 
+			break;
+			case "hidden": ?>
+				<input type='hidden' name='<?php echo $E['Name'];?>'  id='<?php echo $E['ID'];?>' value='<?php echo $E['Value'];?>'/>
+				<?php 
 			break;
 			case 'custom':
 			?>

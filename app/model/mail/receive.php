@@ -46,9 +46,11 @@ class MailReceive extends Mail
 	* @var arrayCollectionOfReviewProgressReceive
 	*/
 	protected $ProgressReceive;
-	function __construct($Num=null, $SenderTopic=null, $ReceiverGroup=null, $Comment=null)
+	
+	public function Save($Files){}
+	function __construct($Num=null, $Subject=null, $SenderTopic=null, $ReceiverGroup=null, $Description=null)
 	{
-		parent::__construct($Num, $Comment);
+		parent::__construct($Num, $Subject, $Description);
 		if($ReceiverGroup) $this->AssignSenderTopic($SenderTopic);
 		if( $SenderTopic) $this->AssignReceiverGroup($ReceiverGroup);
 		$this->ProgressReceive=new ArrayCollection();

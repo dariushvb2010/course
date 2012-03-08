@@ -92,7 +92,7 @@ abstract class Alarm
 	}
  	abstract function Title();
  	abstract function Context();
- 	abstract function Moratorium();
+ 	abstract function MoratoriumToDays();
  	abstract function User();
  	abstract function Group();
  	abstract function Killer();

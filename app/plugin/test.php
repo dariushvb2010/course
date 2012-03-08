@@ -45,7 +45,27 @@ class TestPlugin extends JPlugin
 		}
 		return $s->File();
 	}
-	
+	/**
+	 * Has to pick a random cotag from the database
+	 */
+	static function Pick_Cotag()
+	{
+		$File=self::Pick_File();
+		return $File->Cotag();
+	}
+	/**
+	 * Has to raturn a random file from the database
+	 */
+	static function Pick_File()
+	{
+		$count=ORM::Query("ReviewFile")->GetCount();
+		while(!$File)
+		{
+			$randID=rand(1,$count);
+			$File=ORM::Find("ReviewFile", $randID);
+		}
+		return $File;
+	}
 	
 	
 }

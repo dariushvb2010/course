@@ -21,6 +21,7 @@ class ReviewProgressGiveTest extends JTest
 	{
 		
 		
+		
 		$MailGive1=ORM::Query("MailGive")->Add(rand(1,1000),"Archive","Raked","this is commet for MailGive");
 		//$r=new ReviewProgressGive($File, $MailGive1);
 		//$MailGive2=ORM::Query("MailGive")->Add(rand(1,1000),"Raked","Archive","this is commet for MailGive");

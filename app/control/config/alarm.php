@@ -45,7 +45,7 @@ class ConfigAlarmController extends AlarmController
 		$al->SetHeader("ID", "شناسه",false,false,false);
 		$al->SetHeader("Title", "عنوان");
 		$al->SetHeader("Context", "متن");
-		$al->SetHeader("Moratorium", "مهلت");
+		$al->SetHeader("MoratoriumToDays", "مهلت");
 		$al->SetHeader("Context", "متن");
 		$al->SetHeader("Style", "نوع", false,false,false);
 		$al->EnableEdit("ویرایش","ID");

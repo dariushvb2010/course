@@ -84,7 +84,6 @@ class AlarmController extends BaseControllerClass
 	
 	function MakeForm($type="Free")
 	{
-		echo "MakeForm:".$type;
 		$f=new AutoformPlugin("post");
 		if($type=="Free")
 		$f->AddElement(array(

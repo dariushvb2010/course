@@ -5,8 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * 
  * Autolist Plugin, Provides sortable list views of Objects and Arrays
  * Simplest scenario to use it to create a new instance and provide a SQL Tablename and an array of header/label maps.
- * 
- * @version 1.2
+ * legal metadata for headers: Style,CData
+ * @version 1.8
  * @author abiusx
  * @author dariush jafari (dariushvb2010@gmail.com)
  */
@@ -134,6 +134,13 @@ class AutolistPlugin extends JPlugin
 	public $SelectLabel="Select";
 //=================================select========================
 	/**
+	*
+	* whether has a column for removing the row
+	* @var boolean
+	*/
+	public $HasRemove=false;
+	public $RemoveLabel="Remove";
+	/**
 	 * 
 	 * page_break in css style for print
 	 * @var boolean
@@ -156,9 +163,15 @@ class AutolistPlugin extends JPlugin
 	 */
 	public $MetaData;
 	/**
-	 *	Name of the list
+	 * 
+	 * 1-for adding at the end of DList(javascript name of the list)
+	 * @example
+	 * 		DList_yikjkdslj (yikjkdslj is $this->ID)
+	 * 2- id attribute of the html table
+	 * @example <table id="$this->ID"></table>
+	 * @var unknown_type
 	 */
-	public $Name;
+	public $ID;
 	
 	public $FilterCallback=null;
 	public function SetSortParams()
@@ -180,9 +193,9 @@ class AutolistPlugin extends JPlugin
 		$this->HasTier=$HasTier;
 		$this->TierLabel=$TierLabel;
 		if ($Name==null)
-			$this->Name=$this->GenerateRandomName();
+			$this->ID=$this->GenerateRandomName();
 		else 
-			$this->Name=$Name;
+			$this->ID=$Name;
 		$this->SetHeaders($HeaderArray);
 		if ($DataOrTablename)
 			if (is_string($DataOrTablename))
@@ -331,7 +344,7 @@ class AutolistPlugin extends JPlugin
 			$this->MakeTopOfForm();
 		?>
 		
-			<table class='autolistprint' id='<?php echo $this->Name;?>' width='<?php echo $this->Width;?>' border='<?php echo $this->Border;?>' 
+			<table class='autolistprint' id='<?php echo $this->ID;?>' width='<?php echo $this->Width;?>' border='<?php echo $this->Border;?>' 
 				cellpadding='<?php echo $this->Padding;?>' cellspacing='<?php echo $this->Spacing;?>' 
 				style="<?php if(!$this->HasPageBreak) echo 'page-break-after: auto;'?>">
 			<?php if($this->HasThead): ?>
@@ -444,6 +457,12 @@ class AutolistPlugin extends JPlugin
 			class="<?php echo $this->SelectClass; ?>" /></td><?php 
 		}
 	}
+	protected function EchoReoveTD()
+	{ 
+		if($this->HasRemove):
+		?><td class='remove' onclick='DList_<?php echo $this->ID;?>.Remove($(this));'><a><img style='height:100%; vertical-align:middle;' src='/img/delete-blue-20.png'/> </a> </td><?php 
+		endif;
+	}
 	protected function EchoTHs()
 	{
 		if($this->HasTier)
@@ -461,6 +480,8 @@ class AutolistPlugin extends JPlugin
 			<th><?php echo $h; ?></th>
 			<?php 	
 		}	
+		if($this->HasRemove)
+			echo "<th>".$this->RemoveLabel."</th>";
 	}
 	protected function EchoRecord($D, $IfEchoValue=true)
 	{
@@ -481,14 +502,19 @@ class AutolistPlugin extends JPlugin
 			$Value=$this->Filter($k, $Value,$D);
 			if (!$this->MetaData[$k]['CData'])
 			$Value=htmlspecialchars($Value);
-			?>
-			<!-- +++++++++++++++++++++++   td   +++++++++++++++++++++++ -->
-			<td header="<?php echo $k;?>" 
-			<?php echo $this->EditManager->MetaData[$k]['CanEdit'] ? "canedit='yes'" : "canedit='no'"; ?>
-			><?php if($IfEchoValue) echo ($Value===null || $Value==="") ? "-" : $Value;?></td>
-			<?php
+			
+			$this->EchoRecordTD($k, $Value, $IfEchoValue);
 		}
 		$this->EditManager->EchoHiddenTD($D);
+	}
+	protected function EchoRecordTD($k, $Value, $IfEchoValue)
+	{
+	?>
+		<td header="<?php echo $k;?>" 
+		<?php echo $this->EditManager->MetaData[$k]['CanEdit'] ? "canedit='yes'" : "canedit='no'"; ?>
+		style='<?php echo $this->MetaData[$k]['Style'];?>'
+		><?php if($IfEchoValue) echo ($Value===null || $Value==="") ? "-" : $Value;?></td>
+	<?php
 	}
 	function Present()
 	{
@@ -498,7 +524,8 @@ class AutolistPlugin extends JPlugin
 		if($this->Autoform AND !$this->AutoformAfter)
 			$this->Autoform->PresentHTML();
 		?>
-		<table class='autolist' id='<?php echo $this->Name;?>' width='<?php echo $this->Width;?>' border='<?php echo $this->Border;?>' cellpadding='<?php echo $this->Padding;?>' cellspacing='<?php echo $this->Spacing;?>' >
+		<div class="clear"></div>
+		<table class='autolist' id='<?php echo $this->ID;?>' width='<?php echo $this->Width;?>' border='<?php echo $this->Border;?>' cellpadding='<?php echo $this->Padding;?>' cellspacing='<?php echo $this->Spacing;?>' >
 		<?php if($this->HasThead): ?> 
 				<thead>
 				<tr>
@@ -514,7 +541,7 @@ class AutolistPlugin extends JPlugin
 		<tbody>
 			<?php 
 			$index=0;
-			if (is_array($this->Data))
+			//if (is_array($this->Data) )
 			foreach ($this->Data as $D)
 			{
 				?>
@@ -525,6 +552,7 @@ class AutolistPlugin extends JPlugin
 				$this->EditManager->EchoTD();
 				$this->EchoSelectTD($D);
 				$this->EchoRecord($D);
+				$this->EchoReoveTD();
 				?>
 		</tr>
 				<?php  
@@ -533,6 +561,7 @@ class AutolistPlugin extends JPlugin
 			?>
 		</tbody>
 		</table>
+		<div id="RemoveContainer_<?php echo $this->ID?>" class="HiddenContainer"></div><!-- for dynamiclist -->
 		<?php
 		if( $this->Autoform AND $this->AutoformAfter)
 			$this->Autoform->PresentHTML();
@@ -563,7 +592,7 @@ class AutolistPlugin extends JPlugin
 	{
 		$this->SetFormInputValues();
 		?>
-		<form class='sortform sortbox' id="sortform_<?php echo $this->Name;?>" method='<?php echo $this->FormMethod;?>' style='text-align:center;width:<?php echo $this->FormWidth;?>'>
+		<form class='sortform sortbox' id="sortform_<?php echo $this->ID;?>" method='<?php echo $this->FormMethod;?>' style='text-align:center;width:<?php echo $this->FormWidth;?>'>
 		از
 		<input type='text' name='<?php echo $this->InputNames['Offset'];?>' size='5' value='<?php echo $this->InputValues['Offset'];?>' />
 		به تعداد

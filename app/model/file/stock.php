@@ -18,19 +18,27 @@ class FileStock
 	protected $ID;
 	function ID(){ return $this->ID; }
 	/**
-	* @Column(type="string", nullable=true)
+	* @Column(type="integer")
 	* @var integer
+	*/
+	protected $EditTimestamp;
+	function EditTimestamp(){ return $this->EditTimestamp; }
+	protected function SetEditTimestamp($Time){ $this->EditTimestamp=$Time; }
+	/**
+	* @Column(type="string", nullable=true)
+	* @var string
 	*/
 	protected $Error;
 	function Error(){ return $this->Error; }
 	function SetError($Error){ $this->Error=$Error; }
 	/**
 	 * @OneToOne(targetEntity="ReviewFile", inversedBy="Stock")
-     * @JoinColumn(name="FileID", referencedColumnName="ID", nullable=false)
+     * @JoinColumn(name="FileID", referencedColumnName="ID")
 	 * @var ReviewFile
 	 */
 	protected $File;
 	function File(){ return $this->File; }
+	function SetFile($File){$this->File=$File; }
 	function AssignFile(ReviewFile $File)
 	{
 		$this->File=$File;
@@ -43,18 +51,27 @@ class FileStock
 	*/
 	protected $Mail;
 	function Mail(){ return $this->Mail; }
-	function SetMail(Mail $Mail){ $this->Mail=$Mail; }
+	function SetMail($Mail){ $this->Mail=$Mail; }
 	function AssignMail(Mail $Mail)
 	{
 		$Mail->AddStock($this);
 	}
-	
-	
+	function Update($Error)
+	{
+		$this->SetError($Error);
+		$this->SetEditTimestamp(time());
+	}
+	function Cotag()
+	{
+		if($this->File)
+			return $this->File->Cotag();
+	}
 	function __construct(ReviewFile $File=null, Mail $Mail=null, $Error=null)
 	{
 		$this->AssignFile($File);
 		$this->AssignMail($Mail);
 		$this->Error=$Error;
+		$this->SetEditTimestamp(time());
 	}
 }
 use \Doctrine\ORM\EntityRepository;

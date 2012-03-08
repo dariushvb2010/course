@@ -52,18 +52,19 @@ class ConfigAlarm extends Config
 	protected $Moratorium;
 	public function Moratorium()
 	{
-		return $this->Moratorium/(24*3600);
+		return $this->Moratorium;
 	}
 	function SetMoratorium($Moratorium)
 	{
-		$this->Moratorium=$Moratorium*24*3600;
+		$this->Moratorium=$Moratorium;
 	}
-	public function MoratoriumToSeccond()
+	function SetMoratoriumInDays($Moratorium)
 	{
-		if($this->Moratorium)
-			return $this->Moratorium*24*3600;
-		else
-			return 0;
+		$this->Moratorium=$Moratorium*TIMESTAMP_DAY;
+	}
+	public function MoratoriumToDays()
+	{
+		return $this->Moratorium/TIMESTAMP_DAY;
 	}
 	/**
 	*
@@ -170,7 +171,7 @@ class ConfigAlarm extends Config
 			$this->Title=$Title;
 			$this->Context=$Context;
 			if($Moratorium)
-				$this->Moratorium=$Moratorium*24*3600;
+				$this->SetMoratoriumInDays($Moratorium);
 			else 
 				$this->Moratorium=0;
 			$this->AlarmAuto= new ArrayCollection();

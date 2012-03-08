@@ -29,12 +29,10 @@ class ReviewProgressGive extends ReviewProgress
 	function SetMailGive(MailGive $MailGive){ $this->MailGive=$MailGive; }
 	function AssignMailGive($MailGive)
 	{
-		echo "AssignMailGive";
 		$this->MailGive=$MailGive;
 		$MailGive->ProgressGive()->add($this);
 	}
 	/**
-	*
 	* @OneToOne(targetEntity="ReviewProgressGet", mappedBy="ProgressGive")
 	* @var ReviewProgressGet
 	*/
@@ -50,6 +48,13 @@ class ReviewProgressGive extends ReviewProgress
 	{
 		if($this->MailGive)
 		return $this->MailGive->GetterGroup();
+	}
+	/**
+	 * it means the error of the stock, it is just used in the autolist 
+	 */
+	function Error()
+	{
+		return null;
 	}
 	function __construct(ReviewFile $File=null, MailGive $MailGive=null, $IfPersist=true)
 	{
@@ -105,7 +110,6 @@ class ReviewProgressGiveRepository extends EntityRepository
 		return $ch;
 		if($IfPersist) 
 		{
-			echo "raft to if persist";
 			ORM::Persist($P);
 		}
 		return $P;

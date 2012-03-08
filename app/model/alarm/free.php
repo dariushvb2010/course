@@ -39,14 +39,11 @@ class AlarmFree extends Alarm
 	protected $Moratorium;
 	function Moratorium()
 	{
-		return $this->Moratorium/(24*3600);
+		return $this->Moratorium;
 	}
-	public function MoratoriumToSeccond()
+	public function MoratoriumToDays()
 	{
-		if($this->Moratorium)
-		return $this->Moratorium*24*3600;
-		else
-		return 0;
+		return $this->Moratorium/TIMESTAMP_DAY;
 	}
 	
 	/**

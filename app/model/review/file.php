@@ -139,7 +139,7 @@ class ReviewFile
      */
     protected $Stock;
     function Stock(){ return $this->Stock;}
-    function SetStock(FileStock $Stock){ $this->Stock=$Stock; }
+    function SetStock($Stock){ $this->Stock=$Stock; }
     /**
      * returns the recent file
      * @param  integer or string or ReviewFile
@@ -153,11 +153,51 @@ class ReviewFile
     		$File=ORM::Query("ReviewFile")->GetRecentFile($File);
     		if($File instanceof ReviewFile)
     		return $File;
-    		else
-    		return false;
     	}
-    	else 
-    	return false;
+    }
+    /**
+     * Has to get the cotages or even files and only return the ReviewFile type
+     * @param array of integer|string|ReviewFile $Files
+     */
+    static function Regulate($Files)
+    {
+    	$res=array();
+    	if($Files)
+    	foreach ($Files as $File)
+    	{
+    		$var=self::GetRecentFile($File);
+    		if($var instanceof ReviewFile)
+    			$res[]=$var;
+    	}
+    	return $res;
+    }
+    /**
+    * Has to get the cotages or even files and return the ReviewFile type if file exists 
+    * and return the string if file does not exists
+    * @param array of integer|string|ReviewFile $Files
+    */
+    static function RegulateWithError($Files)
+    {
+    	$res=array();
+    	if($Files)
+    	foreach ($Files as $File)
+    	{
+    		$var=self::GetRecentFile($File);
+    		if($var instanceof ReviewFile)
+    			$res[]=$var;
+    		else 
+    		{
+    			$error='کوتاژ ';
+    			if($File instanceof ReviewFile)
+    				$error.=$File->Cotag();
+    			else 
+    				$error.=strval($File);
+    			$error.="  یافت نشد.";
+    			$res[]=strval($error);
+    		}
+    		
+    	}
+    	return $res;
     }
     function __construct($Cotag=null)
     {
@@ -178,16 +218,6 @@ class ReviewFile
 		$p=new ReviewProgressFinish($this,$thisUser);
 		ORM::Persist($p);
     	$this->FinishTimestamp=time();
-    }
-    static function Regulate($Files)
-    {
-    	$res=array();
-    	if($Files)
-    	foreach ($Files as $File)
-    	{
-    		$res[]=self::GetRecentFile($File);
-    	}
-    	return $res;
     }
 	function LastProgress($Type="all",$IsProcess=false)
 	{

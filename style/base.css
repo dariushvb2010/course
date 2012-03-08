@@ -81,6 +81,8 @@ a:HOVER {
 #body>h2,#body>h3 {
 	margin-right:15px;
 }
+.clear{clear: both;}
+.autoform input[type=text]{text-align:center;}
 .autolist, .autolistprint{
 	-moz-border-radius:6px;
 	overflow: hidden;
