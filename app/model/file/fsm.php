@@ -22,7 +22,7 @@ class FileFsm extends JModel
 	2=>array('Give_cotag_to_archive'=>3),
 	3=>array('Get_archive_from_cotag'=>4),
 	4=>array('Assign'=>5),
-	5=>array('Review_nok'=>6, 'Review_ok'=>7),
+	5=>array('Review_nok'=>9, 'Review_ok'=>7),
 	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
 	7=>array('Review_nok'=>6, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
 	10=>array('Review_ok'=>6, 'Review_nok'=>7),
