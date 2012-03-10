@@ -378,7 +378,7 @@ $(function() {
 		<ul class='menu'>
 			<li>
 
-				<a href='/archive/sendtoraked'>
+				<a href='/archive/transfer/toraked'>
 							<span class='ui-icon-trash ui-icon'></span> 
 							به بایگانی راکد
 				</a>

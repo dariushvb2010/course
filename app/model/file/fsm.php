@@ -24,7 +24,7 @@ class FileFsm extends JModel
 	4=>array('Assign'=>5),
 	5=>array('Review_nok'=>6, 'Review_ok'=>7),
 	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
-	7=>array('Review_nok'=>6, 'Give_review_to_archive'),
+	7=>array('Review_nok'=>6, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
 	10=>array('Review_ok'=>6, 'Review_nok'=>7),
 	11=>array('Assign_by_manager'=>5, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
 	12=>array('Receive_archive_from_out'=>11),
