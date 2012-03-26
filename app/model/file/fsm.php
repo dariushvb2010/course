@@ -171,21 +171,22 @@ class FileFsm extends JModel
 	{
 		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
 		//ORM::Dump($files);
+		j::SQL("UPDATE ReviewFile set State=2 ");
 		foreach($files as $f)
 		{
 			if($f)
 			$f->SetState(2);
 			$p=$f->LastProgress();
-						ORM::Dump($p);
 			if($p->MailNum()==0)
 			{
-		 		echo "hi";
+		 		echo "3";
 				$f->SetState(3);
 			}
 		}
 	}
 	static function Moderate2()
 	{
+		echo "<br/>";
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Registerarchive",0,99999999);
 		//ORM::Dump($files);
 		foreach($files as $f)

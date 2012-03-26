@@ -13,8 +13,6 @@ class TestTest extends JTest
 	function tearDown(){}
 	function testStart()
 	{
-		$this->assertTrue(true);
-		$p=ORM::Find("ReviewProgress", 131779);
-		ORM::Dump($p);
+		FileFsm::Moderate1();
 	}
 }

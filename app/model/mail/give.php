@@ -233,6 +233,29 @@ class MailGiveRepository extends EntityRepository
 		else
 		return null;
 	}
+	function GetAll($GiverGroup='all', $GetterGroup='all', $State='all')
+	{
+		$s="SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E";
+		$w=" WHERE ";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		if($GiverGroup!='all' AND $GetterGroup!='all' AND $State!='all')
+			$r=j::ODQL($s.$w."I=? AND E=?".$o, $GiverGroup, $GetterGroup);
+		elseif($GiverGroup!='all' AND $GetterGroup!='all')
+			;
+		elseif($GiverGroup!='all' AND $State!='all')
+			;
+		elseif ($GetterGroup!='all' AND $State!='all')
+			;
+		elseif ($GiverGroup!='all')// && GetterGroup!='all'
+			$r=j::ODQL($s.$w."E=?".$o,$GetterGroup);
+		elseif($GetterGroup!='all')// && GiverGroup!='all'
+			$r=j::ODQL($s.$w."I=?".$o, $GiverGroup);
+		elseif ($State!='all')
+		;
+		else // GiverGroup!='all' && GetterGroup!='all'
+			$r=j::ODQL($s.$o);
+		return $r;
+	}
 // 	public function GetBelowTime($Mail, $Time)
 // 	{
 // 		$r=j::ODQL("SELECT S FROM FileStock S JOIN S.Mail M WHERE M=? AND S.EditTimestamp<?", $Mail, $Time);

@@ -273,6 +273,7 @@ class MyUserRepository extends EntityRepository
 	}
 	public function getRandomReviewer()
 	{
+		$t1=microtime();
 		$Reviewers=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1");
 		$WSum=0;
 		if($Reviewers)
@@ -295,6 +296,8 @@ class MyUserRepository extends EntityRepository
 				break;
 			}
 		}
+		$dt=microtime()-$t1;
+		echo "&".$dt."&";
 		//ORM::Dump($Selected->getFullName());
 		return $Selected;
 		
@@ -304,6 +307,7 @@ class MyUserRepository extends EntityRepository
 			return null;
 		else
 			return $r[0];
+		
 	}
 	public function AssignedReviewableFileCount($Reviewer)
 	{

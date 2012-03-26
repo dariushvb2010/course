@@ -448,8 +448,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function RecievedInRange($start=0,$end=0)
 	{
-		$r=j::DQL("SELECT F.Cotag FROM ReviewFile AS F  WHERE  F.CreateTimestamp > ? AND
-		(F.ID NOT IN (SELECT K.ID FROM ReviewProgressManual AS P JOIN P.File AS K ))  AND F.Cotag BETWEEN {$start} AND {$end}",time()-(365*24*60*60));
+		$r=j::DQL("SELECT F.Cotag FROM ReviewFile AS F  WHERE  F.CreateTimestamp > ?  AND F.Cotag BETWEEN {$start} AND {$end}",time()-(365*24*60*60));
 		return $r;
 	}
 	/**
@@ -481,9 +480,6 @@ class ReviewFileRepository extends EntityRepository
 		$r=j::ODQL("SELECT P FROM ReviewProgress AS P WHERE P.File=?",$File);
 		return $r;
 	}
-		
-	
-	
 	public function FinishableFiles($off,$lim,$sort,$ord)
 	{
 		$r1=j::DQL("SELECT F,P FROM ReviewProgressReview AS P JOIN P.File AS F WHERE P.Result=1 AND
