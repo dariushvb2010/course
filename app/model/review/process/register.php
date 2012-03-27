@@ -65,8 +65,8 @@ class ReviewProcessRegisterRepository extends EntityRepository
 			{
 				$R=new ReviewProcessRegister($File, $CurrentUser);
 				$R->SetState($File,FileFsm::NextState($File->State(),"ProcessRegister"));
-				ORM::Write($R);
 				ORM::Persist($File);
+				ORM::Write($R);
 				$res['Class']=$R;
 			}
 			else
