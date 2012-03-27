@@ -143,6 +143,13 @@ abstract class Mail
 			return false;
 		return $this->State<$NewState;
 	}
+// 	static function CheckType($Type)
+// 	{
+// 		if($Type==="Give" OR $Type==="Get" OR $Type=="Send" OR $Type="Receive")
+// 			return true;
+// 		else
+// 			return false;
+// 	}
 	function PersianState()
 	{
 		switch($this->State)
@@ -258,5 +265,5 @@ abstract class Mail
 use \Doctrine\ORM\EntityRepository;
 class MailRepository extends EntityRepository
 {
-		
+	
 }

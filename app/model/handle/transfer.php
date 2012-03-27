@@ -51,6 +51,10 @@ abstract class HandleTransfer
 	 * @var string
 	 */
 	protected $Action;
+// 	const Get="Get";
+// 	const Give="Give";
+// 	const Send="Send";
+// 	const Receive="Receive";
 	function Action(){ return $this->Action; }
 	protected function PersianAction()
 	{
@@ -58,19 +62,19 @@ abstract class HandleTransfer
 		{
 			case "Give":
 				$str="تحویل به ";
-				$str.=$this->PersianCatcher();
+				$str.=$this->PersianDest();
 				return $str;
 			case "Get":
 				$str="تحویل گرفتن از ";
-				$str.=$this->PersianTrasferor();
+				$str.=$this->PersianSource();
 				return $str;
 			case "Send":
 				$str="ارسال به ";
-				$str.=$this->PersianCatcher();
+				$str.=$this->PersianDest();
 				return $str;				
 			case "Receive":
 				$str="دریافت از";
-				$str.=$this->PersianTrasferor();
+				$str.=$this->PersianSource();
 				return $str;
 		}
 	}
@@ -78,36 +82,36 @@ abstract class HandleTransfer
 	 * Giver or Sender 
 	 * @var string
 	 */
-	protected $Transferor;
-	protected function PersianTrasferor()
+	protected $Source;
+	protected function PersianSource()
 	{
-		if($this->Transferor=="Out")
+		if($this->Source=="Out")
 			return "خارج";
 		else
-			return ConfigData::$GROUPS[$this->Transferor];
+			return ConfigData::$GROUPS[$this->Source];
 	}
 	/**
 	 * Gitter or Receiver
 	 * @var stirng
 	 */
-	protected $Catcher;
-	protected function PersianCatcher()
+	protected $Dest;
+	protected function PersianDest()
 	{
-		if($this->Catcher=="Out")
+		if($this->Dest=="Out")
 			return "خارج";
 		else
-			return ConfigData::$GROUPS[$this->Catcher];
+			return ConfigData::$GROUPS[$this->Dest];
 	}
 	/**
 	 * SenderGroup for MailSend and GiverGroup for MailGive
 	 * @var MyGroup
 	 */
-	protected $TransferorGroup;
+	protected $SourceGroup;
 	/**
 	 * GetterGroup for MailGet and ReceiverGroup for MailReceive
 	 * @var MyGroup
 	 */
-	protected $CatcherGroup;
+	protected $DestGroup;
 	/**
 	 * SenderTopic for MailReceive and ReceiverTopic for MailSend
 	 * @var ReviewTopic
@@ -115,25 +119,29 @@ abstract class HandleTransfer
 	protected $Topic;
 	public $Error=array();
 	
-	function __construct( $Action="Give", $Transferor, $Catcher)
+	function __construct( $Action="Give", $Source, $Dest)
 	{
-		$this->Transferor=$Transferor;
-		$this->Catcher=$Catcher;
+		$this->Source=$Source;
+		$this->Dest=$Dest;
 		$this->Action=$Action;
 		if($Action=="Receive")
-			$this->TransferorGroup=null;
+			$this->SourceGroup=null;
 		else// Action =Get or Give or Send
-			$this->TransferorGroup=ORM::Find1("MyGroup", "Title",$Transferor);
+			$this->SourceGroup=ORM::Find1("MyGroup", "Title",$Source);
 		if($Action == "Send")
-			$this->CatherGroup=null;
+			$this->DestGroup=null;
 		else //Action =Get or Give or Receive
-			$this->CatcherGroup=ORM::Find1("MyGroup","Title", $Catcher);
+			$this->DestGroup=ORM::Find1("MyGroup","Title", $Dest);
 	}
 	/**
 	* Performing on a MailGive
 	* @param integer $MailID
 	*/
 	function Perform()
+	{
+		
+	}
+	function ShowMails()
 	{
 		
 	}
@@ -158,41 +166,7 @@ abstract class HandleTransfer
 		$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
 		$al->AutoformAfter=true;
 		return $al;
-	}/*
-	protected function MakeList()
-	{
-		///----inner form-----
-		$f=new AutoformPlugin();
-		$f->HasFormTag=false;
-		if($this->Mail->State()==Mail::STATE_EDITING)
-		{	
-			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
-			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
-		}
-		$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
-		$f->Style="border:none;";
-		//-----------List------------------
-		$al=new DynamiclistPlugin($this->Mail->Box());
-		$al->ObjectAccess=true;
-		$al->HasTier=true;
-		$al->TierLabel="ردیف";
-		$al->RemoveLabel="حذف";
-		$al->HasFormTag=true;
-		$al->_List=".autoform .autolist tbody";
-		$al->_Button="div.autoform button";
-		$al->EnterTextName="Cotag";
-		$al->Notifier_Add=array("? اضافه شد","Cotag");
-		//--------al custom javascript code for validating the format of the Cotag-------------
-		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
-		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
-		//----------A C J C------------------------------
-		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
-		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
-		$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
-		$al->Autoform=$f;
-		$al->AutoformAfter=true;
-		return $al;
-	}*/
+	}
 	protected function MakeList()
 	{
 		if($this->Mail instanceof MailGive)
@@ -252,6 +226,7 @@ abstract class HandleTransfer
 		{
 			if($this->Action=="Give")
 			{
+				echo "hi";
 				if($this->Mail->State()==Mail::STATE_EDITING)
 				{
 					$f->AddElement(array("Type"=>"text", "Name"=>"Cotag", "Label"=>"کوتاژ"));
@@ -260,8 +235,10 @@ abstract class HandleTransfer
 			}
 			else if($this->Action=="Get")
 			{
-				if($this->Mail-State()==Mail::STATE_GETTING)
+				echo 1;
+				if($this->Mail-State()==Mail::STATE_GETTING OR $this->Mail-State()==Mail::STATE_INWAY)
 				{
+					echo 2;
 					$f->AddElement(array("Type"=>"text", "Name"=>"Cotag", "Label"=>"کوتاژ"));
 					$f->AddElement(array("Type"=>"button","Value"=>"اضافه"));
 				}

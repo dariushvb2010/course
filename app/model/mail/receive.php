@@ -4,7 +4,7 @@
  * when Archive group or Raked group receive some mail with 1000 file in, this type of mail is used 
  * ReceiverGroup='Archive' or 'Raked'
  * @author dariush jafari
- * @Entity
+ * @Entity(repositoryClass="MailReceiveRepository")
  * 
  */
 class MailReceive extends Mail
@@ -54,5 +54,19 @@ class MailReceive extends Mail
 		if($ReceiverGroup) $this->AssignSenderTopic($SenderTopic);
 		if( $SenderTopic) $this->AssignReceiverGroup($ReceiverGroup);
 		$this->ProgressReceive=new ArrayCollection();
+	}
+}
+use \Doctrine\ORM\EntityRepository;
+class MailReceiveRepository extends EntityRepository
+{
+	function LastMail(ReviewTopic $SenderTopic, MyGroup $RecieverGroup)
+	{
+		$r=j::ODQL("SELECT M FROM MailReceive AS M JOIN M.SenderTopic S JOIN M.RecieverGroup D 
+							WHERE S=? AND D=? 
+					 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1", $SenderTopic, $RecieverGroup);
+		if ($r)
+		return $r[0];
+		else
+		return null;
 	}
 }

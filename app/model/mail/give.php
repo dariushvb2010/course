@@ -87,7 +87,7 @@ class MailGive extends Mail
 			return 1;			
 		}
 	}
-	function SaveGive($Files, $RemoveCalled,& $Error)
+	function SaveGive($Files, $RemoveCalled, &$Error)
 	{
 		$ErrorCount=0;
 		$time=time();
@@ -223,11 +223,11 @@ class MailGiveRepository extends EntityRepository
 		ORM::Persist($r);
 		return $r;
 	}
-	function LastMail(MyGroup $GiverGroup, MyGroup $GetterGroup)
+	function LastMail(MyGroup $GiverGroup, MyGroup $GetterGroup, $State)
 	{
 		$r=j::ODQL("SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E
-						WHERE I=? AND E=?
-				 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1",$GiverGroup, $GetterGroup);
+						WHERE I=? AND E=? AND M.State=?
+				 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1",$GiverGroup, $GetterGroup, $State);
 		if ($r)
 		return $r[0];
 		else
@@ -235,24 +235,24 @@ class MailGiveRepository extends EntityRepository
 	}
 	function GetAll($GiverGroup='all', $GetterGroup='all', $State='all')
 	{
-		$s="SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E";
+		$s=" SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E ";
 		$w=" WHERE ";
 		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
 		if($GiverGroup!='all' AND $GetterGroup!='all' AND $State!='all')
-			$r=j::ODQL($s.$w."I=? AND E=?".$o, $GiverGroup, $GetterGroup);
+			$r=j::ODQL($s.$w."I=? AND E=? AND M.State=?".$o, $GiverGroup, $GetterGroup, $State);
 		elseif($GiverGroup!='all' AND $GetterGroup!='all')
-			;
+			$r=j::ODQL($s.$w."I=? AND E=?".$o, $GiverGroup, $GetterGroup);
 		elseif($GiverGroup!='all' AND $State!='all')
-			;
+			$r=j::ODQL($s.$w."I=? AND M.State=?".$o, $GiverGroup, $State);
 		elseif ($GetterGroup!='all' AND $State!='all')
-			;
-		elseif ($GiverGroup!='all')// && GetterGroup!='all'
-			$r=j::ODQL($s.$w."E=?".$o,$GetterGroup);
-		elseif($GetterGroup!='all')// && GiverGroup!='all'
+			$r=j::ODQL($s.$w."E=? AND M.State=?".$o, $GetterGroup, $State);
+		elseif ($GiverGroup!='all')
 			$r=j::ODQL($s.$w."I=?".$o, $GiverGroup);
+		elseif($GetterGroup!='all')
+			$r=j::ODQL($s.$w."E=?".$o,$GetterGroup);
 		elseif ($State!='all')
-		;
-		else // GiverGroup!='all' && GetterGroup!='all'
+			$r=j::ODQL($s.$w."M.State=?".$o,$State);
+		else 
 			$r=j::ODQL($s.$o);
 		return $r;
 	}

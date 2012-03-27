@@ -2,7 +2,7 @@
 /**
  * 
  * @author dariush jafari
- * @Entity
+ * @Entity(repositoryClass="MailSendRepository")
  */
 class MailSend extends Mail
 {
@@ -48,7 +48,20 @@ class MailSend extends Mail
 		if($ReceiverTopic) $this->AssignReceiverTopic($ReceiverTopic);
 		$this->ProgressSend= new ArrayCollection();
 	}
-	
-	
-	
+
+}
+
+use \Doctrine\ORM\EntityRepository;
+class MailSendRepository extends EntityRepository
+{
+	function LastMail(MyGroup $SenderGroup, ReviewTopic $ReceiverTopic)
+	{
+		$r=j::ODQL("SELECT M FROM MailSend AS M JOIN M.SenderGroup S JOIN M.ReceiverTopic D
+							WHERE S=? AND D=? 
+					 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1",$SenderGroup, $ReceiverTopic);
+		if ($r)
+		return $r[0];
+		else
+		return null;
+	}
 }

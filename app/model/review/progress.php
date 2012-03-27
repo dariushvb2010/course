@@ -293,8 +293,10 @@ abstract class ReviewProgress
 	 */
 	function Apply()
 	{
-		$this->ApplyAlarm();
-		return $this->DoFileState(true);
+		$res=$this->DoFileState(true);
+		if(!is_string($res))
+			$this->ApplyAlarm();
+		return $res;
 	}
 	/**
 	 * Completely pure function

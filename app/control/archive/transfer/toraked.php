@@ -8,16 +8,15 @@ class ArchiveTransferTorakedController extends JControl
 	 */
 	function Start()
 	{
-		//j::$Log->Log("ho", "hhhhhhhhhhhhh");
 		j::Enforce("Archive");
 		
 		//-----------------SINGLE------------
-		if(isset($_POST['MailID']))
+		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
 		{
-// 			if(isset($_POST['Save']))
-// 			$this->Redirect(SiteRoot."/archive/transfer/delete?MailID=".$_POST['MailID']);
-			
-			$MailID=$_POST['MailID']*1;
+			if(isset($_POST['MailID']))
+				$MailID=$_POST['MailID']*1;
+			else 
+				$MailID=$_GET['MailID']*1;
 			$Mail=ORM::Find("MailGive", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
@@ -41,7 +40,7 @@ class ArchiveTransferTorakedController extends JControl
 			return true;
 		if($Mail instanceof MailGive)
 		{
-			if($Mail->GiverGroup()->Title()=="Archive" AND $Mail->GetterGroup()->Title()=="Raked")
+			if($Mail->GiverGroup()->Title()=="Archive" AND $Mail->GetterGroup()->Title()=="Raked" AND $Mail->State()<=Mail::STATE_INWAY)
 				return true;
 			else
 				return false;

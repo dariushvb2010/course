@@ -42,9 +42,9 @@ class HandleTransferSingle extends HandleTransfer
 		
 	}
 	
-	function __construct($Action, $Transferor, $Catcher, $Mail)
+	function __construct($Action, $Source, $Dest, $Mail)
 	{
-		parent::__construct($Action, $Transferor, $Catcher);
+		parent::__construct($Action, $Source, $Dest);
 		$this->Mail=$Mail;
 	}
 	function MailDescription()

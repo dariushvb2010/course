@@ -24,6 +24,7 @@ if($this->Handler->MainForm)
 	$this->Handler->MainForm->PresentHTML();
 ?>
 </div>
+<?php $this->Handler->ShowMails();?>
 <script>
 <?php 
 if($this->Handler->MainForm)
