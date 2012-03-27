@@ -68,21 +68,17 @@ class ReviewProcessProphecyRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Prophecy_".$ProphecyStep))
-			{
-				$R=new ReviewProcessProphecy($File,$ProphecyStep,$Indicator,$CurrentUser);
-				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Prophecy_".$ProphecyStep));
-				ORM::Write($R);
+			$R=new ReviewProcessProphecy($File,$ProphecyStep,$Indicator,$CurrentUser);
+			$R->setComment(($Comment==null?"":$Comment));
+			$er=$R->Apply();
+			if(!is_string($er)){
+				ORM::Persist($R);
 				ORM::Persist($File);
-				$res['Class']=$R;
-			}
-			else
-			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان اعلام ابلاغی را ثبت کرد.";
+				$Res['Class']=$R;
+			}else{
+				$Res['Error']=$er;
 			}
 			return $res;
-
 		}
 
 	}
