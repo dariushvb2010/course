@@ -146,7 +146,6 @@ class ReviewProgressReviewRepository extends EntityRepository
 				$lastreviewer=$File->LastReviewer();
 				$ProgReview=$File->LastReview();
 				$LLP=$File->LLP();
-				ORM::Dump($LLP);
 				$Reviewer=MyUser::CurrentUser();
 				if ($lastreviewer==null)
 				{
@@ -250,6 +249,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 						if($_POST['Difference']!=null)
 						$Difference=implode(",",$_POST['Difference']);
 						$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
+						$Amount=str_replace(",", "", $Amount);
 						$ProgReview->kill();
 						$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 						$R->SetResult($_POST['Result']);

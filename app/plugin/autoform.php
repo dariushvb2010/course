@@ -318,7 +318,9 @@ $(function(){
 				else 
 					echo $E['Default'];
 				?>'
-				
+				<?php if(isset($E['Class'])){?>
+					class='<?php echo $E['Class'];?>'
+				<?php }?>
 				/><?php echo $E['Unit'];?>
 			<?php 	
 			break;
