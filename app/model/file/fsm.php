@@ -102,6 +102,22 @@ class FileFsm extends JModel
 	'karshenas'=>'کارشناس'
 	);
 	
+	public static $Name2State=array(
+		'reviewing'=> 5,
+		'archive'=>4,
+	);
+	
+	/**
+	 * 
+	 * maps state name with state numbers
+	 * @param string
+	 */
+	function Name2State($name){
+		if (!array_key_exists($name,FileFsm::$Name2State))
+			return null;
+		 return FileFsm::$Name2State[$name];
+	}
+	
 	/**
 	 * 
 	 * return possible progresses for each input state
@@ -172,36 +188,46 @@ class FileFsm extends JModel
 	{
 		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
 		//ORM::Dump($files);
-		j::SQL("UPDATE ReviewFile set State=2 ");
+		//j::SQL("UPDATE ReviewFile set State=2 ");
+		//ORM::Flush();
 		foreach($files as $f)
 		{
 			if($f)
-			$f->SetState(2);
+				$f->SetState(2);
 			$p=$f->LastProgress();
 			if($p->MailNum()==0)
 			{
 		 		echo "3";
 				$f->SetState(3);
 			}
+			ORM::Persist($f);
 		}
+		ORM::Flush();
 	}
 	static function Moderate2()
 	{
 		echo "<br/>";
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Registerarchive",0,99999999);
+		//ORM::Query(new ReviewFile)->UpdateStateOfFilesWithLastProgress("Registerarchive",4);
 		//ORM::Dump($files);
 		foreach($files as $f)
 		{
 			$f->SetState(4);
+			ORM::Persist($f);
 		}
+		ORM::Flush();
+	}
+	static function Moderate3()
+	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Assign",0,99999999);
 		foreach($files as $f)
 		{
 			$f->SetState(5);
+			ORM::Persist($f);
 		}
 		ORM::Flush();
 	}
-	public static function Moderate3()
+	public static function Moderate4()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
 		foreach($files as $f)
@@ -212,7 +238,7 @@ class FileFsm extends JModel
 			$f->SetState(11);
 		}
 	}
-	public static function Moderate4()
+	public static function Moderate5()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
 		//ORM::Dump($files);
@@ -229,7 +255,7 @@ class FileFsm extends JModel
 			$f->SetState(11);
 		}
 	}
-	public static function Moderate5()
+	public static function Moderate6()
 	{
 		
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Post",0,99999999);

@@ -286,10 +286,10 @@ class ReviewFileRepository extends EntityRepository
 		if (strtolower($Type)!=="all")
 			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
 			AND P INSTANCE OF Review{$T}{$Type} 
-			ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
+			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
 		else 
 			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
-			ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
+			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
 		return $r[0];
 	}
 	public function GetOnlyProgressStart($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
@@ -319,6 +319,21 @@ class ReviewFileRepository extends EntityRepository
 								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
+	
+	public function UpdateStateOfFilesWithLastProgress($Progress,$NewState)
+	{
+		$r=j::ODQL("SELECT F.ID FROM ReviewFile AS F JOIN F.Progress AS P
+					WHERE P.CreateTimestamp=
+					(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
+					AND P INSTANCE OF ReviewProgress{$Progress}
+					");
+		var_dump($r);
+		foreach ($r as $t){
+			j::DQL("UPDATE ReviewFile FF SET FF.State={$NewState} WHERE FF.ID={$t}");
+		}
+		return $r;
+	}
+	
 	public function GetMaxID()
 	{
 		$r=j::DQL("SELECT MAX(F.ID) AS Result FROM ReviewFile AS F");
