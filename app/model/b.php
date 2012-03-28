@@ -30,27 +30,17 @@ class b
 		 
 		$Num=$Num."";
 		$C="ClassNum{$Num}";
-		echo "C:".$C."<br/>";
-		$CM=ORM::Query("ConfigMain")->GetObject("ClassNum225");
-		ORM::Dump($CM);
-		file_put_contents("a.txt", "salam", FILE_APPEND | LOCK_EX);
+		$CM=ORM::Query("ConfigMain")->GetObject($C);
 		if(!$CM)
 		{
-			ConfigMain::Add("ClassNum225",1,false);
+			ConfigMain::Add($C,1,false);
 			return 1;
 		}
 		else
 		{
-			$ClassNum=$CM->Value();
-			echo "Val:".$ClassNum."<br/>";
-			$ClassNum=($ClassNum).";";
-			echo "add1:".$ClassNum."<br/>";
-			$CM->SetValue($ClassNum);
+			$CM->SetValue($CM->Value()*1+1);
 			ORM::Persist($CM);
-			ORM::Flush();
-			$CM=ORM::Query("ConfigMain")->GetObject("ClassNum225");
-			echo "val after setvalue:".$CM->Value()."<br/>";
-			return $ClassNum;
+			return $CM->Value();
 		}
 	}
 	public static function CotagValidation($Cotag)

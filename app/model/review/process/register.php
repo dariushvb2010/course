@@ -61,17 +61,14 @@ class ReviewProcessRegisterRepository extends EntityRepository
 		$CurrentUser=MyUser::CurrentUser();
 		if($File)
 		{
-			if(FileFsm::IsPossible($File->State(),"ProcessRegister"))
-			{
-				$R=new ReviewProcessRegister($File, $CurrentUser);
-				$R->SetState($File,FileFsm::NextState($File->State(),"ProcessRegister"));
-				ORM::Write($R);
+			$R=new ReviewProcessRegister($File, $CurrentUser);
+			$err=$R->Apply();
+			if(!is_string($err)){
 				ORM::Persist($File);
-				$res['Class']=$R;
-			}
-			else
-			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان ثبت کلاسه کرد.";
+				ORM::Write($R);
+				$res['Class']=$File->GetClass();
+			}else{
+				$res['Error']=$err;
 			}
 		}
 		else 
