@@ -81,6 +81,12 @@ class MailGive extends Mail
 			$this->SaveTimestamp=time();
 			return $this->SaveGet($Files, $RemoveCalled, $Error);
 		}
+		elseif($this->State()==self::STATE_INWAY)
+		{
+			$this->StateGetting();
+			$this->SaveTimestamp=time();
+			return $this->SaveGet($Files, $RemoveCalled, $Error);
+		}
 		else
 		{
 			$Error[]="امکان ذخیره کردن وجود ندارد.";
@@ -120,8 +126,23 @@ class MailGive extends Mail
 		}
 		return $ErrorCount;
 	}
-	function SaveGet($Files, $RemoveCalled,& $Error)
+	function SaveGet($Files, &$Error)
 	{
+		echo "SaveGet";
+		if($this->State()==self::STATE_GETTING)
+		{
+			$this->RetouchTimestamp=time();
+		}
+		elseif($this->State()==self::STATE_INWAY)
+		{
+			$this->StateGetting();
+			$this->RetouchTimestamp=time();
+		}
+		else
+		{
+			$Error[]="امکان ذخیره کردن وجود ندارد.";
+			return 1;
+		}
 		$ErrorCount=0;
 		$time=time();
 		foreach ($Files as $File)
@@ -131,18 +152,16 @@ class MailGive extends Mail
 				$Error[]=strval($File);
 				continue;
 			}
-			$P=ORM::Query("ReviewProgressGet")->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
+			$P=ORM::Query("ReviewProgressGet")->AddToFile($File,false);//progress is not persist, it is just for error reporting
 			if(is_string($P))
 			{
 				$E=$P;
 				$ErrorCount++;
 			}
 			else
-			$E=null;
+				$E=null;
 			$this->UpdateStock($File, $E);
 		}	
-		if($RemoveCalled)
-			$this->RemoveOldStocks($time);
 		return $ErrorCount;
 	}
 	function Give($Files, $RemoveCalled,& $Error)
@@ -185,10 +204,6 @@ class MailGive extends Mail
 	{
 		
 	}
-// 	private function GetBelowTime($Time)
-// 	{
-// 		return ORM::Query("MailGive")->GetBelowTime($this, $Time);
-// 	}
 	function __construct($Num=null, $Subject=null, $GiverGroup=null, $GetterGroup=null, $Description=null)
 	{
 		parent::__construct($Num, $Subject, $Description);
@@ -256,12 +271,4 @@ class MailGiveRepository extends EntityRepository
 			$r=j::ODQL($s.$o);
 		return $r;
 	}
-// 	public function GetBelowTime($Mail, $Time)
-// 	{
-// 		$r=j::ODQL("SELECT S FROM FileStock S JOIN S.Mail M WHERE M=? AND S.EditTimestamp<?", $Mail, $Time);
-// 		if(count($r))
-// 			return $r;
-// 		else
-// 			return null;
-// 	}
 }

@@ -129,7 +129,10 @@ class MyGroup
 			$this->MailGive=new ArrayCollection();
 			$this->MailGet= new ArrayCollection();
 	}
-	
+	static function Archive()
+	{
+		return ORM::Find("MyGroup", "Archive");
+	}
 }
 
 

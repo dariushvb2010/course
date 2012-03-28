@@ -1,4 +1,6 @@
 <?php
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * 
  * when Archive group or Raked group receive some mail with 1000 file in, this type of mail is used 
@@ -46,7 +48,11 @@ class MailReceive extends Mail
 	* @var arrayCollectionOfReviewProgressReceive
 	*/
 	protected $ProgressReceive;
-	
+	function MyBox()
+	{
+		if($this->State==self::STATE_CLOSED)
+			return $this->ProgressReceive;
+	}
 	public function Save($Files){}
 	function __construct($Num=null, $Subject=null, $SenderTopic=null, $ReceiverGroup=null, $Description=null)
 	{
@@ -59,11 +65,58 @@ class MailReceive extends Mail
 use \Doctrine\ORM\EntityRepository;
 class MailReceiveRepository extends EntityRepository
 {
-	function LastMail(ReviewTopic $SenderTopic, MyGroup $RecieverGroup)
+	function Add($Num, $Subject, MyGroup $ReceiverGroup, ReviewTopic $SenderTopic, $Description)
 	{
-		$r=j::ODQL("SELECT M FROM MailReceive AS M JOIN M.SenderTopic S JOIN M.RecieverGroup D 
-							WHERE S=? AND D=? 
-					 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1", $SenderTopic, $RecieverGroup);
+		if(is_string($ReceiverGroup))
+		{
+			$ReceiverGroup=ORM::Find1("MyGroup","Title",$ReceiverGroup);
+			if(!$ReceiverGroup)
+			return "نام بخش تحویل دهنده به درستی وارد نشده است.";
+		}
+		if(!($ReceiverGroup instanceof MyGroup))
+		return "بخش تحویل دهنده یافت نشد.";
+		if(is_numeric($SenderTopic))
+		{
+			$SenderTopic=ORM::Find1("ReviewTopic", $ReviewTopic);
+			if(!$SenderTopic)
+			return "نام بخش تحویل گیرنده به درستی وارد نشده است.";
+		}
+		if(!($SenderTopic instanceof ReviewTopic))
+		return "بخش تحویل گیرنده یافت نشد.";
+	
+		$r=new MailReceive($Num, $Subject, $SenderTopic, $ReceiverGroup, $Description);
+		ORM::Persist($r);
+		return $r;
+	}
+	function GetAll($ReceiverGroup='all', $SenderTopic='all', $State='all')
+	{
+		$s=" SELECT M FROM MailSend AS M JOIN M.SenderTopic I JOIN M.ReceiverGroup E ";
+		$w=" WHERE ";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		if($SenderTopic!='all' AND $ReceiverGroup!='all' AND $State!='all')
+		$r=j::ODQL($s.$w."I=? AND E=? AND M.State=?".$o, $SenderTopic, $ReceiverGroup, $State);
+		elseif($SenderTopic!='all' AND $ReceiverGroup!='all')
+		$r=j::ODQL($s.$w."I=? AND E=?".$o, $SenderTopic, $ReceiverGroup);
+		elseif($SenderTopic!='all' AND $State!='all')
+		$r=j::ODQL($s.$w."I=? AND M.State=?".$o, $SenderTopic, $State);
+		elseif ($ReceiverGroup!='all' AND $State!='all')
+		$r=j::ODQL($s.$w."E=? AND M.State=?".$o, $ReceiverGroup, $State);
+		elseif ($SenderTopic!='all')
+		$r=j::ODQL($s.$w."I=?".$o, $SenderTopic);
+		elseif($ReceiverGroup!='all')
+		$r=j::ODQL($s.$w."E=?".$o,$ReceiverGroup);
+		elseif ($State!='all')
+		$r=j::ODQL($s.$w."M.State=?".$o,$State);
+		else
+		$r=j::ODQL($s.$o);
+		return $r;
+	}
+	function LastMail(MyGroup $ReceiverGroup)
+	{
+		$r=j::ODQL("SELECT M FROM MailReceive AS M JOIN M.ReceiverGroup D 
+							WHERE D=? 
+					 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1", $ReceiverGroup);
+		ORM::Dump($r);
 		if ($r)
 		return $r[0];
 		else

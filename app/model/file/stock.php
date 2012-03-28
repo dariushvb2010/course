@@ -2,6 +2,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 /**
  * has to save the file info
+ * only usefull for mail
  * saves the files in the mail and 
  * has a 1-1 relationship with the ReviewFile
  * @author dariush jafari

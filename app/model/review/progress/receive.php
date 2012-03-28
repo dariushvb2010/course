@@ -26,15 +26,17 @@ class ReviewProgressReceive extends ReviewProgress
 	*/
 	protected $MailReceive;
 	function MailReceive(){ return $this->MailReceive; }
+	function SetMailReceive(MailReceive $Mail){ $this->MailReceive=$Mail; }
 	function AssignMailReceive( MailReceive $var)
 	{
 		$this->MailReceive=$var;
 		$var->ProgressReceive()->add($this);
 	}
-	function __construct(ReviewFile $File=null, MailReceive $MailReceive=null)
+	function __construct(ReviewFile $File=null, MailReceive $MailReceive=null, $IfPersist=true)
 	{
-		parent::__construct($File);
-		if($MailReceive) $this->AssignMailReceive($MailReceive);
+		$User=MyUser::CurrentUser();
+		parent::__construct($File, $User, $IfPersist);
+		$IfPersist ? $this->AssignMailReceive($Mail) : $this->SetMailReceive($Mail);
 	}
 	
 	function  Summary()
@@ -50,7 +52,7 @@ class ReviewProgressReceive extends ReviewProgress
 	}
 	function Event()
 	{
-		return "Assign";
+		return "Receive";
 	}
 }
 
@@ -58,5 +60,21 @@ class ReviewProgressReceive extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressReceiveRepository extends EntityRepository
 {
-	
+	public function AddToFile(ReviewFile $File,MailReceive $Mail, $IfPersist=true)
+	{
+		$File=ReviewFile::GetRecentFile($File);
+		if(!$File)
+		{
+			return "اظهارنامه یافت نشد.";
+		}
+		$P=new ReviewProgressReceive($File, $Mail, $IfPersist);
+		$ch=$IfPersist ? $P->Apply() : $P->Check();
+		if(is_string($ch))
+			return $ch;
+		if($IfPersist) 
+		{
+			ORM::Persist($P);
+		}
+		return $P;
+	}
 }

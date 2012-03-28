@@ -13,6 +13,7 @@ class TestTest extends JTest
 	function tearDown(){}
 	function testStart()
 	{
-		FileFsm::Moderate1();
+		$M=ORM::Find("Mail", 14);
+		ORM::Dump($M);
 	}
 }
