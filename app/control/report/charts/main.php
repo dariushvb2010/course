@@ -3,7 +3,7 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','yy');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -16,6 +16,7 @@ class ReportChartsMainController extends JControl
 		$this->ConfigFileName=$ChartType;
 		
 		switch ($ChartType){
+			//////////////////////////////////////////////////////
 			case 'daftar_cotag':
 				$days=30;
 				$r=ORM::Query(new ReviewProgressStart)->DailyStart($days);
@@ -25,17 +26,31 @@ class ReportChartsMainController extends JControl
 				}
 				$this->daily1=$daily1;
 				break;
+			/////////////////////////////////////////////////////	
 			case 'percentage':
+				$r=ORM::Query(new ReviewProgressReview)->ReviewPercentage();
 				$percentarray=array(
-					'خطا' =>50 ,
-					'کسر دریافتی'=>26,
-					'قطع مرور زمان'=>8,
-					'غیره'=>2);
+					'خطا' => $r['oked'] ,
+					'کسر دریافتی'=> $r['a528'],
+					'قطع مرور زمان'=> $r['a109'], 
+					'غیره'=> $r['a248']);
 				foreach ($percentarray as $key=> $value){
 					$out_ar[]="['{$key}' ,{$value}]";
 				}
 				$this->percentarray=$out_ar;
-				
+				break;
+			/////////////////////////////////////////////////////	
+			case 'karshenas_work_volume':
+				$r=ORM::Query(new ReviewProgressReview)->karshenas_work_lastmounth();
+				$names=array();
+				$values=array();
+				foreach ($r as $value){
+					$names[]="'".$value['user']->getFullName()."'";
+					$values[]=$value['count'];
+				}
+				$this->values=$values;
+				//$this->values=array(5,5);
+				$this->names=$names;
 				break;
 			
 		}

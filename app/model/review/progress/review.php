@@ -262,4 +262,28 @@ class ReviewProgressReviewRepository extends EntityRepository
 			}
 		}
 	}
+	
+	public function ReviewPercentage()
+	{
+		$r1=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=1");
+		$r2=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=528");
+		$r3=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=248");
+		$r4=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=109");
+		$res=array('oked'=>$r1[0]['c'],'a528'=>$r2[0]['c'],'a248'=>$r3[0]['c'],'a109'=>$r4[0]['c']);
+		return $res;
+	}
+
+	public function karshenas_work_lastmounth()
+	{
+		$r=j::ODQL("SELECT COUNT(P.ID) as co,U.ID as user
+					FROM ReviewProgress AS P JOIN P.User AS U 
+					WHERE P INSTANCE OF	ReviewProgressReview AND ".time()."-P.CreateTimestamp<60*60*24*30 
+					GROUP BY P.User");
+		foreach($r as $s)
+		{
+			$u=j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$s['user']);
+			$r2[]=array('count'=>$s['co'],'user'=>$u[0]);
+		}
+		return $r2;
+	}
 }
