@@ -26,28 +26,36 @@ class ReviewProgressSend extends ReviewProgress
 	*/
 	protected $MailSend;
 	function MailSend(){ return $this->MailSend; }
-	function SetMailSend($MailSend){ $this->MailSend=$MailSend; }
-	
-	function __construct(ReviewFile $File=null, $MailSend=null)
+	function SetMailSend($Mail){ $this->MailSend=$Mail; }
+	function AssignMailSend($Mail)
 	{
-		parent::__construct($File);
-		$this->SetMailSend($MailSend);
+		$this->MailSend=$Mail;
+		$Mail->ProgressSend()->add($this);
+	}
+	function __construct(ReviewFile $File=null, MailSend $Mail=null, $IfPersist=true)
+	{
+		$User=MyUser::CurrentUser();
+		parent::__construct($File, $User, $IfPersist);
+		$IfPersist ? $this->AssignMailSend($Mail) : $this->SetMailSend($Mail);
+		
 	}
 	
 	function  Summary()
 	{
-		if($this->Reviewer)
-			return "اظهارنامه به کارشناس بازبینی "."<b>".$this->Reviewer()->getFullName()."</b>"." تخصیص داده شد.";
-		else 
-			return "خطا در گزارش گیری";
+		$href=ViewMailPlugin::GetHref($this, "Send");
+		$r="اظهارنامه از ".$this->MailSend->SenderGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailSend->Num()."</a> به ".$this->MailSend->ReceiverTopic()->Topic()." ارسال شد.";
+		return $r;
 	}
 	function Title()
 	{
-		return "تحویل به ";
+		return "ارسال به خارج ";
 	}
 	function Event()
 	{
-		return "Assign";
+		$r="Send_";
+		$Sender=$this->MailSend->SenderGroup()->Title();
+		$r="Send_".strtolower($Sender)."_to_out";
+		return $r;
 	}
 }
 
@@ -55,36 +63,21 @@ class ReviewProgressSend extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressSendRepository extends EntityRepository
 {
-	public function AddToFile(ReviewFile $File,ReviewMail $MailSend)
+	public function AddToFile(ReviewFile $File,MailSend $Mail, $IfPersist=true)
 	{
 		$File=ReviewFile::GetRecentFile($File);
 		if(!$File)
 		{
 			return "اظهارنامه یافت نشد.";
 		}
-		$P=new ReviewProgressSend();
-		
-		if($Last->isSend()!=1)
-		{
-			$Error="آخرین فرایند اظهارنامه با کوتاژ ".$File->Cotag()."ارسال نبوده است.بلکه دریافت بوده  است.";
-			return $Error;
-		}
-		$countSend=ORM::Query(new ReviewMail)->GetCountType($Mail,1);
-		$countReceive=ORM::Query(new ReviewMail)->GetCountType($Mail,0);
-		if($countReceive+1==$countSend)
-		{
-
-			$Mail->SetState(2);
-
-		}
-				
-		$User=MyUser::CurrentUser();
-		$R=new ReviewProgressPost($File,$User,$Mail,$IsSend);
-		$ch=$R->Apply();
+		$P=new ReviewProgressSend($File, $Mail, $IfPersist);
+		$ch=$IfPersist ? $P->Apply() : $P->Check();
 		if(is_string($ch))
-		return $ch;
-		ORM::Persist($R);
-		ORM::Flush();
-		return true;
+			return $ch;
+		if($IfPersist) 
+		{
+			ORM::Persist($P);
+		}
+		return $P;
 	}
 }

@@ -97,8 +97,10 @@ abstract class HandleTransfer
 	protected $Dest;
 	protected function PersianDest()
 	{
-		if($this->Dest=="Out")
-			return "خارج";
+		if($this->Action=="Send")
+			return $this->Topic()->Topic();
+		elseif($this->Action=="Receive")
+			return $this->Topic()->Topic();
 		else
 			return ConfigData::$GROUPS[$this->Dest];
 	}
@@ -116,7 +118,17 @@ abstract class HandleTransfer
 	 * SenderTopic for MailReceive and ReceiverTopic for MailSend
 	 * @var ReviewTopic
 	 */
-	protected $Topic;
+	protected function Topic()
+	{
+		if($this->Action=="Send")
+		if($this->Mail instanceof MailSend)
+			return $this->Mail->ReceiverTopic();
+		if($this->Action=="Receive")
+		if($this->Mail instanceof MailReceive)
+			return $this->Mail->SenderTopic();
+		return null;
+	}
+	public $TopicType;
 	public $Error=array();
 	
 	function __construct( $Action="Give", $Source, $Dest)
@@ -125,13 +137,27 @@ abstract class HandleTransfer
 		$this->Dest=$Dest;
 		$this->Action=$Action;
 		if($Action=="Receive")
+		{
 			$this->SourceGroup=null;
+			if(isset($Source))
+				$this->TopicType=$Source;
+			elseif($this->Mail)
+				$this->TopicType=$this->Mail->SenderTopic()->Type();
+		}
 		else// Action =Get or Give or Send
 			$this->SourceGroup=ORM::Find1("MyGroup", "Title",$Source);
 		if($Action == "Send")
+		{
 			$this->DestGroup=null;
-		else //Action =Get or Give or Receive
+			if(isset($Dest))
+				$this->TopicType=$Dest;
+			elseif($this->Mail)
+				$this->TopicType=$this->Mail->ReceiverTopic()->Type();
+		}
+		else 
+		{//Action =Get or Give or Receive
 			$this->DestGroup=ORM::Find1("MyGroup","Title", $Dest);
+		}
 	}
 	/**
 	* Performing on a MailGive
@@ -141,32 +167,7 @@ abstract class HandleTransfer
 	{
 		
 	}
-	function ShowMails()
-	{
-		
-	}
-	protected function MakeListTemplate()
-	{
-		$al=new DynamiclistPlugin($this->Mail->Box());
-		$al->ObjectAccess=true;
-		$al->HasTier=true;
-		$al->TierLabel="ردیف";
-		$al->RemoveLabel="حذف";
-		$al->HasFormTag=true;
-		$al->_List=".autoform .autolist tbody";
-		$al->_Button="div.autoform button";
-		$al->EnterTextName="Cotag";
-		$al->Notifier_Add=array("? اضافه شد","Cotag");
-		//--------al custom javascript code for validating the format of the Cotag-------------
-		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
-		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
-		//----------A C J C------------------------------
-		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
-		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
-		$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
-		$al->AutoformAfter=true;
-		return $al;
-	}
+	
 	protected function MakeList()
 	{
 		if($this->Mail instanceof MailGive)
@@ -196,7 +197,12 @@ abstract class HandleTransfer
 		}
 		elseif($this->Action="Get")
 		{
-			if($this->Mail->State()==Mail::STATE_GETTING)
+			$al->HasRemove=false;
+			$al->HasSelect=true;
+			$al->SelectLabel="انتخاب";
+			$al->SelectName="Cotag";
+			$al->SelectValue="Cotag";
+			if($this->Mail->State()==Mail::STATE_GETTING OR $this->Mail->State()==Mail::STATE_INWAY)
 			{
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 				$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
@@ -204,7 +210,7 @@ abstract class HandleTransfer
 			}
 			else
 			{
-				$al->HasRemove=false;
+				
 			}
 		}
 		$f->Style="border:none;";
@@ -213,11 +219,39 @@ abstract class HandleTransfer
 	}
 	private function MakeListForMailSend()
 	{
-	
+		$al=$this->MakeListTemplate();
+		$f=new AutoformPlugin();
+		$f->HasFormTag=false;
+		if($this->Mail->State()==Mail::STATE_EDITING)
+		{
+			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
+			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
+			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
+		}
+		else
+		{
+			$al->HasRemove=false;
+		}
+		$al->Autoform=$f;
+		return $al;
 	}
 	private function MakeListForMailReceive()
 	{
-	
+		$al=$this->MakeListTemplate();
+		$f=new AutoformPlugin();
+		$f->HasFormTag=false;
+		if($this->Mail->State()==Mail::STATE_EDITING)
+		{
+			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
+			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
+			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
+		}
+		else
+		{
+			$al->HasRemove=false;
+		}
+		$al->Autoform=$f;
+		return $al;
 	}
 	protected function MakeMainForm()
 	{
@@ -226,7 +260,6 @@ abstract class HandleTransfer
 		{
 			if($this->Action=="Give")
 			{
-				echo "hi";
 				if($this->Mail->State()==Mail::STATE_EDITING)
 				{
 					$f->AddElement(array("Type"=>"text", "Name"=>"Cotag", "Label"=>"کوتاژ"));
@@ -235,18 +268,19 @@ abstract class HandleTransfer
 			}
 			else if($this->Action=="Get")
 			{
-				echo 1;
-				if($this->Mail-State()==Mail::STATE_GETTING OR $this->Mail-State()==Mail::STATE_INWAY)
+				if($this->Mail->State()==Mail::STATE_GETTING OR $this->Mail->State()==Mail::STATE_INWAY)
 				{
-					echo 2;
-					$f->AddElement(array("Type"=>"text", "Name"=>"Cotag", "Label"=>"کوتاژ"));
-					$f->AddElement(array("Type"=>"button","Value"=>"اضافه"));
+					
 				}
 			}
 		}
-		elseif($this->Mail instanceof MailSend)
+		elseif($this->Mail instanceof MailSend OR $this->Mail instanceof MailReceive)
 		{
-			//TODO
+			if($this->Mail->State()==mail::STATE_EDITING)
+			{
+				$f->AddElement(array("Type"=>"text", "Name"=>"Cotag", "Label"=>"کوتاژ"));
+				$f->AddElement(array("Type"=>"button","Value"=>"اضافه"));
+			}
 		}
 		elseif($this->Mail instanceof MailReceive)
 		{
@@ -254,10 +288,12 @@ abstract class HandleTransfer
 		}
 		$this->MainForm=$f;
 	}
+	
 	protected function MakeMainFormTemplate()
 	{
 		if(!$this->Mail)
 		return;
+		echo "makeMainFormtemplate";
 		$List=$this->MakeList();
 		$f=new AutoformPlugin("post");
 		$f->Style="border:none; padding:10px;";
@@ -265,5 +301,30 @@ abstract class HandleTransfer
 		$f->HasFormTag=false;
 		$f->List=$List;
 		return $f;
+	}
+	protected function MakeListTemplate()
+	{
+		if($this->Action=="Get")
+		$al=new AutolistPlugin($this->Mail->Box());
+		else
+		$al=new DynamiclistPlugin($this->Mail->Box());
+		$al->ObjectAccess=true;
+		$al->HasTier=true;
+		$al->TierLabel="ردیف";
+		$al->RemoveLabel="حذف";
+		$al->HasFormTag=true;
+		$al->_List=".autoform .autolist tbody";
+		$al->_Button="div.autoform button";
+		$al->EnterTextName="Cotag";
+		$al->Notifier_Add=array("? اضافه شد","Cotag");
+		//--------al custom javascript code for validating the format of the Cotag-------------
+		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
+		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
+		//----------A C J C------------------------------
+		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
+		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
+		$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
+		$al->AutoformAfter=true;
+		return $al;
 	}
 }

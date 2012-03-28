@@ -38,7 +38,7 @@ class ReviewProgressGive extends ReviewProgress
 	*/
 	protected $ProgressGet;
 	function ProgressGet(){return $this->ProgressGet;}
-	
+	function SetProgressGet(ReviewProgressGet $ProgressGet){ $this->ProgressGet=$ProgressGet;}
 	function GiverGroup()
 	{
 		if($this->MailGive)

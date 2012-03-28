@@ -28,6 +28,7 @@ abstract class Mail
 	*/
 	protected $Num;
 	public function Num(){ return $this->Num; }
+	protected function SetNum($Num){ $this->Num=$Num; }
 	static function MailNumValidation($Num)
 	{
 		if($Num)
@@ -41,6 +42,7 @@ abstract class Mail
 	*/
 	protected $Subject;
 	public function Subject(){ return $this->Subject; }
+	protected function SetSubject($Subject){ $this->Subject=$Subject; }
 	/**
 	 * state of editting the mail,
 	 * mail has not been transfered yet, it just has been saved to be transfered in the future
@@ -143,6 +145,13 @@ abstract class Mail
 			return false;
 		return $this->State<$NewState;
 	}
+	function CanEdit()
+	{
+		if($this->State > self::STATE_EDITING_FAULTY)
+			return false;
+		else
+			return true;
+	}
 // 	static function CheckType($Type)
 // 	{
 // 		if($Type==="Give" OR $Type==="Get" OR $Type=="Send" OR $Type="Receive")
@@ -192,6 +201,7 @@ abstract class Mail
 	*/
 	protected $Description;
 	public function Description() { return $this->Description; }
+	protected function SetDescription( $D){ $this->Description=$D; }
 	/**
 	* @OneToMany(targetEntity="FileStock", mappedBy="Mail", cascade={"remove"})
 	* @var arrayCollectionOfFileStock
@@ -210,13 +220,12 @@ abstract class Mail
 	}
 	function Box()
 	{
-		$s=$this->State;
-		if($s==self::STATE_EDITING)
+		if($this->State==self::STATE_EDITING)
 			return $this->Stock;
-		elseif($s=self::STATE_INWAY)
+		elseif($this->State==self::STATE_INWAY)
 			return $this->ProgressGive();
-		elseif ($s=self::STATE_GETTING);
-		elseif ($s=self::STATE_CLOSED);
+		else 
+			return $this->MyBox();
 	}
 	/**
 	 * 
@@ -258,6 +267,15 @@ abstract class Mail
 		$this->State=0;
 		$this->StateEditing();
 		$this->Stock= new ArrayCollection();
+	}
+	function Edit($Num=null, $Subject=null, $Description=null)
+	{
+		if(!$this->CanEdit())
+			return false;
+		$this->Num=$Num;
+		$this->Subject=$Subject;
+		$this->Description=$Description;
+		return true;
 	}
 	//abstract function Save($Files, $RemoveCalled);
 }
