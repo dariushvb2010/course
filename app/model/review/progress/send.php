@@ -43,7 +43,8 @@ class ReviewProgressSend extends ReviewProgress
 	function  Summary()
 	{
 		$href=ViewMailPlugin::GetHref($this, "Send");
-		$r="اظهارنامه از ".$this->MailSend->SenderGroup()->PersianTitle()."با شماره نامه <a href='".$href."'>".$this->MailSend->Num."</a> به ".$this->MailSend->ReceiverTopic()->Topic()."ارسال شد.";
+		$r="اظهارنامه از ".$this->MailSend->SenderGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailSend->Num()."</a> به ".$this->MailSend->ReceiverTopic()->Topic()." ارسال شد.";
+		return $r;
 	}
 	function Title()
 	{
