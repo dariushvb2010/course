@@ -172,8 +172,11 @@ class ReviewProgressReviewRepository extends EntityRepository
 					if (count($_POST))
 					{
 							//var_dump($_POST);
+							if($_POST['Result']==0 AND count($_POST['Provision'])==0)
+								return 'شماره کلاسه انتخاب نشده است.'; 
+								 
 							if(is_array($_POST['Provision']))
-								$Provision=implode(",", $_POST['Provision']);
+								$Provision=$_POST['Provision'];
 							else 
 								$Provision="";
 							if(is_array($_POST['Difference']))
@@ -182,6 +185,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 								$Difference="";
 							//echo"<br>pro dif: ". $Provision.$Difference."<br>";
 							$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
+							$Amount=str_replace(",", "", $Amount);
 							
 							$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 							$R->SetResult($_POST['Result']);
@@ -244,8 +248,11 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					if (count($_POST))
 					{
+						if($_POST['Result']==0 AND count($_POST['Provision'])==0)
+							return 'شماره کلاسه انتخاب نشده است.';
+						var_export($_POST['Provision']);	
 						if($_POST['Provision']!=null)
-							$Provision=implode(",", $_POST['Provision']);
+							$Provision=$_POST['Provision'];
 						if($_POST['Difference']!=null)
 						$Difference=implode(",",$_POST['Difference']);
 						$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
