@@ -7,17 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * */
 class ReviewProgressSend extends ReviewProgress
 {
-	function CreateTimestamp()
-	{
-		if($this->MailSend)
-		return $this->MailSend->EventTimestamp();
-	}
-	function CreateTime()
-	{
-		$jc=new CalendarPlugin();
-		if($this->MailSend)
-		return $jc->JalaliFullTime($this->MailSend->EventTimestamp());
-	}
+	
 	/**
 	*
 	* @ManyToOne(targetEntity="MailSend", inversedBy="ProgressSend")
@@ -39,16 +29,15 @@ class ReviewProgressSend extends ReviewProgress
 		$IfPersist ? $this->AssignMailSend($Mail) : $this->SetMailSend($Mail);
 		
 	}
-	
 	function  Summary()
 	{
-		$href=ViewMailPlugin::GetHref($this, "Send");
-		$r="اظهارنامه از ".$this->MailSend->SenderGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailSend->Num()."</a> به ".$this->MailSend->ReceiverTopic()->Topic()." ارسال شد.";
+		$href=ViewMailPlugin::GetHref($this->MailSend, "Send");
+		$r="اظهارنامه از ".$this->MailSend->SenderGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailSend->Num()."</a> به <b>".$this->MailSend->ReceiverTopic()->Topic()."</b> ارسال شد.";
 		return $r;
 	}
 	function Title()
 	{
-		return "ارسال به خارج ";
+		return "ارسال ";
 	}
 	function Event()
 	{

@@ -43,8 +43,13 @@ class ViewMailPlugin extends JPlugin
 		}
 		elseif($M instanceof MailSend)
 		{
-			$Dest=$_GET['Dest'];
+			$Dest=$_GET['Taraf'];
 			$href="/archive/transfer/toout?Dest=".$Dest."&MailID=".$M->ID();
+		}
+		elseif($M instanceof MailReceive)
+		{
+			$Source=$_GET['Taraf'];
+			$href="/archive/transfer/fromout?Taraf=".$Source."&MailID=".$M->ID();
 		}
 		return $href;
 	}

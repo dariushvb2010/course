@@ -9,6 +9,8 @@ class ArchiveTransferFromoutController extends JControl
 	function Start()
 	{
 		j::Enforce("Archive");
+		$Source=$_GET["Taraf"];
+		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
 		{
@@ -19,22 +21,24 @@ class ArchiveTransferFromoutController extends JControl
 			$Mail=ORM::Find("MailReceive", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
-			$TopicID=$_POST['TopicID'];//for Send and receive
-			$Topic=ORM::Find("ReviewTopic", $TopicID);
 			if(!$Topic)
 			{
 				$this->Error[]="محل دریافت یافت نشد.";
 			}
-			$this->Handler=new HandleTransferSingle("Receive",$Topic, "Archive", $Mail);
+			$this->Handler=new HandleTransferSingle("Receive",$Source, "Archive", $Mail);
+			$this->Handler->Perform();
+		}
+		elseif(isset($_POST['Search']))
+		{
+			$this->Handler=new HandleTransferSearch("Receive",$Source, "Archive");
 			$this->Handler->Perform();
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
-			$Source=$_GET["Taraf"];
-			echo $Source;
 			$this->Handler=new HandleTransferPublic("Receive",$Source,"Archive");
 			$this->Handler->Perform();
+			
 		}
 		$this->Error=$Error;
 		if (count($Error))

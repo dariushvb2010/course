@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 div.mail_container, div.mail_container div{}
-div.mail_container{border:2px solid navy; display:inline-block; min-width:200px; padding:1px; margin:5px;}
+div.mail_container{border:2px solid navy; display:inline-block; min-width:200px; max-width:500px; padding:1px; margin:5px;}
 div.mail_container div.mail_head{ height:27px; padding:0 5px; color:white; font-weight:bold;
 		background:url('../img/mail/btn-25.png'); overflow:hidden;}
 div.mail_container div.head>span{margin-top:2px;}

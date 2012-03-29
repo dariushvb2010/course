@@ -73,7 +73,7 @@ abstract class HandleTransfer
 				$str.=$this->PersianDest();
 				return $str;				
 			case "Receive":
-				$str="دریافت از";
+				$str="دریافت از ";
 				$str.=$this->PersianSource();
 				return $str;
 		}
@@ -85,8 +85,10 @@ abstract class HandleTransfer
 	protected $Source;
 	protected function PersianSource()
 	{
-		if($this->Source=="Out")
-			return "خارج";
+		if($this->Action=="Send")
+			return $this->Topic()->Topic();
+		elseif($this->Action=="Receive")
+			return $this->Topic()->Topic();
 		else
 			return ConfigData::$GROUPS[$this->Source];
 	}
@@ -159,23 +161,13 @@ abstract class HandleTransfer
 			$this->DestGroup=ORM::Find1("MyGroup","Title", $Dest);
 		}
 	}
-	/**
-	* Performing on a MailGive
-	* @param integer $MailID
-	*/
-	function Perform()
-	{
-		
-	}
 	
 	protected function MakeList()
 	{
 		if($this->Mail instanceof MailGive)
 		return $this->MakeListForMailGive();
-		else if($this->Mail instanceof MailSend)
-		return $this->MakeListForMailSend();
-		else if($this->Mail instanceof MailReceive)
-		return $this->MakeListForMailReceive();
+		else
+		return $this->MakeListForMailSendANDReceive();
 	}
 	private function MakeListForMailGive()
 	{
@@ -189,6 +181,9 @@ abstract class HandleTransfer
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 				$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
+				
+				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
+				
 			}
 			else 
 			{
@@ -207,6 +202,9 @@ abstract class HandleTransfer
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 				$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
+				
+				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
+				
 			}
 			else
 			{
@@ -217,7 +215,7 @@ abstract class HandleTransfer
 		$al->Autoform=$f;
 		return $al;
 	}
-	private function MakeListForMailSend()
+	private function MakeListForMailSendANDReceive()
 	{
 		$al=$this->MakeListTemplate();
 		$f=new AutoformPlugin();
@@ -227,24 +225,8 @@ abstract class HandleTransfer
 			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
 			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
-		}
-		else
-		{
-			$al->HasRemove=false;
-		}
-		$al->Autoform=$f;
-		return $al;
-	}
-	private function MakeListForMailReceive()
-	{
-		$al=$this->MakeListTemplate();
-		$f=new AutoformPlugin();
-		$f->HasFormTag=false;
-		if($this->Mail->State()==Mail::STATE_EDITING)
-		{
-			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
-			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
-			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
+			
+			$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
 		}
 		else
 		{
@@ -323,8 +305,29 @@ abstract class HandleTransfer
 		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
-		$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
 		$al->AutoformAfter=true;
 		return $al;
+	}
+	protected function MakeSearchForm()
+	{
+		$State=Mail::$PersianState;
+		$State['all']="همه";
+		if($this->TopicType)
+			$Topics=ORM::Query("ReviewTopic")->GetTopics($this->TopicType);
+		else
+			$Topics=ORM::Query("ReviewTopic")->GetTopics();
+		$Ts['all']="همه";
+		if($Topics)
+		foreach ($Topics as $T)
+			$Ts[$T['ID']]=$T['Topic'];
+		$f=new AutoformPlugin("post");
+		$f->AddElement(array("Type"=>"text", "Name"=>"Num", "Label"=>"شماره نامه", "Value"=>$_POST['Num']));
+		$f->AddElement(array("Type"=>"text", "Name"=>"Subject", "Label"=>"عنوان نامه", "Value"=>$_POST['Subjet']));
+		$f->AddElement(array("Type"=>"select", "Name"=>"State", "Label"=>"وضعیت نامه", "Options"=>$State, "Default"=>$_POST['State']));
+		if($this->Action=="Send" or $this->Action=="Receive")
+			$f->AddElement(array("Type"=>"select", "Name"=>"TopicID", "Label"=>"طرف مکاتبه", "Options"=>$Ts, "Default"=>$_POST['TopicID']));
+				
+		$f->AddElement(array("Type"=>"submit", "Name"=>"Search", "Value"=>"جستجوی نامه ها"));
+		$this->SearchForm=$f;
 	}
 }

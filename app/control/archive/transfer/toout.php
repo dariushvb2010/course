@@ -9,6 +9,7 @@ class ArchiveTransferTooutController extends JControl
 	function Start()
 	{
 		j::Enforce("Archive");
+		$Dest=$_GET["Taraf"];
 		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
@@ -20,14 +21,17 @@ class ArchiveTransferTooutController extends JControl
 			$Mail=ORM::Find("MailSend", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
-			$Dest=$_GET["Taraf"];
 			$this->Handler=new HandleTransferSingle("Send","Archive",$Dest, $Mail);
+			$this->Handler->Perform();
+		}
+		elseif(isset($_POST['Search']))
+		{
+			$this->Handler=new HandleTransferSearch("Send","Archive",$Dest);
 			$this->Handler->Perform();
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
-			$Dest=$_GET["Taraf"];
 			$this->Handler=new HandleTransferPublic("Send","Archive",$Dest);
 			$this->Handler->Perform();
 		}

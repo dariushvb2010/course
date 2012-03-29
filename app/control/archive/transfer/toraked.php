@@ -23,12 +23,18 @@ class ArchiveTransferTorakedController extends JControl
 			$this->Handler=new HandleTransferSingle("Give","Archive","Raked", $Mail);
 			$this->Handler->Perform();
 		}
+		elseif(isset($_POST['Search']))
+		{
+			$this->Handler=new HandleTransferSearch("Give","Archive","Raked");
+			$this->Handler->Perform();
+		}
 		//----------------PUBLIC-------------
 		else 
 		{
 			$this->Handler=new HandleTransferPublic("Give","Archive","Raked");
 			$this->Handler->Perform();
 		}
+		
 		$this->Error=$Error;
 		if (count($Error))
 		$this->Result=false;

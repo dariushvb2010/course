@@ -7,17 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * */
 class ReviewProgressGive extends ReviewProgress
 {
-	function CreateTimestamp()
-	{
-		if($this->MailGive)
-		return $this->MailGive->EventTimestamp();
-	}
-	function CreateTime()
-	{
-		$jc=new CalendarPlugin();
-		if($this->MailGive)
-		return $jc->JalaliFullTime($this->MailGive->EventTimestamp());
-	}
 	/**
 	*
 	* @ManyToOne(targetEntity="MailGive", inversedBy="ProgressGive")
@@ -41,12 +30,10 @@ class ReviewProgressGive extends ReviewProgress
 	function SetProgressGet(ReviewProgressGet $ProgressGet){ $this->ProgressGet=$ProgressGet;}
 	function GiverGroup()
 	{
-		if($this->MailGive)
 		return $this->MailGive->GiverGroup();
 	}
 	function GetterGroup()
 	{
-		if($this->MailGive)
 		return $this->MailGive->GetterGroup();
 	}
 	/**
@@ -65,20 +52,22 @@ class ReviewProgressGive extends ReviewProgress
 	}
 	function  Summary()
 	{
-	
+		$href=ViewMailPlugin::GetHref($this->MailGive, "Give");
+		$r="اظهارنامه از ".$this->MailGive->GiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailGive->Num()."</a> به <b>".$this->MailGive->GetterGroup()->PersianTitle()."</b> تحویل داده شد.";
+		return $r;
 	}
 	function Title()
 	{
-		return "تحویل به ";
+		return "تحویل دادن ";
 	}
 	function Event()
 	{
 		if(!$this->MailGive)
-		throw new Exception("No MailGive provided!");
+			throw new Exception("No MailGive provided!");
 		$GiverGroup=$this->GiverGroup();
 		$GetterGroup=$this->GetterGroup();
 		if(!$GiverGroup OR !$GetterGroup)
-		return;
+			return;
 		$Giver=strtolower($GiverGroup->Title());
 		$Getter=strtolower($GetterGroup->Title());
 		$res="Give_".$Giver."_to_".$Getter;

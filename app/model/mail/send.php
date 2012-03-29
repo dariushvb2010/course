@@ -47,83 +47,7 @@ class MailSend extends Mail
 			return $this->ProgressSend;
 		
 	}
-	/**
-	 * 
-	 * Enter description here ...
-	 * @param array_of_ReviewFile $Files
-	 * @param boolean $RemoveCalled
-	 * @param array_of_string $Error
-	 * @return number
-	 */
-	function Save($Files, $RemoveCalled=true, &$Error)
-	{
-		$ErrorCount=0;
-		$time=time();
-		foreach ($Files as $File)
-		{
-			if(!($File instanceof ReviewFile))
-			{
-				$Error[]=strval($File);
-				continue;
-			}
-			$P=ORM::Query("ReviewProgressSend")->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
-		
-			if(is_string($P))
-			{
-				$E=$P;
-				$ErrorCount++;
-			}
-			else
-				$E=null;
-			$this->UpdateStock($File, $E);
-		}
-		if($RemoveCalled)
-		foreach($this->Stock as $s)
-		if($s->EditTimestamp()<$time)
-		{
-			$s->File()->SetStock(null);
-			$this->Stock->removeElement($s);
-			$s->SetMail(null);
-			ORM::Delete($s);
-		}
-		return $ErrorCount;
-	}
-	function Send($Files, $RemoveCalled, &$Error)
-	{
-		$SaveResult=$this->Save($Files, $RemoveCalled, $Error);
-		if($Files AND $SaveResult===0)
-		{
-			foreach ($Files as $File)
-			{
-				if(!($File instanceof ReviewFile))
-				continue;
-				$P=ORM::Query("ReviewProgressSend")->AddToFile($File,$this);//persist
-				if(is_string($P))
-				{
-					$faulty=true;
-					$this->UpdateStock($File, $P);
-					$Error[]=$P;
-					$Error[]="تعدادی از اظهارنامه ها ارسال نشد. این یک خطای ناجور است. در صورت مشاهده آن به مسئولین نرم افزار اطلاع دهید.";
-					return false;
-				}
-				else // progress has been persisted successfully
-				{
-					$s=$File->Stock();
-					$File->SetStock(null);
-					$this->Stock->removeElement($s);
-					$s->SetMail(null);
-					ORM::Delete($s);
-				}
-			}
-			if($faulty)
-				$this->StateEditingFaulty();
-			else
-				$this->StateClosed();
-			return true;
-		}
-		else
-		return false;
-	}
+	
 	function __construct($Num=null, $Subject=null, $SenderGroup=null, $ReceiverTopic=null, $Description=null)
 	{
 		parent::__construct($Num, $Subject, $Description);
@@ -181,6 +105,58 @@ class MailSendRepository extends EntityRepository
 		$r=j::ODQL($s.$w."M.State=?".$o,$State);
 		else
 		$r=j::ODQL($s.$o);
+		return $r;
+	}
+	function Search(MyGroup $SenderGroup,ReviewTopic $ReceiverTopic=null, $State='all', $Num=null, $Subject=null)
+	{
+		if($Num)
+			$Num="%".$Num."%";
+		if($Subject)
+			$Subject="%".$Subject."%";
+		
+		$s=" SELECT M FROM MailSend AS M JOIN M.SenderGroup I JOIN M.ReceiverTopic E ";
+		$w=" WHERE I=? ";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		if($Num AND $Subject AND $State!='all' AND $ReceiverTopic)
+			$r=j::ODQL($s.$w."AND E=? AND M.State=? AND M.Num LIKE ? AND M.Subject LIKE ?".$o, $SenderGroup, $ReceiverTopic, $State, $Num, $Subject);
+		//---------------33333333333333333--------------------------------------------
+		elseif($ReceiverTopic AND $State!='all' AND $Num)
+			$r=j::ODQL($s.$w."AND E=? AND M.State=? AND M.Num LIKE ?".$o, $SenderGroup, $ReceiverTopic, $State, $Num);
+		elseif($ReceiverTopic AND $State!='all' AND $Subject)
+			$r=j::ODQL($s.$w."AND E=? AND M.State=? AND M.Subject LIKE ?".$o, $SenderGroup, $ReceiverTopic, $State, $Subject);
+		elseif($ReceiverTopic AND $Num AND $Subject)
+			$r=j::ODQL($s.$w."AND E=? AND M.Num LIKE ? AND M.Subject LIKE ?".$o, $SenderGroup, $ReceiverTopic, $Num, $Subject);
+		elseif($Num AND $Subject AND $State!='all')
+			$r=j::ODQL($s.$w."AND M.State=? AND M.Num LIKE ? AND M.Subject LIKE ?".$o, $SenderGroup, $State, $Num, $Subject);
+		//------------------------222222222222222222222-------------------------------------
+		
+		elseif($ReceiverTopic AND $State!='all')
+			$r=j::ODQL($s.$w."AND E=? AND M.State=?".$o, $SenderGroup, $ReceiverTopic, $State);
+		elseif($ReceiverTopic AND $Num)
+			$r=j::ODQL($s.$w."AND E=? AND M.Num LIKE ?".$o, $SenderGroup, $ReceiverTopic, $Num);
+		elseif($ReceiverTopic AND $Subject)
+			$r=j::ODQL($s.$w."AND E=? AND M.Subject LIKE ?".$o, $SenderGroup, $ReceiverTopic, $Subject);
+		elseif($State!='all' AND $Num)
+			$r=j::ODQL($s.$w."AND M.State=? AND M.Num LIKE ?".$o, $SenderGroup, $State, $Num);
+		elseif($State!='all' AND $Subject)
+			$r=j::ODQL($s.$w."AND M.State=? AND M.Subject LIKE ?".$o, $SenderGroup, $State, $Subject);
+		elseif($Num AND $Subject)
+			$r=j::ODQL($s.$w."AND M.Num LIKE ? AND M.Subject LIKE ?".$o, $SenderGroup, $Num, $Subject);
+		//-------------------------11111111111111111111111111-------------------------------------
+		elseif($ReceiverTopic)
+			$r=j::ODQL($s.$w."AND E=?".$o, $SenderGroup, $ReceiverTopic);
+		elseif ($State!='all')
+			$r=j::ODQL($s.$w."AND M.State=?".$o, $SenderGroup, $State);
+		elseif($Num)
+			$r=j::ODQL($s.$w."AND M.Num LIKE ?".$o,$SenderGroup, $Num);
+		elseif ($Subject)
+			$r=j::ODQL($s.$w."AND M.State=?".$o,$SenderGroup, $Subject);
+		else
+		{
+			echo $s.$w.$o; 
+			$r=j::ODQL($s.$w.$o,$SenderGroup);
+			ORM::Dump($r);
+		}
 		return $r;
 	}
 	function LastMail(MyGroup $SenderGroup)

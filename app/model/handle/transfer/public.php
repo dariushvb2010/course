@@ -36,7 +36,6 @@ class HandleTransferPublic extends HandleTransfer
 	public $CreateForm;
 	function Perform()
 	{
-		parent::Perform();
 		if($this->Action!="Get")
 			$this->MakeCreateForm();
 		if(isset($_POST['Create']))
@@ -70,7 +69,7 @@ class HandleTransferPublic extends HandleTransfer
 			}
 			if(is_string($Mail))
 				$this->Error[]=$Mail;
-			else
+			elseif(!count($this->Error))
 			{
 				$this->Result.="نامه با شماره ".$Mail->Num()." با موفقیت ایجاد شد.";
 				ORM::Flush();//i want to use the ID of the created Mail thus i have to Flush()!
@@ -110,6 +109,7 @@ class HandleTransferPublic extends HandleTransfer
 		}
 		
 		$this->MakeMainForm();
+		$this->MakeSearchForm();
 		//$this->ShowMails();
 	}
 	/**
@@ -158,6 +158,7 @@ class HandleTransferPublic extends HandleTransfer
 			ViewMailPlugin::GroupShow($Mails, "Receive");
 		}
 	}
+	
 	function __construct($Action, $Source, $Dest)
 	{
 		parent::__construct($Action, $Source, $Dest);

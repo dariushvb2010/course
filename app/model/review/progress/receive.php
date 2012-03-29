@@ -7,17 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * */
 class ReviewProgressReceive extends ReviewProgress
 {
-	function CreateTimestamp()
-	{
-		if($this->MailReceive)
-		return $this->MailReceive->EventTimestamp();
-	}
-	function CreateTime()
-	{
-		$jc=new CalendarPlugin();
-		if($this->MailReceive)
-		return $jc->JalaliFullTime($this->MailReceive->EventTimestamp());
-	}
 	/**
 	*
 	* @ManyToOne(targetEntity="MailReceive", inversedBy="ProgressReceive")
@@ -32,7 +21,7 @@ class ReviewProgressReceive extends ReviewProgress
 		$this->MailReceive=$var;
 		$var->ProgressReceive()->add($this);
 	}
-	function __construct(ReviewFile $File=null, MailReceive $MailReceive=null, $IfPersist=true)
+	function __construct(ReviewFile $File=null, MailReceive $Mail=null, $IfPersist=true)
 	{
 		$User=MyUser::CurrentUser();
 		parent::__construct($File, $User, $IfPersist);
@@ -41,18 +30,19 @@ class ReviewProgressReceive extends ReviewProgress
 	
 	function  Summary()
 	{
-		if($this->Reviewer)
-			return "اظهارنامه به کارشناس بازبینی "."<b>".$this->Reviewer()->getFullName()."</b>"." تخصیص داده شد.";
-		else 
-			return "خطا در گزارش گیری";
+		$href=ViewMailPlugin::GetHref($this->MailReceive, "Receive");
+		$r="اظهارنامه توسط ".$this->MailReceive->ReceiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailReceive->Num()."</a> از <b>".$this->MailReceive->SenderTopic()->Topic()."</b> دریافت شد.";
+		return $r;
 	}
 	function Title()
 	{
-		return "تحویل به ";
+		return "دریافت ";
 	}
 	function Event()
 	{
-		return "Receive";
+		$R=$this->MailReceive->ReceiverGroup()->Title();
+		$r="Receive_".strtolower($R)."_from_out";
+		return $r;
 	}
 }
 

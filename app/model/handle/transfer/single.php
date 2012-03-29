@@ -4,8 +4,6 @@ class HandleTransferSingle extends HandleTransfer
 	public $List;
 	function Perform()
 	{
-		parent::Perform();
-	
 		$Mail=$this->Mail;
 		if(!$Mail)
 		{
@@ -39,7 +37,10 @@ class HandleTransferSingle extends HandleTransfer
 		//-------------------------------------ACT: [Gvie], [Get], [Send], [Receive]-------------------------
 		elseif(isset($_POST[$this->Action]))
 		{
-			$res=$Mail->{$this->Action}($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
+			if($this->Action=="Get")
+			;
+			else
+				$res=$Mail->Act($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
 			if($res)
 				$this->Result="اظهارنامه ها با موفقیت ارسال شدند.";
 			else 
