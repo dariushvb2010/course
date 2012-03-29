@@ -34,6 +34,26 @@ class MyUser extends Xuser
 		return (mb_strlen($r,'utf-8')>15?mb_substr($r, 0,12,'utf-8').'...':mb_substr($r, 0,15,'utf-8'));
 	}
 	
+	/**
+	* @Column(type="boolean")
+	* @var boolean
+	* 0= male
+	* 1=female
+	*/
+	protected $gender;
+	public function Gender()
+	{
+		if($this->gender){
+			return 'خانم';
+		}else{
+			return 'آقای';
+		}
+	}
+	public function SetGender($iswoman)
+	{
+		$this->gender=$iswoman;
+	}
+	
 	const STATE_VACATION=0;
 	const STATE_WORK=1;
 	const STATE_RETIRED=2;
@@ -218,13 +238,14 @@ class MyUser extends Xuser
 		}
 		return $res;
 	}
-	public function __construct($Username=null,$Password=null,$Firstname="",$Lastname="",$isReviewer=false,$Email="",$Group=null)
+	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$isReviewer=false,$Email="",$Group=null)
 	{
 		$this->Progress=new ArrayCollection();
 		if ($Username)
 		{
 			parent::__construct($Username,$Password,$Email);
 			$this->Firstname=$Firstname;
+			$this->gender=$Gender;
 			$this->Lastname=$Lastname;
 			$this->SetGroup($Group);
 			$this->isReviewer=$isReviewer;
@@ -244,7 +265,7 @@ class MyUser extends Xuser
 	);
 	
 	function getFullName(){
-		return $this->Firstname." ".$this->Lastname();
+		return $this->Gender()." ".$this->Firstname." ".$this->Lastname();
 	}
 	public static function CurrentUser()
 	{

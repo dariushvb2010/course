@@ -105,6 +105,10 @@ class FileFsm extends JModel
 	public static $Name2State=array(
 		'reviewing'=> 5,
 		'archive'=>4,
+		'Prophecy_first'=>41,
+		'Prophecy_second'=>47,
+		'Prophecy_setad'=>58,
+		'Prophecy_commission'=>63,
 	);
 	
 	/**

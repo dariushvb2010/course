@@ -455,6 +455,25 @@ class ReviewFileRepository extends EntityRepository
 	}
 
 	/**
+	 * 
+	 * لیست فایل هایی که مدتی است در استیت مشخص شده مانده اند
+	 * کاربرد در ماده 1415 کردن پس از گذشت مدت قانونی در ابلاغ مطالبه نامه
+	 * @param unknown_type $State
+	 * @param integer $PeriodSeconds
+	 * @return array of ReviewFile
+	 * @author morteza kavakebi
+	 */
+	public function ExpiredStateFiles($StateName,$PeriodSeconds)
+	{
+		$StateNumber=FileFsm::Name2State($StateName);
+		$c_time=time();
+		$r=j::DQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
+						WHERE F.State={$StateNumber} AND {$c_time}-P.CreateTimestamp>{$PeriodSeconds}
+						ORDER BY F.Cotag");
+		return $r;
+	}
+
+	/**
 	 *
 	 * used for list of UnReceived Files 
 	 * فایل های که ثبت مختومه شده اند نباید با این کوئری به لیست کوتاژ های وصول نشده بروند 
