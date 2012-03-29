@@ -72,18 +72,15 @@ class ReviewProcessSenddemandRepository extends EntityRepository
 			$Res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Senddemand_".$DemandStep))
-			{ 
-				$R=new ReviewProcessSenddemand($File,$DemandStep,$Indicator,$CurrentUser);
-				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Senddemand_".$DemandStep));
-				ORM::Write($R);
+			$R=new ReviewProcessSenddemand($File,$DemandStep,$Indicator,$CurrentUser);
+			$R->setComment(($Comment==null?"":$Comment));
+			$er=$R->Apply();
+			if(!is_string($er)){
+				ORM::Persist($R);
 				ORM::Persist($File);
 				$Res['Class']=$R;
-			}
-			else
-			{
-				$Res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان اعتراضی برای صاحب کالا ثبت کرد.";
+			}else{
+				$Res['Error']=$er;
 			}
 		}
 		

@@ -29,7 +29,14 @@ class ConfigData
 	  * Name=>array(Value,DeleteAccess,Comment,Style)
 	  */
 	 static $MAIN=array(
-	 "CotagLength"=>array("Value"=>"7","Comment"=>"Length of the Cotag","DeleteAccess"=>"0"),
-	 "Class"=>array("Value"=>"4800")
+	 
 	 );
+	 static $TOPIC_TYPE=array(
+ 				"othergates"=>"گمرک های اجرایی",
+ 				"rajaie"=> "بخش های گمرک شهید رجایی",
+ 				"iran"=>"بخش های گمرک ایران",
+ 				"other"=>"سایر(ارسال بایگانی بازبینی)",
+ 				"correspondent"=>"طرف مکاتبه",
+ 				"comment"=>"توضیحات",
+	 		);
 }

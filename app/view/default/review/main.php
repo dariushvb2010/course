@@ -49,6 +49,53 @@ else
 ?>
 <script>
 
+	$(".money").keyup(function (){
+		ThousandCommas(this);
+	});
+</script>
+<script>
+	function commas(obj){
+		formatNum(obj);
+	}
+	function ThousandCommas(obj){
+	var current=obj.value;
+	var after=current;
+
+	//current=current.replace("/,/g","");
+	current=current.replace(new RegExp(",", 'g'),"");
+	
+	var decimalpoint=current.lastIndexOf(".");
+
+	var n;
+	var d;
+	if(decimalpoint>=0){
+	var f=current.split(".");
+	d=f[1];
+	n=f[0];
+	}
+	else{
+	n=current;
+	}
+
+	var index=parseInt((n.length-1)/3);
+	
+	if(index!=0){
+	var prefixIndex=n.length-index*3;
+	after=n.substr(0,prefixIndex)+","+n.substr(prefixIndex,3);
+	for(var i=2;i<=index;i++){
+	after+=","+n.substr(prefixIndex+3*(i-1),3);
+	}
+
+	if(decimalpoint>=0){
+	after+="."+d;
+	}
+	}
+	obj.value=after;
+	}
+</script>
+
+<script>
+
 //$("form#f1 *[name='m']").hide("slow",0.33);
 
 	//alert($("form input[value='Other']").attr("checked"));

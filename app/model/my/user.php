@@ -34,6 +34,26 @@ class MyUser extends Xuser
 		return (mb_strlen($r,'utf-8')>15?mb_substr($r, 0,12,'utf-8').'...':mb_substr($r, 0,15,'utf-8'));
 	}
 	
+	/**
+	* @Column(type="boolean")
+	* @var boolean
+	* 0= male
+	* 1=female
+	*/
+	protected $gender;
+	public function Gender()
+	{
+		if($this->gender){
+			return 'خانم';
+		}else{
+			return 'آقای';
+		}
+	}
+	public function SetGender($iswoman)
+	{
+		$this->gender=$iswoman;
+	}
+	
 	const STATE_VACATION=0;
 	const STATE_WORK=1;
 	const STATE_RETIRED=2;
@@ -218,13 +238,14 @@ class MyUser extends Xuser
 		}
 		return $res;
 	}
-	public function __construct($Username=null,$Password=null,$Firstname="",$Lastname="",$isReviewer=false,$Email="",$Group=null)
+	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$isReviewer=false,$Email="",$Group=null)
 	{
 		$this->Progress=new ArrayCollection();
 		if ($Username)
 		{
 			parent::__construct($Username,$Password,$Email);
 			$this->Firstname=$Firstname;
+			$this->gender=$Gender;
 			$this->Lastname=$Lastname;
 			$this->SetGroup($Group);
 			$this->isReviewer=$isReviewer;
@@ -244,7 +265,7 @@ class MyUser extends Xuser
 	);
 	
 	function getFullName(){
-		return $this->Firstname." ".$this->Lastname();
+		return $this->Gender()." ".$this->Firstname." ".$this->Lastname();
 	}
 	public static function CurrentUser()
 	{
@@ -273,6 +294,7 @@ class MyUserRepository extends EntityRepository
 	}
 	public function getRandomReviewer()
 	{
+		$t1=microtime();
 		$Reviewers=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1");
 		$WSum=0;
 		if($Reviewers)
@@ -295,6 +317,8 @@ class MyUserRepository extends EntityRepository
 				break;
 			}
 		}
+		$dt=microtime()-$t1;
+		echo "&".$dt."&";
 		//ORM::Dump($Selected->getFullName());
 		return $Selected;
 		
@@ -304,6 +328,7 @@ class MyUserRepository extends EntityRepository
 			return null;
 		else
 			return $r[0];
+		
 	}
 	public function AssignedReviewableFileCount($Reviewer)
 	{
@@ -340,11 +365,22 @@ class MyUserRepository extends EntityRepository
 		}
 		return $c[0][1];
 	}
-	public function AssignedReviewableFile($Reviewer)
+	/*public function AssignedReviewableFile($Reviewer)
 	{
 		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F WHERE P.Reviewer=? AND
 			P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
 			",$Reviewer);
+		foreach($r as $item){
+			$files[]=$item->File();
+		}
+		return $files;
+	}*/
+	public function AssignedReviewableFile($Reviewer)
+	{
+		$state=FileFsm::Name2State('reviewing');
+		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F 
+					WHERE P.Reviewer=? AND P.Dead=0 AND F.State=?",$Reviewer,$state);
+		
 		foreach($r as $item){
 			$files[]=$item->File();
 		}

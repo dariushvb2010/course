@@ -62,33 +62,25 @@ class MailGive extends Mail
 		else 
 			return 0;
 	}
-	/**
-	 * Has to save the mail, usefull for both sides of givergroup and gettergroup
-	 * @param array $Files
-	 * @param boolean $RemoveCalled
-	 * @param array $Error
-	 * @return number of Errors
-	 */
-	function Save($Files, $RemoveCalled, & $Error)
+	
+	
+	function SaveGet($Files, &$Error)
 	{
-		if($this->State()==self::STATE_EDITING)
+		echo "SaveGet";
+		if($this->State()==self::STATE_GETTING)
 		{
-			$this->SaveTimestamp=time();
-			return $this->SaveGive($Files, $RemoveCalled, $Error);
+			$this->RetouchTimestamp=time();
 		}
-		else if($this->State()==self::STATE_GETTING)
+		elseif($this->State()==self::STATE_INWAY)
 		{
-			$this->SaveTimestamp=time();
-			return $this->SaveGet($Files, $RemoveCalled, $Error);
+			$this->StateGetting();
+			$this->RetouchTimestamp=time();
 		}
 		else
 		{
 			$Error[]="امکان ذخیره کردن وجود ندارد.";
-			return 1;			
+			return 1;
 		}
-	}
-	function SaveGive($Files, $RemoveCalled,& $Error)
-	{
 		$ErrorCount=0;
 		$time=time();
 		foreach ($Files as $File)
@@ -98,8 +90,7 @@ class MailGive extends Mail
 				$Error[]=strval($File);
 				continue;
 			}
-				$P=ORM::Query("ReviewProgressGive")->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
-				
+			$P=ORM::Query("ReviewProgressGet")->AddToFile($File,false);//progress is not persist, it is just for error reporting
 			if(is_string($P))
 			{
 				$E=$P;
@@ -108,87 +99,14 @@ class MailGive extends Mail
 			else
 				$E=null;
 			$this->UpdateStock($File, $E);
-		}
-		if($RemoveCalled)
-		foreach($this->Stock as $s)
-		if($s->EditTimestamp()<$time)
-		{
-			$s->File()->SetStock(null);
-			$this->Stock->removeElement($s);
-			$s->SetMail(null);
-			ORM::Delete($s);
-		}
-		return $ErrorCount;
-	}
-	function SaveGet($Files, $RemoveCalled,& $Error)
-	{
-		$ErrorCount=0;
-		$time=time();
-		foreach ($Files as $File)
-		{
-			if(!($File instanceof ReviewFile))
-			{
-				$Error[]=strval($File);
-				continue;
-			}
-			$P=ORM::Query("ReviewProgressGet")->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
-			if(is_string($P))
-			{
-				$E=$P;
-				$ErrorCount++;
-			}
-			else
-			$E=null;
-			$this->UpdateStock($File, $E);
 		}	
-		if($RemoveCalled)
-			$this->RemoveOldStocks($time);
 		return $ErrorCount;
 	}
-	function Give($Files, $RemoveCalled,& $Error)
-	{
-		$SaveResult=$this->Save($Files, $RemoveCalled, $Error);
-		if($Files AND $SaveResult===0)
-		{
-			foreach ($Files as $File)
-			{
-				if(!($File instanceof ReviewFile))
-					continue;
-				$P=ORM::Query("ReviewProgressGive")->AddToFile($File,$this);//persist
-				if(is_string($P))
-				{
-					$faulty=true;
-					$this->UpdateStock($File, $P);
-					$Error[]=$P;
-					$Error[]="تعدادی از اظهارنامه ها ارسال نشد. این یک خطای ناجور است. در صورت مشاهده آن به مسئولین نرم افزار اطلاع دهید.";
-					return false;
-				}
-				else // progress has been persisted successfully
-				{
-					$s=$File->Stock();
-					$File->SetStock(null);
-					$this->Stock->removeElement($s);
-					$s->SetMail(null);
-					ORM::Delete($s);
-				}
-			}
-			if($faulty)
-				$this->StateEditingFaulty();
-			else 
-				$this->StateInway();
-			return true;
-		}
-		else 
-			return false;
-	}
+	
 	function Get()
 	{
 		
 	}
-// 	private function GetBelowTime($Time)
-// 	{
-// 		return ORM::Query("MailGive")->GetBelowTime($this, $Time);
-// 	}
 	function __construct($Num=null, $Subject=null, $GiverGroup=null, $GetterGroup=null, $Description=null)
 	{
 		parent::__construct($Num, $Subject, $Description);
@@ -223,22 +141,68 @@ class MailGiveRepository extends EntityRepository
 		ORM::Persist($r);
 		return $r;
 	}
-	function LastMail(MyGroup $GiverGroup, MyGroup $GetterGroup)
+	function LastMail(MyGroup $GiverGroup, MyGroup $GetterGroup, $State)
 	{
 		$r=j::ODQL("SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E
-						WHERE I=? AND E=?
-				 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1",$GiverGroup, $GetterGroup);
+						WHERE I=? AND E=? AND M.State=?
+				 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1",$GiverGroup, $GetterGroup, $State);
 		if ($r)
 		return $r[0];
 		else
 		return null;
 	}
-// 	public function GetBelowTime($Mail, $Time)
-// 	{
-// 		$r=j::ODQL("SELECT S FROM FileStock S JOIN S.Mail M WHERE M=? AND S.EditTimestamp<?", $Mail, $Time);
-// 		if(count($r))
-// 			return $r;
-// 		else
-// 			return null;
-// 	}
+	function GetAll($GiverGroup='all', $GetterGroup='all', $State='all')
+	{
+		$s=" SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E ";
+		$w=" WHERE ";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		if($GiverGroup!='all' AND $GetterGroup!='all' AND $State!='all')
+			$r=j::ODQL($s.$w."I=? AND E=? AND M.State=?".$o, $GiverGroup, $GetterGroup, $State);
+		elseif($GiverGroup!='all' AND $GetterGroup!='all')
+			$r=j::ODQL($s.$w."I=? AND E=?".$o, $GiverGroup, $GetterGroup);
+		elseif($GiverGroup!='all' AND $State!='all')
+			$r=j::ODQL($s.$w."I=? AND M.State=?".$o, $GiverGroup, $State);
+		elseif ($GetterGroup!='all' AND $State!='all')
+			$r=j::ODQL($s.$w."E=? AND M.State=?".$o, $GetterGroup, $State);
+		elseif ($GiverGroup!='all')
+			$r=j::ODQL($s.$w."I=?".$o, $GiverGroup);
+		elseif($GetterGroup!='all')
+			$r=j::ODQL($s.$w."E=?".$o,$GetterGroup);
+		elseif ($State!='all')
+			$r=j::ODQL($s.$w."M.State=?".$o,$State);
+		else 
+			$r=j::ODQL($s.$o);
+		return $r;
+	}
+	function Search(MyGroup $GiverGroup,MyGroup $GetterGroup, $State='all', $Num=null, $Subject=null)
+	{
+		if($Num)
+			$Num="%".$Num."%";
+		if($Subject)
+			$Subject="%".$Subject."%";
+		$s=" SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E ";
+		$w=" WHERE I=? AND E=? ";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		if($Num AND $Subject AND $State!='all' )
+		$r=j::ODQL($s.$w."AND M.State=? AND M.Num LIKE ? AND M.Subject LIKE ?".$o, $GiverGroup, $GetterGroup, $State, $Num, $Subject);
+		elseif($State!='all' AND $Num)
+		$r=j::ODQL($s.$w."AND M.State=? AND M.Num LIKE ?".$o, $GiverGroup, $GetterGroup, $State, $Num);
+		elseif($State!='all' AND $Subject)
+		$r=j::ODQL($s.$w."AND M.State=? AND M.Subject LIKE ?".$o, $GiverGroup, $GetterGroup, $State, $Subject);
+		elseif($Num AND $Subject)
+		$r=j::ODQL($s.$w."AND M.Num LIKE ? AND M.Subject LIKE ?".$o, $GiverGroup, $GetterGroup, $Num, $Subject);
+		elseif ($State!='all')
+		$r=j::ODQL($s.$w."AND M.State=?".$o, $GiverGroup, $GetterGroup, $State);
+		elseif($Num)
+		$r=j::ODQL($s.$w."AND M.Num LIKE ?".$o,$GiverGroup, $GetterGroup, $Num);
+		elseif ($Subject)
+		$r=j::ODQL($s.$w."AND M.State=?".$o,$GiverGroup, $GetterGroup, $Subject);
+		else
+		{
+			echo $s.$w.$o;
+			$r=j::ODQL($s.$w.$o,$GiverGroup, $GetterGroup);
+			ORM::Dump($r);
+		}
+		return $r;
+	}
 }

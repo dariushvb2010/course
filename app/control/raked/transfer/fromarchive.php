@@ -1,5 +1,5 @@
 <?php
-class ArchiveTransferFromoutController extends JControl
+class RakedTransferFromarchiveController extends JControl
 {
 	//public $Handler;
 	/**
@@ -9,7 +9,6 @@ class ArchiveTransferFromoutController extends JControl
 	function Start()
 	{
 		j::Enforce("Archive");
-		$Source=$_GET["Taraf"];
 		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
@@ -18,27 +17,17 @@ class ArchiveTransferFromoutController extends JControl
 				$MailID=$_POST['MailID']*1;
 			else 
 				$MailID=$_GET['MailID']*1;
-			$Mail=ORM::Find("MailReceive", $MailID);
+			$Mail=ORM::Find("MailGive", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
-			if(!$Topic)
-			{
-				$this->Error[]="محل دریافت یافت نشد.";
-			}
-			$this->Handler=new HandleTransferSingle("Receive",$Source, "Archive", $Mail);
-			$this->Handler->Perform();
-		}
-		elseif(isset($_POST['Search']))
-		{
-			$this->Handler=new HandleTransferSearch("Receive",$Source, "Archive");
+			$this->Handler=new HandleTransferSingle("Get","Archive","Raked", $Mail);
 			$this->Handler->Perform();
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
-			$this->Handler=new HandleTransferPublic("Receive",$Source,"Archive");
+			$this->Handler=new HandleTransferPublic("Get","Archive","Raked");
 			$this->Handler->Perform();
-			
 		}
 		$this->Error=$Error;
 		if (count($Error))
@@ -49,9 +38,9 @@ class ArchiveTransferFromoutController extends JControl
 	{
 		if(!($Mail instanceof Mail))
 			return true;
-		if($Mail instanceof MailReceive)
+		if($Mail instanceof MailGive)
 		{
-			if($Mail->ReceiverGroup()->Title()=="Archive")
+			if($Mail->GiverGroup()->Title()=="Archive" AND $Mail->GetterGroup()->Title()=="Raked" AND $Mail->State()>=Mail::STATE_INWAY)
 				return true;
 			else
 				return false;

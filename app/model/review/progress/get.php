@@ -15,9 +15,24 @@ class ReviewProgressGet extends ReviewProgress
 	*/
 	protected $ProgressGive;
 	function ProgressGive(){ return $this->ProgressGive; }
-	function __construct(ReviewFile $File=null)
+	function SetProgressGive(ReviewProgressGive $ProgressGive)
 	{
-		parent::__construct($File);
+		$this->ProgressGive=$ProgressGive;
+		
+	}
+	function AssignProgressGive(ReviewProgressGive $ProgressGive)
+	{
+		$this->ProgressGive=$ProgressGive;
+		$ProgressGive->SetProgressGet($this);
+	}
+	function __construct(ReviewFile $File=null, $IfPersist=true)
+	{
+		$User=MyUser::CurrentUser();
+		parent::__construct($File, $User, $IfPersist);
+		$ProgressGive=$File->LLP("Give");
+		if($ProgressGive)
+		$IfPersist ? $this->AssignProgressGive($ProgressGive) : $this->SetProgressGive($ProgressGive);
+		
 	}
 	function  Summary()
 	{
@@ -37,5 +52,25 @@ class ReviewProgressGet extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressGetRepository extends EntityRepository
 {
-	
+	/**
+	* @param ReviewFile|string|integer $File
+	* @return string|Ambigous <string, number>
+	*/
+	public function AddToFile($File=null, $IfPersist=true)
+	{
+		$File=ReviewFile::GetRecentFile($File);
+		if(!($File instanceof ReviewFile))
+		{
+			return "اظهارنامه یافت نشد.";
+		}
+		$P=new ReviewProgressGet($File, $IfPersist);
+		$ch=$IfPersist ? $P->Apply() : $P->Check();
+		if(is_string($ch))
+			return $ch;
+		if($IfPersist)
+		{
+			ORM::Persist($P);
+		}
+		return $P;
+	}
 }

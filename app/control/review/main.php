@@ -17,28 +17,6 @@ class ReviewMainController extends JControl
 			$this->Valid=true;
 			$this->Result="نتیجه بازبینی با موفقیت ثبت گردید.";	
 		}
-//		if ($this->Valid) //valid
-//		{
-//			if (count($_POST))
-//			{
-//				$R=$this->Form->Validate($_POST,$err);
-//				if (!$R)
-//					$Error=array_merge($err,$Error);
-//				else 
-//				{
-//					$Provision=($_POST['Provision']==null?'':$_POST['Provision']);
-//					$R=new ReviewProgressReview($File,$Reviewer);
-//					$R->SetResult($_POST['Result']);
-//					$R->SetProvision($Provision);
-//					ORM::Persist($R);
-//						
-//				}
-//			}
-//		}
-//		else{
-//			$this->Redirect("select?Cotag={$Cotag}");
-//		}
-		
 		
 		$this->Error=$Error;
 		if (count($Error)) $this->Result=false;
@@ -69,7 +47,7 @@ class ReviewMainController extends JControl
 		//checkboxes 1
 		$f->AddElement(array(
 					"Name"=>"Provision",
-					"Type"=>"checkbox",
+					"Type"=>"radio",
 					"Options"=>array("528"=>"528",
 									"248"=>"248",
 									"109"=>"109"),
@@ -94,6 +72,7 @@ class ReviewMainController extends JControl
 		$f->AddElement(array(
 			"Type"=>"text",
 			"Name"=>"Amount",
+			"Class"=>"money",
 			"Label"=>" مبلغ تفاوت به ریال",
 			"Dependency"=>"Provision",
 			"DependencyValue"=>">109",

@@ -90,7 +90,7 @@ class ReviewEditController extends JControl
 		//checkboxes 1
 		$f->AddElement(array(
 					"Name"=>"Provision",
-					"Type"=>"checkbox",
+					"Type"=>"radio",
 					"Options"=>array("528"=>"528",
 									"248"=>"248",
 									"109"=>"109"),
@@ -117,6 +117,7 @@ class ReviewEditController extends JControl
 			"Type"=>"text",
 			"Name"=>"Amount",
 			"Value"=>"$Amount",
+			"Class"=>"money",
 			"Label"=>" مبلغ تفاوت به ریال",
 			"Dependency"=>"Provision",
 			"DependencyValue"=>">109",

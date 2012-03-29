@@ -7,17 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * */
 class ReviewProgressReceive extends ReviewProgress
 {
-	function CreateTimestamp()
-	{
-		if($this->MailReceive)
-		return $this->MailReceive->EventTimestamp();
-	}
-	function CreateTime()
-	{
-		$jc=new CalendarPlugin();
-		if($this->MailReceive)
-		return $jc->JalaliFullTime($this->MailReceive->EventTimestamp());
-	}
 	/**
 	*
 	* @ManyToOne(targetEntity="MailReceive", inversedBy="ProgressReceive")
@@ -26,31 +15,34 @@ class ReviewProgressReceive extends ReviewProgress
 	*/
 	protected $MailReceive;
 	function MailReceive(){ return $this->MailReceive; }
+	function SetMailReceive(MailReceive $Mail){ $this->MailReceive=$Mail; }
 	function AssignMailReceive( MailReceive $var)
 	{
 		$this->MailReceive=$var;
 		$var->ProgressReceive()->add($this);
 	}
-	function __construct(ReviewFile $File=null, MailReceive $MailReceive=null)
+	function __construct(ReviewFile $File=null, MailReceive $Mail=null, $IfPersist=true)
 	{
-		parent::__construct($File);
-		if($MailReceive) $this->AssignMailReceive($MailReceive);
+		$User=MyUser::CurrentUser();
+		parent::__construct($File, $User, $IfPersist);
+		$IfPersist ? $this->AssignMailReceive($Mail) : $this->SetMailReceive($Mail);
 	}
 	
 	function  Summary()
 	{
-		if($this->Reviewer)
-			return "اظهارنامه به کارشناس بازبینی "."<b>".$this->Reviewer()->getFullName()."</b>"." تخصیص داده شد.";
-		else 
-			return "خطا در گزارش گیری";
+		$href=ViewMailPlugin::GetHref($this->MailReceive, "Receive");
+		$r="اظهارنامه توسط ".$this->MailReceive->ReceiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailReceive->Num()."</a> از <b>".$this->MailReceive->SenderTopic()->Topic()."</b> دریافت شد.";
+		return $r;
 	}
 	function Title()
 	{
-		return "تحویل به ";
+		return "دریافت ";
 	}
 	function Event()
 	{
-		return "Assign";
+		$R=$this->MailReceive->ReceiverGroup()->Title();
+		$r="Receive_".strtolower($R)."_from_out";
+		return $r;
 	}
 }
 
@@ -58,5 +50,21 @@ class ReviewProgressReceive extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressReceiveRepository extends EntityRepository
 {
-	
+	public function AddToFile(ReviewFile $File,MailReceive $Mail, $IfPersist=true)
+	{
+		$File=ReviewFile::GetRecentFile($File);
+		if(!$File)
+		{
+			return "اظهارنامه یافت نشد.";
+		}
+		$P=new ReviewProgressReceive($File, $Mail, $IfPersist);
+		$ch=$IfPersist ? $P->Apply() : $P->Check();
+		if(is_string($ch))
+			return $ch;
+		if($IfPersist) 
+		{
+			ORM::Persist($P);
+		}
+		return $P;
+	}
 }

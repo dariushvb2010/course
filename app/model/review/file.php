@@ -286,10 +286,10 @@ class ReviewFileRepository extends EntityRepository
 		if (strtolower($Type)!=="all")
 			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
 			AND P INSTANCE OF Review{$T}{$Type} 
-			ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
+			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
 		else 
 			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
-			ORDER BY P.CreateTimestamp DESC LIMIT 1 ",$Cotag);
+			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
 		return $r[0];
 	}
 	public function GetOnlyProgressStart($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
@@ -319,6 +319,21 @@ class ReviewFileRepository extends EntityRepository
 								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
+	
+	public function UpdateStateOfFilesWithLastProgress($Progress,$NewState)
+	{
+		$r=j::ODQL("SELECT F.ID FROM ReviewFile AS F JOIN F.Progress AS P
+					WHERE P.CreateTimestamp=
+					(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
+					AND P INSTANCE OF ReviewProgress{$Progress}
+					");
+		var_dump($r);
+		foreach ($r as $t){
+			j::DQL("UPDATE ReviewFile FF SET FF.State={$NewState} WHERE FF.ID={$t}");
+		}
+		return $r;
+	}
+	
 	public function GetMaxID()
 	{
 		$r=j::DQL("SELECT MAX(F.ID) AS Result FROM ReviewFile AS F");
@@ -440,6 +455,25 @@ class ReviewFileRepository extends EntityRepository
 	}
 
 	/**
+	 * 
+	 * لیست فایل هایی که مدتی است در استیت مشخص شده مانده اند
+	 * کاربرد در ماده 1415 کردن پس از گذشت مدت قانونی در ابلاغ مطالبه نامه
+	 * @param unknown_type $State
+	 * @param integer $PeriodSeconds
+	 * @return array of ReviewFile
+	 * @author morteza kavakebi
+	 */
+	public function ExpiredStateFiles($StateName,$PeriodSeconds)
+	{
+		$StateNumber=FileFsm::Name2State($StateName);
+		$c_time=time();
+		$r=j::DQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
+						WHERE F.State={$StateNumber} AND {$c_time}-P.CreateTimestamp>{$PeriodSeconds}
+						ORDER BY F.Cotag");
+		return $r;
+	}
+
+	/**
 	 *
 	 * used for list of UnReceived Files 
 	 * فایل های که ثبت مختومه شده اند نباید با این کوئری به لیست کوتاژ های وصول نشده بروند 
@@ -448,8 +482,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function RecievedInRange($start=0,$end=0)
 	{
-		$r=j::DQL("SELECT F.Cotag FROM ReviewFile AS F  WHERE  F.CreateTimestamp > ? AND
-		(F.ID NOT IN (SELECT K.ID FROM ReviewProgressManual AS P JOIN P.File AS K ))  AND F.Cotag BETWEEN {$start} AND {$end}",time()-(365*24*60*60));
+		$r=j::DQL("SELECT F.Cotag FROM ReviewFile AS F  WHERE  F.CreateTimestamp > ?  AND F.Cotag BETWEEN {$start} AND {$end}",time()-(365*24*60*60));
 		return $r;
 	}
 	/**
@@ -481,9 +514,6 @@ class ReviewFileRepository extends EntityRepository
 		$r=j::ODQL("SELECT P FROM ReviewProgress AS P WHERE P.File=?",$File);
 		return $r;
 	}
-		
-	
-	
 	public function FinishableFiles($off,$lim,$sort,$ord)
 	{
 		$r1=j::DQL("SELECT F,P FROM ReviewProgressReview AS P JOIN P.File AS F WHERE P.Result=1 AND

@@ -66,8 +66,7 @@ if (is_array($this->Data)){?>
 	<?php }?>
 	</div>
 	<?php } ?>
-	<a href="">مشاهده ی گردش کار اظهارنامه دیگر</a>
-<?php }else{ ?>
+<?php } ?>
 	<form method='post'>
 	<?php if (isset($this->Result))
 	ViewResultPlugin::Show($this->Result,$this->Error);
@@ -83,4 +82,4 @@ if (is_array($this->Data)){?>
 	
 	<input type='submit' value='انتخاب' />
 	</form>
-<?php }?>
+<?php ?>

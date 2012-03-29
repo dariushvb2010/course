@@ -9,20 +9,14 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @DiscriminatorColumn(name="Type", type="string")
  * @DiscriminatorMap({"Base" = "ReviewProgress",
  * 	"Assign"="ReviewProgressAssign",
- * 	"Finish"="ReviewProgressFinish",
  * 	"Correction"="ReviewProgressCorrection",
  * 	"Classeconfirm"="ReviewProgressClasseconfirm",
  * 	"Start"="ReviewProgressStart",
  * 	"Review"="ReviewProgressReview",
- * 	"Manual"="ReviewProgressManual",
- * 	"ManualCorrespondence"="ReviewProgressManualcorrespondence",
  * 	"SendFile"="ReviewProgressSendfile",
  * 	"ReceiveFile"="ReviewProgressReceivefile",
- * 	"CorrespondenceFinish"="ReviewProgressFinishcorrespondence",
- * 	"DeliverToReview"="ReviewProgressDeliver",
  * 	"RegisterInArchive"="ReviewProgressRegisterarchive",
  * 	"RegisterInRaked"="ReviewProgressRegisterraked",
- * 	"ReturnFromRaked"="ReviewProgressReturn",
  * 	"Post"="ReviewProgressPost",
  *  "Give"="ReviewProgressGive",
  *  "Get"="ReviewProgressGet",
@@ -30,6 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *  "Receive"="ReviewProgressReceive",
  * 	"Cancelassign"="ReviewProgressCancelassign",
  * 	"Remove"="ReviewProgressRemove",
+ * 
  * 	"AssignProtest"="ReviewProcessAssign",
  * 	"Confirm"="ReviewProcessConfirm",
  * 	"Feedback"="ReviewProcessFeedback",
@@ -298,8 +293,10 @@ abstract class ReviewProgress
 	 */
 	function Apply()
 	{
-		$this->ApplyAlarm();
-		return $this->DoFileState(true);
+		$res=$this->DoFileState(true);
+		if(!is_string($res))
+			$this->ApplyAlarm();
+		return $res;
 	}
 	/**
 	 * Completely pure function

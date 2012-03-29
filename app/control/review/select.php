@@ -3,7 +3,6 @@ class ReviewSelectController extends JControl
 {
 	function Start()
 	{
-		
 		j::Enforce("Reviewer");
 		if($_REQUEST['Class'])
 		{
@@ -27,7 +26,6 @@ class ReviewSelectController extends JControl
 				$this->Redirect("./?Cotag={$Cotag}");	 						
 			
 		}
-		
 		$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile(j::UserID());
 		$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
@@ -59,9 +57,9 @@ class ReviewSelectController extends JControl
 		elseif($k=='assignCreateTimestamp')
 		{
 			$c=new CalendarPlugin();
-			if($D->LLP('Assign'))
+			/*if($D->LLP('Assign'))
 				return "<span dir='ltr'>{$c->JalaliFullTime($D->LLP('Assign')->CreateTimestamp())}</span>";
-			else 	
+			else*/ 	
 				return '-';
 		}
 		elseif($k=='Select')

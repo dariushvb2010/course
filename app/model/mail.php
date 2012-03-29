@@ -28,6 +28,7 @@ abstract class Mail
 	*/
 	protected $Num;
 	public function Num(){ return $this->Num; }
+	protected function SetNum($Num){ $this->Num=$Num; }
 	static function MailNumValidation($Num)
 	{
 		if($Num)
@@ -41,6 +42,7 @@ abstract class Mail
 	*/
 	protected $Subject;
 	public function Subject(){ return $this->Subject; }
+	protected function SetSubject($Subject){ $this->Subject=$Subject; }
 	/**
 	 * state of editting the mail,
 	 * mail has not been transfered yet, it just has been saved to be transfered in the future
@@ -143,17 +145,33 @@ abstract class Mail
 			return false;
 		return $this->State<$NewState;
 	}
+	function CanEdit()
+	{
+		if($this->State > self::STATE_EDITING_FAULTY)
+			return false;
+		else
+			return true;
+	}
+	function Type()
+	{
+		if($this instanceof MailGive)
+			return "Give";
+		elseif($this instanceof MailSend)
+			return "Send";
+		elseif($this instanceof MailReceive)
+			return "Receive";
+	}
+	public static $PersianState=array(
+		self::STATE_EDITING=>"در حال ویرایش",
+		self::STATE_EDITING_FAULTY=>"ارسال شده ناقص، در حال ویرایش",
+		self::STATE_INWAY=>"در راه",
+		self::STATE_GETTING=>"در حال تحویل گیری",
+		self::STATE_GETTING_FAULTY=>"تحویل گیری ناقص",
+		self::STATE_CLOSED=>"مختومه"
+	);
 	function PersianState()
 	{
-		switch($this->State)
-		{
-			case self::STATE_EDITING: return "در حال ویرایش";
-			case self::STATE_EDITING_FAULTY: return "ارسال شده ناقص، در حال ویرایش";
-			case self::STATE_INWAY: return "در راه";
-			case self::STATE_GETTING: return "در حال تحویل گیری";
-			case self::STATE_GETTING_FAULTY: return "تحویل گیری ناقص";
-			case self::STATE_CLOSED: return "مختومه";
-		}
+		return self::$PersianState[$this->State];
 	}
 	/**
 	* @Column(type="integer")
@@ -185,6 +203,7 @@ abstract class Mail
 	*/
 	protected $Description;
 	public function Description() { return $this->Description; }
+	protected function SetDescription( $D){ $this->Description=$D; }
 	/**
 	* @OneToMany(targetEntity="FileStock", mappedBy="Mail", cascade={"remove"})
 	* @var arrayCollectionOfFileStock
@@ -203,13 +222,12 @@ abstract class Mail
 	}
 	function Box()
 	{
-		$s=$this->State;
-		if($s==self::STATE_EDITING)
+		if($this->State==self::STATE_EDITING)
 			return $this->Stock;
-		elseif($s=self::STATE_INWAY)
+		elseif($this->State==self::STATE_INWAY)
 			return $this->ProgressGive();
-		elseif ($s=self::STATE_GETTING);
-		elseif ($s=self::STATE_CLOSED);
+		else 
+			return $this->MyBox();
 	}
 	/**
 	 * 
@@ -243,6 +261,90 @@ abstract class Mail
 			ORM::Delete($s);
 		}
 	}
+	function Save($Files, $RemoveCalled, &$Error)
+	{
+		if($this->State()==self::STATE_EDITING)
+		{
+			$this->RetouchTimestamp=time();
+		}
+		else
+		{
+			$Error[]="امکان ذخیره کردن وجود ندارد. وضعیت نامه: ".$this->PersianState();
+			return 1;	
+		}
+		$ErrorCount=0;
+		$time=time();
+		$T=$this->Type();
+		foreach ($Files as $File)
+		{
+			if(!($File instanceof ReviewFile))
+			{
+				$Error[]=strval($File);
+				continue;
+			}
+			$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
+			
+			
+			if(is_string($P))
+			{
+				$E=$P;
+				$ErrorCount++;
+			}
+			else
+				$E=null;
+			$this->UpdateStock($File, $E);
+		}
+		if($RemoveCalled)
+		foreach($this->Stock as $s)
+		if($s->EditTimestamp()<$time)
+		{
+			$s->File()->SetStock(null);
+			$this->Stock->removeElement($s);
+			$s->SetMail(null);
+			ORM::Delete($s);
+		}
+		return $ErrorCount;
+	}
+	function Act($Files, $RemoveCalled, &$Error)
+	{
+		$SaveResult=$this->Save($Files, $RemoveCalled, $Error);
+		if($Files AND $SaveResult===0)
+		{
+			$T=$this->Type();
+			foreach ($Files as $File)
+			{
+				if(!($File instanceof ReviewFile))
+				continue;
+				$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this);//persist
+				if(is_string($P))
+				{
+					$faulty=true;
+					$this->UpdateStock($File, $P);
+					$Error[]=$P;
+					$Error[]="تعدادی از اظهارنامه ها ارسال نشد. این یک خطای ناجور است. در صورت مشاهده آن به مسئولین نرم افزار اطلاع دهید.";
+					return false;
+				}
+				else // progress has been persisted successfully
+				{
+					$s=$File->Stock();
+					$File->SetStock(null);
+					$this->Stock->removeElement($s);
+					$s->SetMail(null);
+					ORM::Delete($s);
+				}
+			}
+			if($faulty)
+				$this->StateEditingFaulty();
+			elseif($this instanceof MailGive)
+				$this->StateInway();
+			else
+				$this->StateClosed();
+			return true;
+		}
+		else
+			return false;
+		
+	}
 	function __construct($Num=null, $Subject=null, $Description=null)
 	{
 		$this->Num=$Num;
@@ -252,11 +354,19 @@ abstract class Mail
 		$this->StateEditing();
 		$this->Stock= new ArrayCollection();
 	}
-	//abstract function Save($Files, $RemoveCalled);
+	function Edit($Num=null, $Subject=null, $Description=null)
+	{
+		if(!$this->CanEdit())
+			return false;
+		$this->Num=$Num;
+		$this->Subject=$Subject;
+		$this->Description=$Description;
+		return true;
+	}
 }
 
 use \Doctrine\ORM\EntityRepository;
 class MailRepository extends EntityRepository
 {
-		
+	
 }

@@ -172,8 +172,11 @@ class ReviewProgressReviewRepository extends EntityRepository
 					if (count($_POST))
 					{
 							//var_dump($_POST);
+							if($_POST['Result']==0 AND count($_POST['Provision'])==0)
+								return 'شماره کلاسه انتخاب نشده است.'; 
+								 
 							if(is_array($_POST['Provision']))
-								$Provision=implode(",", $_POST['Provision']);
+								$Provision=$_POST['Provision'];
 							else 
 								$Provision="";
 							if(is_array($_POST['Difference']))
@@ -182,6 +185,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 								$Difference="";
 							//echo"<br>pro dif: ". $Provision.$Difference."<br>";
 							$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
+							$Amount=str_replace(",", "", $Amount);
 							
 							$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 							$R->SetResult($_POST['Result']);
@@ -244,22 +248,52 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					if (count($_POST))
 					{
+						if($_POST['Result']==0 AND count($_POST['Provision'])==0)
+							return 'شماره کلاسه انتخاب نشده است.';
+						var_export($_POST['Provision']);	
 						if($_POST['Provision']!=null)
-							$Provision=implode(",", $_POST['Provision']);
+							$Provision=$_POST['Provision'];
 						if($_POST['Difference']!=null)
 						$Difference=implode(",",$_POST['Difference']);
 						$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
+						$Amount=str_replace(",", "", $Amount);
+						$ProgReview->kill();
 						$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
 						$R->SetResult($_POST['Result']);
 						$R->SetProvision($Provision);
 						$ch=$R->Apply();
 						if(is_string($ch))
-							return $ch;
+							return $ch;						
 						ORM::Persist($R);
+						ORM::Persist($ProgReview);
 						return $R;
 					}
 				}
 			}
 		}
+	}
+	
+	public function ReviewPercentage()
+	{
+		$r1=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=1");
+		$r2=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=528");
+		$r3=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=248");
+		$r4=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=109");
+		$res=array('oked'=>$r1[0]['c'],'a528'=>$r2[0]['c'],'a248'=>$r3[0]['c'],'a109'=>$r4[0]['c']);
+		return $res;
+	}
+
+	public function karshenas_work_lastmounth()
+	{
+		$r=j::ODQL("SELECT COUNT(P.ID) as co,U.ID as user
+					FROM ReviewProgress AS P JOIN P.User AS U 
+					WHERE P INSTANCE OF	ReviewProgressReview AND ".time()."-P.CreateTimestamp<60*60*24*30 
+					GROUP BY P.User");
+		foreach($r as $s)
+		{
+			$u=j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$s['user']);
+			$r2[]=array('count'=>$s['co'],'user'=>$u[0]);
+		}
+		return $r2;
 	}
 }

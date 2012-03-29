@@ -12,9 +12,9 @@
 
 <li><a href="?charttype=0" class="red">دفتر کوتاژ</a></li>
 
-<li><a href="?charttype=1" class="orange">کارشناسی</a></li>
+<li><a href="?charttype=1" class="orange">نتایج کارشناسی</a></li>
 
-<li><a href="?charttype=2" class="yellow">DEMOS</a></li>
+<li><a href="?charttype=2" class="yellow">حجم کاری کارشناسان</a></li>
 
 <li><a href="#url" class="green">MENUS</a></li>
 
@@ -40,9 +40,13 @@
 	 	case 'percentage':
 ?>
  			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->percentarray);?>];
+<?php 	break;
+	 	case 'karshenas_work_volume':
+?>
+ 			chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->names);?>];
+ 			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->values);?>];
 <?php
 	 	break;
-	  	
 ?>
 <?php } ?>
 $(document).ready(function() {
