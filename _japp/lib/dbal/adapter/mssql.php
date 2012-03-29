@@ -41,7 +41,7 @@ class DBAL_MSSQL extends DBAL_Base implements jFramework_DBAL
 				trigger_error("MSSQL connect error : ".$e);
 			}
 			mssql_select_db($DatabaseName);
-// 			if (isset($this->Charset)) $this->DB->set_charset($this->Charset);
+			if (isset($this->Charset)) $this->DB->set_charset($this->Charset);
 		}
 		else
 		{
