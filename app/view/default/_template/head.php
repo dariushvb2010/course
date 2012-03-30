@@ -503,6 +503,12 @@ $(function() {
 			</a>
 		</li>
 		<li>
+			<a href='/review/sayok'>
+				<span class='ui-icon-circle-check ui-icon'></span>
+				بدون مشکل گروهی
+			</a>
+		</li>
+		<li>
 			<a href='/review/dossier/digital'>
 				<span class='ui-icon-circle-check ui-icon'></span>
 				پرونده دیجیتال

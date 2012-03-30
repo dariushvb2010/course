@@ -2,7 +2,7 @@
 ?>
 <style>
 
-form {
+#formdiv {
 	width:400px;
 	margin:auto;
 	padding:10px;
@@ -22,9 +22,9 @@ form input[type='text'] {
 </style>
 
 <h1><img src="/img/h/h1-review-50.png"/>
-انتخاب اظهارنامه جهت بازبینی</h1>
+انتخاب اظهارنامه جهت کارشناسی</h1>
 <p>
-تعداد اظهارنامه‌های در انتظار بازبینی توسط شما : 
+تعداد اظهارنامه‌های در انتظار کارشناسی توسط شما : 
 <strong> 
 <?php echo $this->Count; ?> 
  </strong>
@@ -34,6 +34,7 @@ form input[type='text'] {
 </p>
 
 <form method='post'>
+<div id="formdiv"> 
 <?php if (isset($this->Result))
 	ViewResultPlugin::Show($this->Result,$this->Error);
 ?>
@@ -44,7 +45,7 @@ form input[type='text'] {
 </div>
 
 <input type='submit' value='انتخاب' />
-</form>
+</div>
 <?php if($this->Count){ ?>
 	<div id="filelist">
 		<?php
@@ -53,9 +54,10 @@ form input[type='text'] {
 	</div>
 <?php }else{?>
 <?php }?>
+</form>
+
 <script>
 $(function(){
-	
 	$("form input[name='Cotag']").focus();
 });
 </script>

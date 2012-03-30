@@ -119,6 +119,68 @@ class ReviewProgressReviewRepository extends EntityRepository
 	
 	
 /**
+ * یک فرایند بازبینی  بدون مشکل به فایل با کوتاژ داده شده اضافه می کند 
+ * @param integer $Cotag
+ * @return string for error and true for success
+ */
+	public function AddReviewOked($Cotag=null)
+	{
+		
+		if ($Cotag<1 || $Cotag==null)
+		{
+			$Error="کوتاژ ناصحیح است.";
+			return $Error;
+		}
+		else 
+		{
+			$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+
+			if ($File==null)
+			{
+				$Error ="یافت نشد.";
+				return $Error;
+			}
+			else
+			{
+				$lastreviewer=$File->LastReviewer();
+				$ProgReview=$File->LastReview();
+				$LLP=$File->LLP();
+				$Reviewer=MyUser::CurrentUser();
+				if ($lastreviewer==null)
+				{
+					$Error="این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
+					return $Error;
+				}	
+				elseif ($ProgReview  !=null)
+				{
+					$Error="اظهارنامه مذکور قبلا بازبینی شده است.به قسمت ویرایش نتیجه بازبینی مراجعه نمایید.";
+					return $Error;
+				}
+				elseif ($lastreviewer!=$Reviewer)
+				{
+					$Error="کارشناس بازبینی این اظهارنامه شما نیستید.";
+					return $Error;
+				}
+				else if(!($LLP instanceof ReviewProgressReivew || $LLP instanceof ReviewProgressAssign))
+				{
+					$Error="کارشناس هنوز تخصیص نیافته است یا اینکه از تاریخ بازبینی اظهارنامه گذشته است.";
+					return $Error;
+				}
+				else
+				{
+					$R=new ReviewProgressReview($File,$Reviewer,"","");
+					$R->SetResult(1);
+					$R->SetProvision("");
+					$ch=$R->Apply();
+					if(is_string($ch))
+						return $ch;
+					ORM::Persist($R);
+					return true;	
+				}					
+			}
+		}
+	}
+/**
  * یک فرایند بازبینی به فایل با کوتاژ داده شده اضافه می کند 
  * @param integer $Cotag
  * @param request array  $_POST که از یک فرم که نتیجه بازبینی را می فرستد آمده است که ماده هم دارد 
