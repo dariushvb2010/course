@@ -26,14 +26,11 @@ if (jURL::HTTPHost()=="localhost")
 elseif (
 strpos(jURL::HTTPHost(),".ir")!==false
 or strpos(jURL::HTTPHost(),".com")!==false
-or jURL::HTTPHost()=="31.24.203.26"
 or jURL::HTTPHost()=="10.32.0.19"
-or jURL::HTTPHost()=="212.33.210.59"
 or jURL::HTTPHost()=="10.2.16.139"
 or strpos(jURL::HTTPHost(),"192.168")!==false
-
 ) #replace this with your site
-	reg("app/state","develop");
+	reg("app/state","deploy");
 elseif (php_sapi_name()=="cli")
 	reg("app/state","develop");
 else 
@@ -64,7 +61,7 @@ elseif (reg("app/state")=="deploy")
 {
 	reg("app/db/default/name","bazbini");
 	reg("app/db/default/user","bazbini"); #comment this for no-DB jFramework
-	reg("app/db/default/pass","vf6GceA8xKwBCJmb"); #replace it with your own password
+	reg("app/db/default/pass","TDmrheErbra79RNb"); #replace it with your own password
 	reg("app/db/default/host","localhost");
 }
 /**
