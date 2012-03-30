@@ -188,6 +188,7 @@ class FileFsm extends JModel
 		
 		 
 	}
+	static function Moderate10(){echo 'ss';}
 	static function Moderate1()
 	{
 		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
@@ -207,6 +208,7 @@ class FileFsm extends JModel
 			ORM::Persist($f);
 		}
 		ORM::Flush();
+		echo 'done1';
 	}
 	static function Moderate2()
 	{
@@ -220,6 +222,7 @@ class FileFsm extends JModel
 			ORM::Persist($f);
 		}
 		ORM::Flush();
+		echo 'done2';
 	}
 	static function Moderate3()
 	{
@@ -230,6 +233,7 @@ class FileFsm extends JModel
 			ORM::Persist($f);
 		}
 		ORM::Flush();
+		echo 'done3';
 	}
 	public static function Moderate4()
 	{
@@ -237,10 +241,13 @@ class FileFsm extends JModel
 		foreach($files as $f)
 		{
 			if($f->LastProgress()->Result()==0)
-			$f->SetState(9);
+				$f->SetState(9);
 			else
-			$f->SetState(11);
+				$f->SetState(11);
+			
+			ORM::Persist($f);
 		}
+		echo 'done4';
 	}
 	public static function Moderate5()
 	{
@@ -248,8 +255,11 @@ class FileFsm extends JModel
 		foreach($files as $f)
 		{
 			if($f->LastProgress()->Result()==1)
-			$f->SetState(7);
+				$f->SetState(7);
+			
+			ORM::Persist($f);
 		}
+		echo 'done5';
 	}
 	public static function Moderate6()
 	{
@@ -259,7 +269,9 @@ class FileFsm extends JModel
 		foreach($files as $f)
 		{
 			$f->SetState(11);
+			ORM::Persist($f);
 		}
+		echo 'done6';
 	}
 	
 	public static function Moderate7()
@@ -277,7 +289,9 @@ class FileFsm extends JModel
 		foreach($files as $f)
 		{
 			$f->SetState(11);
+			ORM::Persist($f);
 		}
+		echo 'done7';
 	}
 	public static function Moderate8()
 	{
@@ -288,9 +302,12 @@ class FileFsm extends JModel
 		foreach($files as $f)
 		{
 			if($f->LastProgress()->IsSend()==1)
-			$f->SetState(13);
+				$f->SetState(13);
 			else
-			$f->SetState(14);
+				$f->SetState(14);
+			
+			ORM::Persist($f);
 		}
+		echo 'done8';
 	}
 }

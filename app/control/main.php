@@ -5,8 +5,8 @@ class MainController extends BaseControllerClass
 
 	function Start()
 	{
-		FileFsm::ModerateTo7();
-		FileFsm::ModerateTo11();
+		//FileFsm::ModerateTo7();
+		//FileFsm::ModerateTo11();
 // 		echo b::CotagValidation(1234567);
 // 		var_dump(strval(123));
 // 		echo b::GenerateClassNum(248);
