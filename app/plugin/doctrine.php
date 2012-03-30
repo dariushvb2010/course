@@ -56,6 +56,7 @@ class DoctrinePlugin extends JPlugin
     'host' => $host,
     'dbname' => reg("app/db/default/name"),
     'charset' => 'utf8',
+	'driverOptions' => array(1002=>'SET NAMES utf8'),
     'path' => reg("app/db/default/sqlite/folder") . '/'.reg("app/db/default/name"),
 		);
 

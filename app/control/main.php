@@ -5,10 +5,9 @@ class MainController extends BaseControllerClass
 
 	function Start()
 	{
-		echo b::CotagValidation(1234567);
-		echo b::CotagValidation('1234567');
-		echo b::CotagValidation('123.567');
-		echo b::CotagValidation("0111111");
+		FileFsm::ModerateTo7();
+		FileFsm::ModerateTo11();
+// 		echo b::CotagValidation(1234567);
 // 		var_dump(strval(123));
 // 		echo b::GenerateClassNum(248);
 // 		file_put_contents("a.txt", "salam", FILE_APPEND | LOCK_EX);
