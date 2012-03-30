@@ -21,15 +21,18 @@ class ReviewProgressReceive extends ReviewProgress
 		$this->MailReceive=$var;
 		$var->ProgressReceive()->add($this);
 	}
-	function __construct(ReviewFile $File=null, MailReceive $Mail=null, $IfPersist=true)
+	function __construct(ReviewFile $File=null, MailReceive $Mail=null, $IfPersist=true, MyUser $User=null)
 	{
-		$User=MyUser::CurrentUser();
+		if(!$User)
+			$User=MyUser::CurrentUser();
 		parent::__construct($File, $User, $IfPersist);
 		$IfPersist ? $this->AssignMailReceive($Mail) : $this->SetMailReceive($Mail);
 	}
 	
 	function  Summary()
 	{
+		if(!$this->MailReceive)
+			return "نامه یافت نشد.";
 		$href=ViewMailPlugin::GetHref($this->MailReceive, "Receive");
 		$r="اظهارنامه توسط ".$this->MailReceive->ReceiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailReceive->Num()."</a> از <b>".$this->MailReceive->SenderTopic()->Topic()."</b> دریافت شد.";
 		return $r;
@@ -50,14 +53,14 @@ class ReviewProgressReceive extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressReceiveRepository extends EntityRepository
 {
-	public function AddToFile(ReviewFile $File,MailReceive $Mail, $IfPersist=true)
+	public function AddToFile(ReviewFile $File,MailReceive $Mail, $IfPersist=true, MyUser $User=null)
 	{
 		$File=ReviewFile::GetRecentFile($File);
 		if(!$File)
 		{
 			return "اظهارنامه یافت نشد.";
 		}
-		$P=new ReviewProgressReceive($File, $Mail, $IfPersist);
+		$P=new ReviewProgressReceive($File, $Mail, $IfPersist, $User);
 		$ch=$IfPersist ? $P->Apply() : $P->Check();
 		if(is_string($ch))
 			return $ch;

@@ -174,6 +174,7 @@ class AutolistPlugin extends JPlugin
 	public $ID;
 	
 	public $FilterCallback=null;
+	function GetRequest(){}// it is for compatibality with dynamiclist
 	public function SetSortParams()
 	{
 		if (isset($_GET[$this->InputNames['Sort']]))
@@ -311,6 +312,7 @@ class AutolistPlugin extends JPlugin
 	 */
 	function PresentForPrint()
 	{
+		//ORM::Dump($this->Data);
 		if($this->Data)
 			$AllDataCount=count($this->Data);
 		else
@@ -374,7 +376,8 @@ class AutolistPlugin extends JPlugin
 			<col class="autolist-leftdata" />
 			</colgroup>
 			<?php endif; 
-				if (is_array($this->Data))
+			
+				if ($this->Data)
 				for($r=0; $r<$RowsCount; $r++)
 				if($PastDataCount+$r<$AllDataCount || $this->HasTier)//this condition prevents from empty rows
 				{
@@ -457,7 +460,7 @@ class AutolistPlugin extends JPlugin
 			class="<?php echo $this->SelectClass; ?>" /></td><?php 
 		}
 	}
-	protected function EchoReoveTD()
+	protected function EchoRemoveTD()
 	{ 
 		if($this->HasRemove):
 		?><td class='remove' onclick='DList_<?php echo $this->ID;?>.Remove($(this));'><a><img style='height:100%; vertical-align:middle;' src='/img/delete-blue-20.png'/> </a> </td><?php 
@@ -502,7 +505,6 @@ class AutolistPlugin extends JPlugin
 			$Value=$this->Filter($k, $Value,$D);
 			if (!$this->MetaData[$k]['CData'])
 			$Value=htmlspecialchars($Value);
-			
 			$this->EchoRecordTD($k, $Value, $IfEchoValue);
 		}
 		$this->EditManager->EchoHiddenTD($D);
@@ -552,7 +554,7 @@ class AutolistPlugin extends JPlugin
 				$this->EditManager->EchoTD();
 				$this->EchoSelectTD($D);
 				$this->EchoRecord($D);
-				$this->EchoReoveTD();
+				$this->EchoRemoveTD();
 				?>
 		</tr>
 				<?php  

@@ -26,6 +26,13 @@ class FileStock
 	function EditTimestamp(){ return $this->EditTimestamp; }
 	protected function SetEditTimestamp($Time){ $this->EditTimestamp=$Time; }
 	/**
+	 * @Column(type="boolean")
+	 * @var boolean
+	 */
+	protected $Act;
+	function Act(){ return $this->Act; }
+	function SetAct($Act){ $this->Act=$Act; }
+	/**
 	* @Column(type="string", nullable=true)
 	* @var string
 	*/
@@ -72,6 +79,7 @@ class FileStock
 		$this->AssignFile($File);
 		$this->AssignMail($Mail);
 		$this->Error=$Error;
+		$this->Act=false;
 		$this->SetEditTimestamp(time());
 	}
 }

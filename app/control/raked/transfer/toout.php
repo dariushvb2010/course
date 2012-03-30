@@ -1,5 +1,5 @@
 <?php
-class ArchiveTransferTorakedController extends JControl
+class RakedTransferTooutController extends JControl
 {
 	//public $Handler;
 	/**
@@ -8,7 +8,8 @@ class ArchiveTransferTorakedController extends JControl
 	 */
 	function Start()
 	{
-		j::Enforce("Archive");
+		j::Enforce("Raked");
+		$Dest=$_GET["Taraf"];
 		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
@@ -17,19 +18,19 @@ class ArchiveTransferTorakedController extends JControl
 				$MailID=$_POST['MailID']*1;
 			else 
 				$MailID=$_GET['MailID']*1;
-			$Mail=ORM::Find("MailGive", $MailID);
+			$Mail=ORM::Find("MailSend", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
-			$this->Handler=new HandleTransferSingle("Give","Archive","Raked", $Mail);
+			$this->Handler=new HandleTransferSingle("Send","Raked",$Dest, $Mail);
 		}
 		elseif(isset($_POST['Search']))
 		{
-			$this->Handler=new HandleTransferSearch("Give","Archive","Raked");
+			$this->Handler=new HandleTransferSearch("Send","Raked",$Dest);
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
-			$this->Handler=new HandleTransferPublic("Give","Archive","Raked");
+			$this->Handler=new HandleTransferPublic("Send","Raked",$Dest);
 		}
 		
 		$this->Handler->Perform();
@@ -42,9 +43,9 @@ class ArchiveTransferTorakedController extends JControl
 	{
 		if(!($Mail instanceof Mail))
 			return true;
-		if($Mail instanceof MailGive)
+		if($Mail instanceof MailSend)
 		{
-			if($Mail->GiverGroup()->Title()=="Archive" AND $Mail->GetterGroup()->Title()=="Raked" AND ($Mail->State()<=Mail::STATE_INWAY or $Mail->State()==Mail::STATE_CLOSED))
+			if($Mail->SenderGroup()->Title()=="Archive")
 				return true;
 			else
 				return false;

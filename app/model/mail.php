@@ -126,12 +126,29 @@ abstract class Mail
 	const STATE_CLOSED=9;//---------------------9-------------------
 	protected function StateClosed()
 	{
-		if($this->CanIGoTo(self::STATE_CLOSED))
+		$res=true;
+		foreach ($this->Stock() as $s)
+			$res &=$s->Act();
+		if($res)
 		{
-			$this->State=self::STATE_CLOSED;
+			if($this->CanIGoTo(self::STATE_CLOSED))
+			{
+				foreach ($this->Stock() as $s)
+				{
+					$File=$s->File();
+					$File->SetStock(null);
+					$this->Stock->removeElement($s);
+					$s->SetMail(null);
+					ORM::Delete($s);
+				}
+				$this->State=self::STATE_CLOSED;
+				return true;
+			}
+			else
+			throw new Exception();
 		}
 		else
-			throw new Exception();
+			return false;
 	}
 	/**
 	 * I have My own state, can I go to new State
@@ -179,6 +196,7 @@ abstract class Mail
 	*/
 	private $State;
 	function State(){return $this->State;}
+	function SetState($State){ $this->State=$State; }
 	//please dont Declare SetState function, we have alternative safe functions for that 
 	/**
 	 * Time of send or receive or give or get
@@ -282,17 +300,20 @@ abstract class Mail
 				$Error[]=strval($File);
 				continue;
 			}
-			$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
-			
-			
-			if(is_string($P))
+			if(!$File->Stock() or !$File->Stock()->Act())
 			{
-				$E=$P;
-				$ErrorCount++;
+				$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
+			
+			
+				if(is_string($P))
+				{
+					$E=$P;
+					$ErrorCount++;
+				}
+				else
+					$E=null;
+				$this->UpdateStock($File, $E);
 			}
-			else
-				$E=null;
-			$this->UpdateStock($File, $E);
 		}
 		if($RemoveCalled)
 		foreach($this->Stock as $s)
@@ -315,35 +336,50 @@ abstract class Mail
 			{
 				if(!($File instanceof ReviewFile))
 				continue;
-				$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this);//persist
-				if(is_string($P))
+				if(!$File->Stock()->Act())
 				{
-					$faulty=true;
-					$this->UpdateStock($File, $P);
-					$Error[]=$P;
-					$Error[]="تعدادی از اظهارنامه ها ارسال نشد. این یک خطای ناجور است. در صورت مشاهده آن به مسئولین نرم افزار اطلاع دهید.";
-					return false;
-				}
-				else // progress has been persisted successfully
-				{
-					$s=$File->Stock();
-					$File->SetStock(null);
-					$this->Stock->removeElement($s);
-					$s->SetMail(null);
-					ORM::Delete($s);
+					$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this);//persist
+					if(is_string($P))
+					{
+						$faulty=true;
+						$this->UpdateStock($File, $P);
+						$Error[]=$P;
+						$Error[]="تعدادی از اظهارنامه ها ارسال نشد. این یک خطای ناجور است. در صورت مشاهده آن به مسئولین نرم افزار اطلاع دهید.";
+						return false;
+					}
+					else // progress has been persisted successfully
+					{
+						
+						$File->Stock()->SetAct(true);
+						$this->UpdateStock($File, "انجام شد");
+	// 					$s=$File->Stock();
+	// 					$File->SetStock(null);
+	// 					$this->Stock->removeElement($s);
+	// 					$s->SetMail(null);
+	// 					ORM::Delete($s);
+					}
 				}
 			}
 			if($faulty)
 				$this->StateEditingFaulty();
-			elseif($this instanceof MailGive)
-				$this->StateInway();
-			else
-				$this->StateClosed();
+// 			elseif($this instanceof MailGive)
+// 				$this->StateInway();
+// 			else
+// 				$this->StateClosed();
 			return true;
 		}
 		else
 			return false;
 		
+	}
+	function Complete($Files, $RemoveCalled, &$Error)
+	{
+		if($this->Act($Files, $RemoveCalled, $Error))
+		{
+			return $this->StateClosed();
+		}
+		else 
+		return false;
 	}
 	function __construct($Num=null, $Subject=null, $Description=null)
 	{

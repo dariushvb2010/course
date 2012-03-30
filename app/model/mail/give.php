@@ -199,9 +199,7 @@ class MailGiveRepository extends EntityRepository
 		$r=j::ODQL($s.$w."AND M.State=?".$o,$GiverGroup, $GetterGroup, $Subject);
 		else
 		{
-			echo $s.$w.$o;
 			$r=j::ODQL($s.$w.$o,$GiverGroup, $GetterGroup);
-			ORM::Dump($r);
 		}
 		return $r;
 	}

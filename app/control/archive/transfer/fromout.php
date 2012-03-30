@@ -26,20 +26,18 @@ class ArchiveTransferFromoutController extends JControl
 				$this->Error[]="محل دریافت یافت نشد.";
 			}
 			$this->Handler=new HandleTransferSingle("Receive",$Source, "Archive", $Mail);
-			$this->Handler->Perform();
 		}
 		elseif(isset($_POST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Receive",$Source, "Archive");
-			$this->Handler->Perform();
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
 			$this->Handler=new HandleTransferPublic("Receive",$Source,"Archive");
-			$this->Handler->Perform();
-			
 		}
+		
+		$this->Handler->Perform();
 		$this->Error=$Error;
 		if (count($Error))
 		$this->Result=false;

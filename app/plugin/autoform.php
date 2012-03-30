@@ -27,6 +27,12 @@ class AutoformPlugin extends JPlugin
 	 */
 	public $List;
 	/**
+	 * 
+	 * determine which function of the will be called: Present or PresentForPrint
+	 * @var string
+	 */
+	public $List_Present_Func="Present";
+	/**
 	 * String for styling the form
 	 * @var string
 	 **/
@@ -415,7 +421,10 @@ $(function(){
 			?> </div> <?php 	
 		}
 		if($this->List)
+		if($this->List_Present_Func=="Present")
 			$this->List->Present();
+		elseif($this->List_Present_Func=="PresentForPrint")
+			$this->List->PresentForPrint();
 		if($this->HasFormTag):
 			?></form><?php 
 		else:
