@@ -32,7 +32,7 @@ or strpos(jURL::HTTPHost(),"192.168")!==false
 ) #replace this with your site
 	reg("app/state","deploy");
 elseif (php_sapi_name()=="cli")
-	reg("app/state","develop");
+	reg("app/state","deploy");
 else 
 	reg("app/state","develop");
 
