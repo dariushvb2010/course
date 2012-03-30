@@ -242,7 +242,7 @@ class FileFsm extends JModel
 			$f->SetState(11);
 		}
 	}
-	public static function ModerateTo7()
+	public static function Moderate5()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
 		foreach($files as $f)
@@ -251,7 +251,7 @@ class FileFsm extends JModel
 			$f->SetState(7);
 		}
 	}
-	public static function Moderate5()
+	public static function Moderate6()
 	{
 	$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
 		echo "4";
@@ -262,7 +262,7 @@ class FileFsm extends JModel
 		}
 	}
 	
-	public static function Moderate4()
+	public static function Moderate7()
 	{
 // 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
 // 		ORM::Dump($files);
@@ -279,7 +279,7 @@ class FileFsm extends JModel
 			$f->SetState(11);
 		}
 	}
-	public static function Moderate6()
+	public static function Moderate8()
 	{
 		
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Post",0,99999999);
