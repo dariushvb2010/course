@@ -3,11 +3,17 @@ class ViewTransferPlugin extends JPlugin
 {
 static function Present(BaseViewClass $View, $Title="ارسال اظهارنامه ها")
 {
+	if(!$View->Handler)
+	{
+		echo "شما اجازه دسترسی به این قسمت را ندارید.";
+		return;
+	}
 	?>
 	
 	<style>
 	div#body>div.mainform{border:4px double black; margin: 5px 12px; padding:5px;}
 	<?php
+	
 	if($View->Handler->CreateForm)
 			$View->Handler->CreateForm->PresentCSS();
 	if($View->Handler->SearchForm)

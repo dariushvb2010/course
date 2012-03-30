@@ -45,6 +45,10 @@ class HandleTransferSingle extends HandleTransfer
 				$this->Result="اظهارنامه ها با موفقیت ارسال شدند.";
 			else 
 				$this->Error[]="ارسال نشد. لطفا خطاهای موجود را رفع نمایید.";
+		}
+		elseif(isset($_POST['Complete']))
+		{
+			$Mail->Complete($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
 		}//-------------------------------------EditMail----------------------------
 		elseif(isset($_POST['EditMail']))
 		{

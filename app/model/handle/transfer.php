@@ -180,13 +180,23 @@ abstract class HandleTransfer
 			{
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 				$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
+				$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 				
 				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
-				
+				$al->RemoveLabel="حذف";
+				$al->HasFormTag=true;
+				$al->_List=".autoform .autolist tbody";
+				$al->_Button="div.autoform button";
+				$al->EnterTextName="Cotag";
+				$al->Notifier_Add=array("? اضافه شد","Cotag");
+				//--------al custom javascript code for validating the format of the Cotag-------------
+				$al->AutoformAfter=true;
 			}
 			else 
 			{
+				$al->InputValues['ColsCount']=5;
+				$al->InputValues['RowsCount']='auto';
 				$al->HasRemove=false;
 			}
 		}
@@ -201,6 +211,7 @@ abstract class HandleTransfer
 			{
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 				$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
+				$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 				
 				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
@@ -220,17 +231,29 @@ abstract class HandleTransfer
 		$al=$this->MakeListTemplate();
 		$f=new AutoformPlugin();
 		$f->HasFormTag=false;
-		if($this->Mail->State()==Mail::STATE_EDITING)
+		if($this->Mail->State()==Mail::STATE_EDITING )
 		{
 			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
+			$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 			
-			$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
+			$al->SetHeader("Error", "وضعیت", "","",array("Useless"=>true,"Style"=>"color:red;"));
+			
+			$al->RemoveLabel="حذف";
+			$al->HasFormTag=true;
+			$al->_List=".autoform .autolist tbody";
+			$al->_Button="div.autoform button";
+			$al->EnterTextName="Cotag";
+			$al->Notifier_Add=array("? اضافه شد","Cotag");
+			//--------al custom javascript code for validating the format of the Cotag-------------
+			$al->AutoformAfter=true;
 		}
 		else
 		{
 			$al->HasRemove=false;
+			$al->InputValues['ColsCount']=5;
+			$al->InputValues['RowsCount']='auto';
 		}
 		$al->Autoform=$f;
 		return $al;
@@ -274,10 +297,12 @@ abstract class HandleTransfer
 	protected function MakeMainFormTemplate()
 	{
 		if(!$this->Mail)
-		return;
-		echo "makeMainFormtemplate";
+			return;
 		$List=$this->MakeList();
 		$f=new AutoformPlugin("post");
+		$f->List_Present_Func="Present";
+		if($this->Mail->State()==Mail::STATE_CLOSED or ($this->Mail->State()==Mail::STATE_INWAY and $this->Action=="Give"))
+			$f->List_Present_Func="PresentForPrint";
 		$f->Style="border:none; padding:10px;";
 		//------place the list into the form-----
 		$f->HasFormTag=false;
@@ -286,26 +311,19 @@ abstract class HandleTransfer
 	}
 	protected function MakeListTemplate()
 	{
-		if($this->Action=="Get")
+		if($this->Action=="Get" or $this->Mail->State()==Mail::STATE_CLOSED)
 		$al=new AutolistPlugin($this->Mail->Box());
 		else
 		$al=new DynamiclistPlugin($this->Mail->Box());
 		$al->ObjectAccess=true;
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
-		$al->RemoveLabel="حذف";
-		$al->HasFormTag=true;
-		$al->_List=".autoform .autolist tbody";
-		$al->_Button="div.autoform button";
-		$al->EnterTextName="Cotag";
-		$al->Notifier_Add=array("? اضافه شد","Cotag");
-		//--------al custom javascript code for validating the format of the Cotag-------------
 		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
 		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
-		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
-		$al->AutoformAfter=true;
+		
+		
 		return $al;
 	}
 	protected function MakeSearchForm()

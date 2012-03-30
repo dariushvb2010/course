@@ -153,9 +153,7 @@ class MailSendRepository extends EntityRepository
 			$r=j::ODQL($s.$w."AND M.State=?".$o,$SenderGroup, $Subject);
 		else
 		{
-			echo $s.$w.$o; 
 			$r=j::ODQL($s.$w.$o,$SenderGroup);
-			ORM::Dump($r);
 		}
 		return $r;
 	}

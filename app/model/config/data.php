@@ -31,12 +31,5 @@ class ConfigData
 	 static $MAIN=array(
 	 
 	 );
-	 static $TOPIC_TYPE=array(
- 				"othergates"=>"گمرک های اجرایی",
- 				"rajaie"=> "بخش های گمرک شهید رجایی",
- 				"iran"=>"بخش های گمرک ایران",
- 				"other"=>"سایر(ارسال بایگانی بازبینی)",
- 				"correspondent"=>"طرف مکاتبه",
- 				"comment"=>"توضیحات",
-	 		);
+	 
 }

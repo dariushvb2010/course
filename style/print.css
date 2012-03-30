@@ -16,7 +16,7 @@
 		display: none;
 	}
 	.noprint {
-		display: none;
+		display: none !important;
 	}
 	body {
 		width:10cm;

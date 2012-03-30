@@ -68,7 +68,14 @@ class ReviewTopic
 		$this->MailReceive= new ArrayCollection();
 		$this->MailSend= new ArrayCollection();
 	}
-	
+	static $TYPES=array(
+	 				"othergates"=>"گمرک های اجرایی",
+	 				"rajaie"=> "بخش های گمرک شهید رجایی",
+	 				"iran"=>"بخش های گمرک ایران",
+	 				"other"=>"سایر(ارسال بایگانی بازبینی)",
+	 				"correspondent"=>"طرف مکاتبه",
+	 				"comment"=>"توضیحات",
+	);
 	public static function Topics($type='*')
 	{
 		return ORM::Query(new ReviewTopic())->GetTopics($type);

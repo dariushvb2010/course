@@ -343,7 +343,7 @@ class DynamiclistPlugin extends AutolistPlugin
 		DList_<?php echo $this->ID;?>.UpdateNotifier();
         DList_<?php echo $this->ID;?>.WriteRecord(row);
         if(DList_<?php echo $this->ID;?>.HasRemove)
-        	row.append("<?php $this->EchoReoveTD();?>");
+        	row.append("<?php $this->EchoRemoveTD();?>");
 	<?php 			    
 	}
 	protected function jInit()
