@@ -257,9 +257,9 @@ class DynamiclistPlugin extends AutolistPlugin
 		style='<?php echo $this->MetaData[$k]['Style'];?>'
 		>
 		<span class="data"><?php if($IfEchoValue) echo ($Value===null || $Value==="") ? "-" : $Value;?></span>
-		<?php if(!$this->MetaData[$k]['Useless']):?>
+		<?php if(!$this->MetaData[$k]['Useless']): if($IfEchoValue):?>
 		<input type="hidden" value="<?php echo $Value;?>" name="<?php echo $this->NamePrefix.$k?>[]"/>
-		<?php endif;?>
+		<?php endif; endif;?>
 		</td>
 	<?php
 	}

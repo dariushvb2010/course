@@ -24,7 +24,7 @@ class FileStock
 	*/
 	protected $EditTimestamp;
 	function EditTimestamp(){ return $this->EditTimestamp; }
-	protected function SetEditTimestamp($Time){ $this->EditTimestamp=$Time; }
+	function SetEditTimestamp($Time){ $this->EditTimestamp=$Time; }
 	/**
 	 * @Column(type="boolean")
 	 * @var boolean
@@ -32,6 +32,13 @@ class FileStock
 	protected $Act;
 	function Act(){ return $this->Act; }
 	function SetAct($Act){ $this->Act=$Act; }
+	/**
+	* @Column(type="boolean")
+	* @var boolean
+	*/
+	protected $IfSaveGet;
+	function IfSaveGet(){ return $this->IfSaveGet; }
+	function SetIfSaveGet($IfSaveGet){ $this->IfSaveGet=$IfSaveGet;	}
 	/**
 	* @Column(type="string", nullable=true)
 	* @var string
@@ -64,11 +71,7 @@ class FileStock
 	{
 		$Mail->AddStock($this);
 	}
-	function Update($Error)
-	{
-		$this->SetError($Error);
-		$this->SetEditTimestamp(time());
-	}
+	
 	function Cotag()
 	{
 		if($this->File)
@@ -80,6 +83,7 @@ class FileStock
 		$this->AssignMail($Mail);
 		$this->Error=$Error;
 		$this->Act=false;
+		$this->IfSaveGet=true;
 		$this->SetEditTimestamp(time());
 	}
 }

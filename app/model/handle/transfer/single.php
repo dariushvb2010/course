@@ -13,13 +13,8 @@ class HandleTransferSingle extends HandleTransfer
 		$this->MakeMainForm();
 		if($this->Action=="Get")
 		{
-			$Cs=$_POST['Cotag'];
-			foreach ($Cs as $Cotag)
-			{
-				$F=ORM::Find1("ReviewFile", "Cotag", $Cotag);
-				if($F)
-					$Files[]=$F;	
-			}
+			$Cotags=$_POST['Cotag'];
+			$Files=ReviewFile::RegulateWithError($Cotags);
 		}
 		else
 		{
@@ -38,7 +33,7 @@ class HandleTransferSingle extends HandleTransfer
 		elseif(isset($_POST[$this->Action]))
 		{
 			if($this->Action=="Get")
-			;
+				$res=$Mail->Get($Files, $this->Error);
 			else
 				$res=$Mail->Act($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
 			if($res)
@@ -48,7 +43,11 @@ class HandleTransferSingle extends HandleTransfer
 		}
 		elseif(isset($_POST['Complete']))
 		{
-			$Mail->Complete($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
+			$res=$Mail->Complete($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
+			if($res)
+				$this->Result="با موفقیت انجام شد.";
+			else 
+				$this->Error[]="انجام نشد.";
 		}//-------------------------------------EditMail----------------------------
 		elseif(isset($_POST['EditMail']))
 		{

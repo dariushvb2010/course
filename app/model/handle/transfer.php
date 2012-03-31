@@ -50,7 +50,7 @@ abstract class HandleTransfer
 	 * Type of the progress: [Give], [Get], [Send], [Receive] 
 	 * @var string
 	 */
-	protected $Action;
+	public  $Action;
 // 	const Get="Get";
 // 	const Give="Give";
 // 	const Send="Send";
@@ -196,17 +196,13 @@ abstract class HandleTransfer
 			else 
 			{
 				$al->InputValues['ColsCount']=5;
-				$al->InputValues['RowsCount']='auto';
+				$al->InputValues['RowsCount']=30;
 				$al->HasRemove=false;
 			}
 		}
 		elseif($this->Action="Get")
 		{
 			$al->HasRemove=false;
-			$al->HasSelect=true;
-			$al->SelectLabel="انتخاب";
-			$al->SelectName="Cotag";
-			$al->SelectValue="Cotag";
 			if($this->Mail->State()==Mail::STATE_GETTING OR $this->Mail->State()==Mail::STATE_INWAY)
 			{
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
@@ -214,17 +210,36 @@ abstract class HandleTransfer
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 				
+				$al->AutoformAfter=true;
+				$al->SetHeader("Select","انتخاب", true, false, false);
+				$al->SetFilter(array($this, "Filter"));
 				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
-				
+				$al->HasFormTag=true;
 			}
 			else
 			{
-				
+				$al->InputValues['ColsCount']=5;
+				$al->InputValues['RowsCount']=30;
+				$al->HasRemove=false;
 			}
 		}
 		$f->Style="border:none;";
 		$al->Autoform=$f;
 		return $al;
+	}
+	function Filter($k, $v, $D)
+	{
+		if($k=="Select")
+		{
+			if($D->File()->Stock())
+			if($D->File()->Stock()->IfSaveGet())
+			{
+				$s="checked='checked'";
+			}
+			return "<input type='checkbox' name='Cotag[]' value='".$D->Cotag()."' class='item' {$s}/>";
+		}
+		else 
+			return $v;
 	}
 	private function MakeListForMailSendANDReceive()
 	{
@@ -275,7 +290,8 @@ abstract class HandleTransfer
 			{
 				if($this->Mail->State()==Mail::STATE_GETTING OR $this->Mail->State()==Mail::STATE_INWAY)
 				{
-					
+					$f->AddElement(array("Type"=>"text", "Name"=>"SelectCotag", "Label"=>"کوتاژ"));
+					$f->AddElement(array("Type"=>"button","Name"=>"Select", "Value"=>"انتخاب"));
 				}
 			}
 		}
@@ -312,9 +328,9 @@ abstract class HandleTransfer
 	protected function MakeListTemplate()
 	{
 		if($this->Action=="Get" or $this->Mail->State()==Mail::STATE_CLOSED)
-		$al=new AutolistPlugin($this->Mail->Box());
+			$al=new AutolistPlugin($this->Mail->Box());
 		else
-		$al=new DynamiclistPlugin($this->Mail->Box());
+			$al=new DynamiclistPlugin($this->Mail->Box());
 		$al->ObjectAccess=true;
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";

@@ -101,7 +101,7 @@ class HandleTransferPublic extends HandleTransfer
 			if($this->Action=="Give")
 				$this->Mail=ORM::Query("MailGive")->LastMail($this->SourceGroup, $this->DestGroup, Mail::STATE_EDITING);
 			elseif($this->Action=="Get")
-				$this->Mail=ORM::Query("MailGive")->LastMail($this->SourceGroup, $this->DestGroup, Mail::STATE_GETTING);
+				$this->Mail=ORM::Query("MailGive")->LastMail($this->SourceGroup, $this->DestGroup, Mail::STATE_INWAY);
 			elseif($this->Action=="Send")
 				$this->Mail=ORM::Query("MailSend")->LastMail($this->SourceGroup);
 			elseif($this->Action=="Receive")

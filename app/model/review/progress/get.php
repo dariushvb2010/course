@@ -25,26 +25,40 @@ class ReviewProgressGet extends ReviewProgress
 		$this->ProgressGive=$ProgressGive;
 		$ProgressGive->SetProgressGet($this);
 	}
-	function __construct(ReviewFile $File=null, $IfPersist=true)
+	function __construct(ReviewProgressGive $ProgressGive=null, $IfPersist=true)
 	{
 		$User=MyUser::CurrentUser();
-		parent::__construct($File, $User, $IfPersist);
-		$ProgressGive=$File->LLP("Give");
-		if($ProgressGive)
+		parent::__construct($ProgressGive->File(), $User, $IfPersist);
 		$IfPersist ? $this->AssignProgressGive($ProgressGive) : $this->SetProgressGive($ProgressGive);
 		
 	}
 	function  Summary()
 	{
-		
+		if(!$this->ProgressGive)
+			return "فرآیند تحویل یافت نشد.";
+		$Mail=$this->ProgressGive->MailGive();
+		if(!$Mail)
+			return "نامه یافت نشد.";
+		$href=ViewMailPlugin::GetHref($this->MailGive, "Give");
+		$r="اظهارنامه توسط ".$Mail->GetterGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$Mail->Num()."</a> از <b>".$Mail->GiverGroup()->PersianTitle()."</b> تحویل گرفته شد.";
+		return $r;
 	}
 	function Title()
 	{
-		return "تحویل به ";
+		return "تحویل گرفتن ";
 	}
 	function Event()
 	{
-		return "";
+		$GiverGroup=$this->ProgressGive->MailGive()->GiverGroup();
+		$GetterGroup=$this->ProgressGive->MailGive()->GetterGroup();
+		if(!$GiverGroup OR !$GetterGroup)
+		{
+			return;
+		}
+		$Giver=strtolower($GiverGroup->Title());
+		$Getter=strtolower($GetterGroup->Title());
+		$res="Get_".$Getter."_from_".$Giver;
+		return $res;
 	}
 }
 
@@ -56,14 +70,9 @@ class ReviewProgressGetRepository extends EntityRepository
 	* @param ReviewFile|string|integer $File
 	* @return string|Ambigous <string, number>
 	*/
-	public function AddToFile($File=null, $IfPersist=true)
+	public function AddToFile(ReviewProgressGive $ProgressGive=null, $IfPersist=true)
 	{
-		$File=ReviewFile::GetRecentFile($File);
-		if(!($File instanceof ReviewFile))
-		{
-			return "اظهارنامه یافت نشد.";
-		}
-		$P=new ReviewProgressGet($File, $IfPersist);
+		$P=new ReviewProgressGet($ProgressGive, $IfPersist);
 		$ch=$IfPersist ? $P->Apply() : $P->Check();
 		if(is_string($ch))
 			return $ch;

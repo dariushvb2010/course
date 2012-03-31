@@ -35,10 +35,20 @@ class ViewMailPlugin extends JPlugin
 	{
 		if($M instanceof MailGive)
 		{
-			if($M->GiverGroup()->Title()=="Archive" AND $M->GetterGroup()->Title()=="Raked" AND $Action=="Give")
-				$href="/archive/transfer/toraked?MailID=".$M->ID();
-			elseif($M->GiverGroup()->Title()=="Archive" AND $M->GetterGroup()->Title()=="Raked" AND $Action=="Get")
-				$href="/raked/transfer/fromarchive?MailID=".$M->ID();
+			if($Action=="Give")
+			{
+				if($M->GiverGroup()->Title()=="Archive" AND $M->GetterGroup()->Title()=="Raked")
+					$href="/archive/transfer/toraked?MailID=".$M->ID();
+				elseif($M->GiverGroup()->Title()=="CotagBook" AND $M->GetterGroup()->Title()=="Archive")
+					$href="/cotag/transfer/toarchive?MailID=".$M->ID();
+			}
+			elseif($Action=="Get")
+			{
+				if($M->GiverGroup()->Title()=="Archive" AND $M->GetterGroup()->Title()=="Raked")
+					$href="/raked/transfer/fromarchive?MailID=".$M->ID();
+				if($M->GiverGroup()->Title()=="CotagBook" AND $M->GetterGroup()->Title()=="Archive")
+					$href="/Archive/transfer/fromcotag?MailID=".$M->ID();
+			}
 			
 		}
 		elseif($M instanceof MailSend)

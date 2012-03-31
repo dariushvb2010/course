@@ -1,5 +1,5 @@
 <?php
-class RakedTransferFromoutController extends JControl
+class ArchiveTransferFromcotagController extends JControl
 {
 	//public $Handler;
 	/**
@@ -8,8 +8,8 @@ class RakedTransferFromoutController extends JControl
 	 */
 	function Start()
 	{
-		j::Enforce("Raked");
-		$Source=$_GET["Taraf"];
+		j::Enforce("Archive");
+		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
 		{
@@ -17,26 +17,21 @@ class RakedTransferFromoutController extends JControl
 				$MailID=$_POST['MailID']*1;
 			else 
 				$MailID=$_GET['MailID']*1;
-			$Mail=ORM::Find("MailReceive", $MailID);
+			$Mail=ORM::Find("MailGive", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
-			if(!$Topic)
-			{
-				$this->Error[]="محل دریافت یافت نشد.";
-			}
-			$this->Handler=new HandleTransferSingle("Receive",$Source, "Raked", $Mail);
-		}//---------------Search-------------
+			$this->Handler=new HandleTransferSingle("Get","CotagBook","Archive", $Mail);
+		}//----------------Search-----------------
 		elseif(isset($_POST['Search']))
 		{
-			$this->Handler=new HandleTransferSearch("Receive",$Source, "Raked");
+			$this->Handler=new HandleTransferSearch("Get","CotagBook","Archive");
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
-			$this->Handler=new HandleTransferPublic("Receive",$Source,"Raked");
+			$this->Handler=new HandleTransferPublic("Get","CotagBook","Archive");
 		}
 		$this->Handler->Perform();
-		
 		$this->Error=$Error;
 		if (count($Error))
 		$this->Result=false;
@@ -46,9 +41,9 @@ class RakedTransferFromoutController extends JControl
 	{
 		if(!($Mail instanceof Mail))
 			return true;
-		if($Mail instanceof MailReceive)
+		if($Mail instanceof MailGive)
 		{
-			if($Mail->ReceiverGroup()->Title()=="Raked")
+			if($Mail->GiverGroup()->Title()=="CotagBook" AND $Mail->GetterGroup()->Title()=="Archive" AND $Mail->State()>=Mail::STATE_INWAY)
 				return true;
 			else
 				return false;

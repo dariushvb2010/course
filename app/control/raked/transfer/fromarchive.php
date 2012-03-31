@@ -21,14 +21,17 @@ class RakedTransferFromarchiveController extends JControl
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Get","Archive","Raked", $Mail);
-			$this->Handler->Perform();
+		}//----------------Search-----------------
+		elseif(isset($_POST['Search']))
+		{
+			$this->Handler=new HandleTransferSearch("Get","Archive","Raked");
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
 			$this->Handler=new HandleTransferPublic("Get","Archive","Raked");
-			$this->Handler->Perform();
 		}
+		$this->Handler->Perform();
 		$this->Error=$Error;
 		if (count($Error))
 		$this->Result=false;

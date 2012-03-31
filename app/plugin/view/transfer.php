@@ -35,7 +35,7 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	<!-- --------------------------main form of the mail -->
 	<?php if($View->Handler->MainForm):?>
 			<div class="mainform" ><?php 
-			ViewMailPlugin::SingleShow($View->Handler->Mail, "float:left;","Give");
+			ViewMailPlugin::SingleShow($View->Handler->Mail, "float:left;",$View->Handler->Action);
 			$View->Handler->MainForm->PresentHTML();
 			?>
 			</div>
@@ -49,12 +49,60 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 		}
 	 	$View->Handler->ShowMails();
 	 	?>
+	 	
+	 	
+	 	
+	 	
 	<script>
 	<?php 
 	if($View->Handler->MainForm)
 		$View->Handler->MainForm->PresentScript();
-	
+	if($View->Handler->Action=="Get"):
 	?>
+	function Select(Cotag)
+	{
+		res=false;
+		td=$("table.autolist td[Header='Cotag']");
+		$.each(td,function(i,n){
+			MyCotag=$(this).html();
+			if(MyCotag==Cotag)
+			{
+				sibs=$(this).siblings("td[header=Select]");
+				check=sibs.children("input");
+				check.attr('checked','checked');
+				res=true;				
+			}
+		});
+		return res;
+	}
+	function ShowResult(res)
+	{
+		if(res==true)
+			text="<span style='color:green;'>انتخاب شد</span>";
+		else
+			text="<span style='color:red;'>در لیست وجود ندارد</span>";
+			
+		span=$(":text[name=SelectCotag]").parent("div").find("span#Result");
+		if(!span.length)
+		{
+			$(":text[name=SelectCotag]").parent("div").append("<span id='Result'>hi</span>");
+		}
+		$(":text[name=SelectCotag]").parent("div").find("span#Result").html(text);
+		
+	}
+	$(":text[name=SelectCotag]").keydown(function(event){
+	    if(event.keyCode == 13){
+	        $("button[name=Select]").click();
+	    }
+	});
+	$("button[name=Select]").click(function(){
+		Cotag=$(":text[name=SelectCotag]").val();
+		ShowResult(Select(Cotag));
+		$(":text[name=SelectCotag]").val("");
+	});
+	
+		
+	<?php endif;?>
 	</script>
 	<?php 
 }

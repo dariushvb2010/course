@@ -1,5 +1,5 @@
 <?php
-class ArchiveTransferTooutController extends JControl
+class CotagTransferToarchiveController extends JControl
 {
 	//public $Handler;
 	/**
@@ -8,8 +8,11 @@ class ArchiveTransferTooutController extends JControl
 	 */
 	function Start()
 	{
-		j::Enforce("Archive");
-		$Dest=$_GET["Taraf"];
+		j::Enforce("CotagBook");
+		$c=new CalendarPlugin();
+		$this->today=explode("/", $c->JalaliFromTimestamp(time()));
+		$this->tomorrow=explode("/", $c->JalaliFromTimestamp(strtotime("tomorrow")));
+		$this->PublicShow=false;
 		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
@@ -18,19 +21,19 @@ class ArchiveTransferTooutController extends JControl
 				$MailID=$_POST['MailID']*1;
 			else 
 				$MailID=$_GET['MailID']*1;
-			$Mail=ORM::Find("MailSend", $MailID);
+			$Mail=ORM::Find("MailGive", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
-			$this->Handler=new HandleTransferSingle("Send","Archive",$Dest, $Mail);
-		}//----------------Search-----------------
+			$this->Handler=new HandleTransferCotagbookSingle("Give","CotagBook","Archive", $Mail);
+		}
 		elseif(isset($_POST['Search']))
 		{
-			$this->Handler=new HandleTransferSearch("Send","Archive",$Dest);
+			$this->Handler=new HandleTransferSearch("Give","CotagBook","Archive");
 		}
 		//----------------PUBLIC-------------
 		else 
 		{
-			$this->Handler=new HandleTransferPublic("Send","Archive",$Dest);
+			$this->Handler=new HandleTransferCotagbookPublic("Give","CotagBook","Archive");
 		}
 		
 		$this->Handler->Perform();
@@ -43,9 +46,9 @@ class ArchiveTransferTooutController extends JControl
 	{
 		if(!($Mail instanceof Mail))
 			return true;
-		if($Mail instanceof MailSend)
+		if($Mail instanceof MailGive)
 		{
-			if($Mail->SenderGroup()->Title()=="Archive")
+			if($Mail->GiverGroup()->Title()=="CotagBook" AND $Mail->GetterGroup()->Title()=="Archive" AND ($Mail->State()<=Mail::STATE_INWAY or $Mail->State()==Mail::STATE_CLOSED))
 				return true;
 			else
 				return false;

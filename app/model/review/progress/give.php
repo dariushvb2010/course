@@ -28,21 +28,15 @@ class ReviewProgressGive extends ReviewProgress
 	protected $ProgressGet;
 	function ProgressGet(){return $this->ProgressGet;}
 	function SetProgressGet(ReviewProgressGet $ProgressGet){ $this->ProgressGet=$ProgressGet;}
-	function GiverGroup()
-	{
-		return $this->MailGive->GiverGroup();
-	}
-	function GetterGroup()
-	{
-		return $this->MailGive->GetterGroup();
-	}
 	/**
 	 * it means the error of the stock, it is just used in the autolist 
 	 */
 	function Error()
 	{
-		return null;
+		if($this->File()->Stock())
+		return $this->File()->Stock()->Error();
 	}
+	
 	function __construct(ReviewFile $File=null, MailGive $MailGive=null, $IfPersist=true, MyUser $User=null)
 	{
 		if(!$User)
@@ -53,6 +47,8 @@ class ReviewProgressGive extends ReviewProgress
 	}
 	function  Summary()
 	{
+		if(!$this->MailGive)
+			return "نامه یافت نشد.";
 		$href=ViewMailPlugin::GetHref($this->MailGive, "Give");
 		$r="اظهارنامه از ".$this->MailGive->GiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailGive->Num()."</a> به <b>".$this->MailGive->GetterGroup()->PersianTitle()."</b> تحویل داده شد.";
 		return $r;
@@ -65,10 +61,12 @@ class ReviewProgressGive extends ReviewProgress
 	{
 		if(!$this->MailGive)
 			throw new Exception("No MailGive provided!");
-		$GiverGroup=$this->GiverGroup();
-		$GetterGroup=$this->GetterGroup();
+		$GiverGroup=$this->MailGive->GiverGroup();
+		$GetterGroup=$this->MailGive->GetterGroup();
 		if(!$GiverGroup OR !$GetterGroup)
+		{
 			return;
+		}
 		$Giver=strtolower($GiverGroup->Title());
 		$Getter=strtolower($GetterGroup->Title());
 		$res="Give_".$Giver."_to_".$Getter;
