@@ -62,11 +62,17 @@ class MailGive extends Mail
 		else 
 			return 0;
 	}
-	
+	function PersianSource()
+	{
+		return $this->GiverGroup->PersianTitle();
+	}
+	function PersianDest()
+	{
+		return $this->GetterGroup->PersianTitle();
+	}
 	
 	function SaveGet($Files, &$Error)
 	{
-		echo "SaveGet";
 		if($this->State()==self::STATE_GETTING)
 		{
 			$this->RetouchTimestamp=time();

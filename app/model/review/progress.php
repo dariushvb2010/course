@@ -122,7 +122,7 @@ abstract class ReviewProgress
 		$User->Progress()->add($this);
 	}
 	/**
-	 * @Column(type="string")
+	 * @Column(type="string", nullable=true)
 	 * @var string
 	 */
 	protected $Comment;

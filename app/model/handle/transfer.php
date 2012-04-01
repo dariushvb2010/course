@@ -206,7 +206,7 @@ abstract class HandleTransfer
 			if($this->Mail->State()==Mail::STATE_GETTING OR $this->Mail->State()==Mail::STATE_INWAY)
 			{
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
-				$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
+				$f->AddElement(array("Type"=>"submit", "Name"=>$this->Action, "Value"=>$this->PersianAction()));
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 				

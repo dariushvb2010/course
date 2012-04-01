@@ -37,7 +37,7 @@ class HandleTransferSingle extends HandleTransfer
 			else
 				$res=$Mail->Act($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
 			if($res)
-				$this->Result="اظهارنامه ها با موفقیت ارسال شدند.";
+				$this->Result="با موفقیت انجام شد.";
 			else 
 				$this->Error[]="ارسال نشد. لطفا خطاهای موجود را رفع نمایید.";
 		}

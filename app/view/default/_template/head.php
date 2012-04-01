@@ -384,25 +384,29 @@ $(function() {
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=rajaie&from=Archive'>
+					<a href='/archive/transfer/toout?Taraf=rajaie'>
+				<!--  <a href='/archive/send?to=rajaie&from=Archive'> -->
 							<span class='ui-icon-extlink ui-icon'></span> 
 							سایر دوائر گمرگ رجایی
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=iran&from=Archive'>
+					<a href='/archive/transfer/toout?Taraf=iran'>
+				<!-- <a href='/archive/send?to=iran&from=Archive'> -->
 							<span class='ui-icon-flag ui-icon'></span> 
 							گمرک ایران
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=othergates&from=Archive'>
+				<a href='/archive/transfer/toout?Taraf=othergates'>
+				<!-- <a href='/archive/send?to=othergates&from=Archive'>-->
 							<span class='ui-icon-arrow-4 ui-icon'></span> 
 							سایر گمرکات اجرایی
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=other&from=Archive'>
+					<a href='/archive/transfer/toout?Taraf=other'>
+				<!-- <a href='/archive/send?to=other&from=Archive'> -->
 							<span class='ui-icon-gripsmall-diagonal-se ui-icon'></span> 
 							سایر
 				</a>

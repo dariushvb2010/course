@@ -19,8 +19,8 @@ class FileFsm extends JModel
 	Public static $StateGraph=array(
 	//-----------------------Review---------------------
 	1=>array('Start'=>2),
-	2=>array('Give_cotag_to_archive'=>3),
-	3=>array('Get_archive_from_cotag'=>4),
+	2=>array('Give_cotagbook_to_archive'=>3),
+	3=>array('Get_archive_from_cotagbook'=>4),
 	4=>array('Assign'=>5),
 	5=>array('Review_nok'=>9, 'Review_ok'=>7),
 	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
@@ -192,14 +192,11 @@ class FileFsm extends JModel
 	static function Moderate1()
 	{
 		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
-		//ORM::Dump($files);
-		//j::SQL("UPDATE ReviewFile set State=2 ");
-		//ORM::Flush();
 		foreach($files as $f)
 		{
 			if($f)
 				$f->SetState(2);
-			$p=$f->LastProgress();
+			$p=$f->LLP("Start");
 			if($p->MailNum()==0)
 			{
 		 		echo "3";
@@ -207,7 +204,6 @@ class FileFsm extends JModel
 			}
 			ORM::Persist($f);
 		}
-		ORM::Flush();
 		echo 'done1';
 	}
 	static function Moderate2()

@@ -49,6 +49,15 @@ class MailReceive extends Mail
 	*/
 	protected $ProgressReceive;
 	function ProgressReceive(){ return $this->ProgressReceive; }
+	
+	function PersianSource()
+	{
+		return $this->SenderTopic->Topic();
+	}
+	function PersianDest()
+	{
+		return $this->ReceiverGroup->PersianTitle();
+	}
 	function MyBox()
 	{
 		if($this->State()==self::STATE_CLOSED)

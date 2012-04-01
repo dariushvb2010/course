@@ -41,10 +41,8 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 			$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
 			$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
 			$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
-			$f=$FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin; echo $f."<br/>";
 			$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
 				
-			echo "s:".$StartTimestamp." f:".$FinishTimestamp;
 			$NewFiles=ORM::Query(new ReviewFile())->FilesInTimeRange($StartTimestamp,$FinishTimestamp,MyUser::CurrentUser());
 			$this->MakeMainList($NewFiles);
 		}
@@ -58,6 +56,7 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 			}
 			else 
 				$this->Error[]="ارسال نشد. لطفا خطاهای موجود را رفع نمایید.";
+			$this->MakeMainList($Files);
 		}//-------------------------------------EditMail----------------------------
 		elseif(isset($_POST['EditMail']))
 		{

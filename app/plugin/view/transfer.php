@@ -11,6 +11,7 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	?>
 	
 	<style>
+	input[type=submit]{min-width:200px;}
 	div#body>div.mainform{border:4px double black; margin: 5px 12px; padding:5px;}
 	<?php
 	
@@ -29,6 +30,8 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	</h1>
 	<?php
 	ViewResultPlugin::Show($View->Handler->Result, $View->Handler->Error);
+	ViewResultPlugin::Show($View->Result, $View->Error);
+	
 	if($View->Handler->CreateForm)
 		$View->Handler->CreateForm->PresentHTML();
 	?>

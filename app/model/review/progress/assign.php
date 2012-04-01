@@ -72,33 +72,32 @@ class ReviewProgressAssignRepository extends EntityRepository
 			$Error="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 			return $Error;
 		}
-		else{
-			$lp = $File->LLP();
-			if(($lp instanceof ReviewProgressRegisterarchive)OR ($lp instanceof ReviewProgressReturn))
+		else
+		{
+			$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer);
+			$R->setComment($Comment);
+			$ch=$R->Apply();
+			if(is_string($ch))
 			{
-				return $this->finalization($File,$CurrentUser,$Reviewer,$Comment);
-			}else{
-				
-				if(j::Check('Reassign') AND (($lp instanceof ReviewProgressAssign) 
-						OR ($lp instanceof ReviewProgressReview) OR $lp instanceof ReviewProgressCancelassign)){
-					return $this->finalization($File,$CurrentUser,$Reviewer,$Comment);
-				}else{
-					$Error=" اظهارنامه با شماره کوتاژ ".$File->Cotag()."قابل تخصیص به کارشناس نیست.";
-					return $Error;
+				if(j::check("Reassign"))
+				{
+					$LLP=$File->LLP();
+					if( $LLP instanceof ReviewProgressAssign)
+					{
+						$LLP->kill();
+						ORM::Persist($R);
+						return $R;
+					}
 				}
-				
+				return "اظهارنامه با شماره کوتاژ  ".$File->Cotag()." قابل تخصیص به کارشناس نیست.";
+			}
+			else
+			{
+				ORM::Persist($R);
+				return $R;
 			}
 		
 		}
 		
-	}
-	function finalization($File,$CurrentUser,$Reviewer,$Comment){
-		$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer);
-		$R->setComment(($Comment==null?"":$Comment));
-		$ch=$R->Apply();
-		if(is_string($ch))
-			return $ch;
-		ORM::Persist($R);
-		return $R;
 	}
 }

@@ -253,6 +253,8 @@ abstract class Mail
 			$Stock->SetMail($this);
 		}
 	}
+	abstract function PersianSource();
+	abstract function PersianDest();
 	function Box()
 	{
 		if($this->State()==self::STATE_EDITING)

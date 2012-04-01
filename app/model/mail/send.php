@@ -47,7 +47,14 @@ class MailSend extends Mail
 			return $this->ProgressSend;
 		
 	}
-	
+	function PersianSource()
+	{
+		return $this->SenderGroup->PersianTitle();
+	}
+	function PersianDest()
+	{
+		return $this->ReceiverTopic->Topic();
+	}
 	function __construct($Num=null, $Subject=null, $SenderGroup=null, $ReceiverTopic=null, $Description=null)
 	{
 		parent::__construct($Num, $Subject, $Description);
