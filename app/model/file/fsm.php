@@ -189,121 +189,110 @@ class FileFsm extends JModel
 		 
 	}
 	static function Moderate10(){echo 'ss';}
-	static function Moderate1()
+	static function Moderate23()
 	{
 		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
 		foreach($files as $f)
 		{
-			if($f)
-				$f->SetState(2);
-			$p=$f->LLP("Start");
-			if($p->MailNum()==0)
-			{
-		 		echo "3";
-				$f->SetState(3);
-			}
-			ORM::Persist($f);
+			$f->SetState(2);
 		}
-		echo 'done1';
-	}
-	static function Moderate2()
-	{
-		echo "<br/>";
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Registerarchive",0,99999999);
-		//ORM::Query(new ReviewFile)->UpdateStateOfFilesWithLastProgress("Registerarchive",4);
-		//ORM::Dump($files);
+		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject2(0,999999999);
 		foreach($files as $f)
 		{
-			$f->SetState(4);
-			ORM::Persist($f);
+			$f->SetState(3);
 		}
-		ORM::Flush();
-		echo 'done2';
+		echo 'done23';
 	}
-	static function Moderate3()
+	static function Moderate4()
+	{
+		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Registerarchive",0,99999999);
+		foreach($files as $f)
+		{
+			
+				$f->SetState(4);
+			
+		}
+		echo 'done4';
+	}
+	static function Moderate5()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Assign",0,99999999);
 		foreach($files as $f)
 		{
-			$f->SetState(5);
-			ORM::Persist($f);
+			if($f->State()==0)
+				$f->SetState(5);
+			else
+				echo $f->Cotag()." ";
+			
 		}
 		ORM::Flush();
-		echo 'done3';
+		echo 'done5';
 	}
-	public static function Moderate4()
+	public static function Moderate911()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
 		foreach($files as $f)
 		{
 			if($f->LastProgress()->Result()==0)
+			{
+				if($f->State()==0)
 				$f->SetState(9);
+				else
+				echo $f->Cotag()." ";
+			}
 			else
+			{
+				if($f->State()==0)
 				$f->SetState(11);
+				else
+				echo $f->Cotag()." ";
+			}
 			
-			ORM::Persist($f);
 		}
-		echo 'done4';
+		echo 'done911';
 	}
-	public static function Moderate5()
+	public static function Moderate11()
 	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
+		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
 		foreach($files as $f)
 		{
-			if($f->LastProgress()->Result()==1)
-				$f->SetState(7);
-			
-			ORM::Persist($f);
-		}
-		echo 'done5';
-	}
-	public static function Moderate6()
-	{
-	$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
-		echo "4";
-		//ORM::Dump($files);
-		foreach($files as $f)
-		{
+			if($f->State()==0)
 			$f->SetState(11);
-			ORM::Persist($f);
+			else
+			echo $f->Cotag()." ";
+			
 		}
-		echo 'done6';
+		echo 'done11';
 	}
 	
-	public static function Moderate7()
+	public static function Moderate12()
 	{
-// 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
-// 		ORM::Dump($files);
-// 		foreach($files as $f)
-// 		{
-// 			$f->SetState(12);
-// 		}
-// 		ORM::Flush();
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
-		echo "4";
-		//ORM::Dump($files);
+		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
 		foreach($files as $f)
 		{
-			$f->SetState(11);
-			ORM::Persist($f);
+			if($f->State()==0)
+			$f->SetState(12);
+			else
+			echo $f->Cotag()." ";
 		}
-		echo 'done7';
+		echo 'done12';
 	}
-	public static function Moderate8()
+	
+	public static function Moderate13()
 	{
 		
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Post",0,99999999);
-		echo "5";
-		//ORM::Dump($files);
 		foreach($files as $f)
 		{
-			if($f->LastProgress()->IsSend()==1)
-				$f->SetState(13);
+			if($f->State()==0)
+			$f->SetState(13);
 			else
-				$f->SetState(14);
-			
-			ORM::Persist($f);
+			echo $f->Cotag()." ";
 		}
-		echo 'done8';
+		echo 'done13';
+	}
+	public static function ModerateTest()
+	{
+		
 	}
 }

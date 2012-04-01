@@ -310,11 +310,20 @@ class ReviewFileRepository extends EntityRepository
 							ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
+	public function GetOnlyProgressStartObject2($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
+	{
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
+								WHERE P.MailNum!=0 AND P.CreateTimestamp=
+									(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
+									 AND P INSTANCE OF ReviewProgressStart    
+								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
+		return $r;
+	}
 	public function GetFilesWithLastProgress($Progress,$Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
-								WHERE P.CreateTimestamp=
-									(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
+								WHERE
+									P.ID=(SELECT MAX(P3.ID) FROM ReviewProgress AS P3 WHERE P3.File=F)
 									 AND P INSTANCE OF ReviewProgress{$Progress}   
 								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
