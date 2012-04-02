@@ -272,7 +272,7 @@ class DynamiclistPlugin extends AutolistPlugin
 	{
 		parent::PresentScript();
 		?>
-		
+		 
 		var DList_<?php echo $this->ID;?>;
 		DList_<?php echo $this->ID;?> = {
 	    	<?php 
