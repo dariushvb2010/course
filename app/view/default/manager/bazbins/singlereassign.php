@@ -47,9 +47,8 @@ ViewResultPlugin::Show($this->ReassignResult,$this->ReassignError);
 
 
 <script>
-<?php $this->ReassignForm->PresentScript();?>
-<?php $this->ReassignList->PresentScript();?>
 <?php $this->CancelList->PresentScript();?>
+<?php $this->ReassignList->PresentScript();?>
 $('#CommentBox').click(function(){
 		$("#Comment").attr("value",$("#CommentBox option:selected").text());
 	});
