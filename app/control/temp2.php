@@ -44,6 +44,7 @@ class Temp2Controller extends JControl
 		}
 		foreach ($Mails as $M)
 			$M->SetState(9);
+		echo "done2";
 		return $this->Present();
 	}
 	

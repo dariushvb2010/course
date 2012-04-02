@@ -12,7 +12,7 @@ class ViewMailPlugin extends JPlugin
 			<a href="<?php echo $href; ?>"><div class="mail_head">
 				<img src="/img/mail/mail-<?php echo $M->State();?>-25.png" title="<?php echo $M->PersianState();?>"/>
 				<span><?php echo $M->Num();?></span>
-			</div></a><div class="mail_body" title="<?php echo $Title ?>">
+			</div></a><div class="mail_body noprint" title="<?php echo $Title ?>">
 						<span>شناسه: </span><b><?php echo $M->ID();?></b><br/>
 					
 						<span>عنوان: </span><b><?php echo $M->Subject();?></b><br/>
@@ -43,7 +43,7 @@ class ViewMailPlugin extends JPlugin
 				if($M->GiverGroup()->Title()=="Archive" AND $M->GetterGroup()->Title()=="Raked")
 					$href="/raked/transfer/fromarchive?MailID=".$M->ID();
 				if($M->GiverGroup()->Title()=="CotagBook" AND $M->GetterGroup()->Title()=="Archive")
-					$href="/Archive/transfer/fromcotag?MailID=".$M->ID();
+					$href="/archive/transfer/fromcotag?MailID=".$M->ID();
 			}
 			
 		}

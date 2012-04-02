@@ -196,7 +196,7 @@ abstract class HandleTransfer
 			else 
 			{
 				$al->InputValues['ColsCount']=5;
-				$al->InputValues['RowsCount']=30;
+				$al->InputValues['RowsCount']=25;
 				$al->HasRemove=false;
 			}
 		}
@@ -219,7 +219,7 @@ abstract class HandleTransfer
 			else
 			{
 				$al->InputValues['ColsCount']=5;
-				$al->InputValues['RowsCount']=30;
+				$al->InputValues['RowsCount']=25;
 				$al->HasRemove=false;
 			}
 		}

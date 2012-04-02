@@ -26,7 +26,7 @@ class Temp3Controller extends JControl
 			}
 			$Mail->SetState(Mail::STATE_INWAY);
 		}
-		
+		echo "done3";
 		return $this->Present();
 	}
 	

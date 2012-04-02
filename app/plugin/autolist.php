@@ -548,7 +548,7 @@ class AutolistPlugin extends JPlugin
 		<tbody>
 			<?php 
 			$index=0;
-			//if (is_array($this->Data) )
+			if ($this->Data)
 			foreach ($this->Data as $D)
 			{
 				?>

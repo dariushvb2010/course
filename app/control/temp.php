@@ -4,7 +4,7 @@ class TempController extends JControl
 	
 	function Start()
 	{
-		//$Ps=j::DQL("SELECT P.CreateTimestamp FROM ReviewProgressSendfile P GROUP BY P.CreateTimestamp");
+		
 		$Ps=j::DQL("SELECT P.Requester FROM ReviewProgressSendfile P GROUP BY P.Requester");
 		$i=1;
 		foreach($Ps as $ps2)
@@ -142,7 +142,6 @@ class TempController extends JControl
 			foreach($PP as $P)
 			{
 				echo ";".$P->User()->ID().";";
-				//if(array_search($File, $Files)!=null)
 				{
 					$P->File()->SetState(11);
 					$File=$P->File();
@@ -152,18 +151,13 @@ class TempController extends JControl
 					echo $New;
 				else 
 					$New->SetCreateTimestamp($P->CreateTimestamp());
-				//echo $P->File()->Cotag()." ";
 			}
 			
-			//$State=$Files[0]->State();
-				//$Mail->Save($Files, false, $Error, $PP[0]->CreateTimestamp());
-				//$State2=$Files[0]->State();
-				//if($State!=$State2) echo "hooooo";
-				//var_dump($Error);
 			echo $Topic->Topic()." ";
 			echo "<br/>";
 			
 		}
+		echo "done1";
 		return $this->Present();
 	}
 	
