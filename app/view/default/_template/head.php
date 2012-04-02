@@ -274,7 +274,8 @@ $(function() {
 			</a>
 		</li>
 		<li>
-			<a href='/cotag/deliver'>
+			<a href="/cotag/transfer/toarchive">
+			<!-- <a href='/cotag/deliver'> -->
 				<span class='ui-icon-arrowthick-1-w ui-icon'></span>
 				تحویل به بازبینی
 			</a>
@@ -299,43 +300,12 @@ $(function() {
 	<button id='archiveMenu' class="mymenu" > بایگانی بازبینی</button>
 	<ul class='menu' style="display: none;">
 	<li>
-		<a href='#'>
-			<span class='ui-icon-circle-arrow-s ui-icon'></span> 
-				وصول اظهارنامه
-		</a>
-		<ul class='menu'>
-			<li>
-				<a href='/archive/new'>
-					<span class='ui-icon-grip-dotted-vertical ui-icon'></span> 
-					 از دفتر کوتاژ
-				</a>
-			</li>
-			 <li>
-				<a href='/archive/other'>
-					<span class='ui-icon-grip-diagonal-se ui-icon'></span> 
-					از سایر گمرک ها
-				</a>
-			</li>
-			<li>
-				<a href='/archive/return'>
-					<span class='ui-icon-trash ui-icon'></span> 
-					وصول مجدد از بایگانی راکد
-				</a>
-			</li>
-			<li>
-				<a href='/archive/manual'>
-					<span class='ui-icon-tag ui-icon'></span> 
-					ثبت اظهارنامه قدیمی در سیستم
-				</a>
-			</li>
-		</ul>
-			
-	</li>
-	<li>
-		<a href='/archive/newassign'>
-					<span class='ui-icon-arrowthick-1-sw ui-icon'></span> 
-					وصول و تخصیص
-		</a>
+		<li>
+			<a href='/archive/transfer/fromcotag' >
+				<span class='ui-icon-grip-dotted-vertical ui-icon'></span> 
+				 وصول از دفتر کوتاژ 
+			</a>
+		</li>
 	</li>
 	<li>
 		<a href='#'>
@@ -414,11 +384,49 @@ $(function() {
 		</ul>
 	</li>
 	<li>
-		<a href='/archive/receive'>
-					<span class='ui-icon-arrowthick-1-s ui-icon'></span> 
-					دریافت اظهارنامه
+		<a href='#'>
+			<span class='ui-icon-arrowthick-1-n ui-icon'></span> 
+			دریافت اظهارنامه
 		</a>
+		<ul class='menu'>
+			<li>
+
+				<a href='/archive/transfer/fromraked'>
+							<span class='ui-icon-trash ui-icon'></span> 
+							از بایگانی راکد
+				</a>
+			</li>
+			<li>
+					<a href='/archive/transfer/fromout?Taraf=rajaie'>
+				<!--  <a href='/archive/send?to=rajaie&from=Archive'> -->
+							<span class='ui-icon-extlink ui-icon'></span> 
+							سایر دوائر گمرگ رجایی
+				</a>
+			</li>
+			<li>
+					<a href='/archive/transfer/fromout?Taraf=iran'>
+				<!-- <a href='/archive/send?to=iran&from=Archive'> -->
+							<span class='ui-icon-flag ui-icon'></span> 
+							گمرک ایران
+				</a>
+			</li>
+			<li>
+				<a href='/archive/transfer/fromout?Taraf=othergates'>
+				<!-- <a href='/archive/send?to=othergates&from=Archive'>-->
+							<span class='ui-icon-arrow-4 ui-icon'></span> 
+							سایر گمرکات اجرایی
+				</a>
+			</li>
+			<li>
+					<a href='/archive/transfer/fromout?Taraf=other'>
+				<!-- <a href='/archive/send?to=other&from=Archive'> -->
+							<span class='ui-icon-gripsmall-diagonal-se ui-icon'></span> 
+							سایر
+				</a>
+			</li>
+		</ul>
 	</li>
+	
 	<li>
 		<a href='/cotag/barcode'>
 					<span class='ui-icon-print ui-icon'></span> 
@@ -437,14 +445,32 @@ $(function() {
 				</a>
 				<ul class='menu'>
 					<li>
-						<a href='/raked/receive'>
+						<a href='/raked/transfer/fromarchive'>
 									<span class='ui-icon-plusthick ui-icon'></span> 
 									از بازبینی
 						</a>
 					</li>
 					<li>
-						<a href='/archive/receive'>
-									<span class='ui-icon-plusthick ui-icon'></span> 
+						<a href='/raked/transfer/fromout?Taraf=rajaie'>
+									<span class='ui-icon-extlink ui-icon'></span> 
+									سایر دوائر گمرگ رجایی
+						</a>
+					</li>
+					<li>
+						<a href='/raked/transfer/fromout?Taraf=iran'>
+									<span class='ui-icon-flag ui-icon'></span> 
+									گمرک ایران
+						</a>
+					</li>
+					<li>
+						<a href='/raked/transfer/fromout?Taraf=othergates'>
+									<span class='ui-icon-arrow-4 ui-icon'></span> 
+									سایر گمرکات اجرایی
+						</a>
+					</li>
+					<li>
+						<a href='/raked/transfer/fromout?Taraf=other'>
+									<span class='ui-icon-gripsmall-diagonal-se ui-icon'></span> 
 									سایر
 						</a>
 					</li>
@@ -458,25 +484,25 @@ $(function() {
 		<ul class='menu'>
 			
 			<li>
-				<a href='/archive/send?to=rajaie&from=Raked'>
+				<a href='/raked/transfer/toout?Taraf=rajaie'>
 							<span class='ui-icon-extlink ui-icon'></span> 
 							سایر دوائر گمرگ رجایی
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=iran&from=Raked'>
+				<a href='/raked/transfer/toout?Taraf=iran'>
 							<span class='ui-icon-flag ui-icon'></span> 
 							گمرک ایران
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=othergates&from=Raked'>
+				<a href='/raked/transfer/toout?Taraf=othergates'>
 							<span class='ui-icon-arrow-4 ui-icon'></span> 
 							سایر گمرکات اجرایی
 				</a>
 			</li>
 			<li>
-				<a href='/archive/send?to=other&from=Raked'>
+				<a href='/raked/transfer/toout?Taraf=other'>
 							<span class='ui-icon-gripsmall-diagonal-se ui-icon'></span> 
 							سایر
 				</a>

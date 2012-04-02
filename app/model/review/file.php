@@ -336,7 +336,6 @@ class ReviewFileRepository extends EntityRepository
 					(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
 					AND P INSTANCE OF ReviewProgress{$Progress}
 					");
-		var_dump($r);
 		foreach ($r as $t){
 			j::DQL("UPDATE ReviewFile FF SET FF.State={$NewState} WHERE FF.ID={$t}");
 		}

@@ -8,7 +8,7 @@ class RakedTransferFromarchiveController extends JControl
 	 */
 	function Start()
 	{
-		j::Enforce("Archive");
+		j::Enforce("Raked");
 		
 		//-----------------SINGLE------------
 		if(isset($_POST['MailID']) OR isset($_GET['MailID']))

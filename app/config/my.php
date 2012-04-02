@@ -6,7 +6,7 @@
 * Define your jFramework powered web application here. Set at least a version, a Name and a
 * title for your application. Name would better follow identifier rules.
 */
-reg( "app/version", "3.2" );
+reg( "app/version", "3.3" );
 reg( "app/name", "CustomsReview" );
 reg( "app/title", "نرم‌افزار جامع بازبینی گمرک شهید رجایی" );
 

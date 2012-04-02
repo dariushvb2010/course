@@ -13,11 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * 	"Classeconfirm"="ReviewProgressClasseconfirm",
  * 	"Start"="ReviewProgressStart",
  * 	"Review"="ReviewProgressReview",
- * 	"SendFile"="ReviewProgressSendfile",
- * 	"ReceiveFile"="ReviewProgressReceivefile",
  * 	"RegisterInArchive"="ReviewProgressRegisterarchive",
- * 	"RegisterInRaked"="ReviewProgressRegisterraked",
- * 	"Post"="ReviewProgressPost",
  *  "Give"="ReviewProgressGive",
  *  "Get"="ReviewProgressGet",
  *  "Send"="ReviewProgressSend",
@@ -45,23 +41,14 @@ abstract class ReviewProgress
 	 * @var integer
 	 */
 	protected $ID;
-	function ID()
-	{
-		return $this->ID; 
-	}
+	function ID(){ return $this->ID; }
 	/**
 	 * @Column(type="integer")
 	 * @var integer
 	 */
 	protected $CreateTimestamp;
-	function CreateTimestamp()
-	{
-		return $this->CreateTimestamp;
-	}
-	function SetCreateTimestamp($Time)
-	{
-		$this->CreateTimestamp=$Time;
-	}
+	function CreateTimestamp(){ return $this->CreateTimestamp; }
+	function SetCreateTimestamp($Time){ $this->CreateTimestamp=$Time; }
 	function CreateTime()
 	{
 		$jc=new CalendarPlugin();
@@ -72,28 +59,14 @@ abstract class ReviewProgress
 	 * @var integer
 	 */
 	protected $EditTimestamp;
-	function SetEditTimestamp($Timestamp)
-	{
-		$this->EditTimestamp=$Timestamp;
-	}
-	
+	function SetEditTimestamp($Timestamp){ $this->EditTimestamp=$Timestamp; }
 	/**
 	 * @ManyToOne(targetEntity="ReviewFile", inversedBy="Progress")
  	 * @JoinColumn(name="FileID", referencedColumnName="ID")
 	 */
 	protected $File;
-	function File()
-	{
-		return $this->File;
-	}
-	function SetFile(ReviewFile $File)
-	{
-		$this->File=$File;
-	}
-	function Cotag()
-	{
-		return $this->File->Cotag();
-	}
+	function File(){ return $this->File; }
+	function SetFile(ReviewFile $File){ $this->File=$File; }
 	/**
 	 * Assigns the file here and assigns this progress to the file
 	 * @param ReviewFile $File
@@ -108,14 +81,8 @@ abstract class ReviewProgress
  	 * @JoinColumn(name="UserID", referencedColumnName="ID")
 	 */
 	protected $User;
-	function User()
-	{
-		return $this->User;
-	}
-	function SetUser(MyUser $User)
-	{
-		$this->User=$User;
-	}
+	function User(){ return $this->User; }
+	function SetUser(MyUser $User){	$this->User=$User; }
 	function AssignUser(MyUser $User)
 	{
 		$this->User=$User;
@@ -126,55 +93,34 @@ abstract class ReviewProgress
 	 * @var string
 	 */
 	protected $Comment;
-	function Comment()
-	{
-		return $this->Comment;
-	}
-	function setComment($value){
-		$this->Comment=$value;
-	}
+	function Comment(){ return $this->Comment; }
+	function setComment($value){ $this->Comment=$value;	}
 	/**
 	 * @Column(type="string")
 	 * @var string
 	 */
 	protected $MailNum;
-	function MailNum()
-	{
-		return $this->MailNum;
-	}
-	function setMailNum($value){
-		$this->MailNum=$value;
-	}
+	function MailNum(){ return $this->MailNum; }
+	function setMailNum($value){ $this->MailNum=$value;	}
 	/**
 	 * 
 	 * @Column(type="integer") 
 	 * @var integer 
 	 */
 	protected  $PrevState;
-	function PrevState()
+	function PrevState(){ return $this->PrevState; }
+	function SetPrevState($State){ $this->PrevState=$State; }
+	function SetState(ReviewFile $File,$state)
 	{
-		return $this->PrevState;
-		
-	}
-	function SetPrevState($State)
-	{
-		$this->PrevState=$State;
-	}
-	function SetState(ReviewFile $File,$state){
 		$this->SetPrevState($File->State());
 		$File->SetState($state);
 	}
-	
 	/**
-	 *
 	 * @Column(type="boolean")
 	 * @var boolean
 	*/
 	protected  $Dead;
-	function Dead()
-	{
-		return $this->Dead;
-	}
+	function Dead(){ return $this->Dead; }
 	function kill()
 	{
 		$this->Dead=true;
@@ -184,6 +130,10 @@ abstract class ReviewProgress
 		$R=$Prefix;
 		$R.=$Flag ? $IfTrue : $IfTrue;
 		return $R;
+	}
+	function Cotag()
+	{
+		return $this->File->Cotag();
 	}
 	/**
 	 * Creates a new progress
@@ -241,8 +191,6 @@ abstract class ReviewProgress
 	private function KillAlarm()
 	{
 		$ETitle=$this->Event();
-		// 		if($ETitle==null OR $ETitle=="" OR !ETitle)
-		// 			throw new Exception("EventTitle is empty!");
 		$Event=ORM::Find1("ConfigEvent", "EventName", $ETitle);
 		
 		if(!$Event)

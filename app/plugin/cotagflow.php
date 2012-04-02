@@ -43,6 +43,7 @@ class CotagflowPlugin
 			height:16px;
 			display:none;
 		}
+		#CGFForm span#CGFDelete{ float:right; margin:-7px;}
 		<?php 
 	}
 	static function PresentScript()
@@ -117,6 +118,7 @@ class CotagflowPlugin
 		{
 			$("div#CGFBack").hide("slow");
 			$("div#CGF").hide("slow");
+			$("div#CGFMain").hide();
 		}
 		,button:function()
 		{
@@ -140,14 +142,15 @@ class CotagflowPlugin
 		?>
 	<div id="CGFMain" class="CGFMain">
 		<form id="CGFForm" onsubmit="CGF.button(); return false;">
+		<span  id="CGFDelete" dir='ltr' style="float:right;"><img onclick='CGF.hide();' src='<?php echo SiteRoot;?>/img/delete-blue-20.png' /></span>
 			<div class="input" style="text-align:center;">
 				<span style="width:20px; display:inline-block; margin:0; padding:0"><img class="CGFAnimator" src="<?php echo SiteRoot;?>/img/loading.gif" title="درحال کار کردن..." /></span>
 				<input type="text" class="CGFField" maxlength="<?php echo CotagLength;?>" />
-				<input type="submit"   class="GetReport" class="CGFSendButton"value="گزارش گیری"/>
+				<input type="submit"   class="GetReport" id="CGFSendButton" style="width:100px;" value="گزارش گیری"/>
 			</div>
 		</form>
 		<div id="CGF">
-			<div id="CGFDelete" dir='ltr'><img onclick='CGF.hide();' src='<?php echo SiteRoot;?>/img/delete-blue-20.png' /></div>
+			
 			<div id="CGFList" class="CGFList">
 			</div>
 		</div>

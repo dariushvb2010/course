@@ -157,7 +157,6 @@ class MyGroupRepository extends EntityRepository
 				return $Error;
 			}
 			$G=new MyGroup($Title, $PersianTitle, $Description);
-			ORM::Dump($G);
 			ORM::Write($G);
 			return $G;
 		}

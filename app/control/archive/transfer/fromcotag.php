@@ -3,7 +3,6 @@ class ArchiveTransferFromcotagController extends JControl
 {
 	//public $Handler;
 	/**
-	 * 
 	 * @see BaseControllerClass::Start()
 	 */
 	function Start()
@@ -42,7 +41,6 @@ class ArchiveTransferFromcotagController extends JControl
 						continue;
 					}
 					$P=ORM::Query("ReviewProgressAssign")->AddToFile($File, $Reviewer);
-					ORM::Dump($P);
 					if(is_string($P))
 					{
 						$Error[]=$P;

@@ -313,7 +313,6 @@ class AutolistPlugin extends JPlugin
 	 */
 	function PresentForPrint()
 	{
-		//ORM::Dump($this->Data);
 		if($this->Data)
 			$AllDataCount=count($this->Data);
 		else

@@ -79,7 +79,6 @@ class ReviewProcessAssignRepository extends EntityRepository
 				}
 
 				$p=new ReviewProcessAssign($File, $CurrentUser,$Reviewer);
-//				var_dump("Saasas");
 				$p->SetState($File,FileFsm::NextState($File->State(),"ProcessAssign"));
 				ORM::Persist($File);
 				ORM::Persist($p);

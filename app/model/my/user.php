@@ -319,7 +319,6 @@ class MyUserRepository extends EntityRepository
 		}
 		$dt=microtime()-$t1;
 		echo "&".$dt."&";
-		//ORM::Dump($Selected->getFullName());
 		return $Selected;
 		
 		$Offset=mt_rand(0,$this->getReviewerCount()-1);
