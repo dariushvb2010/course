@@ -39,7 +39,7 @@ class HandleTransferSingle extends HandleTransfer
 			if($res)
 				$this->Result="با موفقیت انجام شد.";
 			else 
-				$this->Error[]="ارسال نشد. لطفا خطاهای موجود را رفع نمایید.";
+				$this->Error[]="انجام نشد. لطفا خطاهای موجود را رفع نمایید.";
 		}
 		elseif(isset($_POST['Complete']))
 		{
