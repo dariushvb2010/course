@@ -363,4 +363,17 @@ class ReviewProgressReviewRepository extends EntityRepository
 		}
 		return $r2;
 	}
+	
+	public function BazbiniPerMonth()
+	{
+		$r=j::SQL("SELECT COUNT(P.ID) as count,
+							PMONTH(FROM_UNIXTIME(P.CreateTimestamp))as month,
+							PMONTHNAME(FROM_UNIXTIME(P.CreateTimestamp))as monthname,
+							PYEAR(FROM_UNIXTIME(P.CreateTimestamp))as year 
+							FROM App_ReviewProgress AS P 
+							WHERE P.type='Start' 
+							GROUP BY PMONTH(FROM_UNIXTIME(P.CreateTimestamp)),PYEAR(FROM_UNIXTIME(P.CreateTimestamp))
+							ORDER BY year,month");
+		return $r;
+	}
 }

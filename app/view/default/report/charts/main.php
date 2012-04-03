@@ -16,7 +16,7 @@
 
 <li><a href="?charttype=2" class="yellow">حجم کاری کارشناسان</a></li>
 
-<li><a href="#url" class="green">MENUS</a></li>
+<li><a href="?charttype=3" class="green">سرعت کار بازبینی</a></li>
 
 <li><a href="#url" class="blue">LAYOUTS</a></li>
 
@@ -45,6 +45,12 @@
 ?>
  			chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->names);?>];
  			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->values);?>];
+<?php 	break;
+	 	case 'bazbini_speed':
+?>
+ 			
+ 			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->values);?>];
+ 			chartconfig['series'][1]['data']= [<?php echo implode(',',$this->values);?>];
 <?php
 	 	break;
 ?>

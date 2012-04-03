@@ -11,7 +11,7 @@ chartconfig={
     subtitle: {
 		text: document.ontouchstart === undefined ?
 			'با موس قسمتی از نمودار را برای یزرگ نمایی انتخاب کنید' :
-			'Drag your finger over the plot to zoom in'
+			'قسمتی را با ماوس انتخاب کنید تا روی آن زوم شود.'
 	},
 	xAxis: {
 		type: 'datetime',
