@@ -3,7 +3,7 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','bazbini_speed');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -51,6 +51,18 @@ class ReportChartsMainController extends JControl
 				$this->values=$values;
 				//$this->values=array(5,5);
 				$this->names=$names;
+				break;
+			/////////////////////////////////////////////////////	
+			case 'bazbini_speed':
+				$r=ORM::Query(new ReviewProgressReview)->BazbiniPerMonth();
+				$names=array();
+				$values=array();
+				foreach ($r as $value){
+					$X[]="'".$value['monthname']." ".$value['year']."'";
+					$values[]=$value['count'];
+				}
+				$this->values=$values;
+				$this->X=$X;
 				break;
 			
 		}
