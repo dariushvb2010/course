@@ -1,0 +1,3 @@
+[submodule "install/PersianDateMySQL"]
+	path = install/PersianDateMySQL
+	url = https://github.com/zoghal/Presian-Date-for-MySQL.git
