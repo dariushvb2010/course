@@ -21,16 +21,19 @@ class CotagDeliverController extends JControl
 			$FMin=$_POST['FMin'];
 			$Cotag=$_POST['Cotag']*1;
 			$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
+			var_dump($c->JalaliToGregorian(1391,2,12));
 			$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
 			$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
 			$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
-
+			$f=$FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin; echo $f."<br/>";
+			echo "s:".$StartTimestamp." f:".$FinishTimestamp;
+				
 			
 			if(!$this->validateDate($CYear,$CMonth,$CDay))
 			{
 				$Error[]="تاریخ آغازی ناصحیح است.";
 			}
-			elseif(!$this->validateDate($FYear,$FMonth,$FDay))
+			if(!$this->validateDate($FYear,$FMonth,$FDay))
 			{
 				$Error[]="تاریخ پایانی ناصحیح است.";
 			}

@@ -19,8 +19,8 @@ class FileFsm extends JModel
 	Public static $StateGraph=array(
 	//-----------------------Review---------------------
 	1=>array('Start'=>2),
-	2=>array('Give_cotag_to_archive'=>3),
-	3=>array('Get_archive_from_cotag'=>4),
+	2=>array('Give_cotagbook_to_archive'=>3),
+	3=>array('Get_archive_from_cotagbook'=>4),
 	4=>array('Assign'=>5),
 	5=>array('Review_nok'=>9, 'Review_ok'=>7),
 	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
@@ -189,125 +189,110 @@ class FileFsm extends JModel
 		 
 	}
 	static function Moderate10(){echo 'ss';}
-	static function Moderate1()
+	static function Moderate23()
 	{
 		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
-		//ORM::Dump($files);
-		//j::SQL("UPDATE ReviewFile set State=2 ");
-		//ORM::Flush();
 		foreach($files as $f)
 		{
-			if($f)
-				$f->SetState(2);
-			$p=$f->LastProgress();
-			if($p->MailNum()==0)
-			{
-		 		echo "3";
-				$f->SetState(3);
-			}
-			ORM::Persist($f);
+			$f->SetState(2);
 		}
-		ORM::Flush();
-		echo 'done1';
+		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject2(0,999999999);
+		foreach($files as $f)
+		{
+			$f->SetState(3);
+		}
+		echo 'done23';
 	}
-	static function Moderate2()
+	static function Moderate4()
 	{
-		echo "<br/>";
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Registerarchive",0,99999999);
-		//ORM::Query(new ReviewFile)->UpdateStateOfFilesWithLastProgress("Registerarchive",4);
-		//ORM::Dump($files);
 		foreach($files as $f)
 		{
-			$f->SetState(4);
-			ORM::Persist($f);
+			
+				$f->SetState(4);
+			
 		}
-		ORM::Flush();
-		echo 'done2';
+		echo 'done4';
 	}
-	static function Moderate3()
+	static function Moderate5()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Assign",0,99999999);
 		foreach($files as $f)
 		{
-			$f->SetState(5);
-			ORM::Persist($f);
+			if($f->State()==0)
+				$f->SetState(5);
+			else
+				echo $f->Cotag()." ";
+			
 		}
 		ORM::Flush();
-		echo 'done3';
+		echo 'done5';
 	}
-	public static function Moderate4()
+	public static function Moderate911()
 	{
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
 		foreach($files as $f)
 		{
 			if($f->LastProgress()->Result()==0)
+			{
+				if($f->State()==0)
 				$f->SetState(9);
+				else
+				echo $f->Cotag()." ";
+			}
 			else
+			{
+				if($f->State()==0)
 				$f->SetState(11);
+				else
+				echo $f->Cotag()." ";
+			}
 			
-			ORM::Persist($f);
 		}
-		echo 'done4';
+		echo 'done911';
 	}
-	public static function Moderate5()
+	public static function Moderate11()
 	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
+		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
 		foreach($files as $f)
 		{
-			if($f->LastProgress()->Result()==1)
-				$f->SetState(7);
-			
-			ORM::Persist($f);
-		}
-		echo 'done5';
-	}
-	public static function Moderate6()
-	{
-	$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
-		echo "4";
-		//ORM::Dump($files);
-		foreach($files as $f)
-		{
+			if($f->State()==0)
 			$f->SetState(11);
-			ORM::Persist($f);
+			else
+			echo $f->Cotag()." ";
+			
 		}
-		echo 'done6';
+		echo 'done11';
 	}
 	
-	public static function Moderate7()
+	public static function Moderate12()
 	{
-// 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
-// 		ORM::Dump($files);
-// 		foreach($files as $f)
-// 		{
-// 			$f->SetState(12);
-// 		}
-// 		ORM::Flush();
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
-		echo "4";
-		//ORM::Dump($files);
+		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
 		foreach($files as $f)
 		{
-			$f->SetState(11);
-			ORM::Persist($f);
+			if($f->State()==0)
+			$f->SetState(12);
+			else
+			echo $f->Cotag()." ";
 		}
-		echo 'done7';
+		echo 'done12';
 	}
-	public static function Moderate8()
+	
+	public static function Moderate13()
 	{
 		
 		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Post",0,99999999);
-		echo "5";
-		//ORM::Dump($files);
 		foreach($files as $f)
 		{
-			if($f->LastProgress()->IsSend()==1)
-				$f->SetState(13);
+			if($f->State()==0)
+			$f->SetState(13);
 			else
-				$f->SetState(14);
-			
-			ORM::Persist($f);
+			echo $f->Cotag()." ";
 		}
-		echo 'done8';
+		echo 'done13';
+	}
+	public static function ModerateTest()
+	{
+		
 	}
 }

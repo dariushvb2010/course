@@ -23,8 +23,8 @@ class ViewResultPlugin extends JPlugin
 		if (($Success))
 		{
 			?>
-<div style="margin: 2px; margin: 5px; padding: 0 .7em; height: 35px;"
-	class="ui-state-highlight ui-corner-all"
+<div style="margin: 2px; margin: 5px; padding: 0 .7em; min-height: 35px;"
+	class="ui-state-highlight ui-corner-all noprint"
 >
 <p style='margin-top: 5px;'><span
 	style="float: right; margin-left: .3em; margin-top: 4px;"

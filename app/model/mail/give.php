@@ -62,11 +62,17 @@ class MailGive extends Mail
 		else 
 			return 0;
 	}
-	
+	function PersianSource()
+	{
+		return $this->GiverGroup->PersianTitle();
+	}
+	function PersianDest()
+	{
+		return $this->GetterGroup->PersianTitle();
+	}
 	
 	function SaveGet($Files, &$Error)
 	{
-		echo "SaveGet";
 		if($this->State()==self::STATE_GETTING)
 		{
 			$this->RetouchTimestamp=time();
@@ -82,6 +88,8 @@ class MailGive extends Mail
 			return 1;
 		}
 		$ErrorCount=0;
+		foreach ($this->Stock as $s)
+			$s->SetIfSaveGet(false);
 		$time=time();
 		foreach ($Files as $File)
 		{
@@ -90,22 +98,108 @@ class MailGive extends Mail
 				$Error[]=strval($File);
 				continue;
 			}
-			$P=ORM::Query("ReviewProgressGet")->AddToFile($File,false);//progress is not persist, it is just for error reporting
-			if(is_string($P))
+			if($File->Stock())
+			if($File->Stock()->Act())
 			{
-				$E=$P;
+				$File->Stock()->SetIfSaveGet(true);
+				continue;
+			}
+			$ProgressGive=$File->LLP("Give");
+			if($this->ProgressGive->contains($ProgressGive))
+			{
+				$P=ORM::Query("ReviewProgressGet")->AddToFile($ProgressGive,false);//progress is not persist, it is just for error reporting
+				if(is_string($P))
+				{
+					$E=$P;
+					$ErrorCount++;
+				}
+				else
+					$E=null;
+			}
+			else 
+			{
+				j::Log("Unexpected", "به این بخش تحویل داده نشده است. in mail/give");
+				$E="به این بخش تحویل داده نشده است.";
 				$ErrorCount++;
 			}
-			else
-				$E=null;
 			$this->UpdateStock($File, $E);
+			$File->Stock()->SetIfSaveGet(true);
 		}	
 		return $ErrorCount;
 	}
 	
-	function Get()
+	function Get($Files, &$Error)
 	{
-		
+		$SaveResult=$this->SaveGet($Files, $Error);
+		if($Files AND $SaveResult===0)
+		{
+			foreach ($Files as $File)
+			{
+				if(!($File instanceof ReviewFile))
+				continue;
+				if(!$File->Stock()->Act())
+				{
+					$ProgressGive=$File->LLP("Give");
+					if($this->ProgressGive->contains($ProgressGive))
+					{
+						$P=ORM::Query("ReviewProgressGet")->AddToFile($ProgressGive);//persist
+						
+						if(is_string($P))
+						{
+							$faulty=true;
+							$this->UpdateStock($File, $P);
+							$Error[]=$P;
+							$Error[]="تعدادی از اظهارنامه ها ارسال نشد. این یک خطای ناجور است. در صورت مشاهده آن به مسئولین نرم افزار اطلاع دهید.";
+							return false;
+						}
+						else // progress has been persisted successfully
+						{
+							$File->Stock()->SetAct(true);
+							$this->UpdateStock($File, "انجام شد");
+						}
+					}
+					else
+					{
+						j::Log("Unexpected", "به این بخش تحویل داده نشده است. in mail/give");
+						$this->UpdateStock($File, " به این بخش تحویل داده نشده است.");
+					}
+				}
+			}
+			if($faulty)
+				$this->StateEditingFaulty();
+			return true;
+		}
+		else
+		return false;
+	}
+	function Complete($Files, $RemoveCalled, &$Error)
+	{
+		if($this->State()==self::STATE_EDITING)
+		{
+			if($this->Act($Files, $RemoveCalled, $Error))
+			{
+				return $this->StateInway();
+			}
+			else
+				return false;
+		}
+		elseif($this->State()==self::STATE_GETTING)
+		{
+			if($this->Get($Files, $Error))
+			{
+				return $this->StateClosed();
+			}
+			else
+				return false;
+		}
+		else 
+			return false;
+	}
+	function MyBox()
+	{
+		if($this->State()==self::STATE_CLOSED)
+		return $this->ProgressGive;
+	
 	}
 	function __construct($Num=null, $Subject=null, $GiverGroup=null, $GetterGroup=null, $Description=null)
 	{

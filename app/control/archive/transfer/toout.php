@@ -22,7 +22,7 @@ class ArchiveTransferTooutController extends JControl
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Send","Archive",$Dest, $Mail);
-		}
+		}//----------------Search-----------------
 		elseif(isset($_POST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Send","Archive",$Dest);

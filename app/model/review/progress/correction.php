@@ -93,6 +93,7 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 		}
 		
 		$R=new ReviewProgressCorrection($file1,$CurrentUser);
+		$R->kill();
 		$R->setComment($Comment);
 		$R->setOldCotag($OldCotag);
 		$R->setNewCotag($NewCotag);

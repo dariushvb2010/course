@@ -25,7 +25,7 @@ class RakedTransferFromoutController extends JControl
 				$this->Error[]="محل دریافت یافت نشد.";
 			}
 			$this->Handler=new HandleTransferSingle("Receive",$Source, "Raked", $Mail);
-		}
+		}//---------------Search-------------
 		elseif(isset($_POST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Receive",$Source, "Raked");

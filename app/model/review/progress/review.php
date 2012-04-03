@@ -48,8 +48,14 @@ class ReviewProgressReview extends ReviewProgress
 	* @var string
 	*/
 	protected $Difference;
-	function Difference()
+	function Difference($type='field')
 	{
+		$t=array('Tariff'=>'تعرفه',
+		'Value'=>'ارزش',
+		);
+		if ($type=='persian'){
+			return (isset($t[$this->Difference])?$t[$this->Difference]:$this->Difference); 
+		}
 		return $this->Difference;
 	}
 	function DifferenceArray()
@@ -90,7 +96,7 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		$sum="کارشناسی انجام شد و نتیجه آن، ";
 		if($this->Result==false)
-			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>"."با علت تفاوت"."<b> «".$this->Difference."» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount."» </b>";
+			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>"."با علت تفاوت"."<b> «".$this->Difference('persian')."» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount."» </b>";
 		else
 			$sum.=' بدون مشکل ';
 		
@@ -233,7 +239,6 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					if (count($_POST))
 					{
-							//var_dump($_POST);
 							if($_POST['Result']==0 AND count($_POST['Provision'])==0)
 								return 'شماره کلاسه انتخاب نشده است.'; 
 								 

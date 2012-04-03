@@ -38,12 +38,8 @@
 	.security {
 		display:none !important;
 	}
-	.autolist thead {
-	background-color:#444444;
-	color:white;
-	}
-	.autolist tr:nth-child(even) {
-		background-color:#CCCCCC;
+	.autolistprint{
+		margin: -10px;
 	}
 	td.radif{
 	width:15px;

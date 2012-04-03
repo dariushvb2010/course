@@ -105,11 +105,11 @@ class AlarmRepository extends EntityRepository
 	public function CurrentUserAlarms_Personal()
 	{
 		$now=time();
-		$CurrentUser=MyUser::CurrentUser();
+		$CurrentUser=MyUser::CurrentUser($offset=0, $limit=50);
 		$Q1="SELECT A From AlarmFree A JOIN A.User AS U WHERE
-				 	 U=? AND A.CreateTimestamp+A.Moratorium<=?";
+				 	 U=? AND A.CreateTimestamp+A.Moratorium<=? Limit {$offset},{$limit}";
 		$Q2="SELECT A From AlarmAuto A JOIN A.ConfigAlarm AS C JOIN C.User AS U 
-			WHERE U=? AND A.CreateTimestamp+C.Moratorium<=?";
+			WHERE U=? AND A.CreateTimestamp+C.Moratorium<=? Limit {$offset},{$limit}";
 		if($CurrentUser)
 		{
 			$r1=j::ODQL($Q1,$CurrentUser,$now);
@@ -123,14 +123,14 @@ class AlarmRepository extends EntityRepository
 			$r=$r2;
 		return $r;
 	}
-	public function CurrentUserAlarms_Group()
+	public function CurrentUserAlarms_Group($offset=0, $limit=50)
 	{
 		$now=time();
 		$CurrentUser=MyUser::CurrentUser();
 		$Q1="SELECT A From AlarmFree A JOIN A.Group AS G WHERE
-					 	 G=? AND A.CreateTimestamp+A.Moratorium<=?";
+					 	 G=? AND A.CreateTimestamp+A.Moratorium<=? Limit {$offset},{$limit}";
 		$Q2="SELECT A From AlarmAuto A JOIN A.ConfigAlarm AS C JOIN C.Group AS G
-				WHERE G=? AND A.CreateTimestamp+C.Moratorium<=?";
+				WHERE G=? AND A.CreateTimestamp+C.Moratorium<=? Limit {$offset},{$limit}";
 		if($CurrentUser)
 		{
 			$r1=j::ODQL($Q1,$CurrentUser->Group(),$now);

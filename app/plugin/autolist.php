@@ -175,6 +175,7 @@ class AutolistPlugin extends JPlugin
 	
 	public $FilterCallback=null;
 	function GetRequest(){}// it is for compatibality with dynamiclist
+	function RemoveCalled(){ return true;}//it is for comaptibality with dynamiclist
 	public function SetSortParams()
 	{
 		if (isset($_GET[$this->InputNames['Sort']]))
@@ -312,7 +313,6 @@ class AutolistPlugin extends JPlugin
 	 */
 	function PresentForPrint()
 	{
-		//ORM::Dump($this->Data);
 		if($this->Data)
 			$AllDataCount=count($this->Data);
 		else
@@ -340,10 +340,13 @@ class AutolistPlugin extends JPlugin
 		{
 			$PageCount=(int)($PageCount)+1;//the last page will contain less data than the others
 		}
-		
+		if($this->Autoform)
+			$this->Autoform->HasFormTag=false;
+		$this->MakeTopOfForm();
+		if($this->Autoform AND !$this->AutoformAfter)
+			$this->Autoform->PresentHTML();
 		//one seperate table for each page
 		for($p=0; $p<$PageCount; $p++){
-			$this->MakeTopOfForm();
 		?>
 		
 			<table class='autolistprint' id='<?php echo $this->ID;?>' width='<?php echo $this->Width;?>' border='<?php echo $this->Border;?>' 
@@ -406,8 +409,10 @@ class AutolistPlugin extends JPlugin
 			</tbody>
 			</table>
 			<?php
-			$this->MakeBottomOfForm();
 		}//end of for: for each page
+			if( $this->Autoform AND $this->AutoformAfter)
+				$this->Autoform->PresentHTML();
+			$this->MakeBottomOfForm();
 		
 	}
 	/**
@@ -543,7 +548,7 @@ class AutolistPlugin extends JPlugin
 		<tbody>
 			<?php 
 			$index=0;
-			//if (is_array($this->Data) )
+			if ($this->Data)
 			foreach ($this->Data as $D)
 			{
 				?>

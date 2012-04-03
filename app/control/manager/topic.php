@@ -77,6 +77,10 @@ class ManagerTopicController extends JControl
 		{
 			return "<input type='checkbox' class='item' value='".$D['ID']."' name='item[]' />";
 		}
+		elseif($k=='Type')
+		{
+			return ReviewTopic::$TYPES[$v];
+		}
 		else
 		{
 			return $v;

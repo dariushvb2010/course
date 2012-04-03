@@ -294,7 +294,6 @@ class MyUserRepository extends EntityRepository
 	}
 	public function getRandomReviewer()
 	{
-		$t1=microtime();
 		$Reviewers=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1");
 		$WSum=0;
 		if($Reviewers)
@@ -317,9 +316,6 @@ class MyUserRepository extends EntityRepository
 				break;
 			}
 		}
-		$dt=microtime()-$t1;
-		echo "&".$dt."&";
-		//ORM::Dump($Selected->getFullName());
 		return $Selected;
 		
 		$Offset=mt_rand(0,$this->getReviewerCount()-1);

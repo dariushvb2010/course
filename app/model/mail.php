@@ -83,12 +83,27 @@ abstract class Mail
 	const STATE_INWAY=4;//----------------------4---------------
 	protected function StateInway()
 	{
-		if($this->CanIGoTo(self::STATE_INWAY))
+		$res=true;
+		foreach ($this->Stock() as $s)
+		$res &=$s->Act();
+		if($res)
 		{
-			$this->State=self::STATE_INWAY;
+			if($this->CanIGoTo(self::STATE_INWAY))
+			{
+				foreach ($this->Stock() as $s)
+				{
+					$s->SetError(null);
+					$s->SetIfSaveGet(false);
+					$s->SetAct(false);
+				}
+				$this->State=self::STATE_INWAY;
+				return true;
+			}
+			else
+				throw new Exception();
 		}
 		else
-			throw new Exception();
+			return false;
 	}
 	/**
 	 * the man at the destination unit catched the mail, and can catch the files of the mail
@@ -238,11 +253,13 @@ abstract class Mail
 			$Stock->SetMail($this);
 		}
 	}
+	abstract function PersianSource();
+	abstract function PersianDest();
 	function Box()
 	{
-		if($this->State==self::STATE_EDITING)
+		if($this->State()==self::STATE_EDITING)
 			return $this->Stock;
-		elseif($this->State==self::STATE_INWAY)
+		elseif($this->State()==self::STATE_INWAY or $this->State()==self::STATE_GETTING)
 			return $this->ProgressGive();
 		else 
 			return $this->MyBox();
@@ -263,7 +280,8 @@ abstract class Mail
 		{
 			if($File->Stock()->Mail()->ID()!=$this->ID())
 				j::Log("Unexpected", "Stock from another mail exists . Cotag:".$File->Cotag().", StockID:".$File->Stock()->ID().". at model/mail");
-			$File->Stock()->Update($Error);
+			$File->Stock()->SetError($Error);
+			$File->Stock()->SetEditTimestamp(time());
 			$this->AddStock($File->Stock());
 		}
 		//ORM::Flush();

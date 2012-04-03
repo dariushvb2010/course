@@ -82,7 +82,6 @@ class FileStateRepository extends EntityRepository
 {
 	public function Add($Num, $Str, $Summary, $Place)
 	{
-		//var_dump($Num, $Str, $Summary, $Place);
 		$s=ORM::Find('FileState', 'Num',$Num);
 		if($s)
 		{
@@ -90,7 +89,6 @@ class FileStateRepository extends EntityRepository
 			return $r;
 		}
 		$r=new FileState($Num, $Str, $Summary, $Place);
-		//ORM::Dump($r);
 		ORM::Write($r);
 	}
 	public function GetAllStates()

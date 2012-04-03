@@ -4,7 +4,6 @@
 تعریف کاربر جدید</h1>
 
 <?php 
-// var_dump($this->Result,$this->Error);
 	ViewResultPlugin::Show($this->Result,$this->Error);
 	?>
 

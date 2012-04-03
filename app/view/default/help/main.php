@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/style/help.css"  />
 <h1><img src="/img/h/h1-help-50.png"/>
 راهنما</h1>
+<div><a href='/help/mail'>راهنمای ارسال و دریافت اظهارنامه ها</a></div>
 <div id="context"></div>
 <a name="manager"></a><!-- ---------------------------------manager------------------------ -->
 <h2 class="helph" id="manager">مدیریت</h2><a name="manager"></a>

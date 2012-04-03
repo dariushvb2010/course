@@ -49,6 +49,15 @@ class MailReceive extends Mail
 	*/
 	protected $ProgressReceive;
 	function ProgressReceive(){ return $this->ProgressReceive; }
+	
+	function PersianSource()
+	{
+		return $this->SenderTopic->Topic();
+	}
+	function PersianDest()
+	{
+		return $this->ReceiverGroup->PersianTitle();
+	}
 	function MyBox()
 	{
 		if($this->State()==self::STATE_CLOSED)
@@ -156,9 +165,7 @@ class MailReceiveRepository extends EntityRepository
 			$r=j::ODQL($s.$w."AND M.State=?".$o,$ReceiverGroup, $Subject);
 		else
 		{
-			echo $s.$w.$o;
 			$r=j::ODQL($s.$w.$o,$ReceiverGroup);
-			ORM::Dump($r);
 		}
 		return $r;
 	}
@@ -167,7 +174,6 @@ class MailReceiveRepository extends EntityRepository
 		$r=j::ODQL("SELECT M FROM MailReceive AS M JOIN M.ReceiverGroup D 
 							WHERE D=? 
 					 		ORDER BY M.RetouchTimestamp DESC,M.ID DESC LIMIT 1", $ReceiverGroup);
-		ORM::Dump($r);
 		if ($r)
 		return $r[0];
 		else

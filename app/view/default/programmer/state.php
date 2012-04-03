@@ -20,17 +20,19 @@ form input[type='text'] {
 <div id='exceptBarcode'>
 <h1>تنظیم وضعیت ها</h1>
 <form method='post'>
-<?php if (isset($this->Result))
+<?php
 	ViewResultPlugin::Show($this->Result,$this->Error);
 	if($this->HasError)
 		AutosoundPlugin::EchoError("error3");
 ?>
-	<a href='/help/#archive_new'>
-	<img src='/img/web/icon/help32.png' style='border:0px solid gray; float:left;' />
-	</a>
+
 <div>
-	<label>شماره کوتاژ</label>
-	<input name='Cotag' value='<?php echo $_POST['Cotag'];?>' /><br/>
+	<label>شماره کوتاژ</label><input name='Cotag[]' value='<?php echo $_POST['Cotag'][0];?>' /><br/>
+	<label>شماره کوتاژ</label><input name='Cotag[]' value='<?php echo $_POST['Cotag'][1];?>' /><br/>
+	<label>شماره کوتاژ</label><input name='Cotag[]' value='<?php echo $_POST['Cotag'][2];?>' /><br/>
+	<label>شماره کوتاژ</label><input name='Cotag[]' value='<?php echo $_POST['Cotag'][3];?>' /><br/>
+	<label>شماره کوتاژ</label><input name='Cotag[]' value='<?php echo $_POST['Cotag'][4];?>' /><br/>
+	<label>شماره کوتاژ</label><input name='Cotag[]' value='<?php echo $_POST['Cotag'][5];?>' /><br/>
 	<label>شماره وضعیت</label>
 	<input type='text' name='Num'  value='<?php echo $_POST['Num'];?>'/>
 	

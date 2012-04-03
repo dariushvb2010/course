@@ -11,6 +11,7 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	?>
 	
 	<style>
+	input[type=submit]{min-width:200px;}
 	div#body>div.mainform{border:4px double black; margin: 5px 12px; padding:5px;}
 	<?php
 	
@@ -29,13 +30,15 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	</h1>
 	<?php
 	ViewResultPlugin::Show($View->Handler->Result, $View->Handler->Error);
+	ViewResultPlugin::Show($View->Result, $View->Error);
+	
 	if($View->Handler->CreateForm)
 		$View->Handler->CreateForm->PresentHTML();
 	?>
 	<!-- --------------------------main form of the mail -->
 	<?php if($View->Handler->MainForm):?>
 			<div class="mainform" ><?php 
-			ViewMailPlugin::SingleShow($View->Handler->Mail, "float:left;","Give");
+			ViewMailPlugin::SingleShow($View->Handler->Mail, "float:left;",$View->Handler->Action);
 			$View->Handler->MainForm->PresentHTML();
 			?>
 			</div>
@@ -49,12 +52,60 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 		}
 	 	$View->Handler->ShowMails();
 	 	?>
+	 	
+	 	
+	 	
+	 	
 	<script>
 	<?php 
 	if($View->Handler->MainForm)
 		$View->Handler->MainForm->PresentScript();
-	
+	if($View->Handler->Action=="Get"):
 	?>
+	function Select(Cotag)
+	{
+		res=false;
+		td=$("table.autolist td[Header='Cotag']");
+		$.each(td,function(i,n){
+			MyCotag=$(this).html();
+			if(MyCotag==Cotag)
+			{
+				sibs=$(this).siblings("td[header=Select]");
+				check=sibs.children("input");
+				check.attr('checked','checked');
+				res=true;				
+			}
+		});
+		return res;
+	}
+	function ShowResult(res)
+	{
+		if(res==true)
+			text="<span style='color:green;'>انتخاب شد</span>";
+		else
+			text="<span style='color:red;'>در لیست وجود ندارد</span>";
+			
+		span=$(":text[name=SelectCotag]").parent("div").find("span#Result");
+		if(!span.length)
+		{
+			$(":text[name=SelectCotag]").parent("div").append("<span id='Result'>hi</span>");
+		}
+		$(":text[name=SelectCotag]").parent("div").find("span#Result").html(text);
+		
+	}
+	$(":text[name=SelectCotag]").keydown(function(event){
+	    if(event.keyCode == 13){
+	        $("button[name=Select]").click();
+	    }
+	});
+	$("button[name=Select]").click(function(){
+		Cotag=$(":text[name=SelectCotag]").val();
+		ShowResult(Select(Cotag));
+		$(":text[name=SelectCotag]").val("");
+	});
+	
+		
+	<?php endif;?>
 	</script>
 	<?php 
 }
