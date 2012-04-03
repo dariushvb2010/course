@@ -36,6 +36,7 @@
 		</a>
 		<?php }?>
 		<a href="/alarm">ایجاد یادآور دستی</a>
+		<a href="/desk/alarm">مشاهده پیام ها</a>
 		<a href="/help/main">راهنما</a>
 </div>
 <p>

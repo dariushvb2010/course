@@ -124,7 +124,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$al->EnterTextName="Cotag";
 		//--------al custom javascript code for validating the format of the Cotag-------------
 		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
-		$CotagCode.="if(patt.test(?)); else {alert('فرمت  است.'); return false;}";
+		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$CommentCode="var patt=/.{".b::$CommentMinLength."}/;";//patt=/.{6}/
