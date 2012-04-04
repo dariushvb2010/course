@@ -644,6 +644,14 @@ $(function() {
 			</a>
 		</li>
 <?php endif;?>
+<?php if (j::UserID()>0) :?>
+		<li>
+			<a href='/report/userprogresslist'>
+				<span class='ui-icon-refresh ui-icon'></span> 
+				فعالیت های ثبت شده توسط شما
+			</a>
+		</li>
+<?php endif;?>
 <?php if ( j::Check("AssignedList")) :?>
 		<li>
 			<a href='/report/assignedrange'>

@@ -16,7 +16,7 @@ class ReviewEditController extends JControl
 		$Result=$ProgReview->Result();
 		$Provision=$ProgReview->ProvisionArray();
 		$Difference=$ProgReview->DifferenceArray();
-		$Amount=$ProgReview->Amount();
+		$Amount=$ProgReview->Amount('formatted');
 		return array("Result"=>$Result,"Provision"=>$Provision,"Difference"=>$Difference,"Amount"=>$Amount);
 	}
 	function Start()
