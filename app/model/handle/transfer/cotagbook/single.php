@@ -49,6 +49,7 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 		//-------------------------------------ACT: [Gvie], [Get], [Send], [Receive]-------------------------
 		elseif(isset($_POST[$this->Action]))
 		{
+			ORM::Dump($Files);
 				$res=$Mail->Complete($Files, false, $this->Error);
 			if($res)
 			{
@@ -83,12 +84,14 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 	}
 	protected function MakeMainList($Files)
 	{
+		
 		if(!$this->Mail)
 			return ;
+		$Data=$this->Mail->GetProgress();
 		if($this->Mail->State()==Mail::STATE_EDITING)
 			$al=new DynamiclistPlugin($Files);
 		else 
-			$al=new DynamiclistPlugin($this->Mail->Box());
+			$al=new DynamiclistPlugin($Data);
 		$al->SetHeader('Cotag', 'کوتاژ', "text");
 		$al->Width="80%";
 		$al->HasTier=true;
@@ -97,7 +100,7 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 		$al->HasRemove=false;
 		$al->ObjectAccess=true;
 		$al->InputValues['ColsCount']=5;
-		$al->InputValues['RowsCount']=25;
+		$al->InputValues['RowsCount']=30;
 		$al->_TierAttr=array("style"=>"font-size:11pt;");//ردیف
 		
 		$f=new AutoformPlugin();
