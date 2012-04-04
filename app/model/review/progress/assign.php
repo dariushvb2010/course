@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ReviewProgressAssign extends ReviewProgress
 {
 	/**
-	 * 
 	 * @ManyToOne(targetEntity="MyUser");
 	 * @JoinColumn(name="ReviewerID",referencedColumnName="ID")
 	 * @var MyUser
