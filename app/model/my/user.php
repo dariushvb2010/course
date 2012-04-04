@@ -105,7 +105,6 @@ class MyUser extends Xuser
 		$this->State=2;
 	}
 	/**
-	 * 
 	 * @ManyToOne(targetEntity="MyGroup", inversedBy="User")
 	 * @JoinColumn(name="Group1ID",referencedColumnName="ID")
 	 * @var MyGroup
