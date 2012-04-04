@@ -4,7 +4,7 @@ img { vertical-align: middle;}
 li{margin-bottom:10px;}
 </style>
 <h1><img src="/img/h/h1-help-mail-50.png"/>
-راهنمای ارسال و دریافت اظهانامه ها</h1>
+راهنمای ارسال و دریافت اظهارنامه ها</h1>
 <div id="context"></div>
 
 <h3 class="helph"> مقدمه</h3>

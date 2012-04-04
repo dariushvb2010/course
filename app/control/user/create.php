@@ -87,9 +87,9 @@ class UserCreateController extends BaseControllerClass
 		else
 			$isReviewer=0;
 		
-		if (ORM::Find(new MyUser(),"Username",$Username))
+		if (ORM::Find("MyUser","Username",$Username))
 			return false;
-		$Group=ORM::Find1(new MyGroup(), "Title",$Role);
+		$Group=ORM::Find1("MyGroup", "Title",$Role);
 		if(!$Group)
 		{
 			$res=ORM::Query("MyGroup")->Add($Role,$Role);

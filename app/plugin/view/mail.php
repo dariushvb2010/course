@@ -9,10 +9,13 @@ class ViewMailPlugin extends JPlugin
 		$href=self::GetHref($M, $Action);
 		?>
 		<div class="mail_container" style="<?php echo $Style; ?>">
-			<a href="<?php echo $href; ?>"><div class="mail_head">
-				<img src="/img/mail/mail-<?php echo $M->State();?>-25.png" title="<?php echo $M->PersianState();?>"/>
-				<span><?php echo $M->Num();?></span>
-			</div></a><div class="mail_body noprint" title="<?php echo $Title ?>">
+			<a href="<?php echo $href; ?>">
+				<div class="mail_head">
+					<img src="/img/mail/mail-<?php echo $M->State();?>-25.png" title="<?php echo $M->PersianState();?>"/>
+					<span><?php echo $M->Num();?></span>
+				</div>
+			</a>
+			<div class="mail_body noprint" title="<?php echo $Title ?>">
 						<span>شناسه: </span><b><?php echo $M->ID();?></b><br/>
 					
 						<span>عنوان: </span><b><?php echo $M->Subject();?></b><br/>
