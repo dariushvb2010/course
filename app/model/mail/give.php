@@ -201,6 +201,10 @@ class MailGive extends Mail
 		return $this->ProgressGive;
 	
 	}
+	function GetProgress()
+	{
+		return ORM::Query($this)->GetProgress($this);
+	}
 	function __construct($Num=null, $Subject=null, $GiverGroup=null, $GetterGroup=null, $Description=null)
 	{
 		parent::__construct($Num, $Subject, $Description);
@@ -295,6 +299,11 @@ class MailGiveRepository extends EntityRepository
 		{
 			$r=j::ODQL($s.$w.$o,$GiverGroup, $GetterGroup);
 		}
+		return $r;
+	}
+	function GetProgress($Mail)
+	{
+		$r=j::ODQL("SELECT P FROM ReviewProgressGive P JOIN P.MailGive M JOIN P.File F WHERE M=? ORDER BY F.Cotag", $Mail);
 		return $r;
 	}
 }

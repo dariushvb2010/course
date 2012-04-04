@@ -10,7 +10,7 @@ class MainController extends BaseControllerClass
 // 		echo b::CotagValidation(1234567);
 // 		var_dump(strval(123));
 // 		echo b::GenerateClassNum(248);
-// 		file_put_contents("a.txt", "salam", FILE_APPEND | LOCK_EX);
+		file_put_contents("a.txt", "salam", FILE_APPEND | LOCK_EX);
 		
 		//		phpinfo();
 //$subject = "Registration completed !!!! ";

@@ -60,9 +60,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 						$thisUser=MyUser::CurrentUser();
 						$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
 						if($Time)$Registerarchive->SetCreateTimestamp($Time);
-						$ch=$Registerarchive->Apply();
-						if(is_string($ch))
-							return $ch;
+				
 						ORM::Persist($Registerarchive);  
 						return true;
 					}

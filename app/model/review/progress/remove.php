@@ -64,11 +64,15 @@ class ReviewProgressRemoveRepository extends EntityRepository
 			$Error="کوتاژ ناصحیح است.";
 			return $Error;
 		}
-		$LLP=ORM::Query(new ReviewFile())->LastLiveProgress($File);
-		if(!LLP)
+		$LLP=$File->LLP();
+		if(!$LLP)
 		{
 			$Error="هیچ فرایند قابل حذفی برای این پرونده یا اظهارنامه وجود ندارد.";
 			return $Error;
+		}
+		if($LLP->PrevState()==0)
+		{
+			return "امکان حذف کردن این فرآیند وجود ندارد. ";
 		}
 		$User=MyUser::CurrentUser();
 		$R=new ReviewProgressRemove($File,$User,$Comment);

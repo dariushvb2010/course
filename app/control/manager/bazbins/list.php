@@ -51,8 +51,7 @@ class ManagerBazbinsListController extends JControl
 			$al->SetHeader('View', 'مشاهده',true);
 			
 			$al->SetHeader("State","وضعیت",true);
-			$al->SetHeader('Firstname', 'نام',true);
-			$al->SetHeader('Lastname', 'نام خانوادگی',true);
+			$al->SetHeader('getFullName', 'نام',true);
 			$al->SetHeader('Count', 'تعداد اظهارنامه ',true);
 			$al->SetFilter(array($this,"myfilter"));
 			$this->ReviewersList=$al;

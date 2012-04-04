@@ -147,7 +147,11 @@ abstract class ReviewProgress
 		if($File)
 			$IfPersist ? $this->AssignFile($File) : $this->SetFile($File);
 		if ($User) 
+		{
+			if($IfPersist)
+			ORM::Persist($User);
 			$IfPersist ? $this->AssignUser($User) : $this->SetUser($User);
+		}
 		$this->Comment="";
 		$this->MailNum="";
 		$this->PrevState=0;
@@ -243,7 +247,9 @@ abstract class ReviewProgress
 	{
 		$res=$this->DoFileState(true);
 		if(!is_string($res))
+		{
 			$this->ApplyAlarm();
+		}
 		return $res;
 	}
 	/**
