@@ -18,15 +18,7 @@ chartconfig={
 		backgroundColor: '#FFFFFF'
 	},
 	xAxis: {
-		categories: [
-						'Monday', 
-						'Tuesday', 
-						'Wednesday', 
-						'Thursday', 
-						'Friday', 
-						'Saturday', 
-						'Sunday'
-					],
+		type: 'datetime',
         labels: {
         	rotation: -45,
         	y:20
