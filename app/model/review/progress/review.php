@@ -68,10 +68,15 @@ class ReviewProgressReview extends ReviewProgress
 	* @var string
 	*/
 	protected $Amount;
-	function Amount()
+	function Amount($format='normal')
 	{
-		return $this->Amount;
-	}
+		if($format=='formatted'){
+			return number_format($this->Amount);
+		}else{
+			return $this->Amount;			
+		}
+	}	
+	
 	function SetAmount($a)
 	{
 		$this->Amount=$a;
@@ -96,7 +101,9 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		$sum="کارشناسی انجام شد و نتیجه آن، ";
 		if($this->Result==false)
-			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>"."با علت تفاوت"."<b> «".$this->Difference('persian')."» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount."» </b>";
+			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>".
+					"با علت تفاوت"."<b> «".$this->Difference('persian').
+					"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."» </b>";
 		else
 			$sum.=' بدون مشکل ';
 		

@@ -271,6 +271,10 @@ class MyUser extends Xuser
 		$s = ORM::Find("MyUser",j::UserID());
 		return $s;
 	}
+	
+	function RecentProgresses($count){
+		return ORM::Query($this)->RecentProgresses($this,$count);
+	}
 }
 
 use \Doctrine\ORM\EntityRepository;
@@ -390,6 +394,40 @@ class MyUserRepository extends EntityRepository
 			$files[]=$item->File();
 		}
 		return $files;
+	}
+	
+	/**
+	 * 
+	 * all Progresses user created
+	 * @param MyUser $User
+	 * @return array of ReviewProgress
+	 * @author Morteza Kavakebi
+	 */
+	public function RecentProgresses(MyUser $User,$count)
+	{
+		//TODO think more
+		//TODO: where file and type must be added
+		$r=j::ODQL("SELECT P FROM ReviewProgress AS P WHERE P.User=? ORDER BY P.ID DESC LIMIT {$count}",$User);
+		return $r;
+	}
+	
+	/**
+	 * 
+	 * Count of Progresses user created
+	 * @param MyUser $User
+	 * @return integer
+	 * @author Morteza Kavakebi
+	 */
+	public function CountProgresses(MyUser $User)
+	{
+		//TODO think more
+		//TODO: where file and type must be added
+		$r=j::ODQL("SELECT Count(P) as co FROM ReviewProgress AS P WHERE P.User=?",$User);
+		if(isset($r[0]['co'])){
+			return $r[0]['co'];
+		}else{
+			return null;
+		}
 	}
 	
 }

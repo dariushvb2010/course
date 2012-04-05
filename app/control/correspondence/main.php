@@ -14,29 +14,25 @@ class CorrespondenceMainController extends JControl
 			{
 				$this->Cotag=$Cotag;
 				$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-				$this->Classe=$File->GetClass();
 
 			}
-			else if($Classe>0)
-			{
-				$File=ORM::Query(new ReviewFile)->GetRecentFileByClasse($Classe);
-				if($File)
-				$this->Cotag=$File->Cotag();
-				$this->Classe=$Classe;
-			}
+			
 			if($File)
 			{
+				$this->Classe=$File->GetClass();
 				$FileState=$File->State();
-				$this->ProcessArray=FileFsm::PossibleProgresses($FileState);
-
-				$er=$this->ManageProcesses($File);
-				if($er)
+				$MokatebatStateList=FileFsm::Name2State('Mokatebat');
+				if(in_array($FileState,$MokatebatStateList ))
 				{
-					$Error[]=$er;
+					$ProcessArray=FileFsm::PossibleProgresses($FileState);
+					$er=$this->ManageProcesses($File);
+					if($er)
+					{
+						$Error[]=$er;
+					}
+					$this->Result=$this->ManageSuccesses();
 				}
-				$this->Result=$this->ManageSuccesses();
-					
-				if($this->ProcessArray==null)
+				else
 				{
 					$Error[]="هیچ فرایند مکاتباتی برای این پرونده امکان پذیر نیست";
 				}
@@ -46,6 +42,7 @@ class CorrespondenceMainController extends JControl
 				$Error[]="اظهارنامه‌ای با شماره کوتاژ یا کلاسه داده شده در سیستم ثبت نشده است.";
 			}
 		}
+		$this->ProcessArray=$ProcessArray;
 		$this->Error=$Error;
 		if (count($Error)) $this->Result=false;
 		return $this->Present();

@@ -21,7 +21,7 @@ form input[type='text'] {
 مکاتبات</h1>
 
 
-<form method='post'>
+<form method='post' action="?">
 <?php if (isset($this->Result))
 	ViewResultPlugin::Show($this->Result,$this->Error);
 ?>
