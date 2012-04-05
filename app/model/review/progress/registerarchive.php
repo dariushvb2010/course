@@ -58,9 +58,14 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 					if($lp instanceof ReviewProgressDeliver or $lp =null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
 					{
 						$thisUser=MyUser::CurrentUser();
+						if($File->State()==3)
+							$File->SetState(4);
+						else
+							return "امکان تحویل گرفتن وجود ندارد.";
 						$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
+						$Registerarchive->SetPrevState(3);
 						if($Time)$Registerarchive->SetCreateTimestamp($Time);
-				
+						
 						ORM::Persist($Registerarchive);  
 						return true;
 					}
@@ -94,7 +99,12 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 				if($lp instanceof ReviewProgressDeliver or $lp =null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
 				{
 					$thisUser=MyUser::CurrentUser();
+					if($File->State()==3)
+						$File->SetState(4);
+					else
+						return "امکان تحویل گرفتن وجود ندارد.";
 					$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
+					$Registerarchive->SetPrevState(3);
 					if($Time)$Registerarchive->SetCreateTimestamp($Time);
 					ORM::Persist($Registerarchive);    		
 					return true;

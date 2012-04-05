@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class MailGive extends Mail
 {
+	
 	/**
 	 * @ManyToOne(targetEntity="MyGroup", inversedBy="MailGive")
 	 * @JoinColumn(name="GiverGroupID",referencedColumnName="ID")
@@ -49,6 +50,11 @@ class MailGive extends Mail
 		else
 			return 0;
 	}
+	function GiveTime()
+	{
+		$jc=new CalendarPlugin();
+		return $jc->JalaliFullTime($this->GiveTimestamp());
+	}
 	/**
 	 * GetTimestamp = CloseTimestamp
 	 * TODO correct that to work properly
@@ -61,6 +67,11 @@ class MailGive extends Mail
 			else return 0;
 		else 
 			return 0;
+	}
+	function GetTime()
+	{
+		$jc=new CalendarPlugin();
+		return $jc->JalaliFullTime($this->GetTimestamp());
 	}
 	function PersianSource()
 	{

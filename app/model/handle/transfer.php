@@ -183,7 +183,7 @@ abstract class HandleTransfer
 				$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 				$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 				
-				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
+				$al->SetHeader("Error", "وضعیت", "","",array("Useless"=>true,"Style"=>"color:red;"));
 				$al->RemoveLabel="حذف";
 				$al->HasFormTag=true;
 				$al->_List=".autoform .autolist tbody";
@@ -213,7 +213,7 @@ abstract class HandleTransfer
 				$al->AutoformAfter=true;
 				$al->SetHeader("Select","انتخاب", true, false, false);
 				$al->SetFilter(array($this, "Filter"));
-				$al->SetHeader("Error", "خطا", "","",array("Useless"=>true,"Style"=>"color:red;"));
+				$al->SetHeader("Error", "وضعیت", "","",array("Useless"=>true,"Style"=>"color:red;"));
 				$al->HasFormTag=true;
 			}
 			else
@@ -292,6 +292,7 @@ abstract class HandleTransfer
 				{
 					$f->AddElement(array("Type"=>"text", "Name"=>"SelectCotag", "Label"=>"کوتاژ"));
 					$f->AddElement(array("Type"=>"button","Name"=>"Select", "Value"=>"انتخاب"));
+					$f->AddElement(array("Type"=>"custom", "HTML"=>"<input id='selectall' type='checkbox'/> انتخاب همه"));
 				}
 			}
 		}

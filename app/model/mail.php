@@ -97,6 +97,7 @@ abstract class Mail
 					$s->SetAct(false);
 				}
 				$this->State=self::STATE_INWAY;
+				$this->EventTimestamp=time();
 				return true;
 			}
 			else
@@ -157,6 +158,8 @@ abstract class Mail
 					ORM::Delete($s);
 				}
 				$this->State=self::STATE_CLOSED;
+				if(!($this instanceof MailGive))
+					$this->EventTimestamp=time();
 				return true;
 			}
 			else
@@ -214,12 +217,17 @@ abstract class Mail
 	function SetState($State){ $this->State=$State; }
 	//please dont Declare SetState function, we have alternative safe functions for that 
 	/**
-	 * Time of send or receive or give or get
+	 * Timestamp of closing the mail
 	* @Column(type="integer", nullable=true)
 	* @var integer
 	*/
-	protected $EventTimestamp;
-	function EventTimestamp(){ return $this->EventTimestamp;}
+	protected $CloseTimestamp;
+	function CloseTimestamp(){ return $this->CloseTimestamp;}
+	function CloseTime()
+	{
+		$jc=new CalendarPlugin();
+		return $jc->JalaliFullTime($this->CloseTimestamp);
+	}
 	/**
 	* the last Retouch timestamp.
 	* Retouch=action(give or get or send or receive) | save

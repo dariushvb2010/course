@@ -74,13 +74,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 		}
 		else
 		{
-// 			ORM::Dump($CurrentUser);
-// 			ORM::Dump($File);
-// 			ORM::Dump($Reviewer);
-			
 			$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,false);
-			//ORM::Dump($R);
-			//orm::Flush();
 			if($Comment==null)
 				$Comment="";
 			$R->setComment($Comment);
