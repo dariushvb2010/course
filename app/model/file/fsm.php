@@ -122,27 +122,44 @@ class FileFsm extends JModel
 	'karshenas'=>'کارشناس'
 	);
 	
-	private static $Name2State=array(
-		'reviewing'=> 5,
+	private static $Name2State=array(	
 		'archive'=>4,
+		'reviewing'=> 5,
+		'review_notok'=> 9,
+		'ProcessRegister'=> 18,
 		'Prophecy_first'=>41,
 		'Prophecy_second'=>47,
 		'Prophecy_setad'=>58,
 		'Prophecy_commission'=>63,
-		'Mokatebat'=>array(9,18),
+		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
+		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies'),
 	);
 	
 	/**
 	 * 
 	 * maps state name with state numbers
+	 * it's Complicated isn't it? ;)
 	 * @param string
+	 * @return array of integer
+	 * @author Morteza Kavakebi
 	 */
 	public function Name2State($name){
 		if (!array_key_exists($name,FileFsm::$Name2State))
 			return null;
-		 $Temp=FileFsm::$Name2State[$name];
-		//TODO: must be RECURSIVE
-		return $Temp;
+		$Temp=FileFsm::$Name2State[$name];
+		 
+		if(!is_array($Temp))
+			$Temp=Array($Temp);
+		
+		$res=array();
+		foreach ($Temp as $val){
+			if(is_int($val)){
+				$res[]=$val;
+			}else{
+				$res=array_merge($res,FileFsm::Name2State($val));
+			}
+		}
+		return array_unique($res);
 	}
 	
 	/**

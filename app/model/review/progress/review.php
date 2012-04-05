@@ -52,9 +52,15 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		$t=array('Tariff'=>'تعرفه',
 		'Value'=>'ارزش',
+		'Other'=>'سایر',
 		);
 		if ($type=='persian'){
-			return (isset($t[$this->Difference])?$t[$this->Difference]:$this->Difference); 
+			$rr=explode(',', $this->Difference);
+			if ($rr==null)return "";
+			foreach ($rr as $v){
+				$rr2[]=(isset($t[$v])?$t[$v]:$v);
+			}
+			return implode(',',$rr2); 
 		}
 		return $this->Difference;
 	}
