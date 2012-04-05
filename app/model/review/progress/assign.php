@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ReviewProgressAssign extends ReviewProgress
 {
 	/**
-	 * 
 	 * @ManyToOne(targetEntity="MyUser");
 	 * @JoinColumn(name="ReviewerID",referencedColumnName="ID")
 	 * @var MyUser
@@ -75,13 +74,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 		}
 		else
 		{
-// 			ORM::Dump($CurrentUser);
-// 			ORM::Dump($File);
-// 			ORM::Dump($Reviewer);
-			
 			$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,false);
-			//ORM::Dump($R);
-			//orm::Flush();
 			if($Comment==null)
 				$Comment="";
 			$R->setComment($Comment);

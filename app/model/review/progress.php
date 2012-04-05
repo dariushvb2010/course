@@ -228,12 +228,7 @@ abstract class ReviewProgress
 		$NewState=FileFsm::NextState($CurrentState, $EName);
 		if(!isset($NewState))
 		{
-			
-			$str="از شماره حالت ".$CurrentState;
-			$str.="پلی با نام رویداد ".$EName;
-			$str.="ثبت نشده است.";
-			$str.=" حالت جدید:".$NewState;
-			return $str;
+			return "به دلیل وضعیت فعلی اظهارنامه انجام این فرآیند امکان پذیر نیست.";
 		}
 		$this->SetPrevState($CurrentState);
 		if($Persist)
