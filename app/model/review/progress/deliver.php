@@ -37,7 +37,7 @@ class ReviewProgressDeliverRepository extends EntityRepository
 	 */
 	public Function AddToFiles($StartTime,$EndTime,$MailNum)
 	{
-		
+		return 'this Progress is Deprecated';
 		$Files=ORM::Query(new ReviewFile())->FilesInTimeRange($StartTime,$EndTime,MyUser::CurrentUser());
 		if(!count($Files))
 		{
