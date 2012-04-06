@@ -12,6 +12,10 @@ form.autoform{
 </style>
 <h1><img valign="middle" style="vertical-align:middle;" src="/img/h/h1-users-50.png" />
 لیست کارشناسان بازبینی</h1>
+<div>
+برای مشاهده کارشناسان غیرفعال به قسمت تنظیمات در منوی بالا مراجعه فرمایید.
+<img src="/img/toolbar/setting-30.png" />	
+</div>
 <?php if (isset($this->Result))
 ViewResultPlugin::Show($this->Result,$this->Error);
 ?>
