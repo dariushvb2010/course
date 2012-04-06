@@ -52,9 +52,15 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		$t=array('Tariff'=>'تعرفه',
 		'Value'=>'ارزش',
+		'Other'=>'سایر',
 		);
 		if ($type=='persian'){
-			return (isset($t[$this->Difference])?$t[$this->Difference]:$this->Difference); 
+			$rr=explode(',', $this->Difference);
+			if ($rr==null)return "";
+			foreach ($rr as $v){
+				$rr2[]=(isset($t[$v])?$t[$v]:$v);
+			}
+			return implode(',',$rr2); 
 		}
 		return $this->Difference;
 	}
@@ -68,10 +74,15 @@ class ReviewProgressReview extends ReviewProgress
 	* @var string
 	*/
 	protected $Amount;
-	function Amount()
+	function Amount($format='normal')
 	{
-		return $this->Amount;
-	}
+		if($format=='formatted'){
+			return number_format($this->Amount);
+		}else{
+			return $this->Amount;			
+		}
+	}	
+	
 	function SetAmount($a)
 	{
 		$this->Amount=$a;
@@ -96,7 +107,9 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		$sum="کارشناسی انجام شد و نتیجه آن، ";
 		if($this->Result==false)
-			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>"."با علت تفاوت"."<b> «".$this->Difference('persian')."» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount."» </b>";
+			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>".
+					"با علت تفاوت"."<b> «".$this->Difference('persian').
+					"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."» </b>";
 		else
 			$sum.=' بدون مشکل ';
 		

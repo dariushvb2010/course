@@ -100,10 +100,25 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	});
 	$("button[name=Select]").click(function(){
 		Cotag=$(":text[name=SelectCotag]").val();
+		Cotag=trimZero(Cotag);
+		Cotag=trim(Cotag);
 		ShowResult(Select(Cotag));
 		$(":text[name=SelectCotag]").val("");
 	});
 	
+	$("input#selectall[type=checkbox]").click(function()
+	{
+		$("input.item[type=checkbox]").attr("checked",$("#selectall").attr("checked"));
+	}); 
+	
+	function trim(str)
+	{
+	        return str.replace(/^\s+|\s+$/g,"");
+	}
+	function trimZero(str)
+	{
+		return str.replace(/^0+/, '');
+	}
 		
 	<?php endif;?>
 	</script>

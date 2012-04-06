@@ -147,7 +147,11 @@ abstract class ReviewProgress
 		if($File)
 			$IfPersist ? $this->AssignFile($File) : $this->SetFile($File);
 		if ($User) 
+		{
+			if($IfPersist)
+			ORM::Persist($User);
 			$IfPersist ? $this->AssignUser($User) : $this->SetUser($User);
+		}
 		$this->Comment="";
 		$this->MailNum="";
 		$this->PrevState=0;
@@ -224,12 +228,7 @@ abstract class ReviewProgress
 		$NewState=FileFsm::NextState($CurrentState, $EName);
 		if(!isset($NewState))
 		{
-			
-			$str="از شماره حالت ".$CurrentState;
-			$str.="پلی با نام رویداد ".$EName;
-			$str.="ثبت نشده است.";
-			$str.=" حالت جدید:".$NewState;
-			return $str;
+			return "به دلیل وضعیت فعلی اظهارنامه انجام این فرآیند امکان پذیر نیست.";
 		}
 		$this->SetPrevState($CurrentState);
 		if($Persist)
@@ -243,7 +242,9 @@ abstract class ReviewProgress
 	{
 		$res=$this->DoFileState(true);
 		if(!is_string($res))
+		{
 			$this->ApplyAlarm();
+		}
 		return $res;
 	}
 	/**

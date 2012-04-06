@@ -10,10 +10,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ReviewProgressAssign extends ReviewProgress
 {
 	/**
-	 * 
 	 * @ManyToOne(targetEntity="MyUser");
 	 * @JoinColumn(name="ReviewerID",referencedColumnName="ID")
-	 * @var unknown_type
+	 * @var MyUser
 	 */
 	protected  $Reviewer;
 	function Reviewer()
@@ -21,9 +20,10 @@ class ReviewProgressAssign extends ReviewProgress
 		return $this->Reviewer;
 	}
 	
-	function __construct(ReviewFile $File=null,MyUser $User=null,MyUser $Reviewer=null)
+	function __construct(ReviewFile $File=null,MyUser $User=null,MyUser $Reviewer=null, $IfPersist=true)
 	{
-		parent::__construct($File,$User);
+		parent::__construct($File,$User, $IfPersist);
+		
 		$this->Reviewer=$Reviewer;
 	}
 	
@@ -74,7 +74,9 @@ class ReviewProgressAssignRepository extends EntityRepository
 		}
 		else
 		{
-			$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer);
+			$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,false);
+			if($Comment==null)
+				$Comment="";
 			$R->setComment($Comment);
 			$ch=$R->Apply();
 			if(is_string($ch))
@@ -85,6 +87,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 					if( $LLP instanceof ReviewProgressAssign)
 					{
 						$LLP->kill();
+						$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,true);
 						ORM::Persist($R);
 						return $R;
 					}
@@ -93,6 +96,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 			}
 			else
 			{
+				$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,true);
 				ORM::Persist($R);
 				return $R;
 			}

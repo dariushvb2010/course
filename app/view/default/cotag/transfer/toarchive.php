@@ -88,6 +88,8 @@
 				<div align="center"><input type='submit' name="Date" id='sub' value=' مشاهده کوتاژها' /></div>
 				<input type='hidden' name="MailID" value="<?php echo $this->Handler->Mail->ID();?>"/>
 			</form><?php 
+			else:
+				if($this->Handler->Mail) echo "تاریخ تحویل: "."<b>".$this->Handler->Mail->GiveTime()."</b>";
 			endif;
 		$this->Handler->MainList->PresentForPrint();
 		?>

@@ -65,6 +65,26 @@ class FileFsm extends JModel
 	);
 	
 	Public static $ProcessList=array(
+	'Start'=>'*********',
+	'Give_cotagbook_to_archive'=>'*********',
+	'Get_archive_from_cotagbook'=>'*********',
+	'Assign'=>'*********',
+	'Confirm_ok'=>'*********',
+	'Confirm_nok'=>'*********',
+	'Review_nok'=>'*********',
+	'Give_archive_to_raked'=>'*********',
+	'Send_archive_to_out'=>'*********',
+	'Review_ok'=>'*********',
+	'Review_nok'=>'*********',
+	'Assign_by_manager'=>'*********',
+	'Give_archive_to_raked'=>'*********',
+	'Send_archive_to_out'=>'*********',
+	'Receive_archive_from_out'=>'*********',
+	'Get_raked_from_archive'=>'*********',
+	'Send_raked_to_out'=>'*********',
+	'Give_raked_to_archive'=>'*********',
+	'Receive_raked_from_out'=>'*********',
+	'Get_arhive_from_raked'=>'*********',
 	'Senddemand_demand'=>'ارسال مطالبه نامه',
 	'Senddemand_setad'=>'ارسال رای دفاتر ستادی به صاحب کالا',
 	'Senddemand_karshenas'=>'ارسال نظر کارشناس',
@@ -102,24 +122,44 @@ class FileFsm extends JModel
 	'karshenas'=>'کارشناس'
 	);
 	
-	public static $Name2State=array(
-		'reviewing'=> 5,
+	private static $Name2State=array(	
 		'archive'=>4,
+		'reviewing'=> 5,
+		'review_notok'=> 9,
+		'ProcessRegister'=> 18,
 		'Prophecy_first'=>41,
 		'Prophecy_second'=>47,
 		'Prophecy_setad'=>58,
 		'Prophecy_commission'=>63,
+		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
+		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies'),
 	);
 	
 	/**
 	 * 
 	 * maps state name with state numbers
+	 * it's Complicated isn't it? ;)
 	 * @param string
+	 * @return array of integer
+	 * @author Morteza Kavakebi
 	 */
-	function Name2State($name){
+	public function Name2State($name){
 		if (!array_key_exists($name,FileFsm::$Name2State))
 			return null;
-		 return FileFsm::$Name2State[$name];
+		$Temp=FileFsm::$Name2State[$name];
+		 
+		if(!is_array($Temp))
+			$Temp=Array($Temp);
+		
+		$res=array();
+		foreach ($Temp as $val){
+			if(is_int($val)){
+				$res[]=$val;
+			}else{
+				$res=array_merge($res,FileFsm::Name2State($val));
+			}
+		}
+		return array_unique($res);
 	}
 	
 	/**
@@ -133,9 +173,9 @@ class FileFsm extends JModel
 			return null;
 		$ar=FileFsm::$StateGraph[$state];
 		foreach ($ar as $key=> $value)
-			$ar[$key]=FileFsm::$ProcessList[$key];
+			$ar2[$key]=FileFsm::$ProcessList[$key];
 		
-		return $ar;
+		return $ar2;
 	} 
 	static function PossibleProgresses2($state){
 		if (!array_key_exists($state,FileFsm::$StateGraph))

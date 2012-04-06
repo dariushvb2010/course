@@ -55,6 +55,15 @@ class ReportChartsMainController extends JControl
 			/////////////////////////////////////////////////////	
 			case 'bazbini_speed':
 				$r=ORM::Query(new ReviewProgressReview)->BazbiniPerMonth();
+				/*$r=array(
+					array('monthname'=>'aaa','month'=>'3','year'=>'1390','count'=>555),
+					array('monthname'=>'aaa','month'=>'4','year'=>'1390','count'=>555),
+					array('monthname'=>'aaa','month'=>'5','year'=>'1390','count'=>555),
+					array('monthname'=>'aaa','month'=>'6','year'=>'1390','count'=>555),
+					array('monthname'=>'aaa','month'=>'1','year'=>'1391','count'=>555),
+					array('monthname'=>'aaa','month'=>'2','year'=>'1391','count'=>555),
+					array('monthname'=>'aaa','month'=>'3','year'=>'1391','count'=>555),
+				);*/
 				$names=array();
 				$values=array();
 				foreach ($r as $value){

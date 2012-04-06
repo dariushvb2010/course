@@ -568,17 +568,26 @@ class ReviewFileRepository extends EntityRepository
 		return $r[0]['Result'];
 		
 	}
+	/*public function FilesInTimeRange($TimeStart,$TimeEnd,MyUser $User)
+	{
+		$r=j::ODQL("SELECT F,P FROM ReviewFile AS F JOIN F.Progress AS P 
+					WHERE F.CreateTimestamp BETWEEN ? AND ? AND P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp)
+					 FROM ReviewProgress AS P2 WHERE P2.File=F) AND P INSTANCE OF ReviewProgressStart    ORDER BY F.Cotag",$TimeStart,$TimeEnd);
+		return $r;
+	}*/
 	/**
 	 *
 	 * برای تحویل دفتر کوتاژ به بایگانی بازبینی
 	 * @param unknown_type $TimeStart
 	 * @param unknown_type $TimeEnd
+	 * @return array of ReviewFile
+	 * @author Morteza Kavakebi
 	 */
 	public function FilesInTimeRange($TimeStart,$TimeEnd,MyUser $User)
 	{
-		$r=j::ODQL("SELECT F,P FROM ReviewFile AS F JOIN F.Progress AS P 
-					WHERE F.CreateTimestamp BETWEEN ? AND ? AND P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp)
-					 FROM ReviewProgress AS P2 WHERE P2.File=F) AND P INSTANCE OF ReviewProgressStart    ORDER BY F.Cotag",$TimeStart,$TimeEnd);
+		
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F 
+					WHERE F.State=2 AND F.CreateTimestamp BETWEEN ? AND ? ORDER BY F.Cotag",$TimeStart,$TimeEnd);
 		return $r;
 	}
 	

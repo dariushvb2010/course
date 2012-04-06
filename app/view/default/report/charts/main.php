@@ -49,6 +49,7 @@
 	 	case 'bazbini_speed':
 ?>
  			
+ 			chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->X);?>];
  			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->values);?>];
  			chartconfig['series'][1]['data']= [<?php echo implode(',',$this->values);?>];
 <?php

@@ -45,7 +45,7 @@ class ViewMailPlugin extends JPlugin
 			{
 				if($M->GiverGroup()->Title()=="Archive" AND $M->GetterGroup()->Title()=="Raked")
 					$href="/raked/transfer/fromarchive?MailID=".$M->ID();
-				if($M->GiverGroup()->Title()=="CotagBook" AND $M->GetterGroup()->Title()=="Archive")
+				elseif($M->GiverGroup()->Title()=="CotagBook" AND $M->GetterGroup()->Title()=="Archive")
 					$href="/archive/transfer/fromcotag?MailID=".$M->ID();
 			}
 			
