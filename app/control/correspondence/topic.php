@@ -46,7 +46,6 @@ class CorrespondenceTopicController extends JControl
 		//listing items
 		{
 
-			//$UnassignedFiles=ORM::Query(new ReviewFile)->UnassignedFiles($_POST['off'],$_POST['lim']);
 			$topics=ReviewCorrespondenceTopic::Topics();
 			if(count($topics))
 			{

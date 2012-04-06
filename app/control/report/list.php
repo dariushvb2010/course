@@ -24,16 +24,8 @@ class ReportListController extends JControl
 		if ($SortOrder!='ASC' && $SortOrder!='DESC')
 			$SortOrder='DESC';
 		
-
-//		$this->Data=$m->CotagList($Condition,$Offset,$Limit,$Sort,$SortOrder);
-		
 		$this->Data=ORM::Query(new ReviewFile)->CotagList($Offset,$Limit,$Sort,$SortOrder);
-		if(isset($_POST['Cotag']))
-		{
-			$this->Data=ORM::Query(new ReviewFile)->FileWithLastProg($_POST['Cotag']);
-			if(!$this->Data)
-				$Error[]="اطلاعاتی برای کوتاژ وارد شده وجود ندارد.";
-		}
+		
 		$this->Count=ORM::Query(new ReviewFile)->CotagCount();
 		$this->Limit=$Limit;
 		$this->Offset=$Offset;

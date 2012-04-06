@@ -122,8 +122,12 @@ class FileFsm extends JModel
 	'karshenas'=>'کارشناس'
 	);
 	
-	private static $Name2State=array(	
+	public static $Name2State=array(	
+		'CotagStart'=>2,
+		'CotagSend'=>3,
+		'Cotag'=>array('CotagStart','CotagSend'),
 		'archive'=>4,
+		'Assignable'=>'archive',
 		'reviewing'=> 5,
 		'review_notok'=> 9,
 		'ProcessRegister'=> 18,

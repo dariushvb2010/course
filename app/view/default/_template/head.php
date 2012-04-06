@@ -320,12 +320,6 @@ $(function() {
 				</a>
 			</li>
 			<li>
-				<a href='/archive/assign/range'>
-					<span class='ui-icon-carat-2-e-w ui-icon'></span> 
-					تخصیص بازه ای
-				</a>
-			</li>
-			<li>
 				<a href='/archive/assign/group'>
 					<span class='ui-icon-shuffle ui-icon'></span> 
 					تخصیص گروهی
@@ -333,14 +327,6 @@ $(function() {
 			</li>
 			
 		</ul>
-	</li>
-		<li>
-			<a href='/report/assignedrange'>
-				<span class='ui-icon-search ui-icon'></span> 
-				مشاهده کارشناس اظهارنامه
-			</a>
-		</li>
-	<li>
 		<a href='#'>
 			<span class='ui-icon-arrowthick-1-n ui-icon'></span> 
 			ارسال اظهارنامه
@@ -649,14 +635,6 @@ $(function() {
 			<a href='/report/userprogresslist'>
 				<span class='ui-icon-refresh ui-icon'></span> 
 				فعالیت های ثبت شده توسط شما
-			</a>
-		</li>
-<?php endif;?>
-<?php if ( j::Check("AssignedList")) :?>
-		<li>
-			<a href='/report/assignedrange'>
-				<span class='ui-icon-link ui-icon'></span> 
-				مشاهده تخصیص ها
 			</a>
 		</li>
 <?php endif;?>

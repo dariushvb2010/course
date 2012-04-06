@@ -20,7 +20,7 @@ class ReportNotarchivedController extends JControl
 			$this->Order="ASC";
 		}
 		//NotArchivedFiles=NAF
-		$NAF=ORM::Query(new ReviewFile)->GetOnlyProgressStart($this->Offset,$this->Limit,$this->Sort,$this->Order);
+		$NAF=ORM::Query(new ReviewFile)->CotagBookNotSentFiles($this->Offset,$this->Limit,$this->Sort,$this->Order);
 		//ORM::Dump($NAF);
 		if(count($NAF))
 		{
