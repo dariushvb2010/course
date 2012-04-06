@@ -16,13 +16,7 @@
 
 <li><a href="?charttype=2" class="yellow">حجم کاری کارشناسان</a></li>
 
-<li><a href="?charttype=3" class="green">سرعت کار بازبینی</a></li>
-
-<li><a href="#url" class="blue">LAYOUTS</a></li>
-
-<li><a href="#url" class="indigo">CONTACT</a></li>
-
-<li><a href="#url" class="violet">PRIVACY</a></li>
+<li><a href="?charttype=2" class="green">سرعت کار بازبینی</a></li>
 
 </ul>
 </div>
