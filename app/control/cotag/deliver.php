@@ -39,7 +39,7 @@ class CotagDeliverController extends JControl
 			}
 			else
 			{
-				$res=ORM::Query(new ReviewProgressDeliver())->AddToFiles($StartTimestamp,$FinishTimestamp,$_POST['mailnum']);
+				$res=ORM::Query("ReviewProgressDeliver")->AddToFiles($StartTimestamp,$FinishTimestamp,$_POST['mailnum']);
 				if(is_string($res))
 					$Error[]=$res;
 				else 

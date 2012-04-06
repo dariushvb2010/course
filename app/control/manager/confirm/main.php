@@ -11,8 +11,8 @@ class ManagerConfirmMainController extends JControl
 		$this->Cotag=$Cotag;
 		
 		
-		$file=ORM::Query(new ReviewFile())->GetRecentFile($Cotag);
-		if(!ORM::Query(new ReviewProgressClasseconfirm())->ValidateFile($file)){
+		$file=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+		if(!ORM::Query("ReviewProgressClasseconfirm")->ValidateFile($file)){
 			$this->Redirect("./select");
 		}
 		
@@ -42,7 +42,7 @@ class ManagerConfirmMainController extends JControl
 			$this->Confirmation=$Confirmation;
 			$this->Comment=$Comment;
 			
-			$Res=ORM::Query(new ReviewProgressClasseconfirm())->AddToFile($Cotag,$ConfirmationResult,$Comment);
+			$Res=ORM::Query("ReviewProgressClasseconfirm")->AddToFile($Cotag,$ConfirmationResult,$Comment);
 			if(is_string($Res))
 				$Error[]=$Res;
 			else if($Res)

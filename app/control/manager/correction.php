@@ -11,7 +11,7 @@ class ManagerCorrectionController extends JControl
 			$OldCotag=$_POST['OldCotag']*1;
 			$Comment=$_POST['Comment'];
 			
-			$Res=ORM::Query(new ReviewProgressCorrection())->AddToFile($OldCotag,$NewCotag,$Comment);
+			$Res=ORM::Query("ReviewProgressCorrection")->AddToFile($OldCotag,$NewCotag,$Comment);
 			
 			if(is_string($Res))
 			{

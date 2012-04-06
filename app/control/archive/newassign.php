@@ -23,11 +23,11 @@ class ArchiveNewassignController extends JControl
 			}
 			else
 			{
-				$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
+				$Reviewer=ORM::Query("MyUser")->getRandomReviewer();
 				$this->ReviewerName= $Reviewer ? $Reviewer->getFullName() : "";
 				foreach ($this->Files as $F)
 				{
-						$RegisterResult=ORM::Query(new ReviewProgressRegisterarchive())->AddByFile($F);
+						$RegisterResult=ORM::Query("ReviewProgressRegisterarchive")->AddByFile($F);
 						if(is_string($RegisterResult))
 						{
 							$Error[]=$RegisterResult;
@@ -35,7 +35,7 @@ class ArchiveNewassignController extends JControl
 						else 
 						{
 							ORM::Flush();
-							$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($F,$Reviewer);
+							$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($F,$Reviewer);
 							if(is_string($AssignResult))
 							{
 								$Error[]=$AssignResult;

@@ -8,7 +8,7 @@ class CotagCancelController extends JControl
 		{
 			
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query(new ReviewProgressStart())->CancelCotag($Cotag);
+			$Res=ORM::Query("ReviewProgressStart")->CancelCotag($Cotag);
 			if(is_string($Res))
 			{
 				$Error[]=$Res;

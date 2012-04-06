@@ -29,7 +29,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$this->Cotag=$Cotag;
 		
 		//---REASSIGN PART: List of enable reviewers to be shown in drop box in the form
-		$reviewers = ORM::Query(new MyUser())->Reviewers(true);
+		$reviewers = ORM::Query("MyUser")->Reviewers(true);
 		foreach($reviewers as $r){
 			$x[$r->ID]=$r->getFullName();
 		}
@@ -117,7 +117,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 	{
 		$Cotag=$Data['Cotag']*1;
 		$Comment=$Data['Comment'];
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
 		$this->Comment=$Comment;
 		$str="کوتاژ:".$Cotag." ";
 		//-------too short comment
