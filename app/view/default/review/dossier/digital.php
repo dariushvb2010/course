@@ -13,7 +13,7 @@
 
 -->
  #slider3 {
-  width: 500px;
+  width: 350px;
   height: 600px;
   list-style: none;
  }
@@ -106,7 +106,7 @@ form input[type='text'] {
 <input type='submit' value='مشاهده پرونده دیجیتال' />
 </form>
 <?php }else{?>
-<div class="" style="height: 1000px;">
+<div class="" style="height: 1000px; width=400px">
   <ul id="slider3">
   <?php foreach ($this->Images as $I) {?>
   <li>
@@ -126,7 +126,7 @@ form input[type='text'] {
 	 $('#slider3').anythingSlider({
 		 	easing: "easeOutBack",
 		  	theme:"office",
-			expand				:false,
+			expand				: true,
 			resizeContents      : false,  
 			startText           : "شروع"
 
@@ -134,7 +134,7 @@ form input[type='text'] {
 	  /* this "custom" code is the equivalent of the base caption functions */
 	  .anythingSliderFx({
 	   inFx: {
-	    '.caption-top'    : { top: 0, opacity: 0.8, duration: 400 },
+	    '.caption-top'    : { top: 0,right: 0, opacity: 0.8, duration: 400 },
 	    '.caption-right'  : { right: 0, opacity: 0.8, duration: 400 },
 	    '.caption-bottom' : { bottom: 0, opacity: 0.8, duration: 400 },
 	    '.caption-left'   : { left: 0, opacity: 0.8, duration: 400 }
