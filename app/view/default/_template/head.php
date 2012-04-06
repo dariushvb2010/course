@@ -630,6 +630,14 @@ $(function() {
 			</a>
 		</li>
 <?php endif;?>
+<?php if (1==1) :?>
+		<li>
+			<a href='/report/charts/'>
+				<span class='ui-icon-refresh ui-icon'></span> 
+				نمودارها
+			</a>
+		</li>
+<?php endif;?>
 <?php if (j::UserID()>0) :?>
 		<li>
 			<a href='/report/userprogresslist'>
