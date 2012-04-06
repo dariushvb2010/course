@@ -5,7 +5,7 @@ class ManagerBazbinsBazbinController extends JControl
 	{
 		j::Enforce("MasterHand");
 		if($_GET['id']){
-			$my_reviewer=ORM::Query(new MyUser)->find($_GET['id']);
+			$my_reviewer=ORM::Query("MyUser")->find($_GET['id']);
 			if(isset($_POST['State']))
 			{
 				$s=$_POST['State']*1;
@@ -47,8 +47,8 @@ class ManagerBazbinsBazbinController extends JControl
 			{
 				foreach ($this->Files as $F)
 				{
-					$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
-					$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($F,$Reviewer);
+					$Reviewer=ORM::Query("MyUser")->getRandomReviewer();
+					$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($F,$Reviewer);
 					if(is_string($AssignResult))
 					{
 						$Error[]=$AssignResult;
@@ -69,7 +69,7 @@ class ManagerBazbinsBazbinController extends JControl
 		elseif($_GET['id']) //listing items
 		{
 		
-			$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile($_GET['id']);
+			$MyUnreviewedFiles=$this->Count=ORM::Query("MyUser")->AssignedReviewableFile($_GET['id']);
 			if($MyUnreviewedFiles){
 				$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));

@@ -8,7 +8,7 @@ class ArchiveNewController extends JControl
 		if (count($_POST))
 		{
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query(new ReviewProgressRegisterarchive)->AddToFile($Cotag);
+			$Res=ORM::Query("ReviewProgressRegisterarchive")->AddToFile($Cotag);
 			if(is_string($Res))
 			{
 				$Error[]=$Res;

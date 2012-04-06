@@ -23,7 +23,7 @@ class ManagerBazbinsAssignedController extends JControl
 				foreach ($this->Files as $F)
 				{
 					$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
-					$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($F,$Reviewer);
+					$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($F,$Reviewer);
 					if(is_string($AssignResult))
 					{
 						$Error[]=$AssignResult;
@@ -44,7 +44,7 @@ class ManagerBazbinsAssignedController extends JControl
 		elseif($_GET['id']) //listing items
 		{
 
-			$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile($_GET['id']);
+			$MyUnreviewedFiles=$this->Count=ORM::Query("MyUser")->AssignedReviewableFile($_GET['id']);
 			if($MyUnreviewedFiles){
 				$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));

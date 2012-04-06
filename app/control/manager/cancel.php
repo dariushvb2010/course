@@ -8,7 +8,7 @@ class ManagerCancelController extends JControl
 		{
 			
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query(new ReviewProgressRegisterarchive())->CancelCotag($Cotag);
+			$Res=ORM::Query("ReviewProgressRegisterarchive")->CancelCotag($Cotag);
 			if(is_string($Res))
 			{
 				$Error[]=$Res;

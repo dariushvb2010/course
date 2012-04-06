@@ -8,14 +8,14 @@ class ManagerRemoveController extends JControl
 		{
 			
 			$Cotag=$_POST['Cotag']*1;
-			$LLP=ORM::Query(new ReviewFile())->LastLiveProgress($Cotag);
+			$LLP=ORM::Query("ReviewFile")->LastLiveProgress($Cotag);
 			$this->LLP=$LLP;
 		}
 		else if(isset($_POST['confirm']))
 		{
 			$Cotag=$_POST['Cotag']*1;
-			$File=ORM::Query(new ReviewFile())->GetRecentFile($Cotag);
-			$res=ORM::Query(new ReviewProgressRemove())->AddToFile($File,$_POST['Comment']);
+			$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+			$res=ORM::Query("ReviewProgressRemove")->AddToFile($File,$_POST['Comment']);
 			if(is_string($res))
 			{
 				$Error[]=$res;

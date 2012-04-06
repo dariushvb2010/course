@@ -22,7 +22,7 @@ class ArchiveAssignGroupController extends JControl
 			}
 			else
 			{
-				$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
+				$Reviewer=ORM::Query("MyUser")->getRandomReviewer();
 				$this->ReviewerName= $Reviewer ? $Reviewer->getFullName() : "";
 				foreach ($this->Files as $F)
 				{
