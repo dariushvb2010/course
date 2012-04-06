@@ -50,7 +50,7 @@ abstract class HandleTransfer
 	 * Type of the progress: [Give], [Get], [Send], [Receive] 
 	 * @var string
 	 */
-	public  $Action;
+	protected  $Action;
 // 	const Get="Get";
 // 	const Give="Give";
 // 	const Send="Send";
@@ -83,6 +83,7 @@ abstract class HandleTransfer
 	 * @var string
 	 */
 	protected $Source;
+	function Source(){ return $this->Source; }
 	protected function PersianSource()
 	{
 		if($this->Action=="Send")
@@ -97,6 +98,7 @@ abstract class HandleTransfer
 	 * @var stirng
 	 */
 	protected $Dest;
+	function Dest(){ return $this->Dest; }
 	protected function PersianDest()
 	{
 		if($this->Action=="Send")
@@ -215,6 +217,7 @@ abstract class HandleTransfer
 				$al->SetFilter(array($this, "Filter"));
 				$al->SetHeader("Error", "وضعیت", "","",array("Useless"=>true,"Style"=>"color:red;"));
 				$al->HasFormTag=true;
+				
 			}
 			else
 			{
@@ -328,10 +331,14 @@ abstract class HandleTransfer
 	}
 	protected function MakeListTemplate()
 	{
+		if($this->Mail->State()==Mail::STATE_INWAY)
+			$Data=$this->Mail->GetProgress();
+		else 	
+			$Data=$this->Mail->Box();
 		if($this->Action=="Get" or $this->Mail->State()==Mail::STATE_CLOSED)
-			$al=new AutolistPlugin($this->Mail->Box());
+			$al=new AutolistPlugin($Data);
 		else
-			$al=new DynamiclistPlugin($this->Mail->Box());
+			$al=new DynamiclistPlugin($Data);
 		$al->ObjectAccess=true;
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";

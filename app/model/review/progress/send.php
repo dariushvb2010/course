@@ -22,11 +22,9 @@ class ReviewProgressSend extends ReviewProgress
 		$this->MailSend=$Mail;
 		$Mail->ProgressSend()->add($this);
 	}
-	function __construct(ReviewFile $File=null, MailSend $Mail=null, $IfPersist=true, $User=null)
+	function __construct(ReviewFile $File=null, MailSend $Mail=null, $IfPersist=true)
 	{
-		if(!$User)
-			$User=MyUser::CurrentUser();
-		parent::__construct($File, $User, $IfPersist);
+		parent::__construct($File, null, $IfPersist);
 		$IfPersist ? $this->AssignMailSend($Mail) : $this->SetMailSend($Mail);
 		
 	}
@@ -55,19 +53,21 @@ class ReviewProgressSend extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressSendRepository extends EntityRepository
 {
-	public function AddToFile(ReviewFile $File,MailSend $Mail, $IfPersist=true, $User=null)
+	public function AddToFile(ReviewFile $File,MailSend $Mail, $IfPersist=true)
 	{
 		$File=ReviewFile::GetRecentFile($File);
 		if(!$File)
 		{
 			return "اظهارنامه یافت نشد.";
 		}
-		$P=new ReviewProgressSend($File, $Mail, $IfPersist, $User);
-		$ch=$IfPersist ? $P->Apply() : $P->Check();
+		$P=new ReviewProgressSend($File, $Mail, $IfPersist);
+		$ch=$P->Check();
 		if(is_string($ch))
 			return $ch;
 		if($IfPersist) 
 		{
+			$P=new ReviewProgressSend($File, $Mail, $IfPersist);
+			$P->Apply();
 			ORM::Persist($P);
 		}
 		return $P;

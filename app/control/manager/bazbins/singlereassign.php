@@ -6,36 +6,8 @@ class ManagerBazbinsSinglereassignController extends JControl
 		j::Enforce("MasterHand");
 		$this->MakeReassignList();
 		$this->MakeCancelList();
-		if (isset($_POST['Cotag']))
-		{
-			$Cotag=$_POST['Cotag']*1;
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-			$Reviewer=ORM::Find("MyUser",$_POST['ID']);
-			$Comment=$_POST['Comment'];
-			$this->Comment=$Comment;
-			
-			//-------too short comment
-			if(strlen($Comment)<6){
-				$Error[]='متن توضیحات بسیار کوتاه است.';
-			}
-			//--------REASSIGN
-			
-			//-------CANCELASSIGN
-			else if(isset($_POST['Cancel']))
-			{
-				$CancelassignResult=ORM::Query(new ReviewProgressCancelassign())->AddToFile($File,$Comment);
-				if(is_string($CancelassignResult))
-				{
-					$Error[]=$CancelassignResult;
-				}
-				else
-				{
-					$this->Result='لغو تخصیص';
-				}
-			}
-			
-		}
-		else if(isset($_POST['CancelAssign']))
+		
+		if(isset($_POST['CancelAssign']))
 		{
 			$res=$this->CancelList->GetRequest();
 			foreach ($res as $Data)
@@ -46,6 +18,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		else if(isset($_POST['Reassign']))
 		{
 			$res=$this->ReassignList->GetRequest();
+			ORM::Dump($res);
 			foreach ($res as $Data)
 			{
 				$this->Reassign($Data, $ReassignError);
@@ -156,10 +129,10 @@ class ManagerBazbinsSinglereassignController extends JControl
 		{
 			if(!$File->LLP() instanceof ReviewProgressAssign)
 			{
-				$Error[]="تخصیص داده نشده است. ".$str;
+				$Error[]="امکان لغو تخصیص نیست. ".$str;
 				return;
 			}
-			$CancelResult=ORM::Query(new ReviewProgressRemove())->AddToFile($File,$Comment);
+			$CancelResult=ORM::Query("ReviewProgressRemove")->AddToFile($File,$Comment);
 			if(is_string($CancelResult))
 			{
 				$Error[]=$CancelResult."<br/>".$str;
@@ -179,7 +152,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$Cotag=$Data['Cotag']*1;
 		$RID=$Data['ID'];
 		$Comment=$Data['Comment'];
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
 		$Reviewer=ORM::Find("MyUser",$RID);
 		$this->Comment=$Comment;
 			
@@ -192,7 +165,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		//--------REASSIGN
 		else
 		{
-			$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($File,$Reviewer,$Comment);
+			$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($File,$Reviewer,$Comment);
 			if(is_string($AssignResult))
 			{
 				$Error[]=$AssignResult."<br/>".$str;

@@ -16,14 +16,14 @@ class ReviewProgressStart extends ReviewProgress
 	{
 		return $this->IsPrint;
 	}
-	function __construct(ReviewFile $File=null,MyUser $User=null,$IsPrint=false)
+	function __construct(ReviewFile $File=null,$IsPrint=false, $IfPersist=true)
 	{
 		if($IsPrint!=null)
 			$this->IsPrint=$IsPrint;
 		else 
 			$this->IsPrint=false;
 		
-		parent::__construct($File,$User);
+		parent::__construct($File, null, $IfPersist);
 
 	}
 	function  Summary()
@@ -61,14 +61,17 @@ class ReviewProgressStartRepository extends EntityRepository
 		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 		if($File==null)
 		{
-			$thisUser=MyUser::CurrentUser();
 			$File=new ReviewFile($Cotag);
 			ORM::Persist($File);
-			$start=new ReviewProgressStart($File,$thisUser,$IsPrint);
-			$ch=$start->Apply();
+			$start=new ReviewProgressStart($File,$IsPrint, false);
+			$ch=$start->Check();
 			if(is_string($ch))
 				return $ch;
-			ORM::Persist($start);   
+			
+			$start= new ReviewProgressStart($File, $IsPrint, true);
+			$start->Apply();
+			ORM::Persist($start);
+			   
 			return $start;
 		}
 		else
@@ -114,7 +117,6 @@ class ReviewProgressStartRepository extends EntityRepository
 					$A=$File->Alarm();
 					if(count($A))
 					{
-						echo "raft to count";
 						foreach ($A as $a)
 							ORM::Delete($a);
 					}

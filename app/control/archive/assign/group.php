@@ -9,13 +9,11 @@ class ArchiveAssignGroupController extends JControl
 		{
 			foreach($_POST['item'] as $key=>$value)
 			{
-				
 				$t=ORM::Find('ReviewFile',"Cotag", $value);
 				if($t)
 					$myfiles[]=$t[0];
 				else 
 					$Error[]=" اظهارنامه با کوتاژ".$value."یافت نشد !";
-				
 			}
 			$this->Files=$myfiles;
 			if (!$this->Files or count($this->Files)==0)
@@ -28,7 +26,7 @@ class ArchiveAssignGroupController extends JControl
 				$this->ReviewerName= $Reviewer ? $Reviewer->getFullName() : "";
 				foreach ($this->Files as $F)
 				{
-						$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($F,$Reviewer);
+						$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($F,$Reviewer);
 						if(is_string($AssignResult))
 						{
 							$Error[]=$AssignResult;
@@ -38,16 +36,12 @@ class ArchiveAssignGroupController extends JControl
 							$this->Reviewer=$AssignResult->Reviewer();
 							$this->AssignDate=$AssignResult->CreateTimestamp();
 							$ala[]=array('ID'=>$F->ID(),
-										 'Cotag'=>$F->Cotag(),
-// 										 'Reviewer'=>$Reviewer->getFullName(),
-// 										 'CreateTime'=>$F->CreateTime()
+										 'Cotag'=>$F->Cotag()
 											);
 						}
 				}
 				ORM::Flush();
 				$al2=new AutolistPlugin($ala,array('Cotag'=>'کوتاژ'),null,true,"ردیف");
-					//$al2->SetHeader('Reviewer', 'کارشناس تعیین شده',true);
-					//$al2->SetHeader('CreateTime', 'زمان وصول',true);
 					$al2->SetFilter(array($this,'myfilter2'));
 					$al2->InputValues['ColsCount']=4;
 					$al2->InputValues['RowsCount']="auto";
@@ -81,13 +75,6 @@ class ArchiveAssignGroupController extends JControl
 			$c=new CalendarPlugin();
 			return "<span dir='ltr'>".$v."</span>";
 		}
-//		elseif($k=='Reviewer')
-//		{
-//			if ($o->LastReviewer())
-//				return $o->LastReviewer()->getFullName();
-//			else
-//				return "<span style='color:red;'> خطا تخصیص نیافت</span>";
-//		}
 		else
 		{
 			return $v;

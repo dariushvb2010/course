@@ -4,14 +4,13 @@ class ArchiveAssignSingleController extends JControl
 	function Start()
 	{
 		j::Enforce("Archive");
-		
 		if (count($_POST))
 		{
 			if (isset($_POST['Cotag']))
 			{
 				$Cotag=$_POST['Cotag'];
-				$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-				$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($File);
+				$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+				$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($File);
 				if(is_string($AssignResult))
 				{
 					$Error[]=$AssignResult;

@@ -120,7 +120,6 @@ class ViewAlarmPlugin extends JPlugin
 	{
 		echo "<div class='alarm-groupshow'>";
 		$n=count($As);
-		//ORM::Dump($As);
 		echo "<div class='alarmtoggle'>".$Label." ( ".$n.")</div>";
 		echo "<table width='100%' class='alarm' ";
 		echo "<tr><td>";

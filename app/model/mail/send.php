@@ -47,6 +47,14 @@ class MailSend extends Mail
 			return $this->ProgressSend;
 		
 	}
+	function Source()
+	{
+		return $this->SenderGroup()->Title();
+	}
+	function Dest()
+	{
+		return $this->ReceiverTopic()->Type();
+	}
 	function PersianSource()
 	{
 		return $this->SenderGroup->PersianTitle();
@@ -54,6 +62,10 @@ class MailSend extends Mail
 	function PersianDest()
 	{
 		return $this->ReceiverTopic->Topic();
+	}
+	function GetProgress()
+	{
+		return ORM::Query($this)->GetProgress($this);
 	}
 	function __construct($Num=null, $Subject=null, $SenderGroup=null, $ReceiverTopic=null, $Description=null)
 	{
@@ -173,5 +185,10 @@ class MailSendRepository extends EntityRepository
 		return $r[0];
 		else
 		return null;
+	}
+	function GetProgress($Mail)
+	{
+		$r=j::ODQL("SELECT P FROM ReviewProgressSend P JOIN P.MaiSend M JOIN P.File F WHERE M=? ORDER BY F.Cotag", $Mail);
+		return $r;
 	}
 }

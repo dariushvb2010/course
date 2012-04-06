@@ -20,9 +20,9 @@ class ReviewProgressAssign extends ReviewProgress
 		return $this->Reviewer;
 	}
 	
-	function __construct(ReviewFile $File=null,MyUser $User=null,MyUser $Reviewer=null, $IfPersist=true)
+	function __construct(ReviewFile $File=null,MyUser $Reviewer=null, $IfPersist=true)
 	{
-		parent::__construct($File,$User, $IfPersist);
+		parent::__construct($File,null, $IfPersist);
 		
 		$this->Reviewer=$Reviewer;
 	}
@@ -56,8 +56,6 @@ class ReviewProgressAssignRepository extends EntityRepository
 	 */
 	public function AddToFile(ReviewFile $File=null,MyUser $Reviewer=null,$Comment=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
-
 		if($Reviewer==null)
 		{
 			$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
@@ -74,11 +72,11 @@ class ReviewProgressAssignRepository extends EntityRepository
 		}
 		else
 		{
-			$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,false);
+			$R=new ReviewProgressAssign($File, $Reviewer,false);
 			if($Comment==null)
 				$Comment="";
 			$R->setComment($Comment);
-			$ch=$R->Apply();
+			$ch=$R->Check();
 			if(is_string($ch))
 			{
 				if(j::check("Reassign"))
@@ -87,7 +85,8 @@ class ReviewProgressAssignRepository extends EntityRepository
 					if( $LLP instanceof ReviewProgressAssign)
 					{
 						$LLP->kill();
-						$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,true);
+						$R=new ReviewProgressAssign($File, $Reviewer,true);
+						$R->Apply();
 						ORM::Persist($R);
 						return $R;
 					}
@@ -96,7 +95,8 @@ class ReviewProgressAssignRepository extends EntityRepository
 			}
 			else
 			{
-				$R=new ReviewProgressAssign($File,$CurrentUser,$Reviewer,true);
+				$R=new ReviewProgressAssign($File,$Reviewer,true);
+				$R->Apply();
 				ORM::Persist($R);
 				return $R;
 			}

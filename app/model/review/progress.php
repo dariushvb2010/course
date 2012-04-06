@@ -146,12 +146,10 @@ abstract class ReviewProgress
 		$this->EditTimestamp=0;
 		if($File)
 			$IfPersist ? $this->AssignFile($File) : $this->SetFile($File);
-		if ($User) 
-		{
-			if($IfPersist)
-			ORM::Persist($User);
+		if(!$User)
+			$User=MyUser::CurrentUser();
+		if($User)
 			$IfPersist ? $this->AssignUser($User) : $this->SetUser($User);
-		}
 		$this->Comment="";
 		$this->MailNum="";
 		$this->PrevState=0;

@@ -214,7 +214,6 @@ abstract class Mail
 	*/
 	private $State;
 	function State(){return $this->State;}
-	function SetState($State){ $this->State=$State; }
 	//please dont Declare SetState function, we have alternative safe functions for that 
 	/**
 	 * Timestamp of closing the mail
@@ -261,8 +260,11 @@ abstract class Mail
 			$Stock->SetMail($this);
 		}
 	}
+	abstract function Source();
+	abstract function Dest();
 	abstract function PersianSource();
 	abstract function PersianDest();
+	abstract function GetProgress();
 	function Box()
 	{
 		if($this->State()==self::STATE_EDITING)
@@ -292,7 +294,6 @@ abstract class Mail
 			$File->Stock()->SetEditTimestamp(time());
 			$this->AddStock($File->Stock());
 		}
-		//ORM::Flush();
 	}
 	protected function RemoveOldStocks($time)
 	{
@@ -307,6 +308,7 @@ abstract class Mail
 	}
 	function Save($Files, $RemoveCalled, &$Error)
 	{
+		ORM::Dump($Files);
 		if($this->State()==self::STATE_EDITING)
 		{
 			$this->RetouchTimestamp=time();
@@ -324,13 +326,18 @@ abstract class Mail
 			if(!($File instanceof ReviewFile))
 			{
 				$Error[]=strval($File);
-				continue;
+			}
+			elseif($File->Stock())
+			{
+				if($File->Stock()->Mail()->ID()!=$this->ID())
+				{
+					$Error[]="شماره کوتاژ  ".$File->Cotag()." در نامه ی دیگری قرار دارد که هنوز بسته نشده است.";
+					continue;
+				}
 			}
 			if(!$File->Stock() or !$File->Stock()->Act())
 			{
 				$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
-			
-			
 				if(is_string($P))
 				{
 					$E=$P;
@@ -340,6 +347,7 @@ abstract class Mail
 					$E=null;
 				$this->UpdateStock($File, $E);
 			}
+			
 		}
 		if($RemoveCalled)
 		foreach($this->Stock as $s)
@@ -360,7 +368,7 @@ abstract class Mail
 			$T=$this->Type();
 			foreach ($Files as $File)
 			{
-				if(!($File instanceof ReviewFile))
+				if(!($File instanceof ReviewFile) or !$File->Stock())// $File->Stock() maybe is null because the  function 'Save' deletes some stocks
 				continue;
 				if(!$File->Stock()->Act())
 				{
@@ -378,20 +386,11 @@ abstract class Mail
 						
 						$File->Stock()->SetAct(true);
 						$this->UpdateStock($File, "انجام شد");
-	// 					$s=$File->Stock();
-	// 					$File->SetStock(null);
-	// 					$this->Stock->removeElement($s);
-	// 					$s->SetMail(null);
-	// 					ORM::Delete($s);
 					}
 				}
 			}
 			if($faulty)
 				$this->StateEditingFaulty();
-// 			elseif($this instanceof MailGive)
-// 				$this->StateInway();
-// 			else
-// 				$this->StateClosed();
 			return true;
 		}
 		else

@@ -190,9 +190,12 @@ class ReviewProgressReviewRepository extends EntityRepository
 					$R=new ReviewProgressReview($File,$Reviewer,"","");
 					$R->SetResult(1);
 					$R->SetProvision("");
-					$ch=$R->Apply();
+					$ch=$R->Check();
 					if(is_string($ch))
 						return $ch;
+					
+					$R=new ReviewProgressReview($File,$Reviewer,"","");
+					$R->Apply();
 					ORM::Persist($R);
 					return true;	
 				}					

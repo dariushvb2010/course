@@ -3,10 +3,15 @@ class ViewTransferPlugin extends JPlugin
 {
 static function Present(BaseViewClass $View, $Title="ارسال اظهارنامه ها")
 {
-	if(!$View->Handler)
+	$H=$View->Handler;
+	if(!$H)
 	{
 		echo "شما اجازه دسترسی به این قسمت را ندارید.";
 		return;
+	}
+	if($H->Mail and $H instanceof HandleTransferSingle)
+	{
+		$HomeLink=ViewMailPlugin::HomeLink($H->Action(), $H->Source(), $H->Dest());
 	}
 	?>
 	
@@ -15,42 +20,45 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	div#body>div.mainform{border:4px double black; margin: 5px 12px; padding:5px;}
 	<?php
 	
-	if($View->Handler->CreateForm)
-			$View->Handler->CreateForm->PresentCSS();
-	if($View->Handler->SearchForm)
-		$View->Handler->SearchForm->PresentCSS();
-	if($View->Handler->MainForm);
-	//$View->Handler->MainForm->PresentCSS();
+	if($H->CreateForm)
+			$H->CreateForm->PresentCSS();
+	if($H->SearchForm)
+		$H->SearchForm->PresentCSS();
+	if($H->MainForm);
+	//$H->MainForm->PresentCSS();
 	
 	?>
 	</style>
 	<?php ViewMailPlugin::EchoCSS();?>
 	<h1>
-	<?php echo $Title;?>
+		<?php echo $Title;
+			if($HomeLink): ?>
+				<a href="<?php echo $HomeLink; ?>"> <img style="height: 30px; float:left; margin:7px 7px 0 12px; margin-left" src="/img/mail/back.png" title="برگشت به صفحه اصلی نامه ها"/></a>
+			<?php endif;?>
 	</h1>
 	<?php
-	ViewResultPlugin::Show($View->Handler->Result, $View->Handler->Error);
+	ViewResultPlugin::Show($H->Result, $H->Error);
 	ViewResultPlugin::Show($View->Result, $View->Error);
 	
-	if($View->Handler->CreateForm)
-		$View->Handler->CreateForm->PresentHTML();
+	if($H->CreateForm)
+		$H->CreateForm->PresentHTML();
 	?>
 	<!-- --------------------------main form of the mail -->
-	<?php if($View->Handler->MainForm):?>
+	<?php if($H->MainForm):?>
 			<div class="mainform" ><?php 
-			ViewMailPlugin::SingleShow($View->Handler->Mail, "float:left;",$View->Handler->Action);
-			$View->Handler->MainForm->PresentHTML();
+			ViewMailPlugin::SingleShow($H->Mail, "float:left;",$H->Action());
+			$H->MainForm->PresentHTML();
 			?>
 			</div>
 	<?php endif; 
-		if($View->Handler->SearchForm)
-			$View->Handler->SearchForm->PresentHTML();
-		if($View->Handler->EditForm)
+		if($H->SearchForm)
+			$H->SearchForm->PresentHTML();
+		if($H->EditForm)
 		{
 			echo "<div style='font-size:large; text-decoration:underline; font-weight:bold; clear:both;'>ویرایش مشخصات نامه </div>";
-			$View->Handler->EditForm->PresentHTML();
+			$H->EditForm->PresentHTML();
 		}
-	 	$View->Handler->ShowMails();
+	 	$H->ShowMails();
 	 	?>
 	 	
 	 	
@@ -58,9 +66,9 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	 	
 	<script>
 	<?php 
-	if($View->Handler->MainForm)
-		$View->Handler->MainForm->PresentScript();
-	if($View->Handler->Action=="Get"):
+	if($H->MainForm)
+		$H->MainForm->PresentScript();
+	if($H->Action()=="Get"):
 	?>
 	function Select(Cotag)
 	{

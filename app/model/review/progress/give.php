@@ -37,13 +37,11 @@ class ReviewProgressGive extends ReviewProgress
 		return $this->File()->Stock()->Error();
 	}
 	
-	function __construct(ReviewFile $File=null, MailGive $MailGive=null, $IfPersist=true, MyUser $User=null)
+	function __construct(ReviewFile $File=null, MailGive $MailGive=null, $IfPersist=true)
 	{
-		if(!$User)
-			$User=MyUser::CurrentUser();
-		parent::__construct($File, $User, $IfPersist);
+		parent::__construct($File, null, $IfPersist);
 		if($MailGive) 
-		$IfPersist ? $this->AssignMailGive($MailGive) : $this->SetMailGive($MailGive);
+			$IfPersist ? $this->AssignMailGive($MailGive) : $this->SetMailGive($MailGive);
 	}
 	function  Summary()
 	{
@@ -85,19 +83,21 @@ class ReviewProgressGiveRepository extends EntityRepository
 	 * @param MailGive $MailGive
 	 * @return string|Ambigous <string, number>
 	 */
-	public function AddToFile($File=null, MailGive $MailGive=null, $IfPersist=true, MyUser$User=null)
+	public function AddToFile($File=null, MailGive $MailGive=null, $IfPersist=true)
 	{
 		$File=ReviewFile::GetRecentFile($File);
 		if(!($File instanceof ReviewFile))
 		{
 			return "اظهارنامه یافت نشد.";
 		}
-		$P=new ReviewProgressGive($File,$MailGive,$IfPersist, $User);
-		$ch=$IfPersist ? $P->Apply() : $P->Check();
+		$P=new ReviewProgressGive($File,$MailGive,false);
+		$ch=$P->Check();
 		if(is_string($ch))
-		return $ch;
+			return $ch;
 		if($IfPersist) 
 		{
+			$P=new ReviewProgressGive($File,$MailGive,true);
+			$P->Apply();
 			ORM::Persist($P);
 		}
 		return $P;

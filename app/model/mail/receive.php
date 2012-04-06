@@ -50,6 +50,14 @@ class MailReceive extends Mail
 	protected $ProgressReceive;
 	function ProgressReceive(){ return $this->ProgressReceive; }
 	
+	function Source()
+	{
+		return $this->SenderTopic()->Type();
+	}
+	function Dest()
+	{
+		return $this->ReceiverGroup()->Title();
+	}
 	function PersianSource()
 	{
 		return $this->SenderTopic->Topic();
@@ -62,6 +70,10 @@ class MailReceive extends Mail
 	{
 		if($this->State()==self::STATE_CLOSED)
 			return $this->ProgressReceive;
+	}
+	function GetProgress()
+	{
+		return ORM::Query($this)->GetProgress($this);
 	}
 	function __construct($Num=null, $Subject=null, $SenderTopic=null, $ReceiverGroup=null, $Description=null)
 	{
@@ -178,5 +190,10 @@ class MailReceiveRepository extends EntityRepository
 		return $r[0];
 		else
 		return null;
+	}
+	function GetProgress($Mail)
+	{
+		$r=j::ODQL("SELECT P FROM ReviewProgressReceive P JOIN P.MaiReceive M JOIN P.File F WHERE M=? ORDER BY F.Cotag", $Mail);
+		return $r;
 	}
 }

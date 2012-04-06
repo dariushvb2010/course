@@ -20,11 +20,9 @@ class ArchiveTransferFromcotagController extends JControl
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Get","CotagBook","Archive", $Mail);
-			
-			
 			$Files=$_POST['Cotag'];
 			$Files=ReviewFile::RegulateWithError($Files);
-			$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
+			$Reviewer=ORM::Query("MyUser")->getRandomReviewer();
 			if(!($Reviewer instanceof MyUser))
 			{
 				$Error[]="هیچ کارشناس بازبینی یافت نشد.";
@@ -56,7 +54,6 @@ class ArchiveTransferFromcotagController extends JControl
 					$this->Result=false;
 					$this->Error[]="هیچ اظهارنامه ای تخصیص داده نشد.";
 				}
-				
 			}
 		}
 		//-----------------SINGLE------------

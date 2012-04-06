@@ -45,7 +45,7 @@ class RakedTransferTooutController extends JControl
 			return true;
 		if($Mail instanceof MailSend)
 		{
-			if($Mail->SenderGroup()->Title()=="Archive")
+			if($Mail->SenderGroup()->Title()=="Raked")
 				return true;
 			else
 				return false;

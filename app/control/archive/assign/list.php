@@ -22,7 +22,7 @@ class ArchiveAssignListController extends JControl
 			{
 				foreach ($this->Files as $F)
 				{
-						$AssignResult=ORM::Query(new ReviewProgressAssign())->AddToFile($F);
+						$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($F);
 						if(is_string($AssignResult))
 						{
 							$Error[]=$AssignResult;
@@ -47,7 +47,7 @@ class ArchiveAssignListController extends JControl
 		else //listing items
 		{
 
-			$UnassignedFiles=ORM::Query(new ReviewFile)->UnassignedFiles($_POST['off'],$_POST['lim']);
+			$UnassignedFiles=ORM::Query("ReviewFile")->UnassignedFiles($_POST['off'],$_POST['lim']);
 			if(count($UnassignedFiles))
 			{
 				foreach($UnassignedFiles as $key=>$value)

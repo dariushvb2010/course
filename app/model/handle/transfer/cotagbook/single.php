@@ -49,7 +49,6 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 		//-------------------------------------ACT: [Gvie], [Get], [Send], [Receive]-------------------------
 		elseif(isset($_POST[$this->Action]))
 		{
-			ORM::Dump($Files);
 				$res=$Mail->Complete($Files, false, $this->Error);
 			if($res)
 			{

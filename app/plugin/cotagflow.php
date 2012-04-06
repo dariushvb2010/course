@@ -145,7 +145,7 @@ class CotagflowPlugin
 		<span  id="CGFDelete" dir='ltr' style="float:right;"><img onclick='CGF.hide();' src='<?php echo SiteRoot;?>/img/delete-blue-20.png' /></span>
 			<div class="input" style="text-align:center;">
 				<span style="width:20px; display:inline-block; margin:0; padding:0"><img class="CGFAnimator" src="<?php echo SiteRoot;?>/img/loading.gif" title="درحال کار کردن..." /></span>
-				<input type="text" class="CGFField" maxlength="<?php echo CotagLength;?>" />
+				<input type="text" class="CGFField" />
 				<input type="submit"   class="GetReport" id="CGFSendButton" style="width:100px;" value="گزارش گیری"/>
 			</div>
 		</form>

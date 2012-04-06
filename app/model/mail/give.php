@@ -73,6 +73,14 @@ class MailGive extends Mail
 		$jc=new CalendarPlugin();
 		return $jc->JalaliFullTime($this->GetTimestamp());
 	}
+	function Source()
+	{
+		return $this->GiverGroup()->Title();
+	}
+	function Dest()
+	{
+		return $this->GetterGroup()->Title();
+	}
 	function PersianSource()
 	{
 		return $this->GiverGroup->PersianTitle();

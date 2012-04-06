@@ -39,13 +39,19 @@ class ReportNotrecievedController extends JControl
 						}
 					}
 					if($flag)
-					$UnRecievedFile[$i]=array('Cotag'=>$i);
+					$UnRecievedFile[]=array('Cotag'=>$i);
 				}
 			}
 			$tableparamlist=array(
 					'Cotag'=>'کوتاژ'
 				);
-			$this->al=new AutolistPlugin($UnRecievedFile,$tableparamlist,'UnRecievedTable');
+			$al=new AutolistPlugin($UnRecievedFile,$tableparamlist,'UnRecievedTable');
+			$al->SetHeader("Cotag", "کوتاژ");
+			$al->HasTier=true;
+			$al->TierLabel="ردیف";
+			$al->InputValues['ColsCount']=5;
+			$al->InputValues['RowsCount']=30;
+			$this->al=$al;
 			$this->Count=count($UnRecievedFile);
 			$this->Error=$Error;
 			if (count($Error))

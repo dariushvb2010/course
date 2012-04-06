@@ -65,8 +65,8 @@ form h3 {
  <div align='center'>
  <?php 
  	
- 		$this->al->Width="30%";
-		$this->al->Present();
+ 		$this->al->Width="auto";
+		$this->al->PresentForPrint();
 		
 ?>
 <a href=./notrecieved>لیست کوتاژ های وصول نشده یک بازه جدید</a>

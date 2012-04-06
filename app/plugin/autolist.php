@@ -495,21 +495,24 @@ class AutolistPlugin extends JPlugin
 	{
 		foreach ($this->HeaderArray as $k=>$h)
 		{
-			if ($this->ObjectAccess)
+			if($IfEchoValue)
 			{
-				if (isset($D->{$k}))
-				$Value=($D->{$k});
-				elseif (method_exists($D,$k))
-				$Value=$D->{$k}();
+				if ($this->ObjectAccess)
+				{
+					if (isset($D->{$k}))
+					$Value=($D->{$k});
+					elseif (method_exists($D,$k))
+					$Value=$D->{$k}();
+					else
+					$Value="";
+						
+				}
 				else
-				$Value="";
-					
+				$Value=($D[$k]);
+				$Value=$this->Filter($k, $Value,$D);
+				if (!$this->MetaData[$k]['CData'])
+				$Value=htmlspecialchars($Value);
 			}
-			else
-			$Value=($D[$k]);
-			$Value=$this->Filter($k, $Value,$D);
-			if (!$this->MetaData[$k]['CData'])
-			$Value=htmlspecialchars($Value);
 			$this->EchoRecordTD($k, $Value, $IfEchoValue);
 		}
 		$this->EditManager->EchoHiddenTD($D);

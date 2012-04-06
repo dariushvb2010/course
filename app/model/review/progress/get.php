@@ -40,7 +40,6 @@ class ReviewProgressGet extends ReviewProgress
 		if(!$Mail)
 			return "نامه یافت نشد.";
 		$href=ViewMailPlugin::GetHref($Mail, "Get");
-		echo $href;
 		$r="اظهارنامه توسط ".$Mail->GetterGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$Mail->Num()."</a> از <b>".$Mail->GiverGroup()->PersianTitle()."</b> تحویل گرفته شد.";
 		return $r;
 	}
@@ -74,12 +73,13 @@ class ReviewProgressGetRepository extends EntityRepository
 	public function AddToFile(ReviewProgressGive $ProgressGive=null, $IfPersist=true)
 	{
 		$P=new ReviewProgressGet($ProgressGive, false);
-		$ch=$IfPersist ? $P->Apply() : $P->Check();
+		$ch= $P->Check();
 		if(is_string($ch))
 			return $ch;
 		if($IfPersist)
 		{
 			$R=new ReviewProgressGet($ProgressGive, true);
+			$R->Apply();
 			ORM::Persist($R);
 			return $R;
 		}
