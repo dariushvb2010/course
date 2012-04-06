@@ -31,22 +31,6 @@ form#cotag input[type='text'] {
 تعداد کل :
 <strong><?php echo $this->Count;?></strong> 
  </p>
- <form id='cotag' method='post'>
-<?php if (isset($this->Result))
-	ViewResultPlugin::Show($this->Result,$this->Error);
-?>
-	<a href='/help/#archive_new'>
-	<img src='/img/web/icon/help32.png' style='border:0px solid gray; float:left;' />
-	</a>
-<div>
-	<label>شماره کوتاژ</label>
-	<input type='text' name='Cotag' />
-
-</div>
-
-<input type='submit' value='نمایش' />
-<br/>
-</form>
  <form method='get'>
 نمایش از
 <input type='text' name='Offset' size='5' value='<?php 
