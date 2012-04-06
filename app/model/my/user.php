@@ -376,9 +376,9 @@ class MyUserRepository extends EntityRepository
 	}*/
 	public function AssignedReviewableFile($Reviewer)
 	{
-		$state=FileFsm::Name2State('reviewing');
+		$states=FileFsm::Name2State('reviewing');
 		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F 
-					WHERE P.Reviewer=? AND P.Dead=0 AND F.State=?",$Reviewer,$state);
+					WHERE P.Reviewer=? AND P.Dead=0 AND F.State={$states[0]}",$Reviewer);
 		
 		foreach($r as $item){
 			$files[]=$item->File();
