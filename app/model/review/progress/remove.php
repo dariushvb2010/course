@@ -58,7 +58,6 @@ class ReviewProgressRemoveRepository extends EntityRepository
 	 */
 	public function AddToFile(ReviewFile $File,$Comment)
 	{
-
 		if (!$File)
 		{
 			$Error="کوتاژ ناصحیح است.";

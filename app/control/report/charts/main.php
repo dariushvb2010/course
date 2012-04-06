@@ -19,7 +19,7 @@ class ReportChartsMainController extends JControl
 			//////////////////////////////////////////////////////
 			case 'daftar_cotag':
 				$days=30;
-				$r=ORM::Query(new ReviewProgressStart)->DailyStart($days);
+				$r=ORM::Query("ReviewProgressStart")->DailyStart($days);
 				$this->firstday=(time()-24*60*60*$days)*1000;
 				foreach ($r as $key =>$value){
 					$daily1[]=$value['count'];
@@ -28,7 +28,7 @@ class ReportChartsMainController extends JControl
 				break;
 			/////////////////////////////////////////////////////	
 			case 'percentage':
-				$r=ORM::Query(new ReviewProgressReview)->ReviewPercentage();
+				$r=ORM::Query("ReviewProgressReview")->ReviewPercentage();
 				$percentarray=array(
 					'خطا' => $r['oked'] ,
 					'کسر دریافتی'=> $r['a528'],
@@ -41,7 +41,7 @@ class ReportChartsMainController extends JControl
 				break;
 			/////////////////////////////////////////////////////	
 			case 'karshenas_work_volume':
-				$r=ORM::Query(new ReviewProgressReview)->karshenas_work_lastmounth();
+				$r=ORM::Query("ReviewProgressReview")->karshenas_work_lastmounth();
 				$names=array();
 				$values=array();
 				foreach ($r as $value){
@@ -54,7 +54,7 @@ class ReportChartsMainController extends JControl
 				break;
 			/////////////////////////////////////////////////////	
 			case 'bazbini_speed':
-				$r=ORM::Query(new ReviewProgressReview)->BazbiniPerMonth();
+				$r=ORM::Query("ReviewProgressReview")->BazbiniPerMonth();
 				/*$r=array(
 					array('monthname'=>'aaa','month'=>'3','year'=>'1390','count'=>555),
 					array('monthname'=>'aaa','month'=>'4','year'=>'1390','count'=>555),
