@@ -58,7 +58,7 @@ if (is_array($this->Data)){?>
 	<div id="progresses">
 	<?php $i=0; foreach ($this->Data as $D){ $i++;
 		?>
-		<div class="progress"><span style='color:blue;'>
+		<div class="progress"><span style='color:<?php echo ($D->Dead()?'orange':'blue'); ?>;'>
 			<?php echo $i;?>- <?php echo $D->Title()." ( ".$D->PrevState()." ) ";?>:</span>
 			<span class="summaryinfo"><?php echo $D->Summary();?><br></span>
 			<span class="footinfo"> توسط <?php echo $D->User()->getFullName();?> در تاریخ: <span dir=ltr><?php echo $jc->JalaliFullTime($D->CreateTimestamp(),"/");?></span></span>

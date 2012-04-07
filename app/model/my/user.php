@@ -364,21 +364,13 @@ class MyUserRepository extends EntityRepository
 		}
 		return $c[0][1];
 	}
-	/*public function AssignedReviewableFile($Reviewer)
-	{
-		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F WHERE P.Reviewer=? AND
-			P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
-			",$Reviewer);
-		foreach($r as $item){
-			$files[]=$item->File();
-		}
-		return $files;
-	}*/
+	
 	public function AssignedReviewableFile($Reviewer)
 	{
 		$states=FileFsm::Name2State('reviewing');
+		$stateString=implode(',', $states);
 		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F 
-					WHERE P.Reviewer=? AND P.Dead=0 AND F.State={$states[0]}",$Reviewer);
+					WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString})",$Reviewer);
 		
 		foreach($r as $item){
 			$files[]=$item->File();

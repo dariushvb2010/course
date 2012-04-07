@@ -341,6 +341,7 @@ class ReviewFileRepository extends EntityRepository
 	 * 
 	 * برای این که در فایل جدید مطمئن شویم ک این  کوتاژ قبلا در سال جاری وصول نشده 
 	 * @param unknown_type $Cotag
+	 * @return ReviewFile
 	 */
 	public function GetRecentFile($Cotag)
 	{

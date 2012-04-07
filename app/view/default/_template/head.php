@@ -292,6 +292,12 @@ $(function() {
 				لغو وصول 
 			</a>
 		</li>
+		<li>
+			<a href='/cotag/untiebtal'>
+				<span class='ui-icon-close ui-icon'></span>
+				وصول مجدد ابطالی 
+			</a>
+		</li>
 	</ul>
 	
 	
@@ -588,6 +594,12 @@ $(function() {
 			<a href='/manager/cancel'>
 				<span class='ui-icon-close ui-icon'></span> 
 				لغو وصول اظهارنامه
+			</a>
+		</li>
+		<li>
+			<a href='/manager/ebtal'>
+				<span class='ui-icon-close ui-icon'></span> 
+				ابطال اظهارنامه
 			</a>
 		</li>
 		<li>

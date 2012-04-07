@@ -16,7 +16,7 @@ class FileFsm extends JModel
 	 * @var array
 	 */
 	
-	Public static $StateGraph=array(
+	private static $StateGraph=array(
 	//-----------------------Review---------------------
 	1=>array('Start'=>2),
 	2=>array('Give_cotagbook_to_archive'=>3),
@@ -32,6 +32,7 @@ class FileFsm extends JModel
 	14=>array('Send_raked_to_out'=>15, 'Give_raked_to_archive'=>16),
 	15=>array('Receive_raked_from_out'=>14),
 	16=>array('Get_arhive_from_raked'=>4),
+	'Ebtalable'=>array('Ebtal'=>1),
 	//--------------------------Correspondence-----------
 	9=>array('ProcessRegister'=>18),
 	18=>array('Senddemand_demand'=>40),
@@ -66,9 +67,9 @@ class FileFsm extends JModel
 	
 	Public static $ProcessList=array(
 	'Start'=>'*********',
-	'Give_cotagbook_to_archive'=>'*********',
-	'Get_archive_from_cotagbook'=>'*********',
-	'Assign'=>'*********',
+	'Give_cotagbook_to_archive'=>'وصول دفتر کوتاژ',
+	'Get_archive_from_cotagbook'=>'دریافت از دفتر کوتاژ',
+	'Assign'=>'تخصیص به کارشناس',
 	'Confirm_ok'=>'*********',
 	'Confirm_nok'=>'*********',
 	'Review_nok'=>'*********',
@@ -85,6 +86,7 @@ class FileFsm extends JModel
 	'Give_raked_to_archive'=>'*********',
 	'Receive_raked_from_out'=>'*********',
 	'Get_arhive_from_raked'=>'*********',
+	'Ebtal'=>'ابطال',
 	'Senddemand_demand'=>'ارسال مطالبه نامه',
 	'Senddemand_setad'=>'ارسال رای دفاتر ستادی به صاحب کالا',
 	'Senddemand_karshenas'=>'ارسال نظر کارشناس',
@@ -135,6 +137,7 @@ class FileFsm extends JModel
 		'Prophecy_second'=>47,
 		'Prophecy_setad'=>58,
 		'Prophecy_commission'=>63,
+		'Ebtalable'=>array(2,3,4,5,9,11),
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
 		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies'),
 	);
@@ -147,7 +150,7 @@ class FileFsm extends JModel
 	 * @return array of integer
 	 * @author Morteza Kavakebi
 	 */
-	public function Name2State($name){
+	static function Name2State($name){
 		if (!array_key_exists($name,FileFsm::$Name2State))
 			return null;
 		$Temp=FileFsm::$Name2State[$name];
@@ -173,19 +176,19 @@ class FileFsm extends JModel
 	 * @param integer $state
 	 */
 	static function PossibleProgresses($state){
-		if (!array_key_exists($state,FileFsm::$StateGraph))
-			return null;
-		$ar=FileFsm::$StateGraph[$state];
-		foreach ($ar as $key=> $value)
-			$ar2[$key]=FileFsm::$ProcessList[$key];
+		$Graph=FileFsm::$StateGraph;
+		$ar2=array();
+		foreach($Graph as $s=>$ar){
+			$StateArray=FileFsm::Name2State($s);
+			if( (is_int($s) AND $s===$state) OR (is_string($s) AND in_array($state, $StateArray)) )
+			{
+				foreach ($ar as $key=> $value)
+					$ar2[$key]=FileFsm::$ProcessList[$key];
+			}
+		}
 		
 		return $ar2;
-	} 
-	static function PossibleProgresses2($state){
-		if (!array_key_exists($state,FileFsm::$StateGraph))
-			return null;
-		return FileFsm::$ProcessList;
-	} 
+	}
 	
 	/**
 	*
@@ -196,7 +199,7 @@ class FileFsm extends JModel
 	* @return boolean
 	*/
 	static function IsPossible($currentstate,$progressname){
-		$ar=FileFsm::$StateGraph[$currentstate];
+		$ar=FileFsm::PossibleProgresses($currentstate*1);
 		return array_key_exists($progressname,$ar);
 	}
 	
@@ -209,11 +212,19 @@ class FileFsm extends JModel
 	 * @return integer
 	 */
 	static function NextState($currentstate,$progressname){
-		$currentstate=$currentstate*1;
-		$ar=FileFsm::$StateGraph[$currentstate];
-		if(array_key_exists($progressname,$ar)){
-			return $ar[$progressname];
+		$state=$currentstate*1;
+		$Graph=FileFsm::$StateGraph;
+		$ar2=array();
+		foreach($Graph as $s=>$ar){
+			$StateArray=FileFsm::Name2State($s);
+			if( (is_int($s) AND $s===$state) OR (is_string($s) AND in_array($state, $StateArray)) )
+			{
+				if(array_key_exists($progressname,$ar)){
+					return $ar[$progressname];
+				}
+			}
 		}
+		return null;
 	}
 	static function IsReviewerDisturbState($state)
 	{

@@ -89,47 +89,56 @@ class ReviewProgressStartRepository extends EntityRepository
 			return $Error;
 		}
 		$Cotag=$Cotag*1;
-		if ($Cotag<1)
+		
+		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		if ($File==null)
 		{
-			$Error="کوتاژ ناصحیح است.";
+			$Error="این کوتاژ وصول نشده است.";
 			return $Error;
 		}
-		else
+			
+		$LastProg=$File->LLP();
+		if(!($LastProg instanceof ReviewProgressStart))
 		{
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-			if ($File==null)
-			{
-				$Error="این کوتاژ وصول نشده است.";
-				return $Error;
-			}
-			else 
-			{
-				$LastProg=$File->LLP();
-				if(!($LastProg instanceof ReviewProgressStart))
-				{
-					$Error="شما اجازه لغو این کوتاژ را ندارید.";
-					return $Error;
-				}
-				else if($LastProg instanceof ReviewProgressStart)
-				{
-					$thisUser=MyUser::CurrentUser();
-					ORM::Delete($LastProg);
-					$A=$File->Alarm();
-					if(count($A))
-					{
-						foreach ($A as $a)
-							ORM::Delete($a);
-					}
-					ORM::Delete($File);
-					return true;
-				}
-				else 
-				{
-					$Error="احتمالا خطایی در سیستم رخ داده. با مسئولین نرم افزار تماس بگیرید";
-					return $Error;
-				}
-			}
+			$Error="شما اجازه لغو این کوتاژ را ندارید.";
+			return $Error;
 		}
+		else if($LastProg instanceof ReviewProgressStart)
+		{
+			$thisUser=MyUser::CurrentUser();
+			ORM::Delete($LastProg);
+			$A=$File->Alarm();
+			if(count($A))
+			{
+				foreach ($A as $a)
+					ORM::Delete($a);
+			}
+			ORM::Delete($File);
+			return true;
+		}
+		else 
+		{
+			$Error="احتمالا خطایی در سیستم رخ داده. با مسئولین نرم افزار تماس بگیرید";
+			return $Error;
+		}
+	}
+	
+	public function UntiEbtalCotag($Cotag)
+	{
+		if(b::CotagValidation($Cotag)==false)
+			return "کوتاژ ناصحیح است.";
+		
+		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		if($File==null)
+			return "اظهارنامه در سیستم ثبت نگردیده است!";
+		
+		$start=new ReviewProgressStart($File);
+		$ch=$start->Apply();
+		if(is_string($ch))
+			return $ch;
+   		
+		ORM::Persist($start);
+		return true;
 	}
 	public function Prints($f,$l)
 	{
