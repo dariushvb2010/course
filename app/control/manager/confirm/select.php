@@ -8,7 +8,7 @@ class ManagerConfirmSelectController extends JControl
 		if ($_REQUEST['Cotag'])
 		{
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query(new ReviewProgressReview())->AddReview($Cotag);
+			$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag);
 			if(is_string($Res))
 				$Error[]=$Res;
 			else		

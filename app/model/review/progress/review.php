@@ -88,9 +88,9 @@ class ReviewProgressReview extends ReviewProgress
 		$this->Amount=$a;
 	}
 	
-	function __construct(ReviewFile $File=null,MyUser $User=null,$Dif=null,$Amount=null)
+	function __construct(ReviewFile $File=null, $Dif=null,$Amount=null, $IfPersist=true)
 	{
-		parent::__construct($File,$User);
+		parent::__construct($File,null, $IfPersist);
 		$this->SetResult(false);
 		$this->Provision="";
 		if($Dif==null)
@@ -152,7 +152,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		}
 		else 
 		{
-			$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+			$File=ORM::query("ReviewFile")->GetRecentFile($Cotag);
 
 			if ($File==null)
 			{
@@ -164,7 +164,6 @@ class ReviewProgressReviewRepository extends EntityRepository
 				$lastreviewer=$File->LastReviewer();
 				$ProgReview=$File->LastReview();
 				$LLP=$File->LLP();
-				$Reviewer=MyUser::CurrentUser();
 				if ($lastreviewer==null)
 				{
 					$Error="این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
@@ -187,14 +186,14 @@ class ReviewProgressReviewRepository extends EntityRepository
 				}
 				else
 				{
-					$R=new ReviewProgressReview($File,$Reviewer,"","");
+					$R=new ReviewProgressReview($File,"","", false);
 					$R->SetResult(1);
 					$R->SetProvision("");
 					$ch=$R->Check();
 					if(is_string($ch))
 						return $ch;
 					
-					$R=new ReviewProgressReview($File,$Reviewer,"","");
+					$R=new ReviewProgressReview($File,"","", true);
 					$R->Apply();
 					ORM::Persist($R);
 					return true;	
@@ -230,7 +229,6 @@ class ReviewProgressReviewRepository extends EntityRepository
 				$lastreviewer=$File->LastReviewer();
 				$ProgReview=$File->LastReview();
 				$LLP=$File->LLP();
-				$Reviewer=MyUser::CurrentUser();
 				if ($lastreviewer==null)
 				{
 					$Error="این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
@@ -270,12 +268,14 @@ class ReviewProgressReviewRepository extends EntityRepository
 							$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
 							$Amount=str_replace(",", "", $Amount);
 							
-							$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
+							$R=new ReviewProgressReview($File,$Difference,$Amount, false);
 							$R->SetResult($_POST['Result']);
 							$R->SetProvision($Provision);
-							$ch=$R->Apply();
+							$ch=$R->Check();
 							if(is_string($ch))
 								return $ch;
+							
+							$R=new ReviewProgressReview($File,$Difference,$Amount, true);
 							ORM::Persist($R);
 							return true;
 							
@@ -310,7 +310,6 @@ class ReviewProgressReviewRepository extends EntityRepository
 			{
 				$lastreviewer=$File->LastReviewer();
 				$ProgReview=$File->LastReview();
-				$Reviewer=MYuser::CurrentUser();
 				
 				if ($lastreviewer==null)
 				{
@@ -341,14 +340,15 @@ class ReviewProgressReviewRepository extends EntityRepository
 						$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
 						$Amount=str_replace(",", "", $Amount);
 						$ProgReview->kill();
-						$R=new ReviewProgressReview($File,$Reviewer,$Difference,$Amount);
+						$R=new ReviewProgressReview($File,$Difference,$Amount, false);
 						$R->SetResult($_POST['Result']);
 						$R->SetProvision($Provision);
-						$ch=$R->Apply();
+						$ch=$R->Check();
 						if(is_string($ch))
-							return $ch;						
+							return $ch;	
+											
+						$R=new ReviewProgressReview($File,$Difference,$Amount, true);
 						ORM::Persist($R);
-						ORM::Persist($ProgReview);
 						return $R;
 					}
 				}

@@ -325,6 +325,7 @@ abstract class Mail
 			if(!($File instanceof ReviewFile))
 			{
 				$Error[]=strval($File);
+				continue;
 			}
 			elseif($File->Stock())
 			{

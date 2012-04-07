@@ -342,7 +342,7 @@ abstract class HandleTransfer
 		$al->ObjectAccess=true;
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
-		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
+		$CotagCode="var patt=/^0{0,2}\d{".b::$CotagLength."}$/;";  //javascript code
 		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);

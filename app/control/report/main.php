@@ -9,7 +9,7 @@ class CorrespondenceMainController extends JControl
 		if (count($_POST))
 		{
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query(new ReviewProgressFinishCorrespondence)->AddToFile($Cotag);
+			$Res=ORM::Query("ReviewProgressFinishCorrespondence")->AddToFile($Cotag);
 			if(is_string($Res))
 			{
 				$Error[]=$Res;

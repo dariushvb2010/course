@@ -323,6 +323,14 @@ class DynamiclistPlugin extends AutolistPlugin
 	    HasTier:false,
 	    HasSelect:false,
 	    HasRemove:true,
+	    Trim: function(str)
+		{
+		        return str.replace(/^\s+|\s+$/g,"");
+		},
+		TrimZero: function(str)
+		{
+			return str.replace(/^0+/, '');
+		},
 	<?php 		
 	}
 	protected function jAddRow()
@@ -398,6 +406,10 @@ class DynamiclistPlugin extends AutolistPlugin
         	if(DList_<?php echo $this->ID;?>.MDT[i]=="Text")
         	{
         		x=$(selector).val();
+        		//---TODO ----these two line is depriated 
+      			x=DList_<?php echo $this->ID;?>.TrimZero(x);
+      			x=DList_<?php echo $this->ID;?>.Trim(x);
+      			//---------------------------------------
         		if(x==undefined) x="-";
         		DList_<?php echo $this->ID;?>.IPT.push(x);
         		DList_<?php echo $this->ID;?>.IPV.push(x);

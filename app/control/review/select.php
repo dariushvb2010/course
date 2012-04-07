@@ -10,7 +10,7 @@ class ReviewSelectController extends JControl
 			$Class=$_POST['Classe']*1;
 			$File=ORM::Query(new ReviewFile())->GetRecentFileByClasse($Class);
 			$Cotag=$File->Cotag();
-			$Res=ORM::Query(new ReviewProgressReview())->AddReview($Cotag);
+			$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag);
 			if(is_string($Res))
 				$Error[]=$Res;
 			else		
@@ -19,7 +19,7 @@ class ReviewSelectController extends JControl
 		else if ($_REQUEST['Cotag'])
 		{
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query(new ReviewProgressReview())->AddReview($Cotag);
+			$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag);
 			if(is_string($Res))
 				$Error[]=$Res;
 			else		

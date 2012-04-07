@@ -9,7 +9,7 @@ class ReviewSayokController extends JControl
 		if(isset($_POST['item'])){
 			foreach ($_POST['item'] as $item){
 				echo $item;
-				$Res=ORM::Query(new ReviewProgressReview())->AddReviewOked($item);
+				$Res=ORM::Query("ReviewProgressReview")->AddReviewOked($item);
 				if(is_string($Res)){
 					$item_err_list[$item]='خطا';
 				}else{
