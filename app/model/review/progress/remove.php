@@ -37,7 +37,7 @@ class ReviewProgressRemove extends ReviewProgress
 
 	function  Summary()
 	{
-		return "آخرین فرایند این اظهارنامه یعنی "."<strong> '".$this->Slain->Summary()."' </strong>"."حذف شد ";
+		return "فرآیند قبلی ("."<strong> '".$this->Slain->Title()."' </strong>)"."حذف شد.";
 	}
 	function Title()
 	{
