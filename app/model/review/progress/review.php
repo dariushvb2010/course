@@ -109,7 +109,7 @@ class ReviewProgressReview extends ReviewProgress
 		if($this->Result==false)
 			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>".
 					"با علت تفاوت"."<b> «".$this->Difference('persian').
-					"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."» </b>";
+					"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."»</b> ریال ";
 		else
 			$sum.=' بدون مشکل ';
 		
@@ -119,7 +119,7 @@ class ReviewProgressReview extends ReviewProgress
 	
 	function  Title()
 	{
-		return "بازبینی";
+		return "کارشناسی";
 	}
 	function Event()
 	{
@@ -144,7 +144,7 @@ class ReviewProgressReviewRepository extends EntityRepository
  */
 	public function AddReviewOked($Cotag=null)
 	{
-		
+		$Reviewer=MyUser::CurrentUser();
 		if ($Cotag<1 || $Cotag==null)
 		{
 			$Error="کوتاژ ناصحیح است.";
@@ -190,11 +190,15 @@ class ReviewProgressReviewRepository extends EntityRepository
 					$R->SetResult(1);
 					$R->SetProvision("");
 					$ch=$R->Check();
+					
 					if(is_string($ch))
 						return $ch;
 					
 					$R=new ReviewProgressReview($File,"","", true);
+					$R->SetResult(1);
+					$R->SetProvision("");
 					$R->Apply();
+					
 					ORM::Persist($R);
 					return true;	
 				}					
@@ -210,6 +214,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 	public function AddReview($Cotag=null,$_POST=null)
 	{
 		
+		$Reviewer=MyUser::CurrentUser();
 		if ($Cotag<1 || $Cotag==null)
 		{
 			$Error="کوتاژ ناصحیح است.";
@@ -217,7 +222,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		}
 		else 
 		{
-			$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 
 			if ($File==null)
 			{
@@ -256,15 +261,16 @@ class ReviewProgressReviewRepository extends EntityRepository
 							if($_POST['Result']==0 AND count($_POST['Provision'])==0)
 								return 'شماره کلاسه انتخاب نشده است.'; 
 								 
-							if(is_array($_POST['Provision']))
+							if($_POST['Provision'])
 								$Provision=$_POST['Provision'];
 							else 
+							{
 								$Provision="";
+							}
 							if(is_array($_POST['Difference']))
 								$Difference=implode(",",$_POST['Difference']);
 							else 
 								$Difference="";
-							//echo"<br>pro dif: ". $Provision.$Difference."<br>";
 							$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
 							$Amount=str_replace(",", "", $Amount);
 							
@@ -272,14 +278,18 @@ class ReviewProgressReviewRepository extends EntityRepository
 							$R->SetResult($_POST['Result']);
 							$R->SetProvision($Provision);
 							$ch=$R->Check();
+							
 							if(is_string($ch))
 								return $ch;
 							
 							$R=new ReviewProgressReview($File,$Difference,$Amount, true);
+							$R->SetResult($_POST['Result']);
+							$R->SetProvision($Provision);
+							$R->Apply();
+							
 							ORM::Persist($R);
 							return true;
 							
-//						}
 					}
 				}					
 			}
@@ -287,6 +297,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 	}
 	public function EditReview($Cotag=null,$_POST=null)
 	{
+		$Reviewer=MyUser::CurrentUser();
 		if ($Cotag<1 && $Cotag==null)
 		{
 			$Error="کوتاژ ناصحیح است.";
@@ -339,15 +350,22 @@ class ReviewProgressReviewRepository extends EntityRepository
 						$Difference=implode(",",$_POST['Difference']);
 						$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
 						$Amount=str_replace(",", "", $Amount);
-						$ProgReview->kill();
+						
+						
 						$R=new ReviewProgressReview($File,$Difference,$Amount, false);
 						$R->SetResult($_POST['Result']);
 						$R->SetProvision($Provision);
 						$ch=$R->Check();
+						
 						if(is_string($ch))
 							return $ch;	
-											
+						
+						$ProgReview->kill();
 						$R=new ReviewProgressReview($File,$Difference,$Amount, true);
+						$R->SetResult($_POST['Result']);
+						$R->SetProvision($Provision);
+						$ch=$R->Apply();
+						
 						ORM::Persist($R);
 						return $R;
 					}
@@ -358,10 +376,10 @@ class ReviewProgressReviewRepository extends EntityRepository
 	
 	public function ReviewPercentage()
 	{
-		$r1=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=1");
-		$r2=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=528");
-		$r3=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=248");
-		$r4=j::SQL("SELECT COUNT(*) as c FROM App_ReviewProgressReview WHERE Result=0 AND Provision=109");
+		$r1=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=1");
+		$r2=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=528");
+		$r3=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=248");
+		$r4=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=109");
 		$res=array('oked'=>$r1[0]['c'],'a528'=>$r2[0]['c'],'a248'=>$r3[0]['c'],'a109'=>$r4[0]['c']);
 		return $res;
 	}
@@ -386,8 +404,8 @@ class ReviewProgressReviewRepository extends EntityRepository
 							PMONTH(FROM_UNIXTIME(P.CreateTimestamp))as month,
 							PMONTHNAME(FROM_UNIXTIME(P.CreateTimestamp))as monthname,
 							PYEAR(FROM_UNIXTIME(P.CreateTimestamp))as year 
-							FROM App_ReviewProgress AS P 
-							WHERE P.type='Start' 
+							FROM app_ReviewProgress AS P 
+							WHERE P.Type='Start' 
 							GROUP BY PMONTH(FROM_UNIXTIME(P.CreateTimestamp)),PYEAR(FROM_UNIXTIME(P.CreateTimestamp))
 							ORDER BY year,month");
 		return $r;

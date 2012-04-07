@@ -22,7 +22,7 @@ class ConfigData
 		 "Reviewer"=>"کارشناس بازبینی",
 		 "Correspondence"=>"مکاتبات",
 		 "Typist"=>"تایپیست",
-		 "Programmer"=>"برنامه نویسی"
+		 "Programmer"=>" ویژه"
 	 );
 	
 	 /**

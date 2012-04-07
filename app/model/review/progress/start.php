@@ -132,11 +132,13 @@ class ReviewProgressStartRepository extends EntityRepository
 		if($File==null)
 			return "اظهارنامه در سیستم ثبت نگردیده است!";
 		
-		$start=new ReviewProgressStart($File);
-		$ch=$start->Apply();
+		$start=new ReviewProgressStart($File,false,false);
+		$ch=$start->Check();
 		if(is_string($ch))
 			return $ch;
    		
+		$start=new ReviewProgressStart($File,false,true);
+		$ch=$start->Apply();
 		ORM::Persist($start);
 		return true;
 	}

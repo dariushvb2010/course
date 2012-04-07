@@ -332,6 +332,7 @@ abstract class Mail
 				if($File->Stock()->Mail()->ID()!=$this->ID())
 				{
 					$Error[]="شماره کوتاژ  ".$File->Cotag()." در نامه ی دیگری قرار دارد که هنوز بسته نشده است.";
+					$ErrorCount++;
 					continue;
 				}
 			}

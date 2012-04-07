@@ -7,9 +7,9 @@
  * */
 class ReviewProgressEbtal extends ReviewProgress
 {
-	function __construct(ReviewFile $File=null)
+	function __construct(ReviewFile $File=null, $IfPersist=true)
 	{
-		parent::__construct($File);
+		parent::__construct($File, null, $IfPersist);
 	}
 	function  Summary()
 	{
@@ -44,11 +44,19 @@ class ReviewProgressEbtalRepository extends EntityRepository
 			return $Error;
 		}
 		
-		$Ebtal= new ReviewProgressEbtal($File);
-		$ch=$Ebtal->Apply();
+		$Ebtal= new ReviewProgressEbtal($File, false);
+		$ch=$Ebtal->Check();
 		if(is_string($ch))
 			return $ch;
 		
+		$Ebtal= new ReviewProgressEbtal($File, true);
+		$Ebtal->Apply();
+		
+		$S=$File->Stock();
+		if($S)
+		{
+			ORM::Delete($S);
+		}
 		$A=$File->Alarm();
 		if(count($A))
 		{

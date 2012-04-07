@@ -42,8 +42,7 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 			$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
 			$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
 			$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
-				
-			$NewFiles=ORM::Query(new ReviewFile())->FilesInTimeRange($StartTimestamp,$FinishTimestamp,MyUser::CurrentUser());
+			$NewFiles=ORM::Query("ReviewFile")->FilesInTimeRange($StartTimestamp,$FinishTimestamp,MyUser::CurrentUser());
 			$this->MakeMainList($NewFiles);
 		}
 		//-------------------------------------ACT: [Gvie], [Get], [Send], [Receive]-------------------------

@@ -41,7 +41,7 @@ input[type='text'] {
 
 </style>
 <h1><img src="/img/h/h1-assign-group-50.png"/>
-تعیین کارشناس کوتاژ های متفرقه</h1>
+تخصیص گروهی </h1>
 <p class="noprint">همه ی کوتاژ های انتخابی در فرم زیر پس از زدن دکمه تخصیص به کارشناسی واحد اختصاص می یابند</p> 
 <?php if (isset($this->Result))
 	ViewResultPlugin::Show($this->Result,$this->Error);

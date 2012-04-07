@@ -58,7 +58,7 @@ if (is_array($this->Data)){?>
 	<?php $i=$this->Count; foreach ($this->Data as $D){
 		?>
 		<div class="progress"><span style='color:blue;'>
-			<?php echo $i;?>- <?php echo $D->Title();?>:</span>
+			<?php echo $i;?>- <?php echo $D->Title()."(".$D->File()->Cotag().")"; ?>:</span>
 			<span class="summaryinfo"><?php echo $D->Summary();?><br></span>
 			<span class="footinfo"> توسط <?php echo $D->User()->getFullName();?> در تاریخ: <span dir=ltr><?php echo $jc->JalaliFullTime($D->CreateTimestamp(),"/");?></span></span>
 		</div> 

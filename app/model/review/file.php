@@ -231,7 +231,6 @@ class ReviewFile
 	{
 		$ProgAssign= $this->LastProgress('Assign');
 		if ($ProgAssign==null) return null;
-		if ($ProgAssign->Reviewer()==null)return null;
 		return $ProgAssign->Reviewer();
 	}
 	
@@ -464,7 +463,13 @@ class ReviewFileRepository extends EntityRepository
 					WHERE F.State=2 AND F.CreateTimestamp BETWEEN ? AND ? ORDER BY F.Cotag",$TimeStart,$TimeEnd);
 		return $r;
 	}
+	public function EbtaliFilesInTimeRange($TimeStart,$TimeEnd,MyUser $User)
+	{
 	
+		$r=j::ODQL("SELECT DISTINCT(F) FROM ReviewFile AS F JOIN F.Progress P 
+						WHERE P INSTANCE OF ReviewProgressStart AND F.State=2 AND P.CreateTimestamp BETWEEN ? AND ? ORDER BY F.Cotag",$TimeStart,$TimeEnd);
+		return $r;
+	}
 	/**
 	 * used in correspondence
 	 */

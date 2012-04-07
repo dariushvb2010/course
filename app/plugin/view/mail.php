@@ -65,7 +65,7 @@ class ViewMailPlugin extends JPlugin
 		}
 		elseif($Action=="Send")
 		{
-			$Taraf=$_GET['Taraf'];
+			$Taraf=$Dest;
 			if($Source=="Archive")
 				$href="/archive/transfer/toout?Taraf=".$Taraf."&";
 			elseif($Source=="Raked")
@@ -73,7 +73,7 @@ class ViewMailPlugin extends JPlugin
 		}
 		elseif($Action=="Receive")
 		{
-			$Taraf=$_GET['Taraf'];
+			$Taraf=$Source;
 			if($Dest=="Archive")
 				$href="/archive/transfer/fromout?Taraf=".$Taraf."&";
 			elseif($Dest=="Raked")
