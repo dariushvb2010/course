@@ -18,7 +18,6 @@ class ManagerBazbinsSinglereassignController extends JControl
 		else if(isset($_POST['Reassign']))
 		{
 			$res=$this->ReassignList->GetRequest();
-			ORM::Dump($res);
 			foreach ($res as $Data)
 			{
 				$this->Reassign($Data, $ReassignError);

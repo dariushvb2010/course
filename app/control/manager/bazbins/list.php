@@ -63,11 +63,20 @@ class ManagerBazbinsListController extends JControl
 		{
 			$Reviewer=ORM::Find("MyUser",$_POST['DisableID']);
 			if($Reviewer)
-			if(isset($_POST['Enable']))
-				$Reviewer->Enable();
-			else if(isset($_POST['Disable']))
-				$Reviewer->Disable();
-			ORM::Persist($Reviewer);
+			{
+				$this->Result="کاربری ".$Reviewer->getFullName();
+				if(isset($_POST['Enable']))
+				{
+					$Reviewer->Enable();
+					$this->Result.= " فعال شد.";
+				}
+				else if(isset($_POST['Disable']))
+				{
+					$Reviewer->Disable();
+					$this->Result.= " غیرفعال شد.";
+				}
+				ORM::Persist($Reviewer);
+			}
 		}
 		$this->DisableForm=$this->MakeDisableForm();
 		//-----------------------D F----------------------

@@ -333,6 +333,8 @@ $(function() {
 			</li>
 			
 		</ul>
+	</li>
+	<li>
 		<a href='#'>
 			<span class='ui-icon-arrowthick-1-n ui-icon'></span> 
 			ارسال اظهارنامه

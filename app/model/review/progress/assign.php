@@ -79,18 +79,6 @@ class ReviewProgressAssignRepository extends EntityRepository
 			$ch=$R->Check();
 			if(is_string($ch))
 			{
-				if(j::check("Reassign"))
-				{
-					$LLP=$File->LLP();
-					if( $LLP instanceof ReviewProgressAssign)
-					{
-						$LLP->kill();
-						$R=new ReviewProgressAssign($File, $Reviewer,true);
-						$R->Apply();
-						ORM::Persist($R);
-						return $R;
-					}
-				}
 				return "اظهارنامه با شماره کوتاژ  ".$File->Cotag()." قابل تخصیص به کارشناس نیست.";
 			}
 			else

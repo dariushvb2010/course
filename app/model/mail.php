@@ -308,7 +308,6 @@ abstract class Mail
 	}
 	function Save($Files, $RemoveCalled, &$Error)
 	{
-		ORM::Dump($Files);
 		if($this->State()==self::STATE_EDITING)
 		{
 			$this->RetouchTimestamp=time();

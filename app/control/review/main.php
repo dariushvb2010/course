@@ -8,7 +8,7 @@ class ReviewMainController extends JControl
 		$Error=array();
 		$Cotag=$_REQUEST['Cotag']*1;
 	
-		$Res=ORM::Query(new ReviewProgressReview())->AddReview($Cotag,$_POST);
+		$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag,$_POST);
 		$this->makeForm();
 		if(is_string($Res))
 			$Error[]=$Res;
