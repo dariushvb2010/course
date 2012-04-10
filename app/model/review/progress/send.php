@@ -55,13 +55,11 @@ class ReviewProgressSendRepository extends EntityRepository
 {
 	public function AddToFile(ReviewFile $File,MailSend $Mail, $IfPersist=true)
 	{
-		echo " addToFile ";
 		$File=ReviewFile::GetRecentFile($File);
 		if(!$File)
 		{
 			return "اظهارنامه یافت نشد.";
 		}
-		echo " ok ";
 		$P=new ReviewProgressSend($File, $Mail, false);
 		$ch=$P->Check();
 		if(is_string($ch))
@@ -69,7 +67,6 @@ class ReviewProgressSendRepository extends EntityRepository
 		if($IfPersist) 
 		{
 			$P=new ReviewProgressSend($File, $Mail, true);
-			ORM::Dump($P);
 			$P->Apply();
 			ORM::Persist($P);
 		}
