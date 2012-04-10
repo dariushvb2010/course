@@ -58,13 +58,13 @@ class ReviewProgressReceiveRepository extends EntityRepository
 		{
 			return "اظهارنامه یافت نشد.";
 		}
-		$P=new ReviewProgressReceive($File, $Mail, $IfPersist);
+		$P=new ReviewProgressReceive($File, $Mail, false);
 		$ch=$P->Check();
 		if(is_string($ch))
 			return $ch;
 		if($IfPersist) 
 		{
-			$P=new ReviewProgressReceive($File, $Mail, $IfPersist);
+			$P=new ReviewProgressReceive($File, $Mail, true);
 			$P->Apply();
 			ORM::Persist($P);
 		}

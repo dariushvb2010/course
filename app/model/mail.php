@@ -331,7 +331,7 @@ abstract class Mail
 			{
 				if($File->Stock()->Mail()->ID()!=$this->ID())
 				{
-					$Error[]="شماره کوتاژ  ".$File->Cotag()." در نامه ی دیگری قرار دارد که هنوز بسته نشده است.";
+					$Error[]="شماره کوتاژ  ".$File->Cotag()." در نامه ی دیگری قرار دارد که هنوز بسته نشده است. شناسه نامه".$File->Stock()->Mail()->ID();
 					$ErrorCount++;
 					continue;
 				}
