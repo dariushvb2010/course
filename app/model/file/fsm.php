@@ -18,7 +18,7 @@ class FileFsm extends JModel
 	
 	private static $StateGraph=array(
 	//-----------------------Review---------------------
-	1=>array('Start'=>2),
+	/*1=>array('Start'=>2),
 	2=>array('Give_cotagbook_to_archive'=>3),
 	3=>array('Get_archive_from_cotagbook'=>4),
 	4=>array('Assign'=>5),
@@ -32,9 +32,22 @@ class FileFsm extends JModel
 	14=>array('Send_raked_to_out'=>15, 'Give_raked_to_archive'=>16),
 	15=>array('Receive_raked_from_out'=>14),
 	16=>array('Get_arhive_from_raked'=>4),
+	'Ebtalable'=>array('Ebtal'=>1),*/
+	1=>array('Start'=>2),
+	2=>array('Give_cotagbook_to_archive'=>3),
+	3=>array('Get_archive_from_cotagbook'=>4),
+	4=>array('Assign'=>5),
+	5=>array('Review_nok'=>9, 'Review_ok'=>7),
+	7=>array('Review_nok'=>9, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
+	11=>array('Assign_by_manager'=>5, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
+	12=>array('Receive_archive_from_out'=>11),
+	13=>array('Get_raked_from_archive'=>14),
+	14=>array('Send_raked_to_out'=>15, 'Give_raked_to_archive'=>16),
+	15=>array('Receive_raked_from_out'=>14),
+	16=>array('Get_arhive_from_raked'=>4),
 	'Ebtalable'=>array('Ebtal'=>1),
 	//--------------------------Correspondence-----------
-	9=>array('ProcessRegister'=>18),
+	9=>array('ProcessRegister'=>18, 'Review_ok'=>7, 'Review_nok'=>9),
 	18=>array('Senddemand_demand'=>40),
 	40=>array('Protest'=>42,'Prophecy_first'=>41),
 	41=>array('Protest'=>42,'P1415'=>1514),
@@ -137,7 +150,7 @@ class FileFsm extends JModel
 		'Prophecy_second'=>47,
 		'Prophecy_setad'=>58,
 		'Prophecy_commission'=>63,
-		'Ebtalable'=>array(2,3,4,5,9,11),
+		'Ebtalable'=>array(2,3,4,5,9,11,7),
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
 		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies'),
 	);
