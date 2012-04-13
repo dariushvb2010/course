@@ -11,7 +11,7 @@ class ArchiveTransferTorakedController extends JControl
 		j::Enforce("Archive");
 		
 		//-----------------SINGLE------------
-		if(isset($_POST['MailID']) OR isset($_GET['MailID']))
+		if(isset($_REQUEST['MailID']) )
 		{
 			if(isset($_POST['MailID']))
 				$MailID=$_POST['MailID']*1;
@@ -22,7 +22,7 @@ class ArchiveTransferTorakedController extends JControl
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Give","Archive","Raked", $Mail);
 		}
-		elseif(isset($_POST['Search']))
+		elseif(isset($_REQUEST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Give","Archive","Raked");
 		}

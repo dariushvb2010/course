@@ -22,7 +22,7 @@ class RakedTransferFromarchiveController extends JControl
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Get","Archive","Raked", $Mail);
 		}//----------------Search-----------------
-		elseif(isset($_POST['Search']))
+		elseif(isset($_REQUEST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Get","Archive","Raked");
 		}

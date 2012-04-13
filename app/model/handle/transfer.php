@@ -51,6 +51,8 @@ abstract class HandleTransfer
 	 * @var string
 	 */
 	protected  $Action;
+	public $SearchForm;
+	public $MiniSearchForm;
 // 	const Get="Get";
 // 	const Give="Give";
 // 	const Send="Send";
@@ -251,9 +253,9 @@ abstract class HandleTransfer
 		$f->HasFormTag=false;
 		if($this->Mail->State()==Mail::STATE_EDITING )
 		{
-			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
+			//$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
-			$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
+			//$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
 			
 			$al->SetHeader("Error", "وضعیت", "","",array("Useless"=>true,"Style"=>"color:red;"));
@@ -363,6 +365,7 @@ abstract class HandleTransfer
 		foreach ($Topics as $T)
 			$Ts[$T['ID']]=$T['Topic'];
 		$f=new AutoformPlugin("post");
+		$f->AddElement(array("Type"=>"text", "Name"=>"ID", "Label"=>"شناسه نامه", "Value"=>$_POST['ID']));
 		$f->AddElement(array("Type"=>"text", "Name"=>"Num", "Label"=>"شماره نامه", "Value"=>$_POST['Num']));
 		$f->AddElement(array("Type"=>"text", "Name"=>"Subject", "Label"=>"عنوان نامه", "Value"=>$_POST['Subjet']));
 		$f->AddElement(array("Type"=>"select", "Name"=>"State", "Label"=>"وضعیت نامه", "Options"=>$State, "Default"=>$_POST['State']));
@@ -372,4 +375,5 @@ abstract class HandleTransfer
 		$f->AddElement(array("Type"=>"submit", "Name"=>"Search", "Value"=>"جستجوی نامه ها"));
 		$this->SearchForm=$f;
 	}
+	
 }

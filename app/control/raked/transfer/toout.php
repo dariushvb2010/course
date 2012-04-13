@@ -23,7 +23,7 @@ class RakedTransferTooutController extends JControl
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Send","Raked",$Dest, $Mail);
 		}//---------------Search-----------------
-		elseif(isset($_POST['Search']))
+		elseif(isset($_REQUEST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Send","Raked",$Dest);
 		}

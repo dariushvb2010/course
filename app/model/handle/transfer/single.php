@@ -32,11 +32,16 @@ class HandleTransferSingle extends HandleTransfer
 		//-------------------------------------ACT: [Gvie], [Get], [Send], [Receive]-------------------------
 		elseif(isset($_POST[$this->Action]))
 		{
+			$comres=true;
 			if($this->Action=="Get")
 				$res=$Mail->Get($Files, $this->Error);
 			else
 				$res=$Mail->Act($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
-			if($res)
+			if($this->Action=="Send" or $this->Action=="Receive")
+			{
+				$comres=$Mail->Complete($Files, $this->MainForm->List->RemoveCalled(), $this->Error);
+			}
+			if($res and $comres)
 				$this->Result="با موفقیت انجام شد.";
 			else 
 				$this->Error[]="انجام نشد. لطفا خطاهای موجود را رفع نمایید.";

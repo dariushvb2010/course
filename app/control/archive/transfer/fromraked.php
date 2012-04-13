@@ -16,7 +16,7 @@ class ArchiveTransferFromrakedController extends JControl
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Get","Raked","Archive", $Mail);
 		}//----------------Search-----------------
-		elseif(isset($_POST['Search']))
+		elseif(isset($_REQUEST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Get","Raked","Archive");
 		}

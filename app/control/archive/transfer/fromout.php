@@ -27,7 +27,7 @@ class ArchiveTransferFromoutController extends JControl
 			}
 			$this->Handler=new HandleTransferSingle("Receive",$Source, "Archive", $Mail);
 		}
-		elseif(isset($_POST['Search']))
+		elseif(isset($_REQUEST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Receive",$Source, "Archive");
 		}
