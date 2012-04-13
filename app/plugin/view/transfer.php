@@ -45,7 +45,7 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 			<?php endif;
 			if($SLink):
 			?>
-			<a href="<?php echo $SLink; ?>" style="float:left; margin:7px 7px 0 12px" ><img src="/img/search-32.png" title="جستجوی نامه ها"/></a>
+			<a href="<?php echo $SLink; ?>" style="float:left; margin:7px 7px 0 12px" ><img src="/img/mail/search.jpg" title="جستجوی نامه ها"/></a>
 			<?php endif;?>
 	</h1>
 	<?php
