@@ -143,9 +143,12 @@ abstract class Mail
 	protected function StateClosed()
 	{
 		$res=true;
+		
 		foreach ($this->Stock() as $s)
+		{
 			$res &=$s->Act();
-		if($res)
+		}
+		if($res and count($this->Stock()))
 		{
 			if($this->CanIGoTo(self::STATE_CLOSED))
 			{

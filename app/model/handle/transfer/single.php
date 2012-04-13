@@ -71,6 +71,23 @@ class HandleTransferSingle extends HandleTransfer
 			else 
 				$this->Error[]="مشخصات نامه تغییر نیافت.";
 		}
+		elseif(isset($_POST['DeleteMail']))
+		{
+			$ID=$_POST['MailID'];
+			$Mail=ORM::Find("Mail", $ID);
+			if(!$Mail)
+			{
+				$this->Error[]="نامه یافت نشد.";
+				return;
+			}
+			try {
+				ORM::Delete($Mail);
+				ORM::Flush();
+				$this->Result="نامه حذف شد.";
+			} catch (Exception $e) {
+				$this->Error[]="نامه قابل حذف کردن نیست!";
+			}
+		}
 		//------------------------------------SHOW THE LIST------------------------------
 		else
 		{
@@ -95,6 +112,7 @@ class HandleTransferSingle extends HandleTransfer
 		$f->AddElement(array( "Type"=>"text", "Name"=>"Title","Label"=>"عنوان نامه", "Value"=>$this->Mail->Subject()));
 		$f->AddElement(array("Type"=>"textarea","Name"=>"Comment","Label"=>"توضیحات", "Value"=>$this->Mail->Description()));
 		$f->AddElement(array("Type"=>"submit","Name"=>"EditMail","Value"=>"ویرایش مشخصات نامه"));
+		$f->AddElement(array("Type"=>"submit","Name"=>"DeleteMail","Value"=>"حذف نامه"));
 		$this->EditForm=$f;
 	}
 	function __construct($Action, $Source, $Dest, $Mail)
