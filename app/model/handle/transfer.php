@@ -373,6 +373,7 @@ abstract class HandleTransfer
 			$f->AddElement(array("Type"=>"select", "Name"=>"TopicID", "Label"=>"طرف مکاتبه", "Options"=>$Ts, "Default"=>$_POST['TopicID']));
 				
 		$f->AddElement(array("Type"=>"submit", "Name"=>"Search", "Value"=>"جستجوی نامه ها"));
+		$f->Style="background:#fd9; border-color:navy;";
 		$this->SearchForm=$f;
 	}
 	

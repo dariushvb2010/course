@@ -6,7 +6,19 @@ class HandleTransferSearch extends HandleTransfer
 	{
 		if(($_POST['ID']))
 		{
-			$this->SearchMails[]=ORM::Find("Mail", $_POST['ID']);
+			$M=ORM::Find("Mail", $_POST['ID']);
+			if($M instanceof MailGive)
+			{
+				if($M->State()<Mail::STATE_INWAY)
+					$this->Action="Give";
+				else 
+					$this->Action="Get";
+			}
+			elseif($M instanceof MailSend)
+				$this->Action="Send";
+			elseif($M instanceof MailReceive)
+				$this->Action="Receive";
+			$this->SearchMails[]=$M;
 		}
 		else
 		{
