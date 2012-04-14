@@ -259,7 +259,9 @@ class ReviewProgressReviewRepository extends EntityRepository
 					if (count($_POST))
 					{
 							if($_POST['Result']==0 AND count($_POST['Provision'])==0)
-								return 'شماره کلاسه انتخاب نشده است.'; 
+								return 'شماره کلاسه انتخاب نشده است.';
+							if($_POST['Result']==0 AND (count($_POST['Difference'])==0 OR strlen($_POST['Difference'])==0))
+								return 'علت تفاوت انتخاب نشده است.';
 								 
 							if($_POST['Provision'])
 								$Provision=$_POST['Provision'];
@@ -341,9 +343,12 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					if (count($_POST))
 					{
-						if($_POST['Result']==0 AND count($_POST['Provision'])==0)
+						if($_POST['Result']==0 AND (count($_POST['Provision'])==0 OR strlen($_POST['Provision'])==0))
 							return 'شماره کلاسه انتخاب نشده است.';
-						var_export($_POST['Provision']);	
+						
+						if($_POST['Result']==0 AND (count($_POST['Difference'])==0 OR strlen($_POST['Difference'])==0))
+							return 'علت تفاوت انتخاب نشده است.';
+							
 						if($_POST['Provision']!=null)
 							$Provision=$_POST['Provision'];
 						if($_POST['Difference']!=null)
