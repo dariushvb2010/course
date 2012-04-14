@@ -1,12 +1,5 @@
 <?php
 
-use Doctrine\Common\Collections\ArrayCollection;
-
-/** 
- * @Entity
- * @entity(repositoryClass="BlacklistRepository")
- * @DiscriminatorColumn(name="Type", type="string")
- * */
 class Blacklist
 {
 	/**
