@@ -9,9 +9,17 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 		echo "شما اجازه دسترسی به این قسمت را ندارید.";
 		return;
 	}
-	if($H->Mail and $H instanceof HandleTransferSingle)
+	if($H instanceof HandleTransferSingle or $H instanceof HandleTransferSearch)
 	{
 		$HomeLink=ViewMailPlugin::HomeLink($H->Action(), $H->Source(), $H->Dest());
+	}
+	if(!($H instanceof HandleTransferSearch or $H instanceof HandleTransferSingle))
+	{
+		$SLink=FPlugin::getAddress();
+		if(strpos($SLink,"?")!==false)
+			$SLink.="&Search=yes";
+		else
+			$SLink.="?Search=yes";
 	}
 	?>
 	
@@ -33,13 +41,16 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	<h1>
 		<?php echo $Title;
 			if($HomeLink): ?>
-				<a href="<?php echo $HomeLink; ?>"> <img style="height: 30px; float:left; margin:7px 7px 0 12px; margin-left" src="/img/mail/back.png" title="برگشت به صفحه اصلی نامه ها"/></a>
+				<a href="<?php echo $HomeLink; ?>"> <img style="height: 30px; float:left; margin:7px 7px 0 12px;" src="/img/mail/back.png" title="برگشت به صفحه اصلی نامه ها"/></a>
+			<?php endif;
+			if($SLink):
+			?>
+			<a href="<?php echo $SLink; ?>" style="float:left; margin:7px 7px 0 12px" ><img src="/img/mail/search.jpg" title="جستجوی نامه ها"/></a>
 			<?php endif;?>
 	</h1>
 	<?php
 	ViewResultPlugin::Show($H->Result, $H->Error);
 	ViewResultPlugin::Show($View->Result, $View->Error);
-	
 	if($H->CreateForm)
 		$H->CreateForm->PresentHTML();
 	?>

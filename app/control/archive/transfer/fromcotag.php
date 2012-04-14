@@ -68,7 +68,7 @@ class ArchiveTransferFromcotagController extends JControl
 				return $this->Present();
 			$this->Handler=new HandleTransferSingle("Get","CotagBook","Archive", $Mail);
 		}//----------------Search-----------------
-		elseif(isset($_POST['Search']))
+		elseif(isset($_REQUEST['Search']))
 		{
 			$this->Handler=new HandleTransferSearch("Get","CotagBook","Archive");
 		}
