@@ -25,8 +25,14 @@ class ReviewEditController extends JControl
 		
 		$Error=array();
 		$Cotag=$_REQUEST['Cotag']*1;
-
-		$Res=ORM::Query("ReviewProgressReview")->EditReview($Cotag,$_POST);
+		
+		if(count($_POST))
+		{
+			$dataArray=$_POST;
+			$dataArray['Cotag']=$Cotag;
+		
+			$Res=ORM::Query("ReviewProgressReview")->NewReview($dataArray,'Edit');
+		}
 		//$this->makeForm();
 		if(is_string($Res))
 			$Error[]=$Res;
@@ -36,29 +42,7 @@ class ReviewEditController extends JControl
 			$this->Result=$Res->Summary();//"ویرایش بازبینی با موفقیت ثبت گردید.";	
 		}
 		
-		$info=$this->getReviewInfo($Cotag);
-//		if ($this->Valid) //valid
-//		{
-//			if (count($_POST))
-//			{
-//				$R=$this->Form->Validate($_POST,$err);
-//				if (!$R)
-//					$Error=array_merge($err,$Error);
-//				else 
-//				{
-//					$Provision=($_POST['Provision']==null?'':$_POST['Provision']);
-//					$R=new ReviewProgressReview($File,$Reviewer);
-//					$R->SetResult($_POST['Result']);
-//					$R->SetProvision($Provision);
-//					ORM::Persist($R);
-//						
-//				}
-//			}
-//		}
-//		else{
-//			$this->Redirect("select?Cotag={$Cotag}");
-//		}
-		
+		$info=$this->getReviewInfo($Cotag);		
 		
 		$this->Error=$Error;
 		if (count($Error)) $this->Result=false;

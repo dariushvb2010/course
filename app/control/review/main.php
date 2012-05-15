@@ -7,8 +7,14 @@ class ReviewMainController extends JControl
 		
 		$Error=array();
 		$Cotag=$_REQUEST['Cotag']*1;
+		
+		if(count($_POST))
+		{
+			$dataArray=$_POST;
+			$dataArray['Cotag']=$Cotag;
 	
-		$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag,$_POST);
+			$Res=ORM::Query("ReviewProgressReview")->NewReview($dataArray);
+		}
 		$this->makeForm();
 		if(is_string($Res))
 			$Error[]=$Res;
@@ -34,14 +40,14 @@ class ReviewMainController extends JControl
 			"Disabled"=>true,
 			"Label"=>"کوتاژ",
 			"Value"=>$this->Cotag,
-		));
+		));	
 		$f->AddElement(array(
 			"Name"=>"Result",
 			"Type"=>"radio",
 			"Options"=>array("0"=>"مشکل‌دار",
 							"1"=>"بدون مشکل"),
 			"Label"=>"نتیجه بازبینی",
-			"Default"=>"1",
+			"Default"=>(isset($_POST['Result'])?$_POST['Result']:"1"),
 		));
 		
 		//checkboxes 1
@@ -54,6 +60,7 @@ class ReviewMainController extends JControl
 		         	"Label"=>"کلاسه",
 					"Dependency"=>"Result",
 					"DependencyValue"=>"==0",
+					"Default"=>(isset($_POST['Provision'])?$_POST['Provision']:""),
 					"Class"=>"KoshtiMaRo",
 		));
 		//checkboxes 2

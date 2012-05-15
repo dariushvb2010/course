@@ -205,178 +205,148 @@ class ReviewProgressReviewRepository extends EntityRepository
 			}
 		}
 	}
-/**
- * یک فرایند بازبینی به فایل با کوتاژ داده شده اضافه می کند 
- * @param integer $Cotag
- * @param request array  $_POST که از یک فرم که نتیجه بازبینی را می فرستد آمده است که ماده هم دارد 
- * @return string for error and true for success
- */
-	public function AddReview($Cotag=null,$_POST=null)
+	/**
+	 * 
+	 * یک فرایند بازبینی به فایل با کوتاژ داده شده اضافه می کند
+	 * با دریافت ورودی های ارسالی توسط فرم و تایپ اضافه کردن یا تغییر
+	 * @param array $data
+	 * @param string $type  {'Add','Edit'}
+	 * @author morteza Kavakebi
+	 */
+	public function NewReview($data,$type='Add')
 	{
+		$data['User'] = MyUser::CurrentUser();
 		
-		$Reviewer=MyUser::CurrentUser();
-		if ($Cotag<1 || $Cotag==null)
-		{
-			$Error="کوتاژ ناصحیح است.";
-			return $Error;
-		}
-		else 
-		{
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-
-			if ($File==null)
-			{
-				$Error ="یافت نشد.";
-				return $Error;
-			}
-			else
-			{
-				$lastreviewer=$File->LastReviewer();
-				$ProgReview=$File->LastReview();
-				$LLP=$File->LLP();
-				if ($lastreviewer==null)
-				{
-					$Error="این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
-					return $Error;
-				}	
-				elseif ($ProgReview  !=null)
-				{
-					$Error="اظهارنامه مذکور قبلا بازبینی شده است.به قسمت ویرایش نتیجه بازبینی مراجعه نمایید.";
-					return $Error;
-				}
-				elseif ($lastreviewer!=$Reviewer)
-				{
-					$Error="کارشناس بازبینی این اظهارنامه شما نیستید.";
-					return $Error;
-				}
-				else if(!($LLP instanceof ReviewProgressReivew || $LLP instanceof ReviewProgressAssign))
-				{
-					$Error="کارشناس هنوز تخصیص نیافته است یا اینکه از تاریخ بازبینی اظهارنامه گذشته است.";
-					return $Error;
-				}
-				else
-				{
-					if (count($_POST))
-					{
-							if($_POST['Result']==0 AND count($_POST['Provision'])==0)
-								return 'شماره کلاسه انتخاب نشده است.';
-							if(($_POST['Provision']=='248' OR $_POST['Provision']=='528') AND (count($_POST['Difference'])==0 OR (is_string($_POST['Difference']) AND strlen($_POST['Difference'])==0)) )
-								return 'علت تفاوت انتخاب نشده است.';
-								 
-							if($_POST['Provision'])
-								$Provision=$_POST['Provision'];
-							else 
-							{
-								$Provision="";
-							}
-							if(is_array($_POST['Difference']))
-								$Difference=implode(",",$_POST['Difference']);
-							else 
-								$Difference="";
-							$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
-							$Amount=str_replace(",", "", $Amount);
-							
-							$R=new ReviewProgressReview($File,$Difference,$Amount, false);
-							$R->SetResult($_POST['Result']);
-							$R->SetProvision($Provision);
-							$ch=$R->Check();
-							
-							if(is_string($ch))
-								return $ch;
-							
-							$R=new ReviewProgressReview($File,$Difference,$Amount, true);
-							$R->SetResult($_POST['Result']);
-							$R->SetProvision($Provision);
-							$R->Apply();
-							
-							ORM::Persist($R);
-							return true;
-							
-					}
-				}					
-			}
-		}
-	}
-	public function EditReview($Cotag=null,$_POST=null)
-	{
-		$Reviewer=MyUser::CurrentUser();
-		if ($Cotag<1 && $Cotag==null)
-		{
-			$Error="کوتاژ ناصحیح است.";
-			return $Error;
-		}
+		$validation=$this->ValidateCorrectFilterInput($data,$type);
+		if(is_string($validation))
+			return $validation;
 		else
-		{
-			$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
-	
-			if ($File==null)
-			{
-				$Error ="یافت نشد.";
-				return $Error;
-			}
-			else if(!($File->GetClass()==0 OR $File->GetClass()==null))
-			{
-				$Error="این اظهارنامه کلاسه شده است. ویرایش ممکن نیست.";
-				return $Error;
-			}
-			else
-			{
-				$lastreviewer=$File->LastReviewer();
-				$ProgReview=$File->LastReview();
-				
-				if ($lastreviewer==null)
-				{
-					$Error="این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
-					return $Error;
-				}
-				elseif($ProgReview==null)
-				{
-					$Error="این اظهارنامه بازبینی نشده است";
-					return $Error;
-				}
-				elseif ($lastreviewer!=$Reviewer)
-				{
-					$Error[]="کارشناس بازبینی این اظهارنامه شما نیستید.";
-					return $Error;
-				}
-				else
-				{
-					if (count($_POST))
-					{
-						if($_POST['Result']==0 AND (count($_POST['Provision'])==0 OR strlen($_POST['Provision'])==0))
-							return 'شماره کلاسه انتخاب نشده است.';
-						
-						if(($_POST['Provision']=='248' OR $_POST['Provision']=='528') AND (count($_POST['Difference'])==0 OR (is_string($_POST['Difference']) AND strlen($_POST['Difference'])==0)) )
-							return 'علت تفاوت انتخاب نشده است.';
-							
-						if($_POST['Provision']!=null)
-							$Provision=$_POST['Provision'];
-						if($_POST['Difference']!=null)
-						$Difference=implode(",",$_POST['Difference']);
-						$Amount=($_POST['Amount']==null ? "" : $_POST['Amount']);
-						$Amount=str_replace(",", "", $Amount);
-						
-						
-						$R=new ReviewProgressReview($File,$Difference,$Amount, false);
-						$R->SetResult($_POST['Result']);
-						$R->SetProvision($Provision);
-						$ch=$R->Check();
-						
-						if(is_string($ch))
-							return $ch;	
-						
-						$ProgReview->kill();
-						$R=new ReviewProgressReview($File,$Difference,$Amount, true);
-						$R->SetResult($_POST['Result']);
-						$R->SetProvision($Provision);
-						$ch=$R->Apply();
-						
-						ORM::Persist($R);
-						return $R;
-					}
-				}
-			}
+			$validInput=$validation;		
+		
+		$File=ORM::query(new ReviewFile)->GetRecentFile($validInput['Cotag']);
+		
+		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], false);
+		$R->SetResult($validInput['Result']);
+		$R->SetProvision($validInput['Provision']);
+		$ch=$R->Check();
+		
+		if(is_string($ch))
+			return $ch;	
+		
+		if($type=='Edit'){
+			$ProgReview=$File->LastReview();
+			$ProgReview->kill();
 		}
+		
+		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], true);
+		$R->SetResult($validInput['Result']);
+		$R->SetProvision($validInput['Provision']);
+		$ch=$R->Apply();
+		
+		ORM::Persist($R);
+		return $R;
+	}
+	
+	public function IsEditable($Cotag=null)
+	{
+		$data['User'] = MyUser::CurrentUser();
+		$data['Cotag'] = $Cotag;
+		return $this->ValidateCorrectFilterInput($data,'Editable');
+	}
+	
+	/**
+	 * 
+	 * validates corrects and filters the inputs 
+	 * and returns an array of corrected filtered values
+	 * @param array $dataArray
+	 * @return array OR {string of error} 
+	 * @author morteza Kavakebi
+	 */
+	private function ValidateCorrectFilterInput($dataArray,$type)
+	{
+		$Cotag		=$dataArray['Cotag'];
+		$Result		=$dataArray['Result'];
+		
+		if(is_array($dataArray['Difference'])){
+			$Difference	=implode(',',$dataArray['Difference']);
+		}else{			
+			$Difference	=$dataArray['Difference'];
+		}
+		
+		$Provision	=$dataArray['Provision'];
+		$Amount		=$dataArray['Amount'];
+		$Reviewer	=$dataArray['User'];
+
+		$Amount=str_replace(",", "", $Amount);
+		//----------------input Validation--------------------
+		if ($Cotag<1 && $Cotag==null)
+			return "کوتاژ ناصحیح است.";
+		
+		$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+	
+		if ($File==null)
+			return "یافت نشد.";
+		
+		if(!($File->GetClass()==0 OR $File->GetClass()==null))
+			return "این اظهارنامه کلاسه شده است. ویرایش ممکن نیست.";
+	
+		$lastreviewer=$File->LastReviewer();
+		$ProgReview=$File->LastReview();
+
+		if ($lastreviewer==null)
+			return "این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
+		
+		if(strstr($type,'Edit'))
+		{
+			if($ProgReview==null)
+				return "این اظهارنامه بازبینی نشده است";
+			
+			if ($lastreviewer!=$Reviewer)
+				return "کارشناس بازبینی این اظهارنامه شما نیستید.";
+		}
+		
+		
+		if($type!='Editable')
+		{
+			if($Result==0)
+			{
+				if(strlen($Provision)==0 OR $Provision==null)
+					return 'شماره کلاسه انتخاب نشده است.';
+				
+				if(	($Provision=='248' OR $Provision=='528'))
+				{
+					if(strlen($Difference)==0)
+						return 'علت تفاوت انتخاب نشده است.';
+				
+					if($Amount==0 OR $Amount<20000 OR !is_numeric($Amount))
+						return 'مبلغ تفاوت نامناسب یا کم است.';
+				}				
+			}
+	
+			
+			
+		}
+// 		$LLP=$File->LLP();
+// 		if(!($LLP instanceof ReviewProgressReivew || $LLP instanceof ReviewProgressAssign))
+// 		{
+// 			$Error="کارشناس هنوز تخصیص نیافته است یا اینکه از تاریخ بازبینی اظهارنامه گذشته است.";
+// 			return $Error;
+// 		}
+		
+		//----------------Correction of input--------------------
+		if($Result==1){
+			$Provision="";
+			$Difference="";
+			$Amount="";
+		}
+		//----------------Filtering input--------------------
+		$validatedInput['Provision']	= $Provision;
+		$validatedInput['Result']		= $Result;
+		$validatedInput['Difference']	= $Difference;
+		$validatedInput['Amount']		= $Amount;
+		$validatedInput['Cotag']		= $Cotag;
+		
+		return $validatedInput;
 	}
 	
 	public function ReviewPercentage()
