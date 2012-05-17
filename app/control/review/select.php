@@ -6,25 +6,20 @@ class ReviewSelectController extends JControl
 		j::Enforce("Reviewer");
 		if($_REQUEST['Class'])
 		{
-			
 			$Class=$_POST['Classe']*1;
 			$File=ORM::Query(new ReviewFile())->GetRecentFileByClasse($Class);
-			$Cotag=$File->Cotag();
-			$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag);
-			if(is_string($Res))
-				$Error[]=$Res;
-			else		
-				$this->Redirect("./?Cotag={$Cotag}");	 						
+			$Cotag=$File->Cotag();	
 		}
 		else if ($_REQUEST['Cotag'])
 		{
 			$Cotag=$_POST['Cotag']*1;
-			$Res=ORM::Query("ReviewProgressReview")->AddReview($Cotag);
+		}
+		if($Cotag>0){
+			$Res=ORM::Query("ReviewProgressReview")->IsAddable($Cotag);
 			if(is_string($Res))
 				$Error[]=$Res;
-			else		
-				$this->Redirect("./?Cotag={$Cotag}");	 						
-			
+			else
+				$this->Redirect("./?Cotag={$Cotag}");
 		}
 		$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile(j::UserID());
 		$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");

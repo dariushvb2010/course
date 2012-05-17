@@ -247,11 +247,28 @@ class ReviewProgressReviewRepository extends EntityRepository
 		return $R;
 	}
 	
+	/**
+	 * 
+	 * @param integer $Cotag
+	 * @author morteza kavaebi
+	 */
 	public function IsEditable($Cotag=null)
 	{
 		$data['User'] = MyUser::CurrentUser();
 		$data['Cotag'] = $Cotag;
 		return $this->ValidateCorrectFilterInput($data,'Editable');
+	}
+
+	/**
+	 * 
+	 * @param integer $Cotag
+	 * @author morteza kavaebi
+	 */
+	public function IsAddable($Cotag=null)
+	{
+		$data['User'] = MyUser::CurrentUser();
+		$data['Cotag'] = $Cotag;
+		return $this->ValidateCorrectFilterInput($data,'Addable');
 	}
 	
 	/**
@@ -259,6 +276,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 	 * validates corrects and filters the inputs 
 	 * and returns an array of corrected filtered values
 	 * @param array $dataArray
+	 * @param string $type {'Add','Edit','Addable','Editable'}
 	 * @return array OR {string of error} 
 	 * @author morteza Kavakebi
 	 */
@@ -306,7 +324,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		}
 		
 		
-		if($type!='Editable')
+		if(!strstr($type,'able'))//NOT {Editable,Addable}
 		{
 			if($Result==0)
 			{
