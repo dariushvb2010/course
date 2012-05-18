@@ -19,20 +19,12 @@ class ReviewProgressRemove extends ReviewProgress
 
 
 
-	function __construct(ReviewFile $File=null, MyUser $User=null,$Comment='')
+	function __construct(ReviewProgress $Slain=null, MyUser $User=null,$Comment='')
 	{
-		parent::__construct($File,$User);
-		$this->kill();
-		if($File)
-		{
-			$LLP=ORM::Query(new ReviewFile)->LastLiveProgress($File);
-			if(!$LLP)
-			throw new Exception("Remove of nothing is impossible");
-			$this->Slain=$LLP;
-			$LLP->kill();
-			$File->SetState($LLP->PrevState());
-		}
+		parent::__construct($Slain->File(),$User);
 		$this->Comment=$Comment;
+		$this->Slain=$Slain;
+		$this->SetDead();
 	}
 
 	function  Summary()
@@ -51,30 +43,28 @@ use \Doctrine\ORM\EntityRepository;
 class ReviewProgressRemoveRepository extends EntityRepository
 {
 	/**
-	 *
-	 * Enter description here ...
-	 * @param ReviewFile $File
-	 * @return string on error true on sucsess
+	 * 
+	 * @param ReviewProgress $Slain
+	 * @param string $Comment
+	 * @return string(error)|boolean
 	 */
-	public function AddToFile(ReviewFile $File,$Comment)
+	public function AddToFile(ReviewProgress $Slain,$Comment)
 	{
-		if (!$File)
-		{
-			$Error="کوتاژ ناصحیح است.";
-			return $Error;
+		if(!$Slain){
+			return "فرایندی نداده اید.";
 		}
-		$LLP=$File->LLP();
-		if(!$LLP)
-		{
-			$Error="هیچ فرایند قابل حذفی برای این پرونده یا اظهارنامه وجود ندارد.";
-			return $Error;
+		if(!$Slain->File()){
+			return "کوتاژ صحیح نیست.";
 		}
-		if($LLP->PrevState()==0)
+		if($Slain->PrevState()==0)
 		{
 			return "امکان حذف کردن این فرآیند وجود ندارد. ";
 		}
+		if(strlen($Comment)<10){
+			return "توضیحات کافی نیست.";
+		}
 		$User=MyUser::CurrentUser();
-		$R=new ReviewProgressRemove($File,$User,$Comment);
+		$R=new ReviewProgressRemove($Slain,$User,$Comment);
 		ORM::Persist($R);
 		return true;
 	}

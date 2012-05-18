@@ -245,7 +245,14 @@ class ReviewFile
 		return ORM::Query($this)->ProgressList($this);
 	}
     
-    
+    function killLLP($Comment){
+    	$LLP=$this->LLP();
+    	$res=ORM::Query("ReviewProgressRemove")->AddToFile($LLP,$Comment);
+    	if(is_string($res))
+    		return $res;
+    	
+    	$LLP->kill();
+    }
 }
 
 
@@ -290,6 +297,36 @@ class ReviewFileRepository extends EntityRepository
 			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
 			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
 		return $r[0];
+	}
+
+	/**
+	 * 
+	 * @param ReviewProgress $Progress
+	 * @param string $Type
+	 * @param boolean $IsProcess
+	 * @return ReviewProgress
+	 */
+	public function NextLiveProgress($Progress,$Type='all',$IsProcess=false)
+	{
+		if($Cotag instanceof ReviewFile)
+		{
+			$Cotag=$Progress->File()->Cotag();
+		}
+		
+		if($IsProcess) $T="Process";
+		else  $T="Progress";
+		
+		
+		$Query="SELECT P FROM ReviewProgress AS P join P.File AS F 
+				WHERE P.Dead=0 AND F.Cotag= ? AND P.CreateTimestamp>?".
+				(strtolower($Type)!=="all"?"AND P INSTANCE OF Review{$T}{$Type}":"").
+				"ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1";
+		
+		$r=j::ODQL($Query,$Cotag,$Progress->CreateTimestamp());	 
+		if($r)
+			return $r[0];
+		else
+			return null;
 	}
 	/**
 	 * 
@@ -339,7 +376,7 @@ class ReviewFileRepository extends EntityRepository
 	/**
 	 * 
 	 * برای این که در فایل جدید مطمئن شویم ک این  کوتاژ قبلا در سال جاری وصول نشده 
-	 * @param unknown_type $Cotag
+	 * @param integer $Cotag
 	 * @return ReviewFile
 	 */
 	public function GetRecentFile($Cotag)

@@ -122,9 +122,25 @@ abstract class ReviewProgress
 	*/
 	protected  $Dead;
 	function Dead(){ return $this->Dead; }
+	function SetDead($value=true){ $this->Dead=$value; }
+	
+	/**
+	 * @return ReviewProgress
+	 */
+	function NLP(){
+		return ORM::Query("ReviewFile")->NextLiveProgress($this);
+	}
+		
 	function kill()
 	{
-		$this->Dead=true;
+		$NLP=$this->NLP();
+		if($NLP){
+			$NLP->SetPrevState($this->PrevState());
+		}else{
+			$File=$this->File();
+			$File->SetState($this->PrevState());
+		}
+		$this->SetDead(true);
 	}
 	function Concat($Prefix,$Flag,$IfTrue,$IfFalse)
 	{

@@ -4,18 +4,18 @@ class ManagerRemoveController extends JControl
 	function Start()
 	{
 		j::Enforce("MasterHand");
+
+		$Cotag=$_POST['Cotag']*1;
+		$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+		$LLP=ORM::Query("ReviewFile")->LastLiveProgress($Cotag);
+		
 		if (isset($_POST['Cotag']) && !isset($_POST['confirm']))
 		{
-			
-			$Cotag=$_POST['Cotag']*1;
-			$LLP=ORM::Query("ReviewFile")->LastLiveProgress($Cotag);
 			$this->LLP=$LLP;
 		}
 		else if(isset($_POST['confirm']))
 		{
-			$Cotag=$_POST['Cotag']*1;
-			$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
-			$res=ORM::Query("ReviewProgressRemove")->AddToFile($File,$_POST['Comment']);
+			$res=$File->killLLP($_POST['Comment']);
 			if(is_string($res))
 			{
 				$Error[]=$res;

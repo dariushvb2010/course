@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @entity(repositoryClass="ReviewProgressCorrectionRepository")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="Type", type="string")
+ * @tutorial goto first page and change the cotag of file
+ * if new cotag was not exist.
  * */
 class ReviewProgressCorrection extends ReviewProgress
 {
@@ -86,14 +88,20 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 			return $Error;
 		}
 		
-		if (strlen($Comment)<15)
+		if (strlen($NewCotag)!=b::$CotagLength)
 		{
-			$Error="حداقل توضیحی به طول 10 حرف نیاز دارد.";
+			$Error="کوتاژ باید ".b::$CotagLength." رقمی باشد.";
+			return $Error;
+		}
+		
+		if (strlen($Comment)<b::$CommentMinLength)
+		{
+			$Error="حداقل توضیحی به طول ".b::$CommentMinLength."حرف نیاز دارد.";
 			return $Error;
 		}
 		
 		$R=new ReviewProgressCorrection($file1,$CurrentUser);
-		$R->kill();
+		$R->SetDead();
 		$R->setComment($Comment);
 		$R->setOldCotag($OldCotag);
 		$R->setNewCotag($NewCotag);

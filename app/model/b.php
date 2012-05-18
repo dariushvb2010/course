@@ -5,7 +5,7 @@ class b
 {
 
 	public static $CotagLength=7;
-	public static $CommentMinLength=6;
+	public static $CommentMinLength=10;
 	public static $Error=array();
 	public static $Warning=array();
 	/**
