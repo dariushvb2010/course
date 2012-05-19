@@ -123,7 +123,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		if(strlen($Comment)<6){
 			$Error[]='متن توضیحات بسیار کوتاه است.'."<br/>".$str;
 		}
-		//--------REASSIGN
+		//--------REASSIGN------------
 		else
 		{
 			if(!$File->LLP() instanceof ReviewProgressAssign)
@@ -131,7 +131,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 				$Error[]="امکان لغو تخصیص نیست. ".$str;
 				return;
 			}
-			$CancelResult=ORM::Query("ReviewProgressRemove")->AddToFile($File,$Comment);
+			$CancelResult=$File->killLLP($Comment);
 			if(is_string($CancelResult))
 			{
 				$Error[]=$CancelResult."<br/>".$str;

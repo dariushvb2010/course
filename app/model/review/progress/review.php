@@ -319,9 +319,10 @@ class ReviewProgressReviewRepository extends EntityRepository
 			if($ProgReview==null)
 				return "این اظهارنامه بازبینی نشده است";
 			
-			if ($lastreviewer!=$Reviewer)
-				return "کارشناس بازبینی این اظهارنامه شما نیستید.";
 		}
+		
+		if ($lastreviewer!=$Reviewer)
+			return "کارشناس بازبینی این اظهارنامه شما نیستید.";
 		
 		
 		if(!strstr($type,'able'))//NOT {Editable,Addable}
