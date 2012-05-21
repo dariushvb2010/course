@@ -148,10 +148,10 @@ class ReportStatisticsMainController extends JControl
 	
 		if(!$v || $v==' ')
 			return '-';
+		elseif($k='Sum')
+			return number_format($v);
 		else
-		{
 			return $v;
-		}
 	}
 
 }
