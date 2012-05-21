@@ -3,7 +3,7 @@ class ReportStatisticsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('numberResults','percentage','karshenas_work_volume','bazbini_speed');
+		$ChartTypeArray=array('numberResults');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -17,8 +17,33 @@ class ReportStatisticsMainController extends JControl
 		switch ($ChartType){
 			//////////////////////////////////////////////////////
 			case 'numberResults':
+				$c=new CalendarPlugin();
+				
+				if(isset($_POST['date'])){
+					$c=new CalendarPlugin();
+					$CYear=$_POST['CYear'];
+					$CMonth=$_POST['CMonth'];
+					$CDay=$_POST['CDay'];
+					$CHour=$_POST['CHour'];
+					$CMin=$_POST['CMin'];
+					$FYear=$_POST['FYear'];
+					$FMonth=$_POST['FMonth'];
+					$FDay=$_POST['FDay'];
+					$FHour=$_POST['FHour'];
+					$FMin=$_POST['FMin'];
+					$Cotag=$_POST['Cotag']*1;
+					$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
+					$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
+					$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
+					$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
+				}else{					
+					$StartTimestamp=strtotime("-30 days");
+					$FinishTimestamp=time();
+					$this->today=explode("/", $c->JalaliFromTimestamp($StartTimestamp));
+					$this->tomorrow=explode("/", $c->JalaliFromTimestamp($FinishTimestamp));
+				}
 				$data=array();
-				$r=ORM::Query("ReviewProgressReview")->ResultStatistics(10,10000000000);
+				$r=ORM::Query("ReviewProgressReview")->ResultStatistics($StartTimestamp,$FinishTimestamp);
 				$al1=new AutolistPlugin($r,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
 				$al1->SetHeader('Count', 'تعداد');
@@ -32,7 +57,7 @@ class ReportStatisticsMainController extends JControl
 				$al1->SetFilter(array($this,"myfilter"));
 				$this->AutoListResult=$al1;
 				
-				$r2=ORM::Query("ReviewProgressReview")->ProvisionStatistics(10,10000000000);
+				$r2=ORM::Query("ReviewProgressReview")->ProvisionStatistics($StartTimestamp,$FinishTimestamp);
 				$al2=new AutolistPlugin($r2,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
 				$al2->SetHeader('Count', 'تعداد');
