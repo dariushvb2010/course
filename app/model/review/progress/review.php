@@ -404,4 +404,40 @@ class ReviewProgressReviewRepository extends EntityRepository
 							ORDER BY year,month");
 		return $r;
 	}
+
+	public function ResultStatistics($StartTimestamp,$EndTimestamp)
+	{
+		$r=j::DQL("SELECT P.Result,COUNT(P),SUM(P.Amount)
+							FROM ReviewProgressReview AS P 
+							WHERE P.CreateTimestamp BETWEEN ? AND ?   
+							GROUP BY P.Result
+							ORDER BY P.Result",$StartTimestamp,$EndTimestamp);
+		$r2=array();
+		foreach($r as $k=>$v){
+			$r2[]=array(
+					'Result'=>$v['Result'],
+					'Count'=>$v[1],
+					'Sum'=>$v[2],
+					);
+		}
+		return $r2;
+	}
+
+	public function ProvisionStatistics($StartTimestamp,$EndTimestamp)
+	{
+		$r=j::DQL("SELECT P.Provision,COUNT(P),SUM(P.Amount)
+							FROM ReviewProgressReview AS P 
+							WHERE P.CreateTimestamp BETWEEN ? AND ?   
+							GROUP BY P.Provision
+							ORDER BY P.Provision",$StartTimestamp,$EndTimestamp);
+		$r2=array();
+		foreach($r as $k=>$v){
+			$r2[]=array(
+					'Provision'=>$v['Provision'],
+					'Count'=>$v[1],
+					'Sum'=>$v[2],
+					);
+		}
+		return $r2;
+	}
 }

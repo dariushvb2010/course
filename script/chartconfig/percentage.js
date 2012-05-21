@@ -7,7 +7,7 @@ chartconfig={
 		plotShadow: false
 	},
 	title: {
-		text: 'شیر بازار مصرف آهو کباب در شمیرانات'
+		text: 'میزان کلاسه های مختلف در میان اظهارنامه های خطا یابی شده'
 	},
 	tooltip: {
 		formatter: function() {

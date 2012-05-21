@@ -652,6 +652,14 @@ $(function() {
 			</a>
 		</li>
 <?php endif;?>
+<?php if (1==1) :?>
+		<li>
+			<a href='/report/statistics/'>
+				<span class='ui-icon-refresh ui-icon'></span> 
+				آمار
+			</a>
+		</li>
+<?php endif;?>
 <?php if (j::UserID()>0) :?>
 		<li>
 			<a href='/report/userprogresslist'>
