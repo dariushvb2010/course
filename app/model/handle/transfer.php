@@ -57,6 +57,8 @@ abstract class HandleTransfer
 // 	const Give="Give";
 // 	const Send="Send";
 // 	const Receive="Receive";
+	const ColsCount=4;
+	const RowsCount=25;
 	function Action(){ return $this->Action; }
 	protected function PersianAction()
 	{
@@ -199,8 +201,9 @@ abstract class HandleTransfer
 			}
 			else 
 			{
-				$al->InputValues['ColsCount']=5;
-				$al->InputValues['RowsCount']=25;
+				$al->InputValues['ColsCount']=self::ColsCount;
+				$al->InputValues['RowsCount']=self::RowsCount;
+				$al->Width = "auto";
 				$al->HasRemove=false;
 			}
 		}
@@ -223,8 +226,9 @@ abstract class HandleTransfer
 			}
 			else
 			{
-				$al->InputValues['ColsCount']=5;
-				$al->InputValues['RowsCount']=25;
+				$al->InputValues['ColsCount']=self::ColsCount;
+				$al->InputValues['RowsCount']=self::RowsCount;
+				$al->Width = "auto";
 				$al->HasRemove=false;
 			}
 		}
@@ -272,7 +276,8 @@ abstract class HandleTransfer
 		else
 		{
 			$al->HasRemove=false;
-			$al->InputValues['ColsCount']=5;
+			$al->Width = "auto";
+			$al->InputValues['ColsCount']=self::ColsCount;
 			$al->InputValues['RowsCount']='auto';
 		}
 		$al->Autoform=$f;
