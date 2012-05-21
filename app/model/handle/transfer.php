@@ -257,7 +257,7 @@ abstract class HandleTransfer
 		$f->HasFormTag=false;
 		if($this->Mail->State()==Mail::STATE_EDITING )
 		{
-			//$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
+			$f->AddElement(array("Type"=>"submit", "Name"=>"Save", "Value"=>"ذخیره"));
 			$f->AddElement(array("Type"=>"submit", "Value"=>$this->PersianAction(), "Name"=>$this->Action));
 			//$f->AddElement(array("Type"=>"submit", "Name"=>"Complete", "Value"=>"کامل کردن"));
 			$f->AddElement(array("Type"=>"hidden", "Name"=>"MailID", "Value"=>$this->Mail->ID()));
