@@ -55,15 +55,26 @@ class ReviewProgressReview extends ReviewProgress
 		'Other'=>'سایر',
 		);
 		if ($type=='persian'){
-			$rr=explode(',', $this->Difference);
-			if ($rr==null)return "";
-			foreach ($rr as $v){
-				$rr2[]=(isset($t[$v])?$t[$v]:$v);
-			}
-			return implode(',',$rr2); 
+			return self::PersianDifference($this->Difference); 
 		}
 		return $this->Difference;
 	}
+	
+	public static function PersianDifference($Value)
+	{
+		$t=array('Tariff'=>'تعرفه',
+				'Value'=>'ارزش',
+				'Other'=>'سایر',
+		);
+		
+		$rr=explode(',', $Value);
+		if ($rr==null)return "";
+		foreach ($rr as $v){
+			$rr2[]=(isset($t[$v])?$t[$v]:$v);
+		}
+		return implode(',',$rr2);
+	}
+	
 	function DifferenceArray()
 	{
 		$res = explode(",", $this->Difference);
@@ -434,6 +445,25 @@ class ReviewProgressReviewRepository extends EntityRepository
 		foreach($r as $k=>$v){
 			$r2[]=array(
 					'Provision'=>$v['Provision'],
+					'Count'=>$v[1],
+					'Sum'=>$v[2],
+					);
+		}
+		return $r2;
+	}
+
+	public function DifferenceStatistics($StartTimestamp,$EndTimestamp)
+	{
+		$r=j::DQL("SELECT P.Difference,COUNT(P),SUM(P.Amount)
+							FROM ReviewProgressReview AS P 
+							WHERE P.CreateTimestamp BETWEEN ? AND ?   
+							GROUP BY P.Difference
+							ORDER BY P.Difference",$StartTimestamp,$EndTimestamp);
+		$r2=array();
+		
+		foreach($r as $k=>$v){
+			$r2[]=array(
+					'Difference'=>ReviewProgressReview::PersianDifference($v['Difference']),
 					'Count'=>$v[1],
 					'Sum'=>$v[2],
 					);

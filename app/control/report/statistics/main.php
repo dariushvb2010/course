@@ -72,6 +72,17 @@ class ReportStatisticsMainController extends JControl
 				$al2->InputValues['RowsCount']=4;
 				$al2->SetFilter(array($this,"myfilter"));
 				$this->AutoListProvision=$al2;
+
+				$r3=ORM::Query("ReviewProgressReview")->DifferenceStatistics($StartTimestamp,$FinishTimestamp);
+				$al3=new AutolistPlugin($r3,null,"Select");
+				//				$al1->SetHeader('Key', 'اطلاعات');
+				$al3->SetHeader('Difference', 'نوع اختلاف');
+				$al3->SetHeader('Count', 'تعداد');
+				$al3->SetHeader('Sum', 'جمع اختلاف');
+				$al3->LeftDataLabel="شماره کلاسه";
+				$al3->InputValues['ColsCount']=1;
+				$al3->SetFilter(array($this,"myfilter"));
+				$this->AutoListDifference=$al3;
 				break;
 			/////////////////////////////////////////////////////	
 			case 'percentage':

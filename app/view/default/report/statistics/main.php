@@ -65,6 +65,11 @@
 		echo "<h2>آمار شماره کلاسه اعلامی توسط کارشناسان</h2>";
 		$this->AutoListProvision->PresentForPrint();
 	}
+	if(isset($this->AutoListDifference))
+	{
+		echo "<h2>آمار نوع اختلاف اعلامی توسط کارشناسان</h2>";
+		$this->AutoListDifference->PresentForPrint();
+	}
 	if(isset($this->AutoList1))
 	{
 		echo "<h2> اطلاعات کارشناسی درب خروج</h2>";
