@@ -14,14 +14,6 @@
 	#year{width:40px;margin :3px;text-align:left;}
 	div#body>div.mainList{border:4px double black; margin: 5px 12px; padding:5px; min-height:200px;}
 	table.autolist, table.autolistprint{clear:both}
-	<?php
-	
-
-	if($this->Handler->SearchForm)
-		$this->Handler->SearchForm->PresentCSS();
-	if($this->Handler->MainList)
-		$this->Handler->MainList->PresentCss();
-	?>
 </style>
 
 <div class="menuHolder">

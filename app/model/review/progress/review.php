@@ -416,58 +416,40 @@ class ReviewProgressReviewRepository extends EntityRepository
 		return $r;
 	}
 
-	public function ResultStatistics($StartTimestamp,$EndTimestamp)
+	/**
+	 * 
+	 * @param integer $StartTimestamp
+	 * @param integer $EndTimestamp
+	 * @param group by field $fieldname
+	 * @return array
+	 */
+	public function ReviewStatistics($StartTimestamp,$EndTimestamp,$fieldname)
 	{
-		$r=j::DQL("SELECT P.Result,COUNT(P),SUM(P.Amount)
+		$r=j::DQL("SELECT P.{$fieldname},COUNT(P),SUM(P.Amount)
 							FROM ReviewProgressReview AS P 
-							WHERE P.CreateTimestamp BETWEEN ? AND ?   
-							GROUP BY P.Result
-							ORDER BY P.Result",$StartTimestamp,$EndTimestamp);
+							WHERE P.CreateTimestamp BETWEEN ? AND ? AND P.Dead=0   
+							GROUP BY P.{$fieldname}
+							ORDER BY P.{$fieldname}",$StartTimestamp,$EndTimestamp);
 		$r2=array();
 		foreach($r as $k=>$v){
 			$r2[]=array(
-					'Result'=>$v['Result'],
+					$fieldname=>$v[$fieldname],
 					'Count'=>$v[1],
 					'Sum'=>$v[2],
 					);
 		}
 		return $r2;
 	}
-
-	public function ProvisionStatistics($StartTimestamp,$EndTimestamp)
+	
+	public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
-		$r=j::DQL("SELECT P.Provision,COUNT(P),SUM(P.Amount)
-							FROM ReviewProgressReview AS P 
-							WHERE P.CreateTimestamp BETWEEN ? AND ?   
-							GROUP BY P.Provision
-							ORDER BY P.Provision",$StartTimestamp,$EndTimestamp);
-		$r2=array();
-		foreach($r as $k=>$v){
-			$r2[]=array(
-					'Provision'=>$v['Provision'],
-					'Count'=>$v[1],
-					'Sum'=>$v[2],
-					);
-		}
-		return $r2;
-	}
-
-	public function DifferenceStatistics($StartTimestamp,$EndTimestamp)
-	{
-		$r=j::DQL("SELECT P.Difference,COUNT(P),SUM(P.Amount)
-							FROM ReviewProgressReview AS P 
-							WHERE P.CreateTimestamp BETWEEN ? AND ?   
-							GROUP BY P.Difference
-							ORDER BY P.Difference",$StartTimestamp,$EndTimestamp);
-		$r2=array();
+		$StartTimestamp=0;
+		$EndTimestamp=10000000000;
+		$r=j::ODQL("SELECT P,F
+				FROM ReviewProgressReview AS P JOIN ReviewFile AS F
+				WHERE P.CreateTimestamp BETWEEN ? AND ? AND P.Dead=0 
+				ORDER BY P.Difference",$StartTimestamp,$EndTimestamp);
 		
-		foreach($r as $k=>$v){
-			$r2[]=array(
-					'Difference'=>ReviewProgressReview::PersianDifference($v['Difference']),
-					'Count'=>$v[1],
-					'Sum'=>$v[2],
-					);
-		}
-		return $r2;
+		return $r;
 	}
 }

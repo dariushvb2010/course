@@ -43,7 +43,7 @@ class ReportStatisticsMainController extends JControl
 					$this->tomorrow=explode("/", $c->JalaliFromTimestamp($FinishTimestamp));
 				}
 				$data=array();
-				$r=ORM::Query("ReviewProgressReview")->ResultStatistics($StartTimestamp,$FinishTimestamp);
+				$r=ORM::Query("ReviewProgressReview")->ReviewStatistics($StartTimestamp,$FinishTimestamp,'Result');
 				$al1=new AutolistPlugin($r,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
 				$al1->SetHeader('Count', 'تعداد');
@@ -57,7 +57,7 @@ class ReportStatisticsMainController extends JControl
 				$al1->SetFilter(array($this,"myfilter"));
 				$this->AutoListResult=$al1;
 				
-				$r2=ORM::Query("ReviewProgressReview")->ProvisionStatistics($StartTimestamp,$FinishTimestamp);
+				$r2=ORM::Query("ReviewProgressReview")->ReviewStatistics($StartTimestamp,$FinishTimestamp,'Provision');
 				$al2=new AutolistPlugin($r2,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
 				$al2->SetHeader('Count', 'تعداد');
@@ -73,7 +73,7 @@ class ReportStatisticsMainController extends JControl
 				$al2->SetFilter(array($this,"myfilter"));
 				$this->AutoListProvision=$al2;
 
-				$r3=ORM::Query("ReviewProgressReview")->DifferenceStatistics($StartTimestamp,$FinishTimestamp);
+				$r3=ORM::Query("ReviewProgressReview")->ReviewStatistics($StartTimestamp,$FinishTimestamp,'Difference');
 				$al3=new AutolistPlugin($r3,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
 				$al3->SetHeader('Difference', 'نوع اختلاف');
@@ -148,6 +148,8 @@ class ReportStatisticsMainController extends JControl
 	
 		if(!$v || $v==' ')
 			return '-';
+		elseif($k=='Difference')
+			return ReviewProgressReview::PersianDifference($v);
 		elseif($k=='Sum')
 			return number_format($v);
 		else
