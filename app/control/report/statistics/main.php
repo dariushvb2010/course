@@ -19,7 +19,7 @@ class ReportStatisticsMainController extends JControl
 			case 'numberResults':
 				$c=new CalendarPlugin();
 				
-				if(isset($_POST['date'])){
+				if(isset($_POST['Date'])){
 					$c=new CalendarPlugin();
 					$CYear=$_POST['CYear'];
 					$CMonth=$_POST['CMonth'];
@@ -31,9 +31,8 @@ class ReportStatisticsMainController extends JControl
 					$FDay=$_POST['FDay'];
 					$FHour=$_POST['FHour'];
 					$FMin=$_POST['FMin'];
-					$Cotag=$_POST['Cotag']*1;
 					$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
-					$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
+					$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay); 
 					$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
 					$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
 				}else{					
