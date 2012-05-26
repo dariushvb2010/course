@@ -22,7 +22,8 @@ class ConfigData
 		 "Reviewer"=>"کارشناس بازبینی",
 		 "Correspondence"=>"مکاتبات",
 		 "Typist"=>"تایپیست",
-		 "Programmer"=>" ویژه"
+		 "Programmer"=>" ویژه",
+	 	 "Nazer"=>"مدیریت ارشد",
 	 );
 	
 	 /**
