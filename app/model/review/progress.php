@@ -19,7 +19,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  *  "Get"="ReviewProgressGet",
  *  "Send"="ReviewProgressSend",
  *  "Receive"="ReviewProgressReceive",
- * 	"Cancelassign"="ReviewProgressCancelassign",
  * 	"Remove"="ReviewProgressRemove",
  * 
  * 	"AssignProtest"="ReviewProcessAssign",
