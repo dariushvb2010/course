@@ -37,6 +37,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 	 */
 	public function AddToFile($Cotag,$Time=null)
 	{
+		return 'this function is deprecated.';
 		if ($Cotag<1)
 		{
 				$Error="کوتاژ ناصحیح است.";
@@ -85,7 +86,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 	}
 	public function AddByFile(ReviewFile $File)
 	{
-		
+		return 'this function is deprecated.';
 		if ($File)
 		{
 			if($File->LLP() instanceof ReviewProgressRegisterarchive)
@@ -125,6 +126,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 	}
 	public function CancelCotag($Cotag)
 	{
+		return 'this function is deprecated.';
 		if ($Cotag<1)
 		{
 			$Error="کوتاژ ناصحیح است.";
