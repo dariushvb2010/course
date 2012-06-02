@@ -275,7 +275,6 @@ $(function() {
 		</li>
 		<li>
 			<a href="/cotag/transfer/toarchive">
-			<!-- <a href='/cotag/deliver'> -->
 				<span class='ui-icon-arrowthick-1-w ui-icon'></span>
 				تحویل به بازبینی
 			</a>

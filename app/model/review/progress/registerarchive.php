@@ -55,7 +55,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 				else
 				{
 					$lp=$File->LLP() ;
-					if($lp instanceof ReviewProgressDeliver or $lp =null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
+					if($lp ==null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
 					{
 						$thisUser=MyUser::CurrentUser();
 						if($File->State()==3)
@@ -96,7 +96,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 			else
 			{
 				$lp=$File->LLP() ;
-				if($lp instanceof ReviewProgressDeliver or $lp =null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
+				if($lp ==null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
 				{
 					$thisUser=MyUser::CurrentUser();
 					if($File->State()==3)
