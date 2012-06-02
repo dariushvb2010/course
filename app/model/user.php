@@ -50,8 +50,7 @@ class User
     	{
     		$this->Username=$Username;
     		$this->Password=j::$Session->PasswordHashString($Username, $Password);
-    	}
-    		
+    	}	
     }
     
 }

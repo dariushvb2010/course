@@ -116,5 +116,6 @@ div#top>div#topright{width:30%;}
 div#top>div#topleft{ width:40%;}
 div#top div img{}
 div#top>div#topright img.on{display:none;}
+a img{border:none}
 div#top>div#topleft span{margin-top:7px;}
 /*-------------------T D ------------------------*/
