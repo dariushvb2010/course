@@ -30,6 +30,7 @@ class ArchiveRegisterController extends JControl
 			
 		}
 		$this->Error=$Error;
+		$this->Result=$Result;
 		if (count($Error))
 			$this->Result=false;
 		return $this->Present();
