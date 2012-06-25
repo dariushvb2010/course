@@ -37,52 +37,45 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 	 */
 	public function AddToFile($Cotag,$Time=null)
 	{
-		return 'this function is deprecated.';
-		if ($Cotag<1)
+		
+		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		if ($File)
 		{
-				$Error="کوتاژ ناصحیح است.";
-				return $Error;
-		}
-		else 
-		{
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
-			if ($File)
+			if($File->LLP() instanceof ReviewProgressRegisterarchive)
 			{
-				if($File->LLP() instanceof ReviewProgressRegisterarchive)
-				{
-					$Error="یک بار وصول شده است .";
-					return $Error;
-				}
-				else
-				{
-					$lp=$File->LLP() ;
-					if($lp ==null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
-					{
-						$thisUser=MyUser::CurrentUser();
-						if($File->State()==3)
-							$File->SetState(4);
-						else
-							return "امکان تحویل گرفتن وجود ندارد.";
-						$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
-						$Registerarchive->SetPrevState(3);
-						if($Time)$Registerarchive->SetCreateTimestamp($Time);
-						
-						ORM::Persist($Registerarchive);  
-						return true;
-					}
-					else 
-					{
-						$Error="کوتاژ قابل وصول نیست .";
-						return $Error;
-					}
-				}
+				$Error="یک بار وصول شده است .";
+				return $Error;
 			}
 			else
 			{
-				$Error="اظهارنامه یافت نشد!";
-				return $Error;
+				$lp=$File->LLP() ;
+				if($lp ==null || $lp instanceof ReviewProgressSendfile ||  $lp instanceof ReviewProgressStart )//felan oke ta badan 
+				{
+					$thisUser=MyUser::CurrentUser();
+					if($File->State()==3)
+						$File->SetState(4);
+					else
+						return "امکان تحویل گرفتن وجود ندارد.";
+					$Registerarchive=new ReviewProgressRegisterarchive($File,$thisUser);
+					$Registerarchive->SetPrevState(3);
+					if($Time)$Registerarchive->SetCreateTimestamp($Time);
+					
+					ORM::Persist($Registerarchive);  
+					return true;
+				}
+				else 
+				{
+					$Error="کوتاژ قابل وصول نیست .";
+					return $Error;
+				}
 			}
 		}
+		else
+		{
+			$Error="اظهارنامه یافت نشد!";
+			return $Error;
+		}
+		
 	}
 	public function AddByFile(ReviewFile $File)
 	{

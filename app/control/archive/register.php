@@ -7,27 +7,11 @@ class ArchiveRegisterController extends JControl
 		if(isset($_POST["register"]))
 		{
 			$Cotag = $_POST["Cotag"]*1;
-			
-			$File = ReviewFile::GetRecentFile($Cotag);
-			if($File)
-			{
-				$st = $File->LastProgress();
-				if($st instanceof ReviewProgressStart and $st->MailNum() != null and $File->State()==3)
-				{
-					$File->SetState(4);
-					$Result="وصول شد.";
-				}
-				else
-				{
-					$Error[]="امکان وصول اظهارنامه وجود ندارد.";
-				}
-			}
-			else
-			{
-				$Error[]="اظهارنامه یافت نشد.";
-			}
-			
-			
+			$res=ORM::Query("ReviewProgressRegisterarchive")->AddToFile($Cotag);
+			if(is_string($res))
+				$Error[]=$res;
+			else 
+				$Result="وصول شد.";
 		}
 		$this->Error=$Error;
 		$this->Result=$Result;
