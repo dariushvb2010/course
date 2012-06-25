@@ -1,6 +1,6 @@
 <?php
 use Doctrine\Common\Collections\ArrayCollection;
-//if you want to edit the present subroutine, please edit your presentforprint subroutine
+//if you want to edit the present subroutine, please edit your presentforprint subroutine too
 /**
  * 
  * Autolist Plugin, Provides sortable list views of Objects and Arrays
@@ -305,7 +305,7 @@ class AutolistPlugin extends JPlugin
 	
 	/**
 	 * 
-	 * you can make a print list width seperate pages for print in a paper like A4
+	 * you can make a list width seperate pages and any count of rows and columns for print in a paper like A4
 	 * if you have a form for your autolist dont set colscount and rowscount parameters, it will be set from the form inputs 
 	 * @param integer $RowsCount: Number of rows you want to present in a print page
 	 * @param integer $ColsCount: Number of cols you want to present in a print page
