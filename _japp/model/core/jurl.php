@@ -18,6 +18,7 @@ class jURL_Server
 	 */
 	static function URL ($QueryString=true)
 	{
+		
 		if ($QueryString && jURL::QueryString() )
 			return (jURL::Protocol()."://".jURL::ServerName().jURL::PortReadable().jURL::RequestURI()."?".jURL::QueryString());
 		else
@@ -41,6 +42,7 @@ class jURL_Server
 		$port="";
 		else
 		$port=":".$port;
+		return $port;
 	}
 	/**
 	 * Protocol of client connection, HTTP or HTTPS
@@ -161,7 +163,7 @@ class jURL_Server
 	 */
 	static function Root ()
 	{
-		$x=jURL::Protocol() . "://" . jURL::HTTPHost() . jURL::PortReadable() . jURL::RequestPath();
+		$x=jURL::Protocol() . "://" . jURL::HTTPHost(). jURL::RequestPath();
 		return substr($x,0,strlen($x)-1);
 	}
 
