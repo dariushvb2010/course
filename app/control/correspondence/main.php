@@ -69,7 +69,7 @@ class CorrespondenceMainController extends JControl
 					}
 					break;
 				case 'ProcessAssign':
-					$Res=ORM::Query(new ReviewProcessAssign)->AddToFile($File);
+					$Res=ORM::Query("ReviewProcessAssign")->AddToFile($File);
 					if(!isset($Res['Error'])){
 //						orm::Dump($Res);
 						$this->Redirect("./?Cotag={$File->Cotag()}&success={$input_class}&Reviewer={$Res['Class']->Reviewer()->getFullName()}");

@@ -19,7 +19,7 @@ class ReviewProcessSenddemand extends ReviewProgress
 		return $this->DemandStep;
 	}
 	
-	function __construct(ReviewFile $File=null,$DemandStep=null,$Indicator=null,MyUser $User=null)
+	function __construct(ReviewFile $File=null,$DemandStep=0,$Indicator=0,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
 		$this->MailNum=$Indicator;
@@ -65,6 +65,7 @@ class ReviewProcessSenddemandRepository extends EntityRepository
 	 */
 	public function AddToFile(ReviewFile $File=null,$DemandStep=null,$Indicator,$Comment=null)
 	{
+		
 		$CurrentUser=MyUser::CurrentUser();
 
 		if ($File==null)
@@ -74,10 +75,10 @@ class ReviewProcessSenddemandRepository extends EntityRepository
 		else{
 			$R=new ReviewProcessSenddemand($File,$DemandStep,$Indicator,$CurrentUser);
 			$R->setComment(($Comment==null?"":$Comment));
-			$er=$R->Apply();
+			$er=$R->Check();
 			if(!is_string($er)){
-				ORM::Persist($R);
-				ORM::Persist($File);
+				$R->Apply();
+				ORM::Write($R);
 				$Res['Class']=$R;
 			}else{
 				$Res['Error']=$er;

@@ -1,72 +1,75 @@
 <?php
-class UserCreateController extends BaseControllerClass
+class UserEditController extends BaseControllerClass
 {
     function Start ()
     {
 		j::Enforce("CreateUser");
-		
-		$f=$this->makeform();
+
 	    if (count($_POST))
 	    {
+			$f=$this->makeform();
 	    	$r=$f->Validate($_POST,$Errors);
 	    	if (!$r)
 	    		$Error=$Errors;
 	    	else 
 	    	{
-
-	   			$r=$this->CreateUser($_POST['Username'],$_POST['Password'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Role']);
-	    		
+	    		$r=$this->EditUser($_POST['ID'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Role']);
+	    		$f=$this->makeform($_POST);
 	    		if ($r)
-	    			$Result="با موفقیت ساخته شد.";
+	    			$Result="با موفقیت ثبت شد.";
 	    		else 
-	    			$Error[]="کاربر موجود است";
+	    			$Error[]="خطا";
 	    	}
 	    	
+	    }else{
+	    	$U=ORM::Find("MyUser", $_GET['ID']);
+	    	if (!$U)
+	    		$Error[]="کاربر وجود ندارد.";
+	    	
+	    	$f=$this->makeform($U,true);
 	    }
 	    if(count($Error))$this->Result=false;
 	    $this->Error=$Error;
 	    $this->Result=$Result;
     	$this->Autoform=$f;
-    	return $this->Present();
+    	return $this->Present("",'User.Create');
     }
-    function CreateUser($Username,$Password,$Email,$Gender=0,$Firstname,$Lastname,$Role="Reviewer")
+    
+	
+    function EditUser($ID,$Email,$Gender=0,$Firstname,$Lastname,$Role="Reviewer")
 	{
+		
 		if ("Reviewer"==$Role)
 			$isReviewer=1;
 		else
 			$isReviewer=0;
 		
-		if (ORM::Find("MyUser","Username",$Username))
-			return false;
 		$Group=$this->groupAppend($Role);
 		
-		$U=new MyUser($Username,$Password,$Gender,$Firstname,$Lastname,$isReviewer,"",$Group);
-		ORM::Write($U);
-		if ($U->ID())
-		{
-			j::$RBAC->User_AssignRole("Review_".$Role,$U->ID());
-			return $U->ID();
-		}
-		else
+		$U=ORM::Find("MyUser", $ID);
+		$U=j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$ID);
+		if (!$U)
 			return false;
+		else
+			$U=$U[0];
+
+		$U->SetGender($Gender);
+		$U->SetFirstname($Firstname);
+		$U->SetLastname($Lastname);
+		
+		
+		j::$RBAC->User_UnassignAllRoles($U->ID());
+		j::$RBAC->User_AssignRole("Review_".$Role,$U->ID());
+		return true;
 	}
-    
 	
-    	function makeform(){
+	function makeform($Data=null,$isOBJ=false){
 		$f=new AutoformPlugin("post");
 		$f->AddElement(
 				array(
-						"Type"=>"text",
-						"Label"=>"نام کاربری",
-						"Validation"=>"/^[a-zA-Z0-9]{3,}$/",
-						"Name"=>"Username",
-				));
-		$f->AddElement(
-				array(
-						"Type"=>"password",
-						"Label"=>"رمز عبور",
-						"Validation"=>"*",
-						"Name"=>"Password",
+						"Type"=>"hidden",
+						"Name"=>"ID",
+						"Value"=>($isOBJ?$Data->ID():$Data['ID']),
 				));
 		$f->AddElement(
 				array(
@@ -76,7 +79,7 @@ class UserCreateController extends BaseControllerClass
 						"Options"=>array(
 								0=>'مرد',
 								1=>'زن'),
-						"Default"=>"0",
+						"Default"=>($isOBJ?$Data->Gender():$Data['gender']),
 				));
 		$f->AddElement(
 				array(
@@ -84,6 +87,7 @@ class UserCreateController extends BaseControllerClass
 						"Label"=>"نام",
 						"Validation"=>"alpha_farsi",
 						"Name"=>"Firstname",
+						"Value"=>($isOBJ?$Data->Firstname():$Data['Firstname']),
 				));
 		$f->AddElement(
 				array(
@@ -91,6 +95,7 @@ class UserCreateController extends BaseControllerClass
 						"Label"=>"نام خانوادگی",
 						"Validation"=>"alphanumeric_farsi",
 						"Name"=>"Lastname",
+						"Value"=>($isOBJ?$Data->Lastname():$Data['Lastname']),
 				));
 		$f->AddElement(
 				array(
@@ -100,14 +105,20 @@ class UserCreateController extends BaseControllerClass
 						"Vertical"=>true,
 						"ContainerStyle"=>"text-align:right; margin-right:50px; padding-right:50px; border:1px dotted #aaa;",
 						"Options"=>ConfigData::$GROUPS,
-						"Default"=>"Reviewer",
+						"Default"=>($isOBJ?$this->GetGroupTitleByID($Data->Group()):$Data['Role']),
 				));
 		$f->AddElement(
 				array(
 						"Type"=>"submit",
-						"Value"=>"ایجاد کاربر",
+						"Value"=>"ثبت تغییرات",
 				));
 		return $f;
+	}
+	
+	function GetGroupTitleByID($ID){
+		$U=j::ODQL("SELECT G FROM MyGroup G WHERE G.ID=?", 1);
+		$U=$U[0];
+		return $U->Title();
 	}
 	
 	function groupAppend($Role){

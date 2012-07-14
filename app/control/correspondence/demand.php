@@ -13,9 +13,9 @@ class CorrespondenceDemandController extends JControl
 			if($File)
 			{ 
 				$types=$this->get_input_class('string');
-				if(!FileFsm::IsPossible($File->State(),$types)){
-					$Error[]='این عملیات روی پرونده قابل قبول نیست.';
-				}
+				//if(!FileFsm::IsPossible($File->State(),$types)){
+				//	$Error[]='این عملیات روی پرونده قابل قبول نیست.';
+				//}
 				if(isset($_POST['submit']))
 				{			
 					$Res=$this->all_addfile($File);
@@ -62,25 +62,28 @@ class CorrespondenceDemandController extends JControl
 		}
 		switch ($types[0]){
 			case 'Senddemand':
-				$Res=ORM::Query(new ReviewProcessSenddemand)->AddToFile($File,$types[1],$Indicator,$Comment);
+				$Res=ORM::Query("ReviewProcessSenddemand")->AddToFile($File,$types[1],$Indicator,$Comment);
 				break;
 			case 'Protest':
 				$req_num=$_POST['request'];
 				if($req_num>=0 AND $req_num<4){
 					$ar=array('karshenas','setad','commission','appeals');
-					$Res=ORM::Query(new ReviewProcessProtest)->AddToFile($File,$ar[$req_num],$Indicator,$Comment);
+					$Res=ORM::Query("ReviewProcessProtest")->AddToFile($File,$ar[$req_num],$Indicator,$Comment);
 				}else{
 					$Res['Error'][]='خطا در ورودی اطلاعات.';
 				}
 				break;
 			case 'Prophecy':
-				$Res=ORM::Query(new ReviewProcessProphecy)->AddToFile($File,$types[1],$Indicator,$Comment);
+				$Res=ORM::Query("ReviewProcessProphecy")->AddToFile($File,$types[1],$Indicator,$Comment);
 				break;
 		}
 		if(!isset($Res['Error'])){
 			$Imgs=explode(',', substr($imglist,1));
 			foreach ($Imgs as $k=>$img)
 			{
+				ORM::Dump($Res);
+				var_dump($Res['Class']->ID());
+				
 				rename(j::RootDir()."/app/control/servic/uploads/".$img,j::RootDir()."/app/control/servic/uploads/".$Res['Class']->ID().'_'.$k.".jpg" );
 				ReviewImages::Add($Res['Class'], $Res['Class']->ID().'_'.$k);
 			}
