@@ -15,24 +15,8 @@ class FileFsm extends JModel
 	 * progresses going out of each state with their outcome state are indicated 
 	 * @var array
 	 */
-	
 	private static $StateGraph=array(
 	//-----------------------Review---------------------
-	/*1=>array('Start'=>2),
-	2=>array('Give_cotagbook_to_archive'=>3),
-	3=>array('Get_archive_from_cotagbook'=>4),
-	4=>array('Assign'=>5),
-	5=>array('Review_nok'=>9, 'Review_ok'=>7),
-	6=>array('Review_nok'=>6, 'Confirm_ok'=>9, 'Confirm_nok'=>10),
-	7=>array('Review_nok'=>6, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
-	10=>array('Review_ok'=>6, 'Review_nok'=>7),
-	11=>array('Assign_by_manager'=>5, 'Give_archive_to_raked'=>13, 'Send_archive_to_out'=>12),
-	12=>array('Receive_archive_from_out'=>11),
-	13=>array('Get_raked_from_archive'=>14),
-	14=>array('Send_raked_to_out'=>15, 'Give_raked_to_archive'=>16),
-	15=>array('Receive_raked_from_out'=>14),
-	16=>array('Get_arhive_from_raked'=>4),
-	'Ebtalable'=>array('Ebtal'=>1),*/
 	1=>array('Start'=>2),
 	2=>array('Give_cotagbook_to_archive'=>3),
 	3=>array('Get_archive_from_cotagbook'=>4),
@@ -261,110 +245,5 @@ class FileFsm extends JModel
 		 
 	}
 	static function Moderate10(){echo 'ss';}
-	static function Moderate23()
-	{
-		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject(0,999999999);
-		foreach($files as $f)
-		{
-			$f->SetState(2);
-		}
-		$files=ORM::Query(new ReviewFile)->GetOnlyProgressStartObject2(0,999999999);
-		foreach($files as $f)
-		{
-			$f->SetState(3);
-		}
-		echo 'done23';
-	}
-	static function Moderate4()
-	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Registerarchive",0,99999999);
-		foreach($files as $f)
-		{
-			
-				$f->SetState(4);
-			
-		}
-		echo 'done4';
-	}
-	static function Moderate5()
-	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Assign",0,99999999);
-		foreach($files as $f)
-		{
-			if($f->State()==0)
-				$f->SetState(5);
-			else
-				echo $f->Cotag()." ";
-			
-		}
-		ORM::Flush();
-		echo 'done5';
-	}
-	public static function Moderate911()
-	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Review",0,99999999);
-		foreach($files as $f)
-		{
-			if($f->LastProgress()->Result()==0)
-			{
-				if($f->State()==0)
-				$f->SetState(9);
-				else
-				echo $f->Cotag()." ";
-			}
-			else
-			{
-				if($f->State()==0)
-				$f->SetState(11);
-				else
-				echo $f->Cotag()." ";
-			}
-			
-		}
-		echo 'done911';
-	}
-	public static function Moderate11()
-	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Receivefile",0,99999999);
-		foreach($files as $f)
-		{
-			if($f->State()==0)
-			$f->SetState(11);
-			else
-			echo $f->Cotag()." ";
-			
-		}
-		echo 'done11';
-	}
 	
-	public static function Moderate12()
-	{
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Sendfile",0,99999999);
-		foreach($files as $f)
-		{
-			if($f->State()==0)
-			$f->SetState(12);
-			else
-			echo $f->Cotag()." ";
-		}
-		echo 'done12';
-	}
-	
-	public static function Moderate13()
-	{
-		
-		$files=ORM::Query(new ReviewFile)->GetFilesWithLastProgress("Post",0,99999999);
-		foreach($files as $f)
-		{
-			if($f->State()==0)
-			$f->SetState(13);
-			else
-			echo $f->Cotag()." ";
-		}
-		echo 'done13';
-	}
-	public static function ModerateTest()
-	{
-		
-	}
 }

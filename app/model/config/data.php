@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * 
+ * @author dariush
+ * a class for saving constant data
+ */
 class ConfigData
 {
 	static $CONFIG_STYLE=array(
@@ -13,7 +18,6 @@ class ConfigData
 		"Event"=>array(
 		)
 	);
-	
 	 static $GROUPS=array(
 		 "Admin"=>"مدیریت",
 		 "CotagBook"=>"دفتر کوتاژ",

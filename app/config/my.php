@@ -16,8 +16,5 @@ reg( "app/title", "نرم‌افزار جامع بازبینی گمرک شهید
  */
 reg("my/DirectDownloadLink",SiteRoot."/file/trunk/jf3.1.22.tar.gz");
 define( "CotagLength",7);
-define("ReviewCode",18);
-define("CustomsCode",165);
-
 
 ?>

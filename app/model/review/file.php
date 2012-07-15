@@ -206,9 +206,9 @@ class ReviewFile
 		$this->Cotag=$Cotag;    		
     	$this->Progress= new ArrayCollection();
     	$this->Alarm=new ArrayCollection();
-    	$this->Class=0;
-    	$this->Gatecode=50100;
-    	$this->State=1;
+    	$this->Class=ConfigReview::$file_initial_class;
+    	$this->Gatecode=ConfigReview::$gate_code;
+    	$this->State=ConfigReview::$file_initial_state;
     	
     }
     
