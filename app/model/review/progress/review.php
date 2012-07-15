@@ -421,7 +421,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 							ORDER BY year,month");
 		return $r;
 	}
-
+	
 	/**
 	 * 
 	 * @param integer $StartTimestamp

@@ -274,4 +274,59 @@ abstract class ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressRepository extends EntityRepository
 {
+	/**
+	 * @author dariush
+	 * @tutorial  bazdoc/review/progress/start/monthlystart.html
+	 * @see http://dev.mysql.com/doc/refman/5.5/en/date-and-time-functions.html#function_date-add
+	 *
+	 * --------------time line ------->-->---->----->------>----->------>------->------>------>---->----->----->----->----->-----
+	 * ********|***M(monthCount-1)***|  ...  |***M(2)***|***M(1)***|***M(0)***|startMonth=4|***M***|***M***|***M***|***now***|****
+	 * --------------------------------------------------------------------------------------------------------------------------
+	 * @param integer $monthCount: number of monthes to show
+	 * @param integer $startMonth: how many monthes ago
+	 * @return array the number of files started in a unit(month, day) seperated by unit(month, day)
+	 */
+	public function ProgressCountPerMonth($ProgressType,$monthCount, $startMonth=0)
+	{
+		//-----get the numberof days of last month---------------------------
+		$c = new CalendarPlugin();
+		$n = $c->NowPersian(); //ex: $n = '1391-4-23 21:26:31'
+		$t = explode('-', $n); //ex: $t[2] = '23 21:26:31'
+		$day = explode(" ", $t[2]); //ex: $day[0] = 23
+		$dayOfMonth= $day[0]*1; //our purpose--------------------------------
+		$addDays = 30 - $dayOfMonth;
+		
+		
+		$oc=j::SQL("SELECT COUNT(P.ID) as count,
+						floor(
+							DATEDIFF(
+								curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+								FROM_UNIXTIME(P.CreateTimestamp)
+							)/30.3
+						) as month
+					FROM app_ReviewProgress AS P
+					WHERE P.Type=?
+						AND DATEDIFF(
+								curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+								FROM_UNIXTIME(P.CreateTimestamp)
+							) >= 0
+					GROUP BY month ",$addDays,$startMonth,$ProgressType,$addDays,$startMonth);
+	
+	
+		//-----------------making $res------------------
+		while(count($oc)){
+			$t=array_pop($oc);
+			$month=$t['month'];
+			if($month*1<$monthCount)
+			$res[$month*1+$startMonth]=$t['count'];
+		}
+		
+		for($i=$startMonth;$i<$startMonth+$monthCount;$i++){
+			if(!array_key_exists($i,$res)){
+				$res[$i]=0;//array('count'=>0,'month'=>$i);
+			}
+		}
+		krsort($res);
+		return $res;
+	}
 }

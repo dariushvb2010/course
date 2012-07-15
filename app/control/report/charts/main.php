@@ -3,18 +3,20 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','bazbini_speed');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','bazbini_speed','in_vs_out');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
+			$ChartTypeGet=$_GET['charttype']*1;
 			if($_GET['charttype']>=0 AND $_GET['charttype']<count($ChartTypeArray)){
+				
 				$ChartType=$ChartTypeArray[$_GET['charttype']];
+				
 			}
 		}
-		
 		$this->ChartType=$ChartType;
 		$this->ConfigFileName=$ChartType;
-		
+		$this->ctype=$ChartType;
 		switch ($ChartType){
 			//////////////////////////////////////////////////////
 			case 'daftar_cotag':
@@ -72,6 +74,29 @@ class ReportChartsMainController extends JControl
 				}
 				$this->values=$values;
 				$this->X=$X;
+				break;
+				
+			case 'in_vs_out':
+				
+				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Start",12,0);
+				//$this->firstday=(time()-24*60*60*$days)*1000;
+				foreach ($r as $key =>$value){
+					$daily1[]=$value['count'];
+				}
+				$this->in=$r;
+				
+				
+				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Review",12,0);
+				
+				$names=array();
+				$values=array();
+				foreach ($r as $value){
+					//$X[]="'".$value['monthname']." ".$value['year']."'";
+					$values[]=$value['count'];
+				}
+				//var_dump($values);
+				$this->out=$r;
+				//$this->X=$X;
 				break;
 			
 		}

@@ -16,11 +16,15 @@
 
 <li><a href="?charttype=2" class="yellow">حجم کاری کارشناسان</a></li>
 
-<li><a href="?charttype=2" class="green">سرعت کار بازبینی</a></li>
-
+<li><a href="?charttype=3" class="green">سرعت کار بازبینی</a></li>
+<li><a href="?charttype=4" class="blue">ورودی خروجی</a></li>
 </ul>
 </div>
+
 <div class="shadow"></div>
+<?php 
+
+?>
 <div style="clear: both;"></div>
 
 <script type="text/javascript" src="/script/chartconfig/<?php echo $this->ConfigFileName;?>.js"></script>
@@ -48,7 +52,12 @@
  			chartconfig['series'][1]['data']= [<?php echo implode(',',$this->values);?>];
 <?php
 	 	break;
-?>
+	 	case 'in_vs_out':
+?>	
+ 	 		chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->X);?>];
+ 	 		chartconfig['series'][0]['data']= [<?php echo implode(',',$this->in);?>];
+ 	 		chartconfig['series'][1]['data']= [<?php echo implode(',',$this->out);?>];
+
 <?php } ?>
 $(document).ready(function() {
 		chart = new Highcharts.Chart(chartconfig);	

@@ -147,6 +147,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		$r=j::ODQL("SELECT F.Cotag FROM ReviewProgressStart  AS P JOIN P.File AS F WHERE P.IsPrint=FALSE AND P.CreateTimestamp BETWEEN ? AND ? ",$f,$l);
 		return $r;
 	}
+	
 	public function DailyStart($days=30)
 	{
 		$r=j::SQL("SELECT COUNT(P.ID) as count,DATE(FROM_UNIXTIME(P.CreateTimestamp))as date,DATEDIFF(DATE(NOW()),FROM_UNIXTIME(P.CreateTimestamp))as day FROM app_ReviewProgress AS P WHERE P.Type='Start' GROUP BY DATE(FROM_UNIXTIME(P.CreateTimestamp))");
@@ -165,6 +166,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		}
 		return $res2;
 	}
+	
 	
 	public function HourlyStart()
 	{
