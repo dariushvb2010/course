@@ -368,6 +368,19 @@ class RBAC extends BaseApplicationClass
 		WHERE `".reg("jf/rbac/tables/RoleUsers/table/UserID")."`=? AND `".reg("jf/rbac/tables/RoleUsers/table/RoleID")."`=?"
         ,$UserID,$Role);
 	}
+
+	/**
+	 * Unassigns all roles to a user
+	 *
+	 * @param String $UserID optional, UserID or the current user would be used (use 0 for guest)
+	 */
+	function User_UnassignAllRoles($UserID=null)
+	{
+	    if ($UserID===null) $UserID=$this->App->Session->UserID;
+        $this->DB->Execute("DELETE FROM `".reg("jf/rbac/tables/RoleUsers/table/name")."` 
+		WHERE `".reg("jf/rbac/tables/RoleUsers/table/UserID")."`=?"
+        ,$UserID);
+	}
 	
 	/**
 	 * Returns all Role-User relations as a 2D array of arrays with following fields:

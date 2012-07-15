@@ -83,7 +83,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 			}
 			else
 			{
-				$R=new ReviewProgressAssign($File,$Reviewer,true);
+				//TODO: $R=new ReviewProgressAssign($File,$Reviewer,true);
 				$R->Apply();
 				ORM::Persist($R);
 				return $R;

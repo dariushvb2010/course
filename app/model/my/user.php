@@ -22,6 +22,9 @@ class MyUser extends Xuser
 		$r=$this->Firstname;
 		return (mb_strlen($r,'utf-8')>15?mb_substr($r, 0,12,'utf-8').'...':mb_substr($r, 0,15,'utf-8'));
 	}
+	public function SetFirstname($value){
+		$this->Firstname=$value;
+	}
 	/**
 	* @Column(type="string")
 	* @var string
@@ -33,7 +36,9 @@ class MyUser extends Xuser
 		$r=$this->Lastname;
 		return (mb_strlen($r,'utf-8')>15?mb_substr($r, 0,12,'utf-8').'...':mb_substr($r, 0,15,'utf-8'));
 	}
-	
+	public function SetLastname($value){
+		$this->Lastname=$value;
+	}
 	/**
 	* @Column(type="boolean")
 	* @var boolean
@@ -289,6 +294,15 @@ class MyUserRepository extends EntityRepository
 	{
 		return $this->_em->createQuery('SELECT u FROM User u WHERE u.id < 100')
 		->getResult();
+	}
+	/**
+	 * @author Morteza Kavakebi
+	 * @param integer $ID
+	 * @return MyUser
+	 */
+	public function getUserByID($ID)
+	{
+		return j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$ID);
 	}
 	public function getReviewerCount()
 	{

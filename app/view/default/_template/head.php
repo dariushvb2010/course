@@ -747,9 +747,9 @@ $(function() {
 				</a>
 			</li>
 			<li>
-				<a href='/sys/main'>
+				<a href='/user/list'>
 					<span class='ui-icon-minus ui-icon'></span> 
-					ویرایش کاربر
+					لیست کاربران
 				</a>
 			</li>
 			<li>

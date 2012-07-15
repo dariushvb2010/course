@@ -150,9 +150,13 @@ class FileFsm extends JModel
 		'Prophecy_second'=>47,
 		'Prophecy_setad'=>58,
 		'Prophecy_commission'=>63,
+		'Senddemand_demand'=>40,
+		'Senddemand_setad'=>57,
+		'Senddemand_karshenas'=>46,
 		'Ebtalable'=>array(2,3,4,5,9,11,7),
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
-		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies'),
+		'Senddemands'=>array('Senddemand_demand','Senddemand_setad','Senddemand_karshenas'),
+		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies','Senddemands'),
 	);
 	
 	/**
