@@ -487,6 +487,7 @@ class ReviewFileRepository extends EntityRepository
 
 	/**
 	 *
+	 * لغو ابطالی ها و تحویلی های دفتر کوتاژ
 	 * برای تحویل دفتر کوتاژ به بایگانی بازبینی
 	 * @param unknown_type $TimeStart
 	 * @param unknown_type $TimeEnd
@@ -496,17 +497,11 @@ class ReviewFileRepository extends EntityRepository
 	public function FilesInTimeRange($TimeStart,$TimeEnd,MyUser $User)
 	{
 		
-		$r=j::ODQL("SELECT F FROM ReviewFile AS F 
-					WHERE F.State=2 AND F.CreateTimestamp BETWEEN ? AND ? ORDER BY F.Cotag",$TimeStart,$TimeEnd);
-		return $r;
-	}
-	public function EbtaliFilesInTimeRange($TimeStart,$TimeEnd,MyUser $User)
-	{
-	
-		$r=j::ODQL("SELECT DISTINCT(F) FROM ReviewFile AS F JOIN F.Progress P 
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress P 
 						WHERE P INSTANCE OF ReviewProgressStart AND F.State=2 AND P.CreateTimestamp BETWEEN ? AND ? ORDER BY F.Cotag",$TimeStart,$TimeEnd);
 		return $r;
 	}
+	
 	/**
 	 * used in correspondence
 	 */

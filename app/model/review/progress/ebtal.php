@@ -49,8 +49,6 @@ class ReviewProgressEbtalRepository extends EntityRepository
 		if(is_string($ch))
 			return $ch;
 		
-		$Ebtal= new ReviewProgressEbtal($File, true);
-		$Ebtal->Apply();
 		
 		$S=$File->Stock();
 		if($S)
@@ -69,6 +67,9 @@ class ReviewProgressEbtalRepository extends EntityRepository
 			foreach ($proglist as $p)
 				$p->kill();
 		}
+
+		$Ebtal= new ReviewProgressEbtal($File, true);
+		$Ebtal->Apply();
 		
 		ORM::Persist($Ebtal);
 		
