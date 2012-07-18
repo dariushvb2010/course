@@ -25,6 +25,7 @@ class UserListController extends JControl
 		$al->SetHeader('Lastname', 'نام خانوادگی',true);
 		$al->SetHeader('CreateTimestamp', 'تاریخ ثبت',true);
 		$al->SetHeader('EditButton', 'ویرایش',true);
+		$al->SetHeader('ChPassButton', 'تغییر رمز',true);
 		$al->SetFilter(array($this,"myfilter"));
 		$this->FileAutoList=$al;
 		
@@ -44,7 +45,11 @@ class UserListController extends JControl
 		}
 		elseif($k=='EditButton')
 		{
-			return "<a class='link_but' href='./Edit?ID={$D->ID()}'>ویرایش</a>";
+			return "<a class='link_but' href='./edit?ID={$D->ID()}'>ویرایش</a>";
+		}
+		elseif($k=='ChPassButton')
+		{
+			return "<a class='link_but' href='./resetpass?ID={$D->ID()}'>تغییر رمز</a>";
 		}
 		else
 		{

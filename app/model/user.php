@@ -43,14 +43,18 @@ class User
     {
     	return $this->Password;
     }
-
-    function __construct($Username=null,$Password=null)
-    {
+    
+    public function SetUsernamePassword($Username=null,$Password=null){
     	if ($Username)
     	{
     		$this->Username=$Username;
     		$this->Password=j::$Session->PasswordHashString($Username, $Password);
-    	}	
+    	}
+    }
+
+    function __construct($Username=null,$Password=null)
+    {
+    	$this->SetUsernamePassword($Username,$Password);	
     }
     
 }
