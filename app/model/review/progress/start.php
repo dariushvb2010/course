@@ -151,6 +151,7 @@ class ReviewProgressStartRepository extends EntityRepository
 	public function DailyStart($days=30)
 	{
 		$r=j::SQL("SELECT COUNT(P.ID) as count,DATE(FROM_UNIXTIME(P.CreateTimestamp))as date,DATEDIFF(DATE(NOW()),FROM_UNIXTIME(P.CreateTimestamp))as day FROM app_ReviewProgress AS P WHERE P.Type='Start' GROUP BY DATE(FROM_UNIXTIME(P.CreateTimestamp))");
+		if(is_array($r))
 		while(count($r)){
 			$t=array_pop($r);
 			$day=$t['day'];
