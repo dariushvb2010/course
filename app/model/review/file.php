@@ -428,6 +428,22 @@ class ReviewFileRepository extends EntityRepository
 	}
 
 	/**
+	 *
+	 * لیست کوتاژهای بر اساس نام وضعیت
+	 * @param string $StateName
+	 * @return array of ReviewFile
+	 * @author Morteza Kavakebi
+	 */
+	public static function FilesByStateName($StateName)
+	{
+		$states=FileFsm::Name2State($StateName);
+		$states=implode(',', $states);
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
+					ORDER BY F.Cotag");
+		return $r;
+	}
+
+	/**
 	 * 
 	 * لیست فایل هایی که مدتی است در استیت مشخص شده مانده اند
 	 * کاربرد در ماده 1415 کردن پس از گذشت مدت قانونی در ابلاغ مطالبه نامه

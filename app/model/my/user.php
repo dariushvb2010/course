@@ -138,6 +138,10 @@ class MyUser extends Xuser
 	{
 		return $this->isReviewer;
 	}
+	public function SetisReviewer($value)
+	{
+		$this->isReviewer=$value;
+	}
 	/**
 	 * @OneToMany(targetEntity="ReviewProgress", mappedBy="User")
 	 * @var ArrayCollection
@@ -252,7 +256,7 @@ class MyUser extends Xuser
 			$this->gender=$Gender;
 			$this->Lastname=$Lastname;
 			$this->SetGroup($Group);
-			$this->isReviewer=$isReviewer;
+			$this->SetisReviewer($isReviewer);
 			$this->State=1;
 			$this->Setting= new ArrayCollection();
 		}

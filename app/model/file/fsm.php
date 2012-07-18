@@ -141,6 +141,7 @@ class FileFsm extends JModel
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
 		'Senddemands'=>array('Senddemand_demand','Senddemand_setad','Senddemand_karshenas'),
 		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies','Senddemands'),
+		'PrintForDemand'=>array('ProcessRegister'),
 	);
 	
 	/**
@@ -203,6 +204,11 @@ class FileFsm extends JModel
 		$ar=FileFsm::PossibleProgresses($currentstate*1);
 		return array_key_exists($progressname,$ar);
 	}
+	
+	static function is_printing($ProgressName){
+		$ar=array('Senddemand_demand');
+		return in_array($ProgressName,$ar);
+	} 
 	
 	/**
 	 * 

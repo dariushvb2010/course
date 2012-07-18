@@ -38,7 +38,6 @@ class UserEditController extends BaseControllerClass
 	
     function EditUser($ID,$Email,$Gender=0,$Firstname,$Lastname,$Role="Reviewer")
 	{
-		
 		if ("Reviewer"==$Role)
 			$isReviewer=1;
 		else
@@ -56,10 +55,13 @@ class UserEditController extends BaseControllerClass
 		$U->SetGender($Gender);
 		$U->SetFirstname($Firstname);
 		$U->SetLastname($Lastname);
+		$U->SetGroup($Group);
+		$U->SetisReviewer($isReviewer);
 		
 		
 		j::$RBAC->User_UnassignAllRoles($U->ID());
 		j::$RBAC->User_AssignRole("Review_".$Role,$U->ID());
+		ORM::Write($U);
 		return true;
 	}
 	
@@ -116,7 +118,7 @@ class UserEditController extends BaseControllerClass
 	}
 	
 	function GetGroupTitleByID($ID){
-		$U=j::ODQL("SELECT G FROM MyGroup G WHERE G.ID=?", 1);
+		$U=j::ODQL("SELECT G FROM MyGroup G WHERE G.ID=?",$ID);
 		$U=$U[0];
 		return $U->Title();
 	}

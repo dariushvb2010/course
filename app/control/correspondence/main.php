@@ -76,7 +76,10 @@ class CorrespondenceMainController extends JControl
 					}
 					break;
 				default:
-					$this->Redirect("./demand?Cotag={$File->Cotag()}&input_class={$input_class}");
+					//if(FileFsm::is_printing($input_class))
+					//	$this->Redirect("./demand2?Cotag={$File->Cotag()}&input_class={$input_class}");
+					//else
+						$this->Redirect("./demand?Cotag={$File->Cotag()}&input_class={$input_class}");
 			}
 		}
 		return (isset($Res['Error'])?$Res['Error']:null);

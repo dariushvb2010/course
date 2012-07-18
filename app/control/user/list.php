@@ -15,7 +15,7 @@ class UserListController extends JControl
 			$Cotag=$_POST['Cotag']*1;
 		}
 		
-		$AllUsers= ORM::Query(new MyUser())->Reviewers();
+		$AllUsers= ORM::Query(new MyUser())->GetAll();
 		$al=new AutolistPlugin($AllUsers,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
 		$al->SetHeader('Firstname', 'نام',true);
