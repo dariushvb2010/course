@@ -48,7 +48,7 @@ if (reg("app/state")=="develop")
 {
 	reg("app/db/default/name","gomrok");
 	reg("app/db/default/user","root"); #comment this for no-DB jFramework
-	reg("app/db/default/pass","132465798");
+	reg("app/db/default/pass","");
 	reg("app/db/default/host","127.0.0.1");
 
 	reg("app/db/source/name","Customs");
