@@ -39,6 +39,19 @@ class MyUser extends Xuser
 	public function SetLastname($value){
 		$this->Lastname=$value;
 	}
+
+	/**
+	* @Column(type="string")
+	* @var string
+	*/
+	protected $Codemelli;
+	public function Codemelli()
+	{
+		return $this->Codemelli;
+	}
+	public function SetCodemelli($value){
+		$this->Codemelli=$value;
+	}
 	/**
 	* @Column(type="boolean")
 	* @var boolean
@@ -246,7 +259,7 @@ class MyUser extends Xuser
 		}
 		return $res;
 	}
-	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$isReviewer=false,$Email="",$Group=null)
+	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$Codemelli="",$isReviewer=false,$Email="",$Group=null)
 	{
 		$this->Progress=new ArrayCollection();
 		if ($Username)
@@ -257,6 +270,7 @@ class MyUser extends Xuser
 			$this->Lastname=$Lastname;
 			$this->SetGroup($Group);
 			$this->SetisReviewer($isReviewer);
+			$this->SetCodemelli($Codemelli);
 			$this->State=1;
 			$this->Setting= new ArrayCollection();
 		}

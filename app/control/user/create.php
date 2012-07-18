@@ -14,7 +14,7 @@ class UserCreateController extends BaseControllerClass
 	    	else 
 	    	{
 
-	   			$r=$this->CreateUser($_POST['Username'],$_POST['Password'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Role']);
+	   			$r=$this->CreateUser($_POST['Username'],$_POST['Password'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Codemelli'],$_POST['Role']);
 	    		
 	    		if ($r)
 	    			$Result="با موفقیت ساخته شد.";
@@ -29,7 +29,7 @@ class UserCreateController extends BaseControllerClass
     	$this->Autoform=$f;
     	return $this->Present();
     }
-    function CreateUser($Username,$Password,$Email,$Gender=0,$Firstname,$Lastname,$Role="Reviewer")
+    function CreateUser($Username,$Password,$Email,$Gender=0,$Firstname,$Lastname,$Codemelli,$Role="Reviewer")
 	{
 		if ("Reviewer"==$Role)
 			$isReviewer=1;
@@ -40,7 +40,7 @@ class UserCreateController extends BaseControllerClass
 			return false;
 		$Group=$this->groupAppend($Role);
 		
-		$U=new MyUser($Username,$Password,$Gender,$Firstname,$Lastname,$isReviewer,"",$Group);
+		$U=new MyUser($Username,$Password,$Gender,$Firstname,$Lastname,$Codemelli,$isReviewer,"",$Group);
 		ORM::Write($U);
 		if ($U->ID())
 		{
@@ -91,6 +91,13 @@ class UserCreateController extends BaseControllerClass
 						"Label"=>"نام خانوادگی",
 						"Validation"=>"alphanumeric_farsi",
 						"Name"=>"Lastname",
+				));
+		$f->AddElement(
+				array(
+						"Type"=>"text",
+						"Label"=>"کد ملی",
+						"Validation"=>"alphanumeric_farsi",
+						"Name"=>"Codemelli",
 				));
 		$f->AddElement(
 				array(

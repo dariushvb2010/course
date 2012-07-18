@@ -13,7 +13,7 @@ class UserEditController extends BaseControllerClass
 	    		$Error=$Errors;
 	    	else 
 	    	{
-	    		$r=$this->EditUser($_POST['ID'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Role']);
+	    		$r=$this->EditUser($_POST['ID'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Codemelli'],$_POST['Role']);
 	    		$f=$this->makeform($_POST);
 	    		if ($r)
 	    			$Result="با موفقیت ثبت شد.";
@@ -36,7 +36,7 @@ class UserEditController extends BaseControllerClass
     }
     
 	
-    function EditUser($ID,$Email,$Gender=0,$Firstname,$Lastname,$Role="Reviewer")
+    function EditUser($ID,$Email,$Gender=0,$Firstname,$Lastname,$Codemelli,$Role="Reviewer")
 	{
 		if ("Reviewer"==$Role)
 			$isReviewer=1;
@@ -57,6 +57,7 @@ class UserEditController extends BaseControllerClass
 		$U->SetLastname($Lastname);
 		$U->SetGroup($Group);
 		$U->SetisReviewer($isReviewer);
+		$U->SetCodemelli($Codemelli);
 		
 		
 		j::$RBAC->User_UnassignAllRoles($U->ID());
@@ -98,6 +99,14 @@ class UserEditController extends BaseControllerClass
 						"Validation"=>"alphanumeric_farsi",
 						"Name"=>"Lastname",
 						"Value"=>($isOBJ?$Data->Lastname():$Data['Lastname']),
+				));
+		$f->AddElement(
+				array(
+						"Type"=>"text",
+						"Label"=>"کد ملی",
+						"Validation"=>"alphanumeric_farsi",
+						"Name"=>"Codemelli",
+						"Value"=>($isOBJ?$Data->Codemelli():$Data['Codemelli']),
 				));
 		$f->AddElement(
 				array(
