@@ -1,15 +1,14 @@
-<link rel="stylesheet" href="/style/google.css"/>
 <style>
 form{
 	margin:10,auto;
 }
 #formedit{
-	
+	//float:left;
 }
 #fieldlist{
-	width: 790px;
-	margin:10px auto;
-	padding:5px; 
+	//float:left;
+	border:1px solid red;
+	width:100px;
 }
 #elm1{
 	width: 100%;
@@ -18,8 +17,6 @@ form{
 	width:800px;
 	margin:auto;
 }
-div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor: pointer; 
-		 }
 </style>
 
 <script type="text/javascript" src="/script/tiny_mce/jquery.tinymce.js"></script>
@@ -33,7 +30,7 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 		$('textarea.tinymce').tinymce({
 			// Location of TinyMCE script
 			//TODO: location is not good
-			script_url : '<?php echo SiteRoot; ?>/script/tiny_mce/tiny_mce.js',
+			script_url : '/bazbini/script/tiny_mce/tiny_mce.js',
 
 			// General options
 			theme : "advanced",
@@ -75,23 +72,19 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 عنوان قالب:
 <?php echo $this->Template->Title();?>
 </p>
-
+<div id="fieldlist">
+<?php
+if (count($this->AllFields)){
+	foreach ($this->AllFields as $v){
+?>
+	<div class="fieldelement">[<?php echo $v;?>]</div>
+<?php }
+} 
+?>
+</div>
 <form id="formedit" method="post">
 	<div>
-		<!-- --------------------------fieldlist----------- -->
-		<div id="fieldlist" class="gradient-back">
-			<?php
-			if (count($this->AllFields))
-			{
-				foreach ($this->AllFields as $v){
-					?>
-					<div class="fieldelement i2Style"><?php echo $v;?></div>
-					<?php
-				}
-			} 
-			?>
-		</div><!-- ---------------------------------------- -->
-			
+
 		<!-- Gets replaced with TinyMCE, remember HTML in a textarea should be encoded -->
 		<input type="hidden" name="ID" value="<?php echo $this->Template->ID();?>">
 		<div id="elmwrap">

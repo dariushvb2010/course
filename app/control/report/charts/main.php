@@ -78,23 +78,13 @@ class ReportChartsMainController extends JControl
 				
 			case 'in_vs_out':
 				
-				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Start",12,0);
-				//$this->firstday=(time()-24*60*60*$days)*1000;
-				foreach ($r as $key =>$value){
-					$daily1[]=$value['count'];
-				}
+				$monthCount=12;
+				$startMonth=0;
+				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Start",$monthCount,$startMonth);
 				$this->in=$r;
 				
 				
-				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Review",12,0);
-				
-				$names=array();
-				$values=array();
-				foreach ($r as $value){
-					//$X[]="'".$value['monthname']." ".$value['year']."'";
-					$values[]=$value['count'];
-				}
-				//var_dump($values);
+				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Review",$monthCount,$startMonth);
 				$this->out=$r;
 				//$this->X=$X;
 				break;
