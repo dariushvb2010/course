@@ -75,18 +75,26 @@ class ReportChartsMainController extends JControl
 				$this->values=$values;
 				$this->X=$X;
 				break;
-				
+			////////////////////////////////////////////////////////
 			case 'in_vs_out':
 				
-				$monthCount=12;
-				$startMonth=0;
+				$monthCount=6;
+				$startMonth=4;
 				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Start",$monthCount,$startMonth);
 				$this->in=$r;
 				
 				
 				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Review",$monthCount,$startMonth);
 				$this->out=$r;
-				//$this->X=$X;
+				
+				$bb = FPlugin::PersianMonthesInInterval($startMonth, $monthCount);
+				//var_dump($bb);
+				
+				foreach ($bb as $value){
+					$X[]="'".$value['monthName']." ".substr($value['year'],2)."'";
+				}
+				$this->X=$X;
+				var_dump($this->X);
 				break;
 			
 		}

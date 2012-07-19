@@ -290,10 +290,8 @@ class ReviewProgressRepository extends EntityRepository
 	{
 		//-----get the numberof days of last month---------------------------
 		$c = new CalendarPlugin();
-		$n = $c->NowPersian(); //ex: $n = '1391-4-23 21:26:31'
-		$t = explode('-', $n); //ex: $t[2] = '23 21:26:31'
-		$day = explode(" ", $t[2]); //ex: $day[0] = 23
-		$dayOfMonth= $day[0]*1; //our purpose--------------------------------
+		$t = $c->TodayJalaliArray();
+		$dayOfMonth= $t[2]; //our purpose--------------------------------
 		$addDays = 30 - $dayOfMonth;
 		
 		
