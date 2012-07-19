@@ -26,8 +26,9 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 <script type="text/javascript">
 	$().ready(function() {
 		$('.fieldelement').click(function(){
-				var text=$(this).text();
-				$('#elm1').tinymce().execCommand('mceInsertContent',false,text);
+				var text=$(this).attr('title');
+				var text2=' ['+text+'] ';
+				$('#elm1').tinymce().execCommand('mceInsertContent',false,text2);
 			});
 		
 		$('textarea.tinymce').tinymce({
@@ -83,9 +84,11 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 			<?php
 			if (count($this->AllFields))
 			{
-				foreach ($this->AllFields as $v){
+				foreach ($this->AllFields as $k=>$v){
 					?>
-					<div class="fieldelement i2Style"><?php echo $v;?></div>
+					<div class="fieldelement i2Style" Title="<?php echo $v;?>">
+						<?php echo $k;?>
+					</div>
 					<?php
 				}
 			} 
@@ -99,10 +102,6 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 				<?php echo $this->Template->Html();?>
 			</textarea>
 		</div>
-
-		<!-- Some integration calls -->
-		<a href="javascript:;" onclick="$('#elm1').tinymce().execCommand('mceInsertContent',false,'<b>Hello world!!</b>');return false;">[Insert HTML]</a>
-		<a href="javascript:;" onclick="$('#elm1').tinymce().execCommand('mceReplaceContent',false,'<b>{$selection}</b>');return false;">[Replace selection]</a>
 
 		<br />
 		<input type="submit" name="save" value="Submit" />

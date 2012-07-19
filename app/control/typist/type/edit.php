@@ -32,6 +32,8 @@ class TypistTypeEditController extends BaseControllerClass
 		    	$MyTemplate=Template::TemplateByFile($File);
 		    	if (!$MyTemplate)
 		    		$Error[]="قالب وجود ندارد.";
+		    	else
+		    		$f=$this->makeform($MyTemplate,$File);
 	    	}
 	    }
 	    if(count($Error))$this->Result=false;
@@ -39,7 +41,37 @@ class TypistTypeEditController extends BaseControllerClass
 	    $this->File=$File;
 	    $this->Error=$Error;
 	    $this->Result=$Result;
+    	$this->Autoform=$f;
     	return $this->Present();
     }
+    
+    function makeform($Template=null,$File=NULL){
+		$f=new AutoformPlugin("post");
+		$f->AddElement(
+				array(
+						"Type"=>"hidden",
+						"Name"=>"ID",
+						"Value"=>$File->ID(),
+				));
+		if(Count($Template)){
+			$Fields=$Template->GetUnknownFields();
+			foreach ($Fields as $v)
+			{
+				$f->AddElement(
+					array(
+							"Type"=>"Text",
+							"Label"=>$v,
+							"Name"=>"UF_".$v,
+					));
+			}
+		}
+		$f->AddElement(
+				array(
+						"Type"=>"submit",
+						"Name"=>"submit",
+						"Value"=>"چاپ",
+				));
+		return $f;
+	}
 }
 ?>

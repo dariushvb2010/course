@@ -28,7 +28,7 @@ class TypistTemplateListController extends JControl
 		}
 		elseif($k=='EditButton')
 		{
-			return "<a class='link_but' href='./Edit?ID={$D->ID()}'>ویرایش</a>";
+			return "<a class='link_but' href='./edit?ID={$D->ID()}'>ویرایش</a>";
 		}
 		else
 		{
