@@ -458,4 +458,98 @@ class ReviewProgressReviewRepository extends EntityRepository
 		
 		return $r;
 	}
+	
+	/**
+	 * @author dariush
+	 * @tutorial  bazdoc/review/progress/start/monthlystart.html
+	 * @see http://dev.mysql.com/doc/refman/5.5/en/date-and-time-functions.html#function_date-add
+	 *
+	 * --------------time line ------->-->---->----->------>----->------>------->------>------>---->----->----->----->----->-----
+	 * ********|***M(monthCount-1)***|  ...  |***M(2)***|***M(1)***|***M(0)***|startMonth=4|***M***|***M***|***M***|***now***|****
+	 * --------------------------------------------------------------------------------------------------------------------------
+	 * مقدارهای برگشتی بر حسب میلیون ریال می باشد
+	 * @param integer $monthCount: number of monthes to show
+	 * @param integer $startMonth: how many monthes ago
+	 * @return 2DArray ['']->{[0]->2342, [1]->2342, ...}, ['109']->{[0]->2342, [1]->2342, ...}, ['248']->{[0]->2342, [1]->2342, ...}, ['528']->{[0]->2342, [1]->2342, ...}, ['total']->{['']->0,['109']->0, ['248']->0, ['528']->0}
+	 */
+	public function ReviewAmountPerMonth($monthCount, $startMonth=0)
+	{
+		//-----get the numberof days of last month---------------------------
+		$c = new CalendarPlugin();
+		$t = $c->TodayJalaliArray();
+		$dayOfMonth= $t[2]; //our purpose--------------------------------
+		$addDays = 30 - $dayOfMonth;
+	
+	
+		$oc=j::SQL("SELECT SUM(R.Amount) as amount,R.Provision as provision,
+						floor(
+							DATEDIFF(
+							curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+							FROM_UNIXTIME(P.CreateTimestamp)
+							)/30.3
+						) as month
+					FROM app_ReviewProgress AS P join app_ReviewProgressReview AS R on P.ID=R.ID
+					WHERE P.Type=?
+						AND R.Result=0
+						AND P.Dead=0
+						AND DATEDIFF(
+								curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+								FROM_UNIXTIME(P.CreateTimestamp)
+							) >= 0
+					GROUP BY month, provision ",$addDays,$startMonth,"Review",$addDays,$startMonth);
+	
+		//var_dump($oc);
+		$res["248"]=array();//----[0]->299000 [1]->40000
+		$res["109"]=array();
+		$res["528"]=array();
+		$res[""]=array();//some of them has not been set unfortunately
+		$res["total"]=array(
+						""=>0,
+						"109"=>0,
+						"248"=>0,
+						"528"=>0
+						);
+		//-----------------making $res------------------
+		foreach ($oc as $t)
+		{
+			$t=array_pop($oc);
+			$month=$t['month'];
+			$provision = $t['provision'];
+			if($month*1<$monthCount)
+			{
+				$res[$provision][$month*1+$startMonth] += $t['amount'];
+				$res["total"][$provision]+= $t['amount'];
+			}
+		}
+		
+		//------------------fill none existing fields of arrays and sort---------
+		foreach ($res as $key=>$pv) //only 4 : $res['248'], $res['109'], $res['528'], $res['']
+		{//ex: $pv = $p['248']
+			
+			//------------------make total array------------------
+			if($key=="total")
+			{
+				foreach ($res[$key] as $k=>$v)//ex: $k=248, $v=232398000
+				{
+					$res[$key][$k]= round($v/1000000,1);
+				}
+				continue;
+			}//---------------------------------------------------
+			
+			for($i=$startMonth;$i<$startMonth+$monthCount;$i++)
+			{
+				if(!array_key_exists($i,$pv))
+				{
+					$pv[$i]=0;//array('count'=>0,'month'=>$i);
+				}
+				else 
+					$pv[$i]=round($pv[$i]/1000000,1);
+			}
+			krsort($pv);
+			$res[$key]=$pv; // !important : for applying changes in $pv (overwrite changes into $res)
+			//--------sort array by key high to low
+		}
+		var_dump($res);
+		return $res;
+	}
 }

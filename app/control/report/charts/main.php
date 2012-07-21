@@ -3,7 +3,7 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','bazbini_speed','in_vs_out');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','bazbini_speed','in_vs_out','progress_remove','review_amount');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -78,8 +78,8 @@ class ReportChartsMainController extends JControl
 			////////////////////////////////////////////////////////
 			case 'in_vs_out':
 				
-				$monthCount=6;
-				$startMonth=4;
+				$monthCount=12;
+				$startMonth=0;
 				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Start",$monthCount,$startMonth);
 				$this->in=$r;
 				
@@ -94,9 +94,43 @@ class ReportChartsMainController extends JControl
 					$X[]="'".$value['monthName']." ".substr($value['year'],2)."'";
 				}
 				$this->X=$X;
-				var_dump($this->X);
-				break;
+				
 			
+				break;
+			case 'progress_remove':
+				$monthCount=12;
+				$startMonth=0;
+				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Remove",$monthCount,$startMonth);
+				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerMonth($monthCount, $startMonth);
+				$this->removes=$r;
+				
+				$bb = FPlugin::PersianMonthesInInterval($startMonth, $monthCount);				
+				foreach ($bb as $value){
+					$X[]="'".$value['monthName']." ".substr($value['year'],2)."'";
+				}
+				$this->X=$X;
+				break;
+			case 'review_amount':
+				$monthCount=12;
+				$startMonth=0;
+				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerMonth($monthCount, $startMonth);
+				$this->st248=$r["248"];
+				$this->st528=$r["528"];
+				$this->st109=$r["109"];
+				$this->stempty   =$r[""];
+				
+				//----total----
+				$this->totempty=$r["total"][""];
+				$this->tot109=$r["total"]["109"];
+				$this->tot248=$r["total"]["248"];
+				$this->tot528=$r["total"]["528"];
+				
+				$bb = FPlugin::PersianMonthesInInterval($startMonth, $monthCount);
+				foreach ($bb as $value){
+					$X[]="'".$value['monthName']." ".substr($value['year'],2)."'";
+				}
+				$this->X=$X;
+				break;
 		}
 		
 		
