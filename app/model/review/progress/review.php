@@ -533,7 +533,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					$res[$key][$k]= round($v/1000000,1);
 				}
-				continue;
+				continue;  
 			}//---------------------------------------------------
 			
 			for($i=$startMonth;$i<$startMonth+$monthCount;$i++)
@@ -549,7 +549,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 			$res[$key]=$pv; // !important : for applying changes in $pv (overwrite changes into $res)
 			//--------sort array by key high to low
 		}
-		var_dump($res);
+		//var_dump($res);
 		return $res;
 	}
 }

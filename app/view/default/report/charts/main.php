@@ -5,6 +5,9 @@
 <script type="text/javascript" src="/script/highcharts/modules/exporting.js"></script>
 <script type="text/javascript" src="/script/persianDate.js"></script>
 <link rel="stylesheet" href="/style/xxx.css" />
+<style>
+<?php $this->VI->PresentCSS();?>
+</style>
 
 <div class="menuHolder">
 
@@ -84,3 +87,10 @@ $(document).ready(function() {
 </script>
 <!-- the container -->
 <div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+<div >
+	<?php 
+	$this->VI->PresentHTML();
+	
+	
+	?>
+</div>

@@ -17,6 +17,32 @@ class ReportChartsMainController extends JControl
 		$this->ChartType=$ChartType;
 		$this->ConfigFileName=$ChartType;
 		$this->ctype=$ChartType;
+		
+		//-----------------------date interval -------------------------
+		$vi = new ViewIntervalPlugin();
+		$vi->ElemAttrs['CDay']['disabled'] =
+			$vi->ElemAttrs['CHour']['disabled'] =
+			$vi->ElemAttrs['CMin']['disabled'] =
+			$vi->ElemAttrs['FDay']['disabled'] =
+			$vi->ElemAttrs['FHour']['disabled'] =
+			$vi->ElemAttrs['FMin']['disabled'] =
+												"disabled";
+		$q = $vi->GetRequest();
+		$this->VI=$vi;
+		$c = new CalendarPlugin();
+		$nn = $c->TodayJalaliArray();
+		$thisYear = $nn[0];
+		$thisMonth = $nn[1];
+		$CdiffMonth = ( $thisYear-$q['CYear'] )*12 + $thisMonth - $q['CMonth'];
+		$FdiffMonth = ( $thisYear-$q['FYear'] )*12 + $thisMonth - $q['FMonth'];
+		$startMonth = $FdiffMonth;
+		$monthCount = $CdiffMonth - $FdiffMonth + 1;
+		
+		echo $startMonth."   ";
+		echo $monthCount;
+		//--------------------------------------------------------------
+		
+		
 		switch ($ChartType){
 			//////////////////////////////////////////////////////
 			case 'daftar_cotag':
@@ -78,8 +104,7 @@ class ReportChartsMainController extends JControl
 			////////////////////////////////////////////////////////
 			case 'in_vs_out':
 				
-				$monthCount=12;
-				$startMonth=0;
+				
 				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Start",$monthCount,$startMonth);
 				$this->in=$r;
 				
@@ -98,8 +123,7 @@ class ReportChartsMainController extends JControl
 			
 				break;
 			case 'progress_remove':
-				$monthCount=12;
-				$startMonth=0;
+				
 				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Remove",$monthCount,$startMonth);
 				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerMonth($monthCount, $startMonth);
 				$this->removes=$r;
@@ -111,8 +135,7 @@ class ReportChartsMainController extends JControl
 				$this->X=$X;
 				break;
 			case 'review_amount':
-				$monthCount=12;
-				$startMonth=0;
+				
 				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerMonth($monthCount, $startMonth);
 				$this->st248=$r["248"];
 				$this->st528=$r["528"];
@@ -132,7 +155,6 @@ class ReportChartsMainController extends JControl
 				$this->X=$X;
 				break;
 		}
-		
 		
 		$this->Error=$Error;
 		if(Count($Error))
