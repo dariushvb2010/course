@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `jf_users` (
   `Password` char(128) collate utf8_bin NOT NULL,
   PRIMARY KEY  (`ID`),
   UNIQUE KEY `Username` (`Username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `jf_users`

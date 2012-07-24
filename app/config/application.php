@@ -46,9 +46,9 @@ else
  */
 if (reg("app/state")=="develop")
 {
-	reg("app/db/default/name","gomrok");
+	reg("app/db/default/name","test2");
 	reg("app/db/default/user","root"); #comment this for no-DB jFramework
-	reg("app/db/default/pass","");
+	reg("app/db/default/pass","132465798");
 	reg("app/db/default/host","127.0.0.1");
 
 	reg("app/db/source/name","Customs");
@@ -201,7 +201,7 @@ reg("jf/i18n/langs",array(
 	"current"=>"en",
 	"default"=>"en", # this should not be changed at all, after starting the i18n. This is the base lang others are translated from
 	"en"=>"English",
-	"fa"=>"فارسی",
+	"fa"=>"����������",
 ));
 #####################################################################
 #####################################################################

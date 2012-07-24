@@ -1,15 +1,14 @@
-<link rel="stylesheet" href="/style/google.css"/>
 <style>
 form{
 	margin:10,auto;
 }
 #formedit{
-	
+	//float:left;
 }
 #fieldlist{
-	width: 790px;
-	margin:10px auto;
-	padding:5px; 
+	//float:left;
+	border:1px solid red;
+	width:100px;
 }
 #elm1{
 	width: 100%;
@@ -18,23 +17,20 @@ form{
 	width:800px;
 	margin:auto;
 }
-div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor: pointer; 
-		 }
 </style>
 
 <script type="text/javascript" src="/script/tiny_mce/jquery.tinymce.js"></script>
 <script type="text/javascript">
 	$().ready(function() {
 		$('.fieldelement').click(function(){
-				var text=$(this).attr('title');
-				var text2=' ['+text+'] ';
-				$('#elm1').tinymce().execCommand('mceInsertContent',false,text2);
+				var text=$(this).text();
+				$('#elm1').tinymce().execCommand('mceInsertContent',false,text);
 			});
 		
 		$('textarea.tinymce').tinymce({
 			// Location of TinyMCE script
 			//TODO: location is not good
-			script_url : '<?php echo SiteRoot; ?>/script/tiny_mce/tiny_mce.js',
+			script_url : '/bazbini/script/tiny_mce/tiny_mce.js',
 
 			// General options
 			theme : "advanced",
@@ -76,25 +72,19 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 عنوان قالب:
 <?php echo $this->Template->Title();?>
 </p>
-
+<div id="fieldlist">
+<?php
+if (count($this->AllFields)){
+	foreach ($this->AllFields as $v){
+?>
+	<div class="fieldelement">[<?php echo $v;?>]</div>
+<?php }
+} 
+?>
+</div>
 <form id="formedit" method="post">
 	<div>
-		<!-- --------------------------fieldlist----------- -->
-		<div id="fieldlist" class="gradient-back">
-			<?php
-			if (count($this->AllFields))
-			{
-				foreach ($this->AllFields as $k=>$v){
-					?>
-					<div class="fieldelement i2Style" Title="<?php echo $v;?>">
-						<?php echo $k;?>
-					</div>
-					<?php
-				}
-			} 
-			?>
-		</div><!-- ---------------------------------------- -->
-			
+
 		<!-- Gets replaced with TinyMCE, remember HTML in a textarea should be encoded -->
 		<input type="hidden" name="ID" value="<?php echo $this->Template->ID();?>">
 		<div id="elmwrap">
@@ -102,6 +92,10 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 				<?php echo $this->Template->Html();?>
 			</textarea>
 		</div>
+
+		<!-- Some integration calls -->
+		<a href="javascript:;" onclick="$('#elm1').tinymce().execCommand('mceInsertContent',false,'<b>Hello world!!</b>');return false;">[Insert HTML]</a>
+		<a href="javascript:;" onclick="$('#elm1').tinymce().execCommand('mceReplaceContent',false,'<b>{$selection}</b>');return false;">[Replace selection]</a>
 
 		<br />
 		<input type="submit" name="save" value="Submit" />

@@ -226,10 +226,21 @@ class Template
     
     Static function GetFields(){
     	return array(
-    		'aaaaa',
-    		'bbbbb',
-    		'ccccc',
-    		'ddddd',
+    		'نام صاحب کالا'=>'OwnerName',
+    		'مسثول بازبینی'=>'BazbiniBoss',
+    		'تاریخ'=>'Date',
+    		'شماره کوتاژ'=>'Cotag',
+    		'آدرس صاحب کالا'=>'OwnerAddress',
+    		'نام گمرگ'=>'CustomName',
+    		'شماره گمرک'=>'CustomID',
+    		'کارشناس مربوطه'=>'Reviewer',
+    		'مبلغ کسر دریافتی'=>'KasrDaryafti',
+    		'شماره کلاسه'=>'Classe',
+    		'علت تفاوت'=>'ElatDiff',
+    		'نوع کالا'=>'Kala',
+    		'کارشناس سالن'=>'SaloonKarshenas',
+    		'ارزیاب'=>'arzyab',
+    		'رنگ مسیر'=>'Masir',
     	);
     }
     

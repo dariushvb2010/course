@@ -49,27 +49,27 @@
 <?php 	if($this->ChartType=='numberResults'){
 	if(isset($this->AutoListResult))
 	{
-		echo "<h2>آمار خطایابی توسط کارشناسان</h2>";
+		echo "<h4>آمار خطایابی توسط کارشناسان</h4>";
 		$this->AutoListResult->Present();
 	}
 	if(isset($this->AutoListProvision))
 	{
-		echo "<h2>آمار شماره کلاسه اعلامی توسط کارشناسان</h2>";
+		echo "<h4>آمار شماره کلاسه اعلامی توسط کارشناسان</h4>";
 		$this->AutoListProvision->PresentForPrint();
 	}
 	if(isset($this->AutoListDifference))
 	{
-		echo "<h2>آمار نوع اختلاف اعلامی توسط کارشناسان</h2>";
+		echo "<h4>آمار نوع اختلاف اعلامی توسط کارشناسان</h4>";
 		$this->AutoListDifference->PresentForPrint();
 	}
 	if(isset($this->AutoList1))
 	{
-		echo "<h2> اطلاعات کارشناسی درب خروج</h2>";
+		echo "<h4> اطلاعات کارشناسی درب خروج</h4>";
 		$this->AutoList1->PresentForPrint();
 	}
 	if(isset($this->AutoList2))
 	{
-		echo "<h2> اطلاعات پرداخت های درب خروج</h2>";
+		echo "<h4> اطلاعات پرداخت های درب خروج</h4>";
 		$this->AutoList2->PresentForPrint();
 	}
 } ?>
