@@ -20,7 +20,12 @@
 	text-decoration:underline;
 }
 </style>
+<link rel="stylesheet" type="text/css" href="/style/google.css" /> 
 <h1>نصب و راه‌اندازی برنامه</h1>
+
+<div style="margin:auto; width: 50%; border: 1px double teal; text-align: center; " class="g-button-submit" >
+	<a href="/programmer/install" style="font-size:20px; color: white; " >شروع نصب و راه اندازی نرم افزار</a>
+</div>
 <h2>مقدمه</h2>
 <p>
 برنامه 

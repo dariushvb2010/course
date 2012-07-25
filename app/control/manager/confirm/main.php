@@ -27,7 +27,7 @@ class ManagerConfirmMainController extends JControl
 		if (count($_POST))
 		{	
 					
-			echo $Confirmation=$_REQUEST['Confirmation']*1;
+			$Confirmation=$_REQUEST['Confirmation']*1;
 			$Comment=$_REQUEST['Comment']*1;
 			
 			if($Confirmation==0){
