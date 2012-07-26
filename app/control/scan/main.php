@@ -8,7 +8,6 @@ class ScanMainController extends JControl
 		{
 			$this->cotag=$_POST['Cotag'];
 			$this->sid=session_id();
-			
 		}
 		
 		$this->Error=$Error;

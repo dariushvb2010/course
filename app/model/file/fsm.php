@@ -17,6 +17,7 @@ class FileFsm extends JModel
 	 */
 	private static $StateGraph=array(
 	//-----------------------Review---------------------
+	0=>array('Scan'=>1,'Start'=>2),
 	1=>array('Start'=>2),
 	2=>array('Give_cotagbook_to_archive'=>3),
 	3=>array('Get_archive_from_cotagbook'=>4),

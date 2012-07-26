@@ -2,7 +2,6 @@
 $this->HasError=(count($this->Error));
 ?>
 <style>
-
 form {
 	width:500px;
 	margin:auto;
@@ -54,10 +53,8 @@ form input[type='text'] {
 <div id='exceptBarcode'>
 <h1><img src="/img/h/h1-start-50.png"/>
 اسکن اظهارنامه</h1>
-
-
 <?php if (isset($this->sid)){?>
-	<applet code="com.openkm.applet.Scanner" width="300" height="300" mayscript archive="../scanner.jar">
+	<applet code="com.openkm.applet.Scanner" width="300" height="300" mayscript archive="../../target/scanner.jar">
     <param name="token" value="<?php echo $this->sid?>" />
     <param name="path" value="<?php echo SiteRoot.'/scan/responder';?>"/>
     <param name="lang" value="en_EN" />
@@ -94,14 +91,18 @@ form input[type='text'] {
 </div>
 <?php }?>
 <script>
+function refresh(result,resultMsg)
+{
+	alert("function result"+resultMsg);
+}
 function ok(i)
 {
 	alert("function_OK"+i);
 	
 }
-function nok(i)
+function nok(i,error)
 {
-	alert("function_NOK"+i);
+	alert("function_NOK"+i+"error="+error);
 }
 function IsNumeric(input){
 	    var RE = /^-{0,1}\d*\.{0,1}\d+$/;

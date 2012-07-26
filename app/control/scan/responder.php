@@ -1,6 +1,12 @@
 <?php
+/**
+ * 
+ * @author mohammadt
+ *
+ */
 class ScanResponderController extends JControl
 {
+	
 	function Start()
 	{
 		ob_start();
@@ -10,17 +16,20 @@ class ScanResponderController extends JControl
 		$fh = fopen("testFile.txt", 'w') or die("can't open file");
 		fwrite($fh, $result);
 		fclose($fh);
-		
+		//must be relative
 		$folder="../../../upload/";
 		
 		$result = array();
+		$res=true;
 		foreach ($_FILES as $file)
 		{
 
 			if ($file['size'] > 5000000 )
 			{
 // 				die ("ERROR: Large File Size");
-				$result[]=false;
+				$result[]=array("isSuccess"=>false,
+								"Error"=>"اندازه ی فایل بزرگ است.");
+				$res&=false;
 				continue;
 
 			}
@@ -29,7 +38,9 @@ class ScanResponderController extends JControl
 			{
 // 				echo "Invalid Image File...";
 // 				exit();
-				$result[]=false;
+				$result[]=array("isSuccess"=>false,
+								"Error"=>"فرمت عکس اشتباه است");
+				$res&=false;
 				continue;
 			}
 			$blacklist = array(".php", ".phtml", ".php3", ".php4", ".js", ".shtml", ".pl" ,".py");
@@ -39,7 +50,9 @@ class ScanResponderController extends JControl
 				{
 // 					echo "ERROR: Uploading executable files Not Allowed\n";
 // 					exit;
-					$result[]=false;
+					$result[]=array("isSuccess"=>false,
+								"Error"=>"فرمت عکس اشتباه است");
+					$res&=false;
 					continue;
 				}
 			}
@@ -47,43 +60,112 @@ class ScanResponderController extends JControl
 			{
 // 				echo "Return Code: " . $file["error"] . "<br />";
 // 				exit;
-				$result[]=false;
+				$result[]=array("isSuccess"=>false,
+								"Error"=>"خطا در شبکه");
+				$res&=false;
 				continue;
 			}
 			//making directories in recersive mode
+			if(!is_dir($folder))
 			if(!mkdir($folder,true))
 			{
-				$result[]=false;
+				$result[]=array("isSuccess"=>false,
+								"Error"=>"خطا1");
+				$res&=false;
 				continue;
 			}
 			if (!is_writable($folder)){
 				// 			var_dump(realpath(("../../upload/")));
 // 				echo  "Server error. Upload directory isn't writable.";
-				$result[]=false;
+				$result[]=array("isSuccess"=>false,
+								"Error"=>"خطا2");
+				$res&=false;
 				continue;
 			}
 			if (file_exists($folder . $file["name"]))
 			{
 // 				echo $file["name"] . " already exists. ";
 // 				exit;
-				$result[]=false;
+				$result[]=array("isSuccess"=>false,
+								"Error"=>"فایل تکراری است.");
+				$res&=false;
 				continue;
 			}
 			else
 			{
 				if(move_uploaded_file($file["tmp_name"],$folder . $file["name"]))
 				{	
-					$result[]=true;
+					$result[]=array("isSuccess"=>true,
+								"Error"=>"");
+					
+					
 					continue;
 				}
 				else 
 				{
-					$result[]=false;
+					$result[]=array("isSuccess"=>false,
+								"Error"=>"خطا3");
+					$res&=false;
 					continue;
 				}
 					
 			}
 		}
-		echo json_encode($result);
+		if(!$res)
+		{
+			$resultMsg="خطا در بارگذاری عکس ";
+			$this->deleteMovedFile($folder,$result);
+			$finalRes=false;
+			
+		}
+		else
+		{
+			$Cotag=$_POST['cotag'];
+			$AddRes=ORM::Query("ReviewProgressScan")->AddToFile($Cotag);
+			if(is_string($AddRes))
+			{
+				$resultMsg=$AddRes;
+				$this->deleteMovedFile($folder,$result);
+				$finalRes=false;
+			}
+			else
+			{
+				$finalRes=true;
+				$this->renameMovedFile($folder,$AddRes->File()->ID());
+				$resultMsg="اظهارنامه با شماره کوتاژ  ";
+				$resultMsg.=" <span style='font-size:20px; color:black; font-weight:bold;'>";
+				$resultMsg.=$Cotag."</span> "."با موفقیت وصول گردید.";
+			
+			}
+		}
+		
+		echo json_encode(array("result"=>$finalRes,"resultMsg"=>$resultMsg,"units"=>$result));
 	}
+	function deleteMovedFile($folder,$result)
+	{
+		$i=0;
+		foreach ($_FILES as $file)
+		{
+	
+			if(file_exists($folder.$file["name"]) && $result[$i]["isSuccess"])
+			{
+				unlink($folder.$file["name"]);
+			}
+			$i++;
+		}
+	}
+	function renameMovedFile($folder,$id)
+	{
+		$i=0;
+		foreach ($_FILES as $file)
+		{
+			if(file_exists($folder.$file["name"]))
+			{
+				
+				rename($folder.$file["name"], $folder.$id."_".$i);
+			}
+			$i++;
+		}
+	}
+	
 }
