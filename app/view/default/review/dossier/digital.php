@@ -110,7 +110,7 @@ form input[type='text'] {
   <ul id="slider3">
   <?php foreach ($this->Images as $I) {?>
   <li>
-   <img src='<?php echo jURL::Root();?>/image?name=<?php echo $I->Name();?>.jpg' alt='<?php echo $I->PID()->Title()?>'>
+   <img src='<?php echo jURL::Root();?>/image?name=<?php echo $I->path();?>.jpg' alt='<?php echo $I->PID()->Title()?>'>
    <div class="caption-top">
    <?php echo $I->PID()->Summary()?>
    </div>

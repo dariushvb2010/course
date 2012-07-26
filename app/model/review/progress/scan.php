@@ -34,7 +34,7 @@ class ReviewProgressScanRepository extends EntityRepository
 	/**
 	 * 
 	 * @param integer $Cotag
-	 * @return string for error boolean for true;
+	 * @return string for error object for true;
 	 */
 	public function AddToFile($Cotag)
 	{
@@ -101,6 +101,7 @@ class ReviewProgressScanRepository extends EntityRepository
 				foreach ($A as $a)
 					ORM::Delete($a);
 			}
+			ORM::Query("ReviewImages")->deleteImage($LastProg);
 			ORM::Delete($File);
 			return true;
 		}

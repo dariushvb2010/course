@@ -72,7 +72,7 @@ form input[type='text'] {
 
 </div>
 <div>
-	<input type="checkbox" name='print' <?php if ($_POST['print']==true || !isset($_POST['Cotag']) )echo "checked=checked" ;  ?>><a href='#' id='prints'>چاپ بارکد</a>
+	<input type="checkbox" name='print' id='chkprint' <?php if ($_POST['print']==true || !isset($_POST['Cotag']) )echo "checked=checked" ;  ?>><a href='#' id='prints'>چاپ بارکد</a>
 </div>
 <input type='submit' id='sub' value='وصول' />
 </form>
@@ -112,8 +112,10 @@ function refresh(result,resultMsg)
 			'class="ui-state-highlight ui-corner-all">'+
 		'<p style="margin-top: 5px;"><span style="float: right; margin-left: .3em; margin-top: 4px;"class="ui-icon ui-icon-info"'+
 		'></span>'+resultMsg+'</p></div>');
-		window.open("../cotag/bar?cotag="+<?php echo $this->cotag?>+"&chk=1");
+		if($('#chkprint').attr('checked')=='checked')
+			window.open("../cotag/bar?cotag="+<?php echo $this->cotag?>+"&chk=1");
 	}
+	$("#Cotag").focus();
 }
 function ok(i)
 {
@@ -158,17 +160,16 @@ function setCursor(node,pos){
 
     return false;
 }
-
+$('#prints').click(function ()
+		{
+			 window.open("../cotag/bar?cotag="+$("form input[name='Cotag']").val()+"&chk=1");
+		});
 
 $(document).ready(function(){
 	
-	$("form input[name='Cotag']").focus();
+	$("#Cotag").focus();
 	setCursor("Cotag",$('#Cotag').val().length);
-<?php  if(!($this->Result==false) && $_POST['print']==true){?>
-	
-			window.open("./bar?cotag="+<?php echo $_POST['Cotag'];?>);
 
-<?php }?>
 });
 
 

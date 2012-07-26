@@ -84,7 +84,7 @@ class CorrespondenceDemandController extends JControl
 				ORM::Dump($Res);
 				var_dump($Res['Class']->ID());
 				
-				rename(j::RootDir()."/app/control/servic/uploads/".$img,j::RootDir()."/app/control/servic/uploads/".$Res['Class']->ID().'_'.$k.".jpg" );
+				rename(ConfigReview::upload_folder_relative_from_japp().$img,ConfigReview::upload_folder_relative_from_japp().$Res['Class']->ID().'_'.$k.".jpg" );
 				ReviewImages::Add($Res['Class'], $Res['Class']->ID().'_'.$k);
 			}
 		}

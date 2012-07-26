@@ -161,7 +161,20 @@ class ServicUploadController extends JControl
 		$sizeLimit = 10 * 1024 * 1024;
 
 		$uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
-		$result = $uploader->handleUpload('./../app/control/servic/uploads/');
+		$folder=ConfigReview::upload_folder_relative_from_japp();
+		if(!is_dir($folder))
+		{
+			$old_umask = umask(0);
+			if(!mkdir($folder,0777,true))
+			{
+				$result[]=array("isSuccess"=>false,
+						"Error"=>"خطا1");
+				$res&=false;
+				continue;
+			}
+			umask($old_umask);
+		}
+		$result = $uploader->handleUpload($folder);
 		// to pass data through iframe you will need to encode all html tags
 		return $this->BarePresentString(htmlspecialchars(json_encode($result), ENT_NOQUOTES));
 	}

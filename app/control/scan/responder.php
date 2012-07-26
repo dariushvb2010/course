@@ -9,16 +9,9 @@ class ScanResponderController extends JControl
 	
 	function Start()
 	{
-		ob_start();
-		var_dump($_FILES);
-		var_dump($_POST);
-		$result = ob_get_clean();
-		$fh = fopen("testFile.txt", 'w') or die("can't open file");
-		fwrite($fh, $result);
-		fclose($fh);
-		//must be relative
-		$folder="../../../upload/";
 		
+		//must be relative
+		$folder=ConfigReview::upload_folder_relative_from_japp();
 		$result = array();
 		$res=true;
 		foreach ($_FILES as $file)
@@ -67,12 +60,16 @@ class ScanResponderController extends JControl
 			}
 			//making directories in recersive mode
 			if(!is_dir($folder))
-			if(!mkdir($folder,true))
-			{
-				$result[]=array("isSuccess"=>false,
-								"Error"=>"خطا1");
-				$res&=false;
-				continue;
+			{	
+				$old_umask = umask(0);
+				if(!mkdir($folder,0777,true))
+				{
+					$result[]=array("isSuccess"=>false,
+									"Error"=>"خطا1");
+					$res&=false;
+					continue;
+				}
+				umask($old_umask);
 			}
 			if (!is_writable($folder)){
 				// 			var_dump(realpath(("../../upload/")));
@@ -131,7 +128,7 @@ class ScanResponderController extends JControl
 			else
 			{
 				$finalRes=true;
-				$this->renameMovedFile($folder,$AddRes->File()->ID());
+				$this->renameMovedFile($folder,$AddRes);
 				$resultMsg="اظهارنامه با شماره کوتاژ  ";
 				$resultMsg.=" <span style='font-size:20px; color:black; font-weight:bold;'>";
 				$resultMsg.=$Cotag."</span> "."با موفقیت وصول گردید.";
@@ -161,8 +158,8 @@ class ScanResponderController extends JControl
 		{
 			if(file_exists($folder.$file["name"]))
 			{
-				
-				rename($folder.$file["name"], $folder.$id."_".$i);
+				rename($folder.$file["name"], $folder.$id->ID()."_".$i.'.jpg');
+				ReviewImages::Add($id, $id->ID()."_".$i);
 			}
 			$i++;
 		}

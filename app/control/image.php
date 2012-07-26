@@ -5,6 +5,6 @@ class ImageController extends JControl
 	{
 		j::$App->LoadModule("model.jfilemanager");
 		$as=new Jfilemanager();
-		$as->Feed(j::RootDir()."/app/control/servic/uploads/".$_GET["name"],rand(10, 1000)."ee.jpg");
+		$as->Feed(ConfigReview::$upload_folder_root.$_GET["name"],rand(10, 1000)."ee.jpg");
 	}
 }
