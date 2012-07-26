@@ -30,9 +30,6 @@ class ConfigData
 	 	 "Nazer"=>"مدیریت ارشد",
 	 );
 	
-	 /**
-	  * Name=>array(Value,DeleteAccess,Comment,Style)
-	  */
 	 static $MAIN=array(
 	 
 	 );
