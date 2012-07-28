@@ -72,4 +72,28 @@ class ReviewProgressSendRepository extends EntityRepository
 		}
 		return $P;
 	}
+	
+	public function SendCountPerMonth($monthCount, $startMonth=0)
+	{
+		//-----get the numberof days of last month---------------------------
+		$c = new CalendarPlugin();
+		$t = $c->TodayJalaliArray();
+		$dayOfMonth= $t[2]; //our purpose--------------------------------
+		$addDays = 30 - $dayOfMonth;
+		
+		//\Doctrine\ORM\Query\Parser::registerNumericFunction('FLOOR', 'Doctrine\ORM\Query\MysqlFloor');
+		
+		$r = j::DQL("SELECT COUNT(S.ID) as co, T.Type as tt,
+						 (
+									( ( CURRENT_TIMESTAMP() + ? * 24*3600 - ? * 30*24*3600 ) - S.CreateTimestamp )
+									/30.3*24*3600 
+						 	  ) as mon
+				FROM ReviewProgressSend S JOIN S.MailSend M JOIN M.ReceiverTopic T
+				WHERE 
+					( ( CURRENT_TIMESTAMP() + ? * 24*3600 - ? * 30*24*3600 ) - S.CreateTimestamp ) 
+					>=0
+				GROUP BY T.Type",$addDays,$startMonth,$addDays,$startMonth);
+		ORM::Dump($r);
+	}
+	
 }

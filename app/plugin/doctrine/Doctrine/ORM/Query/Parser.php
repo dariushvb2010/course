@@ -50,7 +50,8 @@ class Parser
         'abs'    => 'Doctrine\ORM\Query\AST\Functions\AbsFunction',
         'sqrt'   => 'Doctrine\ORM\Query\AST\Functions\SqrtFunction',
         'mod'    => 'Doctrine\ORM\Query\AST\Functions\ModFunction',
-        'size'   => 'Doctrine\ORM\Query\AST\Functions\SizeFunction'
+        'size'   => 'Doctrine\ORM\Query\AST\Functions\SizeFunction',
+    	'floor'  => 'Doctrine\ORM\Query\AST\Functions\FloorFunction'
     );
 
     /** READ-ONLY: Maps BUILT-IN datetime function names to AST class names. */

@@ -41,7 +41,7 @@ class ReportChartsMainController extends JControl
 		echo $startMonth."   ";
 		echo $monthCount;
 		//--------------------------------------------------------------
-		
+		$r = ORM::Query("ReviewProgressSend")->SendCountPerMonth(12);
 		
 		switch ($ChartType){
 			//////////////////////////////////////////////////////
