@@ -209,6 +209,12 @@ $(function() {
 			primary: "ui-icon-triangle-1-s"
 		}
 	});
+	$("#scanMenu").button({
+		icons: {
+			secondary: "ui-icon-grip-dotted-vertical",
+			primary: "ui-icon-triangle-1-s"
+		}
+	});
 	$("#reviewMenu").button({
 		icons: {
 			secondary: "ui-icon-search",
@@ -263,6 +269,28 @@ $(function() {
 <div id='smenuBar'>
 <span id="toolbar" class="ui-widget-header ui-corner-all">	
 	<span id='repeat'>
+<?php if (j::Check("Scan")) :?>
+	<button id='scanMenu' class="mymenu" >واحد اسکن</button>
+	<ul class='menu' style="display: none;">
+		
+		<li>
+			<a href='/scan/'>
+				<span class='ui-icon-circle-arrow-s ui-icon'></span>
+				 اسکن اظهارنامه
+			</a>
+		</li>
+		
+		<li>
+			<a href='/scan/cancel'>
+				<span class='ui-icon-close ui-icon'></span>
+				لغو وصول 
+			</a>
+		</li>
+		
+	</ul>
+	
+	
+<?php endif;?>
 <?php if (j::Check("CotagBook")) :?>
 	<button id='cotagMenu' class="mymenu" >دفتر کوتاژ</button>
 	<ul class='menu' style="display: none;">

@@ -3,7 +3,7 @@
 /**
  * 
  * Finite State Mahine
- * @author sonukesh
+ * @author sonukesh,kavakebi
  *
  */
 class FileFsm extends JModel
@@ -17,6 +17,7 @@ class FileFsm extends JModel
 	 */
 	private static $StateGraph=array(
 	//-----------------------Review---------------------
+	0=>array('Scan'=>1,'Start'=>2),
 	1=>array('Start'=>2),
 	2=>array('Give_cotagbook_to_archive'=>3),
 	3=>array('Get_archive_from_cotagbook'=>4),
@@ -63,6 +64,7 @@ class FileFsm extends JModel
 	);
 	
 	Public static $ProcessList=array(
+	'Scan'=>'*********',
 	'Start'=>'*********',
 	'Give_cotagbook_to_archive'=>'وصول دفتر کوتاژ',
 	'Get_archive_from_cotagbook'=>'دریافت از دفتر کوتاژ',
@@ -83,8 +85,14 @@ class FileFsm extends JModel
 	'Give_raked_to_archive'=>'*********',
 	'Receive_raked_from_out'=>'*********',
 	'Get_arhive_from_raked'=>'*********',
-	'Ebtal'=>'ابطال',
-	'Senddemand_demand'=>'ارسال مطالبه نامه',
+	'Ebtal'=>array(
+			'Label'=>'ابطال',
+			'is_MokatebatViewable'=>false,
+			),
+	'Senddemand_demand'=>array(
+			'Label'=>'ارسال مطالبه نامه',
+			'IsPrinting'=>true,
+			),
 	'Senddemand_setad'=>'ارسال رای دفاتر ستادی به صاحب کالا',
 	'Senddemand_karshenas'=>'ارسال نظر کارشناس',
 	'Refund'=>'استرداد',
@@ -101,7 +109,7 @@ class FileFsm extends JModel
 	'Prophecy_second'=>'ثبت ابلاغ ثانویه',
 	'Prophecy_setad'=>'ابلاغ رای دفاتر ستادی',
 	'Prophecy_commission'=>'ابلاغ رای کمیسیون',
-	'ProcessRegister'=>'ثبت کلاسه',
+	'ProcessRegister'=>array('Label'=>'ثبت کلاسه'),
 	'ProcessAssign'=>'تحویل به کارشناس',
 	'Payment'=>'تمکین و پرداخت',
 	'Protest'=>'اعتراض صاحب کالا',
@@ -172,6 +180,30 @@ class FileFsm extends JModel
 	}
 	
 	/**
+	 * Calrifies if two states match if they are string or state number
+	 * as string states can have multiple number states 
+	 * @param unknown_type $state1
+	 * @param unknown_type $state2
+	 * @author Kavakebi
+	 */
+	static function StateMatch($state1,$state2){
+		if($state2===$state1){
+			//TODO: rewise
+			return true;
+		}
+		if(is_string($state1) AND is_int($state2)){
+			 return self::StateMatch($state2,$state1);
+		}
+		if(is_int($state1) AND is_string($state2)){
+			
+			$StateArray=FileFsm::Name2State($state2);
+			return in_array($state1, $StateArray);
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * 
 	 * return possible progresses for each input state
 	 * an array with keys as state english name and value as persian label name
@@ -181,16 +213,25 @@ class FileFsm extends JModel
 		$Graph=FileFsm::$StateGraph;
 		$ar2=array();
 		foreach($Graph as $s=>$ar){
-			$StateArray=FileFsm::Name2State($s);
-			if( (is_int($s) AND $s===$state) OR (is_string($s) AND in_array($state, $StateArray)) )
+			if( self::StateMatch($s, $state))
 			{
-				foreach ($ar as $key=> $value)
-					$ar2[$key]=FileFsm::$ProcessList[$key];
+				foreach ($ar as $key=> $value){
+					$c=self::GetProgressByName($key);
+					$c->beginState=$state;
+					$c->Name=$key;
+					$c->nxtState=self::$StateGraph[$state][$key];
+					$ar2[$key]=$c;
+				}
 			}
 		}
 		
 		return $ar2;
 	}
+	
+	static function GetProgressByName($name){
+		return new FileProgressclass(FileFsm::$ProcessList[$name]);
+	}
+
 	
 	/**
 	*
@@ -204,11 +245,6 @@ class FileFsm extends JModel
 		$ar=FileFsm::PossibleProgresses($currentstate*1);
 		return array_key_exists($progressname,$ar);
 	}
-	
-	static function is_printing($ProgressName){
-		$ar=array('Senddemand_demand');
-		return in_array($ProgressName,$ar);
-	} 
 	
 	/**
 	 * 
@@ -235,12 +271,14 @@ class FileFsm extends JModel
 	}
 	static function IsReviewerDisturbState($state)
 	{
+		return 'deprecated call morteza';
 		if($state==43 || $state==50 ||$state==52)
 			return true;
 		return false;
 	}
 	static function IsReviewerConfirmState($state)
 	{
+		return 'deprecated call morteza';
 		if ($state==71)
 			return true;
 		return false;
@@ -251,5 +289,12 @@ class FileFsm extends JModel
 		 
 	}
 	static function Moderate10(){echo 'ss';}
-	
+
+	static function testFsm(){
+		//-----------IsPossible--------//
+		assert(self::IsPossible(11, 'Assign_by_manager'));
+		assert(!self::IsPossible(12, 'Assign_by_manager'));
+		//-----------PossibleProgra--------//
+		self::PossibleProgresses(5);
+	}
 }

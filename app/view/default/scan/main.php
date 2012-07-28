@@ -2,7 +2,6 @@
 $this->HasError=(count($this->Error));
 ?>
 <style>
-
 form {
 	width:500px;
 	margin:auto;
@@ -29,9 +28,7 @@ form input[type='text'] {
 	border:double;
 	padding:20px;
 }
-<?php if($this->HasError){?>
-#body{background:red; -moz-box-shadow:10px 10px 50px 100px #FAFAFA inset; box-shadow:10px 10px 50px 100px #FAFAFA inset;}
-<?php }?>
+
 @media print {
 	#exceptBarcode{
 		display:none;
@@ -54,10 +51,8 @@ form input[type='text'] {
 <div id='exceptBarcode'>
 <h1><img src="/img/h/h1-start-50.png"/>
 اسکن اظهارنامه</h1>
-
-
 <?php if (isset($this->sid)){?>
-	<applet code="com.openkm.applet.Scanner" width="300" height="300" mayscript archive="../scanner.jar">
+	<applet code="com.openkm.applet.Scanner" width="3" height="3" mayscript archive="<?php echo SiteRoot."/script"?>/scanner.jar">
     <param name="token" value="<?php echo $this->sid?>" />
     <param name="path" value="<?php echo SiteRoot.'/scan/responder';?>"/>
     <param name="lang" value="en_EN" />
@@ -67,11 +62,7 @@ form input[type='text'] {
 
 
 <form method='post'>
-<?php if (isset($this->Result))
-	ViewResultPlugin::Show($this->Result,$this->Error);
-	if($this->HasError)
-		AutosoundPlugin::EchoError("error3");
-?>
+<div id='resultBox'></div>
 	<a href='/help/main#CotagBook'>
 	<img src='/img/web/icon/help32.png' style='border:0px solid gray; float:left;' />
 	</a>
@@ -81,7 +72,7 @@ form input[type='text'] {
 
 </div>
 <div>
-	<input type="checkbox" name='print' <?php if ($_POST['print']==true || !isset($_POST['Cotag']) )echo "checked=checked" ;  ?>><a href='#' id='prints'>چاپ بارکد</a>
+	<input type="checkbox" name='print' id='chkprint' <?php if ($_POST['print']==true || !isset($_POST['Cotag']) )echo "checked=checked" ;  ?>><a href='#' id='prints'>چاپ بارکد</a>
 </div>
 <input type='submit' id='sub' value='وصول' />
 </form>
@@ -94,14 +85,46 @@ form input[type='text'] {
 </div>
 <?php }?>
 <script>
+
+function back()
+{
+	document.getElementById("body").style.background="#FAFAFA";
+}
+function refresh(result,resultMsg)
+{
+	//alert("function result"+resultMsg);
+	if(!result)
+	{
+		$('#resultBox').append(
+		'<div style="margin: 2px; padding: 0 .7em; min-height: 35px;overflow:auto;padding-bottom:0px;"'+
+		'class="ui-state-error ui-corner-all noprint">'+
+		'<p style="margin-top: 5px;"><span style="float: right; margin-left: .3em; margin-top: 4px;"'+
+		'class="ui-icon ui-icon-alert noprint"></span> <strong>خطا: </strong>'+resultMsg+' </p></div>');
+		$('#body').css({'background':'red', '-moz-box-shadow':'10px 10px 50px 100px #FAFAFA inset','box-shadow':'10px 10px 50px 100px #FAFAFA inset'});
+		$('#body').append("<embed src='/file/sound/error3.swf' class='sound'/>");
+		//$('#body').delay(2000).css({'background':'#FAFAFA'});
+		setTimeout(back,2000);
+	}
+	else
+	{
+		$('#resultBox').append(
+		'<div style="margin: 2px; margin: 5px; padding: 0 .7em; min-height: 35px;"'+
+			'class="ui-state-highlight ui-corner-all">'+
+		'<p style="margin-top: 5px;"><span style="float: right; margin-left: .3em; margin-top: 4px;"class="ui-icon ui-icon-info"'+
+		'></span>'+resultMsg+'</p></div>');
+		if($('#chkprint').attr('checked')=='checked')
+			window.open("../cotag/bar?cotag="+<?php echo $this->cotag?>+"&chk=1");
+	}
+	$("#Cotag").focus();
+}
 function ok(i)
 {
-	alert("function_OK"+i);
+	//alert("function_OK"+i);
 	
 }
-function nok(i)
+function nok(i,error)
 {
-	alert("function_NOK"+i);
+	//alert("function_NOK"+i+"error="+error);
 }
 function IsNumeric(input){
 	    var RE = /^-{0,1}\d*\.{0,1}\d+$/;
@@ -138,28 +161,16 @@ function setCursor(node,pos){
     return false;
 }
 $('#prints').click(function ()
-{
-	 window.open("./bar?cotag="+$("form input[name='Cotag']").val()+"&chk=1");
-});
+		{
+			 window.open("../cotag/bar?cotag="+$("form input[name='Cotag']").val()+"&chk=1");
+		});
 
 $(document).ready(function(){
 	
-	$("form input[name='Cotag']").focus();
+	$("#Cotag").focus();
 	setCursor("Cotag",$('#Cotag').val().length);
-<?php  if(!($this->Result==false) && $_POST['print']==true){?>
-	
-			window.open("./bar?cotag="+<?php echo $_POST['Cotag'];?>);
 
-<?php }?>
 });
 
-	<?php 
-	if($this->HasError){
-		?>
-		function back()
-		{
-			document.getElementById("body").style.background="#FAFAFA";
-		}
-		setTimeout(back,2000);
-	<?php }?>
+
 </script>

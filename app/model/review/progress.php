@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * 	"Correction"="ReviewProgressCorrection",
  * 	"Classeconfirm"="ReviewProgressClasseconfirm",
  * 	"Start"="ReviewProgressStart",
+ * 	"Scan"="ReviewProgressScan",
  * 	"Ebtal"="ReviewProgressEbtal",
  * 	"Review"="ReviewProgressReview",
  * 	"RegisterInArchive"="ReviewProgressRegisterarchive",

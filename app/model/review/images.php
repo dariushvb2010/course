@@ -19,12 +19,14 @@ class ReviewImages
 	/**
 	 * @ManyToOne(targetEntity="ReviewProgress")
  	 * @JoinColumn(name="PID", referencedColumnName="ID")
+ 	 * @var ReviewProgress
 	 */
     public $PID;
 	function PID()
 	{
 		return $this->PID;
 	}
+	
 	
 	/**
 	 * @Column(type="string")
@@ -34,6 +36,12 @@ class ReviewImages
 	public function Name()
 	{
 		return $this->Name;
+	}
+	public function path()
+	{
+		$cp=new CalendarPlugin();
+		$jArr=explode('/',$cp->JalaliFromTimestamp($this->PID()->CreateTimestamp()));
+		return ConfigReview::$gate_code.'/'.$jArr[0].'/'.$jArr[1].'/'.$this->Name();
 	}
 	function __construct($PID=null,$Name=null)
 	{
@@ -79,5 +87,18 @@ class ReviewImagesRepository extends EntityRepository
 		$r=j::ODQL("SELECT I FROM ReviewImages AS I JOIN I.PID AS P WHERE P.File=? AND P.Dead=0 ORDER BY P.CreateTimestamp",$File);
 		return $r;
 		
+	}
+	function deleteImage($Progress)
+	{
+		/**
+		 * 
+		 * @var array of ReviewImages
+		 */
+		$r=j::ODQL("SELECT I FROM ReviewImages AS I JOIN I.PID AS P WHERE P=?",$Progress);
+		foreach($r as $image)
+		{
+			unlink(ConfigReview::$upload_folder_root.$image->path().'.jpg');
+			ORM::Delete($image);
+		}
 	}
 }

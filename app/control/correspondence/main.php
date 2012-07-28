@@ -24,7 +24,12 @@ class CorrespondenceMainController extends JControl
 				$MokatebatStateList=FileFsm::Name2State('Mokatebat');
 				if(in_array($FileState,$MokatebatStateList ))
 				{
-					$ProcessArray=FileFsm::PossibleProgresses($FileState);
+					$ProcessArrayraw=FileFsm::PossibleProgresses($FileState);
+					$ProcessArray=array();
+					foreach ($ProcessArrayraw as $r){
+						if($r->is_MokatebatViewable()!==false)$ProcessArray[]=$r;
+					}
+					
 					$er=$this->ManageProcesses($File);
 					if($er)
 					{

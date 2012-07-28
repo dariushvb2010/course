@@ -41,9 +41,9 @@ form input[type='text'] {
 <form method='post' action="./">
 	<input type='hidden' name='Cotag' value='<?php echo $this->Cotag;?>'>	
 	<?php 
-	foreach ($this->ProcessArray as $key=> $value){
+	foreach ($this->ProcessArray as $p){
 	?>
-	<input type='submit' name="###<?php echo $key;?>" value="<?php echo $value;?>"  label="hi"/><br/>
+	<input type='submit' name="###<?php echo $p->Name;?>" value="<?php echo $p->Label;?>"  label="hi"/><br/>
 	<?php }	?>
 </form>
 <?php }?>
