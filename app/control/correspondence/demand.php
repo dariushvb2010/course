@@ -13,9 +13,7 @@ class CorrespondenceDemandController extends JControl
 			if($File)
 			{ 
 				$types=$this->get_input_class('string');
-				//if(!FileFsm::IsPossible($File->State(),$types)){
-				//	$Error[]='این عملیات روی پرونده قابل قبول نیست.';
-				//}
+				
 				if(isset($_POST['submit']))
 				{			
 					$Res=$this->all_addfile($File);
@@ -44,7 +42,7 @@ class CorrespondenceDemandController extends JControl
 		$Comment=(isset($_POST['Comment'])?$_POST['Comment']:null);
 		$types=$this->get_input_class('array');
 
-		if(!FileFsm::IsPossible($File->State(),$this->get_input_class('string'))){
+		if(!FsmGraph::IsPossible($File->State(),$this->get_input_class('string'))){
 			$Res['Error']='این عملیات روی پرونده قابل قبول نیست.';
 			return $Res;
 		}

@@ -4,7 +4,6 @@ class ConfigEventController extends BaseControllerClass
 
 	function Start()
 	{
-		//FileFsm::Moderate();
 		if(count($_POST))
 		{
 			$Name=$_POST['Name'];

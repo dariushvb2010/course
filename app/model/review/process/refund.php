@@ -64,11 +64,11 @@ class ReviewProcessRefundRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Refund"))
+			if(FsmGraph::NextState($File->State(),"Refund"))
 			{
 				$R=new ReviewProcessRefund($File,$RefundValue,$Indicator,$CurrentUser);
 				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Refund"));
+				$R->SetState($File,FsmGraph::NextState($File->State(),"Refund"));
 				ORM::Write($R);
 				ORM::Persist($File);
 				$res['Class']=$R;

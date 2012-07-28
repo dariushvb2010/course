@@ -64,11 +64,11 @@ class ReviewProcessPaymentRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Payment"))
+			if(FsmGraph::NextState($File->State(),"Payment"))
 			{
 				$R=new ReviewProcessPayment($File,$PaymentValue,$Indicator,$CurrentUser);
 				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Payment"));
+				$R->SetState($File,FsmGraph::NextState($File->State(),"Payment"));
 				ORM::Write($R);
 				ORM::Persist($File);
 				$res['Class']=$R;

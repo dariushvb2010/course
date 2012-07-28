@@ -92,11 +92,11 @@ class ReviewProcessFeedbackRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Feedback"))
+			if(FsmGraph::NextState($File->State(),"Feedback"))
 			{
 				$R=new ReviewProcessFeedback($File,$FeedbackResult,$FeedbackOffice,$Indicator,$CurrentUser);
 				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Feedback"));
+				$R->SetState($File,FsmGraph::NextState($File->State(),"Feedback"));
 				ORM::Write($R);
 				ORM::Persist($File);
 				$res['Class']=$R;

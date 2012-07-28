@@ -6,7 +6,7 @@
  * @author kavakebi
  *
  */
-class FileFsmelementclass extends JModel {
+class FsmElement extends JModel {
 
 	public $Label;
 	public $Name;

@@ -10,7 +10,7 @@ class ReviewDossierMainController extends JControl
 		$File=ORM::Query(new ReviewFile())->GetRecentFile($Cotag);
 		if($File)
 			$State=$File->State();
-		if(FileFsm::IsReviewerDisturbState($State))
+		if(FsmGraph::IsReviewerDisturbState($State))
 		{
 			$Option=array(	
 							"ok"=>"قبول اعتراض صاحب کالا ",
@@ -27,7 +27,7 @@ class ReviewDossierMainController extends JControl
 				$Res=ORM::Query(new ReviewProcessJudgement)->AddToFile($File,$JudgeResult,$Setad);
 			}
 		}
-		elseif(FileFsm::IsReviewerConfirmState($State))
+		elseif(FsmGraph::IsReviewerConfirmState($State))
 		{
 			$Option=array(
 							"ok"=>"ختم پرونده",

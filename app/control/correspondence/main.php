@@ -21,10 +21,10 @@ class CorrespondenceMainController extends JControl
 			{
 				$this->Classe=$File->GetClass();
 				$FileState=$File->State();
-				$MokatebatStateList=FileFsm::Name2State('Mokatebat');
+				$MokatebatStateList=FsmGraph::Name2State('Mokatebat');
 				if(in_array($FileState,$MokatebatStateList ))
 				{
-					$ProcessArrayraw=FileFsm::PossibleProgresses($FileState);
+					$ProcessArrayraw=FsmGraph::PossibleProgresses($FileState);
 					$ProcessArray=array();
 					foreach ($ProcessArrayraw as $r){
 						if($r->is_MokatebatViewable()!==false)$ProcessArray[]=$r;
@@ -81,9 +81,7 @@ class CorrespondenceMainController extends JControl
 					}
 					break;
 				default:
-					//if(FileFsm::is_printing($input_class))
-					//	$this->Redirect("./demand2?Cotag={$File->Cotag()}&input_class={$input_class}");
-					//else
+					
 						$this->Redirect("./demand?Cotag={$File->Cotag()}&input_class={$input_class}");
 			}
 		}

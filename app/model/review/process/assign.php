@@ -60,7 +60,7 @@ class ReviewProcessAssignRepository extends EntityRepository
 		$CurrentUser=MyUser::CurrentUser();
 		if($File)
 		{
-			if(FileFsm::NextState($File->State(),"ProcessAssign"))
+			if(FsmGraph::NextState($File->State(),"ProcessAssign"))
 			{
 				if($File->LastReviewer())
 				{
@@ -79,7 +79,7 @@ class ReviewProcessAssignRepository extends EntityRepository
 				}
 
 				$p=new ReviewProcessAssign($File, $CurrentUser,$Reviewer);
-				$p->SetState($File,FileFsm::NextState($File->State(),"ProcessAssign"));
+				$p->SetState($File,FsmGraph::NextState($File->State(),"ProcessAssign"));
 				ORM::Persist($File);
 				ORM::Persist($p);
 				$res['Class']=$p;

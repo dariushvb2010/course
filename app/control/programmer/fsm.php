@@ -12,7 +12,7 @@ class ProgrammerFsmController extends JControl
 			$Summary=$_POST['Summary'];
 			$Place=$_POST['Place'] ? $_POST['Place'] : 'بیرون';
 			
-			$Res=ORM::Query(new FileState)->Add($Num, $Str, $Summary, $Place);
+			$Res=ORM::Query("FsmState")->Add($Num, $Str, $Summary, $Place);
 			if(is_string($Res))
 			{
 				$Error[]=$Res;
@@ -27,7 +27,7 @@ class ProgrammerFsmController extends JControl
 			}
 		}
 		
-		$States=ORM::Query("FileState")->GetAllStates();
+		$States=ORM::Query("FsmState")->GetAllStates();
 		ORM::Dump($States);
 		$al=new AutolistPlugin($States);
 		$al->SetHeader('Num',"شماره");

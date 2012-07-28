@@ -6,7 +6,7 @@
  * @author sonukesh,kavakebi
  *
  */
-class FileFsm extends JModel
+class FsmGraph extends JModel
 {
 
 	/**
@@ -161,10 +161,9 @@ class FileFsm extends JModel
 	 * @author Morteza Kavakebi
 	 */
 	static function Name2State($name){
-		if (!array_key_exists($name,FileFsm::$Name2State))
+		if (!array_key_exists($name,self::$Name2State))
 			return null;
-		$Temp=FileFsm::$Name2State[$name];
-		 
+		$Temp=self::$Name2State[$name];
 		if(!is_array($Temp))
 			$Temp=Array($Temp);
 		
@@ -173,7 +172,7 @@ class FileFsm extends JModel
 			if(is_int($val)){
 				$res[]=$val;
 			}else{
-				$res=array_merge($res,FileFsm::Name2State($val));
+				$res=array_merge($res,self::Name2State($val));
 			}
 		}
 		return array_unique($res);
@@ -196,7 +195,7 @@ class FileFsm extends JModel
 		}
 		if(is_int($state1) AND is_string($state2)){
 			
-			$StateArray=FileFsm::Name2State($state2);
+			$StateArray=self::Name2State($state2);
 			return in_array($state1, $StateArray);
 		}
 		
@@ -210,7 +209,7 @@ class FileFsm extends JModel
 	 * @param integer $state
 	 */
 	static function PossibleProgresses($state){
-		$Graph=FileFsm::$StateGraph;
+		$Graph=self::$StateGraph;
 		$ar2=array();
 		foreach($Graph as $s=>$ar){
 			if( self::StateMatch($s, $state))
@@ -229,7 +228,7 @@ class FileFsm extends JModel
 	}
 	
 	static function GetProgressByName($name){
-		return new FileProgressclass(FileFsm::$ProcessList[$name]);
+		return new FileProgressclass(self::$ProcessList[$name]);
 	}
 
 	
@@ -242,7 +241,7 @@ class FileFsm extends JModel
 	* @return boolean
 	*/
 	static function IsPossible($currentstate,$progressname){
-		$ar=FileFsm::PossibleProgresses($currentstate*1);
+		$ar=self::PossibleProgresses($currentstate*1);
 		return array_key_exists($progressname,$ar);
 	}
 	
@@ -256,10 +255,10 @@ class FileFsm extends JModel
 	 */
 	static function NextState($currentstate,$progressname){
 		$state=$currentstate*1;
-		$Graph=FileFsm::$StateGraph;
+		$Graph=self::$StateGraph;
 		$ar2=array();
 		foreach($Graph as $s=>$ar){
-			$StateArray=FileFsm::Name2State($s);
+			$StateArray=self::Name2State($s);
 			if( (is_int($s) AND $s===$state) OR (is_string($s) AND in_array($state, $StateArray)) )
 			{
 				if(array_key_exists($progressname,$ar)){

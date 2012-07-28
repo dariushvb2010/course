@@ -18,7 +18,7 @@ class ConfigEventTest extends JTest
 	}
 	function testAdd()
 	{	
-		$list=FileFsm::$ProcessList;
+		$list=FsmGraph::$ProcessList;
 		if($list)
 		foreach ($list as $Title=>$PersianTitle)
 		{

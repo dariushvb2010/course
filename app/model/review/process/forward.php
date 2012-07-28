@@ -40,7 +40,7 @@ class ReviewProcessForward extends ReviewProgress
 	function  Summary()
 	{
 		$R="اظهارنامه به ";
-		$R.=FileFsm::$Persian($this->ForwardOffice);
+		$R.=FsmGraph::$Persian($this->ForwardOffice);
 		$R.="ارسال شد.";
 		return $R;
 	}
@@ -83,10 +83,10 @@ class ReviewProcessForwardRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Forward"))
+			if(FsmGraph::NextState($File->State(),"Forward"))
 			{
 				$R=new ReviewProcessForward($File,$Ofiice,$Setad,$Indicator,$CurrentUser);
-				$R->SetState($File,FileFsm::NextState($File->State(),"Forward"));
+				$R->SetState($File,FsmGraph::NextState($File->State(),"Forward"));
 				ORM::Write($R);
 				ORM::Persist($File);
 				$res['Class']=$R;

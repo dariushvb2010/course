@@ -340,7 +340,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function CotagBookNotSentFiles($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
-		$states=FileFsm::Name2State('Cotag');
+		$states=FsmGraph::Name2State('Cotag');
 		$states=implode(',', $states);
 		$r=j::DQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
@@ -420,7 +420,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public static function UnassignedFiles($From=0,$Limit=0)
 	{
-		$states=FileFsm::Name2State('Assignable');
+		$states=FsmGraph::Name2State('Assignable');
 		$states=implode(',', $states);
 		$r=j::DQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
 					ORDER BY F.Cotag LIMIT {$From},{$Limit}");
@@ -436,7 +436,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public static function FilesByStateName($StateName)
 	{
-		$states=FileFsm::Name2State($StateName);
+		$states=FsmGraph::Name2State($StateName);
 		$states=implode(',', $states);
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
 					ORDER BY F.Cotag");
@@ -454,7 +454,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function ExpiredStateFiles($StateName,$PeriodSeconds)
 	{
-		$StateNumber=FileFsm::Name2State($StateName);
+		$StateNumber=FsmGraph::Name2State($StateName);
 		$c_time=time();
 		$r=j::DQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
 						WHERE F.State={$StateNumber} AND {$c_time}-P.CreateTimestamp>{$PeriodSeconds}

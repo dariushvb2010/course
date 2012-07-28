@@ -30,7 +30,7 @@ class ReviewProcessProtest extends ReviewProgress
 	{
 		$R= "اعتراض صاحب کالا با درخواست ارسال به";
 		$R.=' ';
-		$R.=FileFsm::$Persian[$this->ProtestRequest];
+		$R.=FsmGraph::$Persian[$this->ProtestRequest];
 		$R.=' ';
 		$R.="ثبت شد.";
 		return $R;

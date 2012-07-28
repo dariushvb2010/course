@@ -72,11 +72,11 @@ class ReviewProcessJudgementRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Judgement_".$JudgeResult))
+			if(FsmGraph::NextState($File->State(),"Judgement_".$JudgeResult))
 			{
 				$R=new ReviewProcessJudgement($File,$JudgeResult,$JudgementSetad,$CurrentUser);
 				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Judgement_".$JudgeResult));
+				$R->SetState($File,FsmGraph::NextState($File->State(),"Judgement_".$JudgeResult));
 				ORM::Persist($R);
 				ORM::Persist($File);
 				$res['Class']=$R;

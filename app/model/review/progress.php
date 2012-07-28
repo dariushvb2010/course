@@ -240,7 +240,7 @@ abstract class ReviewProgress
 		if(!isset($EName))
 			throw new Exception("Event Not Set for Progress ".get_class($this));
 		$CurrentState=$this->File->State();
-		$NewState=FileFsm::NextState($CurrentState, $EName);
+		$NewState=FsmGraph::NextState($CurrentState, $EName);
 		if(!isset($NewState))
 		{
 			return "به دلیل وضعیت فعلی اظهارنامه انجام این فرآیند امکان پذیر نیست.";

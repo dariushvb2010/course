@@ -6,8 +6,8 @@
  * @author kavakebi
  *
  */
-class FileProgressclass extends FileFsmelementclass {
-
+class FsmProgress extends FsmElement {
+	
 	public $beginState;
 	public $nxtState;
 	

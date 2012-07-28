@@ -69,11 +69,11 @@ class ReviewProcessConfirmRepository extends EntityRepository
 			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
 		}
 		else{
-			if(FileFsm::NextState($File->State(),"Processconfirm"))
+			if(FsmGraph::NextState($File->State(),"Processconfirm"))
 			{
 				$R=new ReviewProcessConfirm($File,$ConfirmResult,$Indicator,$CurrentUser);
 				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FileFsm::NextState($File->State(),"Processconfirm"));
+				$R->SetState($File,FsmGraph::NextState($File->State(),"Processconfirm"));
 				ORM::Persist($File);
 				ORM::Persist($R);
 				$res['Class']=$R;

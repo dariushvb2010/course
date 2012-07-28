@@ -3,12 +3,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
 *
-* @Entity Table(name="FileState")
-* @Entity(repositoryClass="FileStateRepository")
+* @Entity 
+* @Entity(repositoryClass="FsmStateRepository")
 * DiscriminatorColumn(name="discriminator", type="string")
 * DiscriminatorMap({"dbvalue"="class"})
 **/
-class FileState extends JModel
+class FsmState extends JModel
 {
 
 	/**
@@ -78,7 +78,7 @@ class FileState extends JModel
 }
 
 use \Doctrine\ORM\EntityRepository;
-class FileStateRepository extends EntityRepository
+class FsmStateRepository extends EntityRepository
 {
 	public function Add($Num, $Str, $Summary, $Place)
 	{
