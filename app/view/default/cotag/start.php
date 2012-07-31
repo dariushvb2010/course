@@ -53,7 +53,7 @@ form input[type='text'] {
 </style>
 <div id='exceptBarcode'>
 <h1><img src="/img/h/h1-start-50.png"/>
-دریافت اظهارنامه</h1>
+ورود اظهارنامه</h1>
 <form method='post'>
 <?php if (isset($this->Result))
 	ViewResultPlugin::Show($this->Result,$this->Error);

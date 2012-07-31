@@ -1,7 +1,7 @@
 <?php
 ?>
 <h1><img src="/img/h/h1-cancel-cotagbook-50.png"/>
-لغو وصول اظهارنامه</h1>
+لغو ورود اظهارنامه</h1>
 <style>
 
 form {
