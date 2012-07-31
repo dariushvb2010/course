@@ -6,22 +6,24 @@ class CotagCancelController extends JControl
 		j::Enforce("CotagBook");
 		if (count($_POST))
 		{
-			
 			$Cotag=$_POST['Cotag']*1;
 			$Res=ORM::Query("ReviewProgressStart")->CancelCotag($Cotag);
-			if(is_string($Res))
+			if(is_array($Res))
 			{
-				$Error[]=$Res;
+				if($Res['result']==true)
+					$Result = $Res['message'];
+				else 
+				$Error[]=$Res['message'];
 			}
 			else 
 			{
-
-				$this->Result=true;
-				$this->Result="وصول اظهارنامه با شماره کوتاژ "."<span style='font-size:20px; color:black; font-weight:bold;'>".$Cotag."</span>"."لغو شد.";
+				throw new Exception(" return value must be an array!");
+				//$this->Result="وصول اظهارنامه با شماره کوتاژ "."<span style='font-size:20px; color:black; font-weight:bold;'>".$Cotag."</span>"."لغو شد.";
 				
 				
 			}
 		}
+		$this->Result=$Result;
 		$this->Error=$Error;
 		if (count($Error)) $this->Result=false;
 
