@@ -35,7 +35,7 @@ class CotagNewController extends JControl
 				$this->Result="اظهارنامه با شماره کوتاژ  ";
 				$this->Result.=" <span style='font-size:20px; color:black; font-weight:bold;'>";
 				$this->Result.=$Cotag."</span> "."با موفقیت وصول گردید.";
-				
+				$this->Result = " اظهارنامه با شماره کوتاژ ".v::bgc($Cotag)." با موفقیت وصول گردید. ";
 			}
 		}
 		$this->Error=$Error;

@@ -43,6 +43,10 @@ class b
 			return $CM->Value();
 		}
 	}
+	/**
+	 * @param string_or_int $Cotag
+	 * @return bool
+	 */
 	public static function CotagValidation($Cotag)
 	{
 		$Cotag=strval($Cotag);
@@ -50,7 +54,18 @@ class b
 		$res=preg_match($pattern,$Cotag);
 		return $res==0 ? false : true;
 	}
-	
+	/**
+	 * returns an integer value of $cotag
+	 * @param string_or_int $cotag
+	 * @return int_or_bool {int if cotag is validated} {false if cotag is not validated}
+	 */
+	public static function BakeCotag($rawCotag)
+	{
+		if(self::CotagValidation($rawCotag))
+			return $rawCotag*1;
+		else
+			return false;
+	}
 	static public function __Initialize ()
 	{
 		self::$CotagLength=7;
