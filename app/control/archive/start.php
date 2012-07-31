@@ -9,7 +9,7 @@ class ArchiveStartController extends JControl
 
 	function Start()
 	{
-		//j::Enforce("Archive");
+		j::Enforce("Archive");
 		//ORM::Dump(MyGroup::Archive());
 		//////////////////////////////////////
 
@@ -31,7 +31,7 @@ class ArchiveStartController extends JControl
 		if (count($Error)) $this->Result=false;
 
 		//return $this->Present();
-		return $this->Present("",'cotag/new');
+		return $this->Present("",'cotag/start');
 		//$this->Prese
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-class CotagNewController extends JControl
+class CotagStartController extends JControl
 {
 	
 	function Start()
