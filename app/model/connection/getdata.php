@@ -59,7 +59,6 @@ class ConnectionGetdata extends JModel
 	/* gets the data from a URL */
 	private function get_data($url)
 	{
-		echo $url.'<br>';
 		$ch = curl_init();
 		$timeout = 5;
 		curl_setopt($ch,CURLOPT_URL,$url);
