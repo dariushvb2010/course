@@ -21,7 +21,7 @@ class data{
         public function execute($file)
         {
                $res=true;
-                $contents = file_get_contents($file);
+                $contents = file_get_contents($this->fullpath($file));
 //                 var_dump( $contents );
                 $queries = preg_split("/;+(?=([^'|^\\\']*['|\\\'][^'|^\\\']*['|\\\'])*[^'|^\\\']*[^'|^\\\']$)/", $contents);
                 foreach ($queries as $query){
@@ -30,13 +30,32 @@ class data{
                 }
                 return $res;
         }
-        public static function echofile($file)
+        public function echofile($file)
         {
-        	if(file_exists($file))
+        	if(file_exists($this->fullpath($file)))
         		echo "<li class='ok'>";
         	else 
         		echo "<li class='nok'>";
         	echo $file."</li>";
+        }
+        
+        public function fullpath($fname){
+        	return dirname(__FILE__)."/".$fname;
+        }
+        
+        public function lockinstallation()
+        {
+        	$a='dd';
+        	var_dump(file_exists($this->fullpath("../.htaccess2")));
+        	try{
+        		rename($this->fullpath("users2.sql"), $this->fullpath("abcd.sql"));
+        		$a= copy($this->fullpath("users.sql"), $this->fullpath("abcd"));
+        		//copy($source, $dest)
+        	}catch(Exception $e)
+        	{
+        		var_dump($e."0");
+        	}
+        	return $a;
         }
 }
 ?>
@@ -59,7 +78,7 @@ class data{
         label{}
         input{float:right; margin-right:20px;}
         input[type=submit]{ float:none; margin:0;}
-        form{width: 500px;}
+        form{}
 </style>
 </head><body>
 <div id="body">
@@ -78,7 +97,7 @@ class data{
         		echo "<ul>"; 
         			foreach ($da::$files as $file)
         			{
-        				$da::echofile($file);
+        				$da->echofile($file);
         			}
         		echo "</ul>";
 		        ?>
@@ -94,6 +113,7 @@ class data{
                                 <input type="submit" name="rolepermissions" value="rolepermissions" />
                                 <input type="submit" name="users" value="users" />
                                 <input type="submit" name="configevent" value="configevent" />
+                                <input type="submit" name="lockinstallation" value="lock installation" />
                         </p>
                 </form>
                 
@@ -113,11 +133,15 @@ class data{
                         if( $res)
                                 echo $da->execute("users.sql");
                         else
-                                echo "please update database schema!";
+                            echo "please update database schema!";
                     }
                     elseif( isset($_POST['configevent']) )
                     {
                         echo $da->execute("configevent.sql");
+                    }
+                    elseif( isset($_POST['lockinstallation']) )
+                    {
+                        echo $da->lockinstallation();
                     }
                         
                         

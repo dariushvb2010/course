@@ -78,6 +78,18 @@ class ViewIntervalPlugin extends JPlugin
 		
 	}
 	/**
+	 * sets the values of elements from defaultDate
+	 * @example $this->ElemAttrs['CYear']['value'] = $this->DefaultDate['CYear']
+	 */
+	public function SetValuesFromDefaultDate()
+	{
+		foreach (self::$keys as $k)
+		{
+			$this->ElemAttrs[$k]['value'] = $this->DefaultDate[$k];
+		}
+		
+	}
+	/**
 	 * @example $elem like 'CDay', 'CYear', ...
 	 * @param string $elem
 	 */
@@ -142,9 +154,11 @@ class ViewIntervalPlugin extends JPlugin
 	}
 	/**
 	 * gets the post or get request and returns an array
+	 * 
 	 * @return array $res[<key>] ;
 	 * @example $res['CDay'] : 24;
 	 * 	         $res['CHour'] : 10;
+	 * @return array_or_bool false if none of them is not set
 	 */
 	function GetRequest()
 	{
@@ -152,12 +166,15 @@ class ViewIntervalPlugin extends JPlugin
 			$REQ = $_POST;
 		else
 			$REQ = $_GET;
-		
+		$b= false;
 		foreach (self::$keys as $v)
 		{
 			$res[$v] = $REQ[$this->ElemAttrs[$v]['name']]*1;
+			if(isset($REQ[$this->ElemAttrs[$v]['name']]))
+				$b = true;
 		}
-		return $res;
+		
+		return ($b ? $res : false);
 	}
 	
 }

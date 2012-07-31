@@ -26,13 +26,27 @@ class ReportChartsMainController extends JControl
 			$vi->ElemAttrs['FDay']['disabled'] =
 			$vi->ElemAttrs['FHour']['disabled'] =
 			$vi->ElemAttrs['FMin']['disabled'] =
-												"disabled";
+										"disabled";
+		
 		$q = $vi->GetRequest();
+		var_dump($q);
 		$this->VI=$vi;
 		$c = new CalendarPlugin();
 		$nn = $c->TodayJalaliArray();
 		$thisYear = $nn[0];
 		$thisMonth = $nn[1];
+		$vi->DefaultDate['CYear'] = $thisYear-1;
+		//$vi->SetValuesFromDefaultDate();
+		if($q!==false)
+		{
+			$CYear = $q['CYear'];
+			$CMonth = $q['CMonth'];
+		}
+		else
+		{ 
+			$CYear = $vi->DefaultDate['CYear'];
+			$CMonth = $vi->DefaultDate['CMonth'];
+		}
 		$CdiffMonth = ( $thisYear-$q['CYear'] )*12 + $thisMonth - $q['CMonth'];
 		$FdiffMonth = ( $thisYear-$q['FYear'] )*12 + $thisMonth - $q['FMonth'];
 		$startMonth = $FdiffMonth;
