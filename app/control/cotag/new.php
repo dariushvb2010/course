@@ -1,10 +1,24 @@
 <?php
 class CotagNewController extends JControl
 {
+	
 	function Start()
 	{
 		j::Enforce("CotagBook");
 		
+		//////////////////////////////////////
+		
+		$c=new ConnectionBakedata();
+		$c->GetMojavezBargiriYear("4000013", "1391");
+		$f=$c->GetResult();
+		var_dump($f);
+
+		$c=new ConnectionBakedata();
+		$c->GetParvaneyeVaredat("21598");
+		$f=$c->GetResult();
+		var_dump($f);
+		
+		///////////////////////////////////////////
 		if (count($_POST))
 		{
 			$Cotag=$_POST['Cotag'];
@@ -28,4 +42,6 @@ class CotagNewController extends JControl
 		if (count($Error)) $this->Result=false;
 		return $this->Present();
 	}
+	
+	
 }
