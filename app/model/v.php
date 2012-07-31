@@ -1,6 +1,14 @@
 <?php
 class v
 {
+	
+	/**
+	 * bold tag
+	 */
+	public static function b($cot)
+	{
+		return "<b>".$cot."</b>";
+	}
 	/**
 	 * Green Cotag
 	 * @param unknown_type $cot

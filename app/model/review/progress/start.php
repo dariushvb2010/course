@@ -16,28 +16,53 @@ class ReviewProgressStart extends ReviewProgress
 	{
 		return $this->IsPrint;
 	}
-	function __construct(ReviewFile $File=null,$IsPrint=false, $IfPersist=true)
-	{
+	/**
+	 * @ManyToOne(targetEntity="MyGroup")
+	 * @JoinColumn(name="StartGroupID", referencedColumnName="ID", nullable="false")
+	 * 
+	 * to distiguish the file next state, we will need this var
+	 * @see $this->Event()
+	 * @example only three Groups: cotagbook, archive, raked
+	 * @var MyGroup
+	 
+	 */
+	protected $StartGroup;
+	function StartGroup(){ return $this->StartGroup; }
+	function SetStartGroup(MyGroup $G){
+		$this->StartGroup=$G;
+	}
+	function __construct(ReviewFile $File=null,$IsPrint=false, $IfPersist=true, MyGroup $StartGroup=null)
+	{	
 		if($IsPrint!=null)
 			$this->IsPrint=$IsPrint;
 		else
 			$this->IsPrint=false;
-
+		if($StartGroup==null)
+			$this->StartGroup = MyGroup::CotagBook();
+		else 
+		{
+			$this->StartGroup = $StartGroup;
+		}
 		parent::__construct($File, null, $IfPersist);
 
 	}
 	function  Summary()
 	{
-		return "اظهارنامه توسط دفتر کوتاژ وصول گردید.";
+		$sgn = $this->StartGroup()->Title();
+		return "اظهارنامه توسط ".v::b(ConfigData::$GROUPS[$sgn])." در سیستم ثبت شد. ";
 	}
 
 	function Title()
 	{
-		return "وصول دفترکوتاژ";
+		return "ورود اظهارنامه";
 	}
 	function Event()
 	{
-		return "Start";
+		$sgn = $this->StartGroup()->Title(); // startGroup Title
+		if(!isset($sgn))
+			throw new Exception("start event has not been set!");
+		
+		return "Start_".strtolower($sgn);
 	}
 }
 use \Doctrine\ORM\EntityRepository;
@@ -48,8 +73,9 @@ class ReviewProgressStartRepository extends EntityRepository
 	 * @param integer $Cotag
 	 * @return string for error boolean for true;
 	 */
-	public function AddToFile($Cotag,$IsPrint=false)
+	public function AddToFile($Cotag,$IsPrint=false,$StartGroup)
 	{
+		//ORM::Dump($StartGroup);die();
 		if(b::CotagValidation($Cotag)==false)
 			return "کوتاژ ناصحیح است.";
 		//		else if(! j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag)))
@@ -64,14 +90,14 @@ class ReviewProgressStartRepository extends EntityRepository
 			$File=new ReviewFile($Cotag);
 			ORM::Persist($File);
 		}
-		$start=new ReviewProgressStart($File,$IsPrint, false);
+		$start=new ReviewProgressStart($File,$IsPrint, false, $StartGroup);
 		$ch=$start->Check();
 		if(is_string($ch))
 		{
 			return $ch;
 		}
 
-		$start= new ReviewProgressStart($File, $IsPrint, true);
+		$start= new ReviewProgressStart($File, $IsPrint, true, $StartGroup);
 		$start->Apply();
 		ORM::Persist($start);
 
@@ -86,7 +112,7 @@ class ReviewProgressStartRepository extends EntityRepository
 	 */
 	public function CancelCotag($Cotag)
 	{
-		$ret = array();
+		$ret = array(); // the return value
 		$Cotag = b::BakeCotag($Cotag);
 		if($Cotag == false)
 		{

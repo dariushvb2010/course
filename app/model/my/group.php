@@ -131,7 +131,19 @@ class MyGroup
 	}
 	static function Archive()
 	{
-		return ORM::Find("MyGroup", "Archive");
+		return ORM::Find1("MyGroup", "Title", "Archive");
+	}
+	static function CotagBook()
+	{
+		return ORM::Find1("MyGroup", "Title", "CotagBook");
+	}
+	static function Raked()
+	{
+		return ORM::Find1("MyGroup", "Title", "Raked");
+	}
+	static function GetGroup($GroupName)
+	{
+		return ORM::Find1("MyGroup", "Title", $GroupName);
 	}
 }
 
