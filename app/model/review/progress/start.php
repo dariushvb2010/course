@@ -73,7 +73,7 @@ class ReviewProgressStartRepository extends EntityRepository
 	 * @param integer $Cotag
 	 * @return string for error boolean for true;
 	 */
-	public function AddToFile($Cotag,$IsPrint=false,$StartGroup)
+	public function AddToFile($Cotag,$IsPrint=false,$StartGroup =null)
 	{
 		//ORM::Dump($StartGroup);die();
 		if(b::CotagValidation($Cotag)==false)
@@ -159,11 +159,10 @@ class ReviewProgressStartRepository extends EntityRepository
 			}//---------------------
 			//-----delete Stock-------
 			$S = $File->Stock();
-			if(count($S))
+			if(isset($S))
 			{
 				$resMessage = " اظهارنامه از نامه حذف شد. ".$resMessage;
-				foreach ($S as $s)
-					ORM::Delete($s);
+				ORM::Delete($S);
 			}//---------------------
 			ORM::Delete($File);
 			$ret['result'] = true;
