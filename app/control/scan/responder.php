@@ -137,6 +137,7 @@ class ScanResponderController extends JControl
 		}
 		
 		echo json_encode(array("result"=>$finalRes,"resultMsg"=>$resultMsg,"units"=>$result));
+		exit();
 	}
 	function deleteMovedFile($folder,$result)
 	{
