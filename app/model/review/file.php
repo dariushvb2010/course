@@ -34,7 +34,26 @@ class ReviewFile
 	{
 		$this->Cotag=$value;
 	}
-	
+	/**
+	 * شماره مجوز بارگیری
+	 * Bargiri Serail
+	 * @Column(type="string")
+	 * @var string
+	 */
+	protected $BarSerial;
+	function BarSerial()
+	{
+		return $this->BarSerial;
+	}
+	/**
+	 * @Column(type="integer")
+	 * @var integer
+	 */
+	protected $RegYear;
+	function RegYear()
+	{
+		return $this->RegYear;
+	}
     /**
      * @Column(type="integer")
      * @var integer
