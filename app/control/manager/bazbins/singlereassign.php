@@ -62,7 +62,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$al->_Button="div.autoform[num=first] button";
 		$al->EnterTextName="Cotag";
 		//--------al custom javascript code for validating the format of the Cotag-------------
-		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
+		$CotagCode="var patt=/^\d{".b::CotagLength."}$/;";
 		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
@@ -95,7 +95,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$al->_Button="div.autoform[num=last] button";
 		$al->EnterTextName="Cotag";
 		//--------al custom javascript code for validating the format of the Cotag-------------
-		$CotagCode="var patt=/^\d{".b::$CotagLength."}$/;";
+		$CotagCode="var patt=/^\d{".b::CotagLength."}$/;";
 		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);

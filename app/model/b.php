@@ -3,8 +3,21 @@
 
 class b
 {
+	//const gate_code = 50100;
+	const CotagLength=7;
+	const file_initial_state = 0;
+	const file_initial_class = 0;
+	const upload_folder_root="../../../upload/";
 
-	public static $CotagLength=7;
+	static function upload_folder_relative_from_japp()
+	{
+		$jl=new CalendarPlugin();
+		$jArr=$jl->TodayJalaliArray();
+	
+		return self::upload_folder_root.reg("app/GateCode").'/'.$jArr[0].'/'.$jArr[1].'/';
+	}
+
+	//////////////////////////////////////////////////
 	public static $CommentMinLength=10;
 	public static $Error=array();
 	public static $Warning=array();
@@ -50,7 +63,7 @@ class b
 	public static function CotagValidation($Cotag)
 	{
 		$Cotag=strval($Cotag);
-		$pattern="/\A[1-9]{1}\d{".(CotagLength-1)."}\z/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
+		$pattern="/\A[1-9]{1}\d{".(self::CotagLength-1)."}\z/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
 		$res=preg_match($pattern,$Cotag);
 		return $res==0 ? false : true;
 	}
@@ -68,7 +81,6 @@ class b
 	}
 	static public function __Initialize ()
 	{
-		self::$CotagLength=7;
 	}
 	
 	static function generatePassword($length=9, $strength=0) {

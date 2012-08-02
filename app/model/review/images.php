@@ -41,7 +41,7 @@ class ReviewImages
 	{
 		$cp=new CalendarPlugin();
 		$jArr=explode('/',$cp->JalaliFromTimestamp($this->PID()->CreateTimestamp()));
-		return ConfigReview::$gate_code.'/'.$jArr[0].'/'.$jArr[1].'/'.$this->Name();
+		return reg("app/GateCode").'/'.$jArr[0].'/'.$jArr[1].'/'.$this->Name();
 	}
 	function __construct($PID=null,$Name=null)
 	{
@@ -97,7 +97,7 @@ class ReviewImagesRepository extends EntityRepository
 		$r=j::ODQL("SELECT I FROM ReviewImages AS I JOIN I.PID AS P WHERE P=?",$Progress);
 		foreach($r as $image)
 		{
-			unlink(ConfigReview::$upload_folder_root.$image->path().'.jpg');
+			unlink(b::upload_folder_root.$image->path().'.jpg');
 			ORM::Delete($image);
 		}
 	}

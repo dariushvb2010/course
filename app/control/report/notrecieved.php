@@ -15,9 +15,9 @@ class ReportNotrecievedController extends JControl
 				
 			}
 				
-			elseif (strlen($_POST['RangeStart'])!= CotagLength ||strlen($_POST['RangeEnd'])!= CotagLength)
+			elseif (strlen($_POST['RangeStart'])!= b::CotagLength ||strlen($_POST['RangeEnd'])!= b::CotagLength)
 			{
-				$Error[]="کوتاژ باید  ".CotagLength." رقمی باشد . ";
+				$Error[]="کوتاژ باید  ".b::CotagLength." رقمی باشد . ";
 			}	
 			else
 			{

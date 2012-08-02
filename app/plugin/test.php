@@ -15,7 +15,7 @@ class TestPlugin extends JPlugin
 		$File=null;
 		while(!$File)
 		{
-			for($i=0; $i<CotagLength; $i++)
+			for($i=0; $i<b::CotagLength; $i++)
 			{
 				$a=rand(0, 9);
 				$Cotag.=strval($a);

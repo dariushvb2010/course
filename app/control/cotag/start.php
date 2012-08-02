@@ -31,7 +31,7 @@ class CotagStartController extends JControl
 		}
 		
 		$this->Error=$Error;
-		$this->IsPrint=false;//$IsPrint;
+		$this->IsPrint=$IsPrint;
 		
 		if (count($Error)) $this->Result=false;
 		return $this->Present();
