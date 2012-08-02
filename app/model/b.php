@@ -14,7 +14,7 @@ class b
 		$jl=new CalendarPlugin();
 		$jArr=$jl->TodayJalaliArray();
 	
-		return self::upload_folder_root.reg("app/GateCode").'/'.$jArr[0].'/'.$jArr[1].'/';
+		return self::upload_folder_root.GateCode.'/'.$jArr[0].'/'.$jArr[1].'/';
 	}
 
 	//////////////////////////////////////////////////

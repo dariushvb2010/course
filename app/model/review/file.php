@@ -226,7 +226,7 @@ class ReviewFile
     	$this->Progress= new ArrayCollection();
     	$this->Alarm=new ArrayCollection();
     	$this->Class=b::file_initial_class;
-    	$this->Gatecode=reg("app/GateCode");
+    	$this->Gatecode=GateCode;
     	$this->State=b::file_initial_state;
     	
     }

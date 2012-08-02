@@ -41,7 +41,7 @@ class ReviewImages
 	{
 		$cp=new CalendarPlugin();
 		$jArr=explode('/',$cp->JalaliFromTimestamp($this->PID()->CreateTimestamp()));
-		return reg("app/GateCode").'/'.$jArr[0].'/'.$jArr[1].'/'.$this->Name();
+		return GateCode.'/'.$jArr[0].'/'.$jArr[1].'/'.$this->Name();
 	}
 	function __construct($PID=null,$Name=null)
 	{
