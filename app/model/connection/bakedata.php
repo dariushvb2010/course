@@ -29,12 +29,12 @@ class ConnectionBakedata extends JModel
 		$this->datapackage=$c->GetData();
 	}
 
-	public function GetParvaneFromAsycudaYear($Cotag,$Year){
+	public function GetParvanehFromAsycudaYear($Cotag,$Year){
 		$RequestArray=array(
 				'kutaj'=>$Cotag,
 				"year"=>$Year,
 		);
-		$c=new ConnectionGetdata($this->hoststring."/GetParvaneFromAsycuda", $RequestArray);
+		$c=new ConnectionGetdata($this->hoststring."/GetParvanehFromAsycuda", $RequestArray);
 		$this->datapackage=$c->GetData();
 	}
 	
@@ -48,6 +48,8 @@ class ConnectionBakedata extends JModel
 		$i=0;//@todo use a constant for retry number
 		while($i++<$Reapeat)
 		{
+			//$this->GetMojavezBargiriYear($Cotag, $year+$i-1);
+			//$this->GetParvanehFromAsycudaYear($Cotag, $year+$i-1);
 			$this->GetMojavezBargiriYear($Cotag, $year+$i-1);
 			if($this->Validate())
 				break;

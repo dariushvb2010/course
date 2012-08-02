@@ -6,25 +6,13 @@ class CotagStartController extends JControl
 	{
 		j::Enforce("CotagBook");
 		
+		
 		if (count($_POST))
 		{
-			$Cotag=$_POST['Cotag'];
 			$IsPrint=isset($_POST['print']) ? true : false;
-			//////////////////////////////////////
-			/*$c=new ConnectionBakedata();
-			$c->GetMojavezBargiri($Cotag);
-			if($c->Validate()){
-				$serial=$c->GetResult();
-				$c=new ConnectionBakedata();
-				$c->GetParvaneyeVaredat($serial);
-				if($c->Validate())
-					$AsyData=$c->GetResult();
-				else
-					$Error[]="اطلاعات اطهارنامه یافت نشد.";
-			}else{
-				$Error[]="اطهارنامه یافت نشد.";
-			}*/
-			///////////////////////////////////////////
+			$Cotag=$_POST['Cotag'];
+			$this->Cotag=$Cotag;
+
 			if(empty($Error)){
 				$Res=ORM::Query("ReviewProgressStart")->AddToFile($Cotag,$IsPrint);
 				if(is_string($Res))
@@ -38,8 +26,13 @@ class CotagStartController extends JControl
 			}else{
 				$Error[]="";
 			}
+		}else{
+			$IsPrint=true;
 		}
+		
 		$this->Error=$Error;
+		$this->IsPrint=false;//$IsPrint;
+		
 		if (count($Error)) $this->Result=false;
 		return $this->Present();
 	}

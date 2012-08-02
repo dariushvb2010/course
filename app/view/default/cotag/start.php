@@ -65,19 +65,19 @@ form input[type='text'] {
 	</a>
 <div>
 	<label>شماره کوتاژ</label>
-	<input type='text' name='Cotag' id='Cotag' value='<?php echo substr($_POST['Cotag'],0,3);?>'/>
+	<input type='text' name='Cotag' id='Cotag' value='<?php echo substr($this->Cotag,0,3);?>'/>
 
 </div>
 <div>
-	<input type="checkbox" name='print' <?php if ($_POST['print']==true || !isset($_POST['Cotag']) )echo "checked=checked" ;  ?>><a href='#' id='prints'>چاپ بارکد</a>
+	<input type="checkbox" name='print' <?php if ($this->IsPrint==true || !isset($this->Cotag) )echo "checked=checked" ;  ?>><a href='#' id='prints'>چاپ بارکد</a>
 </div>
 <input type='submit' id='sub' value='وصول' />
 </form>
 </div>
-<?php if( !($this->Result==false) && $_POST['print']==true){ ?>
+<?php if( !($this->Result==false) && $this->IsPrint==true){ ?>
 <div id="BarcodeContainer" align="center">
 	<div>
-		<img src='<?php echo jURL::Root();?>/barcode?number=<?php echo  $_POST['Cotag'];?>&width=3&height=100&font=18'>
+		<img src='<?php echo jURL::Root();?>/barcode?number=<?php echo  $this->Cotag;?>&width=3&height=100&font=18'>
 	</div>
 </div>
 <?php }?>
