@@ -11,7 +11,7 @@ class ScanResponderController extends JControl
 	{
 		
 		//must be relative
-		$folder=ConfigReview::upload_folder_relative_from_japp();
+		$folder=b::upload_folder_relative_from_japp();
 		$result = array();
 		$res=true;
 		foreach ($_FILES as $file)

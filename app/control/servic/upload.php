@@ -161,7 +161,7 @@ class ServicUploadController extends JControl
 		$sizeLimit = 10 * 1024 * 1024;
 
 		$uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
-		$folder=ConfigReview::upload_folder_relative_from_japp();
+		$folder=b::upload_folder_relative_from_japp();
 		if(!is_dir($folder))
 		{
 			$old_umask = umask(0);

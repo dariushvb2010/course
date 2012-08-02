@@ -88,9 +88,9 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 			return $Error;
 		}
 		
-		if (strlen($NewCotag)!=b::$CotagLength)
+		if (strlen($NewCotag)!=b::CotagLength)
 		{
-			$Error="کوتاژ باید ".b::$CotagLength." رقمی باشد.";
+			$Error="کوتاژ باید ".b::CotagLength." رقمی باشد.";
 			return $Error;
 		}
 		

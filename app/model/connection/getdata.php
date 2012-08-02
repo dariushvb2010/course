@@ -25,6 +25,7 @@ class ConnectionGetdata extends JModel
 		$hexdata= $this->get_data($url);
 		$json=$this->hex2str($hexdata);
 		$ret=json_decode($json);
+		var_dump($ret);
 		return $ret;
 		
 	}
@@ -59,6 +60,7 @@ class ConnectionGetdata extends JModel
 	/* gets the data from a URL */
 	private function get_data($url)
 	{
+		echo $url;
 		$ch = curl_init();
 		$timeout = 5;
 		curl_setopt($ch,CURLOPT_URL,$url);

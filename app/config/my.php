@@ -15,7 +15,7 @@ reg( "app/title", "نرم‌افزار جامع بازبینی گمرک" );
  * 
  */
 reg("my/DirectDownloadLink",SiteRoot."/file/trunk/jf3.1.22.tar.gz");
-define( "CotagLength",7);
 
 reg("link/MohamadTavbal","http://10.64.0.18:8080");
+reg("app/GateCode","8888");
 ?>
