@@ -1,11 +1,4 @@
 <?php
-try {
-	require_once(dirname(__FILE__)."/install/index.php");
-	die();
-}catch (Exception $e){
-var_dump($e);
-die();	
-
 if (defined("jfasalib") && constant("jfasalib"))
 {
 	require_once(dirname(__FILE__)."/_japp/controller.php");
@@ -24,5 +17,4 @@ root.
 <br/>
 Visit <A href='http://wiki.jframework.info/index.php/Manual'>http://wiki.jframework.info/index.php/Manual</A> for more info. 
 <?php
-}
 }
