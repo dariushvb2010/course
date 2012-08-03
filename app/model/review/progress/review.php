@@ -2,7 +2,7 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-/** 
+/**
  * @Entity
  * @entity(repositoryClass="ReviewProgressReviewRepository")
  * @InheritanceType("JOINED")
@@ -23,11 +23,11 @@ class ReviewProgressReview extends ReviewProgress
 	function Result(){
 		return $this->Result;
 	}
-	
+
 	/**
-	* @Column(type="string")
-	* @var string
-	*/
+	 * @Column(type="string")
+	 * @var string
+	 */
 	protected $Provision;
 	function SetProvision($value){
 		if($value==null)
@@ -44,29 +44,29 @@ class ReviewProgressReview extends ReviewProgress
 		return $res;
 	}
 	/**
-	* @Column(type="string")
-	* @var string
-	*/
+	 * @Column(type="string")
+	 * @var string
+	 */
 	protected $Difference;
 	function Difference($type='field')
 	{
 		$t=array('Tariff'=>'تعرفه',
-		'Value'=>'ارزش',
-		'Other'=>'سایر',
+				'Value'=>'ارزش',
+				'Other'=>'سایر',
 		);
 		if ($type=='persian'){
-			return self::PersianDifference($this->Difference); 
+			return self::PersianDifference($this->Difference);
 		}
 		return $this->Difference;
 	}
-	
+
 	public static function PersianDifference($Value)
 	{
 		$t=array('Tariff'=>'تعرفه',
 				'Value'=>'ارزش',
 				'Other'=>'سایر',
 		);
-		
+
 		$rr=explode(',', $Value);
 		if ($rr==null)return "";
 		foreach ($rr as $v){
@@ -74,31 +74,31 @@ class ReviewProgressReview extends ReviewProgress
 		}
 		return implode(',',$rr2);
 	}
-	
+
 	function DifferenceArray()
 	{
 		$res = explode(",", $this->Difference);
 		return $res;
 	}
 	/**
-	* @Column(type="integer")
-	* @var string
-	*/
+	 * @Column(type="integer")
+	 * @var string
+	 */
 	protected $Amount;
 	function Amount($format='normal')
 	{
 		if($format=='formatted'){
 			return number_format($this->Amount);
 		}else{
-			return $this->Amount;			
+			return $this->Amount;
 		}
-	}	
-	
+	}
+
 	function SetAmount($a)
 	{
 		$this->Amount=$a;
 	}
-	
+
 	function __construct(ReviewFile $File=null, $Dif=null,$Amount=null, $IfPersist=true)
 	{
 		parent::__construct($File,null, $IfPersist);
@@ -113,21 +113,21 @@ class ReviewProgressReview extends ReviewProgress
 		else
 			$this->Amount=$Amount;
 	}
-	
+
 	function  Summary()
 	{
 		$sum="کارشناسی انجام شد و نتیجه آن، ";
 		if($this->Result==false)
 			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>".
-					"با علت تفاوت"."<b> «".$this->Difference('persian').
-					"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."»</b> ریال ";
+			"با علت تفاوت"."<b> «".$this->Difference('persian').
+			"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."»</b> ریال ";
 		else
 			$sum.=' بدون مشکل ';
-		
+
 		$sum.='اعلام گردید .';
 		return $sum;
 	}
-	
+
 	function  Title()
 	{
 		return "کارشناسی";
@@ -138,7 +138,7 @@ class ReviewProgressReview extends ReviewProgress
 			throw new Exception("Result is not set!");
 		if($this->Result)
 			return "Review_ok";
-		else 
+		else
 			return "Review_nok";
 	}
 }
@@ -146,13 +146,13 @@ class ReviewProgressReview extends ReviewProgress
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressReviewRepository extends EntityRepository
 {
-	
-	
-/**
- * یک فرایند بازبینی  بدون مشکل به فایل با کوتاژ داده شده اضافه می کند 
- * @param integer $Cotag
- * @return string for error and true for success
- */
+
+
+	/**
+	 * یک فرایند بازبینی  بدون مشکل به فایل با کوتاژ داده شده اضافه می کند
+	 * @param integer $Cotag
+	 * @return string for error and true for success
+	 */
 	public function AddReviewOked($Cotag=null)
 	{
 		$Reviewer=MyUser::CurrentUser();
@@ -161,7 +161,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 			$Error="کوتاژ ناصحیح است.";
 			return $Error;
 		}
-		else 
+		else
 		{
 			$File=ORM::query("ReviewFile")->GetRecentFile($Cotag);
 
@@ -179,7 +179,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					$Error="این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
 					return $Error;
-				}	
+				}
 				elseif ($ProgReview  !=null)
 				{
 					$Error="اظهارنامه مذکور قبلا بازبینی شده است.به قسمت ویرایش نتیجه بازبینی مراجعه نمایید.";
@@ -201,23 +201,23 @@ class ReviewProgressReviewRepository extends EntityRepository
 					$R->SetResult(1);
 					$R->SetProvision("");
 					$ch=$R->Check();
-					
+						
 					if(is_string($ch))
 						return $ch;
-					
+						
 					$R=new ReviewProgressReview($File,"","", true);
 					$R->SetResult(1);
 					$R->SetProvision("");
 					$R->Apply();
-					
+						
 					ORM::Persist($R);
-					return true;	
-				}					
+					return true;
+				}
 			}
 		}
 	}
 	/**
-	 * 
+	 *
 	 * یک فرایند بازبینی به فایل با کوتاژ داده شده اضافه می کند
 	 * با دریافت ورودی های ارسالی توسط فرم و تایپ اضافه کردن یا تغییر
 	 * @param array $data
@@ -227,39 +227,39 @@ class ReviewProgressReviewRepository extends EntityRepository
 	public function NewReview($data,$type='Add')
 	{
 		$data['User'] = MyUser::CurrentUser();
-		
+
 		$validation=$this->ValidateCorrectFilterInput($data,$type);
 		if(is_string($validation))
 			return $validation;
 		else
-			$validInput=$validation;		
-		
+			$validInput=$validation;
+
 		$File=ORM::query(new ReviewFile)->GetRecentFile($validInput['Cotag']);
-		
+
 		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], false);
 		$R->SetResult($validInput['Result']);
 		$R->SetProvision($validInput['Provision']);
 		$ch=$R->Check();
-		
+
 		if(is_string($ch))
-			return $ch;	
-		
+			return $ch;
+
 		if($type=='Edit'){
 			$ProgReview=$File->LastReview();
 			$ProgReview->kill();
 		}
-		
+
 		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], true);
 		$R->SetResult($validInput['Result']);
 		$R->SetProvision($validInput['Provision']);
 		$ch=$R->Apply();
-		
+
 		ORM::Persist($R);
 		return $R;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param integer $Cotag
 	 * @author morteza kavaebi
 	 */
@@ -271,7 +271,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 	}
 
 	/**
-	 * 
+	 *
 	 * @param integer $Cotag
 	 * @author morteza kavaebi
 	 */
@@ -281,27 +281,27 @@ class ReviewProgressReviewRepository extends EntityRepository
 		$data['Cotag'] = $Cotag;
 		return $this->ValidateCorrectFilterInput($data,'Addable');
 	}
-	
+
 	/**
-	 * 
-	 * validates corrects and filters the inputs 
+	 *
+	 * validates corrects and filters the inputs
 	 * and returns an array of corrected filtered values
 	 * @param array $dataArray
 	 * @param string $type {'Add','Edit','Addable','Editable'}
-	 * @return array OR {string of error} 
+	 * @return array OR {string of error}
 	 * @author morteza Kavakebi
 	 */
 	private function ValidateCorrectFilterInput($dataArray,$type)
 	{
 		$Cotag		=$dataArray['Cotag'];
 		$Result		=$dataArray['Result'];
-		
+
 		if(is_array($dataArray['Difference'])){
 			$Difference	=implode(',',$dataArray['Difference']);
-		}else{			
+		}else{
 			$Difference	=$dataArray['Difference'];
 		}
-		
+
 		$Provision	=$dataArray['Provision'];
 		$Amount		=$dataArray['Amount'];
 		$Reviewer	=$dataArray['User'];
@@ -310,65 +310,65 @@ class ReviewProgressReviewRepository extends EntityRepository
 		//----------------input Validation--------------------
 		if ($Cotag<1 && $Cotag==null)
 			return "کوتاژ ناصحیح است.";
-		
+
 		$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
-	
+
 		if ($File==null)
 			return "یافت نشد.";
-		
+
 		if(!($File->GetClass()==0 OR $File->GetClass()==null))
 			return "این اظهارنامه کلاسه شده است. ویرایش ممکن نیست.";
-	
+
 		$lastreviewer=$File->LastReviewer();
 		$ProgReview=$File->LastReview();
 
 		if ($lastreviewer==null)
 			return "این اظهارنامه هنوز به کارشناس جهت بازبینی تخصیص نیافته است.";
-		
+
 		if ($lastreviewer!=$Reviewer)
 			return "کارشناس بازبینی این اظهارنامه شما نیستید.";
-		
+
 		if(strstr($type,'Edit'))
 		{
 			if($ProgReview==null)
 				return "این اظهارنامه بازبینی نشده است";
-			
+				
 		}
 		if(!strstr($type,'Edit'))
 		{
 			if($ProgReview!=null)
 				return "این اظهارنامه قبلا کارشناسی شده است،برای ویرایش آن به صفحه ی ویرایش مراجعه نمایید.";
-				
+
 		}
-		
-		
+
+
 		if(!strstr($type,'able'))//NOT {Editable,Addable}
 		{
 			if($Result==0)
 			{
 				if(strlen($Provision)==0 OR $Provision==null)
 					return 'شماره کلاسه انتخاب نشده است.';
-				
+
 				if(	($Provision=='248' OR $Provision=='528'))
 				{
 					if(strlen($Difference)==0)
 						return 'علت تفاوت انتخاب نشده است.';
-				
+
 					if($Amount==0 OR $Amount<20000 OR !is_numeric($Amount))
 						return 'مبلغ تفاوت نامناسب یا کم است.';
-				}				
+				}
 			}
-	
-			
-			
+
+				
+				
 		}
-// 		$LLP=$File->LLP();
-// 		if(!($LLP instanceof ReviewProgressReivew || $LLP instanceof ReviewProgressAssign))
-// 		{
-// 			$Error="کارشناس هنوز تخصیص نیافته است یا اینکه از تاریخ بازبینی اظهارنامه گذشته است.";
-// 			return $Error;
-// 		}
-		
+		// 		$LLP=$File->LLP();
+		// 		if(!($LLP instanceof ReviewProgressReivew || $LLP instanceof ReviewProgressAssign))
+			// 		{
+		// 			$Error="کارشناس هنوز تخصیص نیافته است یا اینکه از تاریخ بازبینی اظهارنامه گذشته است.";
+		// 			return $Error;
+		// 		}
+
 		//----------------Correction of input--------------------
 		if($Result==1){
 			$Provision="";
@@ -381,84 +381,84 @@ class ReviewProgressReviewRepository extends EntityRepository
 		$validatedInput['Difference']	= $Difference;
 		$validatedInput['Amount']		= $Amount;
 		$validatedInput['Cotag']		= $Cotag;
-		
-		return $validatedInput;
-	}
-	
-	public function ReviewPercentage()
-	{
-		$r1=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=1");
-		$r2=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=528");
-		$r3=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=248");
-		$r4=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=109");
-		$res=array('oked'=>$r1[0]['c'],'a528'=>$r2[0]['c'],'a248'=>$r3[0]['c'],'a109'=>$r4[0]['c']);
-		return $res;
-	}
 
-	public function karshenas_work_lastmounth()
+		return $validatedInput;
+}
+
+public function ReviewPercentage()
+{
+	$r1=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=1");
+	$r2=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=528");
+	$r3=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=248");
+	$r4=j::SQL("SELECT COUNT(*) as c FROM app_ReviewProgressReview WHERE Result=0 AND Provision=109");
+	$res=array('oked'=>$r1[0]['c'],'a528'=>$r2[0]['c'],'a248'=>$r3[0]['c'],'a109'=>$r4[0]['c']);
+	return $res;
+}
+
+public function karshenas_work_lastmounth()
+{
+	$r=j::ODQL("SELECT COUNT(P.ID) as co,U.ID as user
+			FROM ReviewProgress AS P JOIN P.User AS U
+			WHERE P INSTANCE OF	ReviewProgressReview AND ".time()."-P.CreateTimestamp<60*60*24*30
+			GROUP BY P.User");
+	foreach($r as $s)
 	{
-		$r=j::ODQL("SELECT COUNT(P.ID) as co,U.ID as user
-					FROM ReviewProgress AS P JOIN P.User AS U 
-					WHERE P INSTANCE OF	ReviewProgressReview AND ".time()."-P.CreateTimestamp<60*60*24*30 
-					GROUP BY P.User");
-		foreach($r as $s)
-		{
-			$u=j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$s['user']);
-			$r2[]=array('count'=>$s['co'],'user'=>$u[0]);
-		}
-		return $r2;
+		$u=j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$s['user']);
+		$r2[]=array('count'=>$s['co'],'user'=>$u[0]);
 	}
-	
-	public function BazbiniPerMonth()
-	{
-		$r=j::SQL("SELECT COUNT(P.ID) as count,
-							PMONTH(FROM_UNIXTIME(P.CreateTimestamp))as month,
-							PMONTHNAME(FROM_UNIXTIME(P.CreateTimestamp))as monthname,
-							PYEAR(FROM_UNIXTIME(P.CreateTimestamp))as year 
-							FROM app_ReviewProgress AS P 
-							WHERE P.Type='Start' 
-							GROUP BY PMONTH(FROM_UNIXTIME(P.CreateTimestamp)),PYEAR(FROM_UNIXTIME(P.CreateTimestamp))
-							ORDER BY year,month");
-		return $r;
+	return $r2;
+}
+
+public function BazbiniPerMonth()
+{
+	$r=j::SQL("SELECT COUNT(P.ID) as count,
+			PMONTH(FROM_UNIXTIME(P.CreateTimestamp))as month,
+			PMONTHNAME(FROM_UNIXTIME(P.CreateTimestamp))as monthname,
+			PYEAR(FROM_UNIXTIME(P.CreateTimestamp))as year
+			FROM app_ReviewProgress AS P
+			WHERE P.Type='Start'
+			GROUP BY PMONTH(FROM_UNIXTIME(P.CreateTimestamp)),PYEAR(FROM_UNIXTIME(P.CreateTimestamp))
+			ORDER BY year,month");
+	return $r;
+}
+
+/**
+ *
+ * @param integer $StartTimestamp
+ * @param integer $EndTimestamp
+ * @param group by field $fieldname
+ * @return array
+ */
+public function ReviewStatistics($StartTimestamp,$EndTimestamp,$fieldname)
+{
+	$r=j::DQL("SELECT P.{$fieldname},COUNT(P),SUM(P.Amount)
+	FROM ReviewProgressReview AS P
+	WHERE P.CreateTimestamp BETWEEN ? AND ? AND P.Dead=0
+	GROUP BY P.{$fieldname}
+	ORDER BY P.{$fieldname}",$StartTimestamp,$EndTimestamp);
+	$r2=array();
+	foreach($r as $k=>$v){
+		$r2[]=array(
+				$fieldname=>$v[$fieldname],
+				'Count'=>$v[1],
+				'Sum'=>$v[2],
+		);
 	}
-	
-	/**
-	 * 
-	 * @param integer $StartTimestamp
-	 * @param integer $EndTimestamp
-	 * @param group by field $fieldname
-	 * @return array
-	 */
-	public function ReviewStatistics($StartTimestamp,$EndTimestamp,$fieldname)
-	{
-		$r=j::DQL("SELECT P.{$fieldname},COUNT(P),SUM(P.Amount)
-							FROM ReviewProgressReview AS P 
-							WHERE P.CreateTimestamp BETWEEN ? AND ? AND P.Dead=0   
-							GROUP BY P.{$fieldname}
-							ORDER BY P.{$fieldname}",$StartTimestamp,$EndTimestamp);
-		$r2=array();
-		foreach($r as $k=>$v){
-			$r2[]=array(
-					$fieldname=>$v[$fieldname],
-					'Count'=>$v[1],
-					'Sum'=>$v[2],
-					);
-		}
-		return $r2;
-	}
-	
-	public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
-	{
-		$StartTimestamp=0;
-		$EndTimestamp=10000000000;
-		$r=j::ODQL("SELECT P,F
-				FROM ReviewProgressReview AS P JOIN ReviewFile AS F
-				WHERE P.CreateTimestamp BETWEEN ? AND ? AND P.Dead=0 
-				ORDER BY P.Difference",$StartTimestamp,$EndTimestamp);
-		
-		return $r;
-	}
-	
+	return $r2;
+}
+
+public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
+{
+	$StartTimestamp=0;
+	$EndTimestamp=10000000000;
+	$r=j::ODQL("SELECT P,F
+			FROM ReviewProgressReview AS P JOIN ReviewFile AS F
+			WHERE P.CreateTimestamp BETWEEN ? AND ? AND P.Dead=0
+			ORDER BY P.Difference",$StartTimestamp,$EndTimestamp);
+
+	return $r;
+}
+
 	/**
 	 * @author dariush
 	 * @tutorial  bazdoc/review/progress/start/monthlystart.html
@@ -482,33 +482,32 @@ class ReviewProgressReviewRepository extends EntityRepository
 	
 	
 		$oc=j::SQL("SELECT SUM(R.Amount) as amount,R.Provision as provision,
-						floor(
-							DATEDIFF(
-							curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
-							FROM_UNIXTIME(P.CreateTimestamp)
-							)/30.3
-						) as month
-					FROM app_ReviewProgress AS P join app_ReviewProgressReview AS R on P.ID=R.ID
-					WHERE P.Type=?
-						AND R.Result=0
-						AND P.Dead=0
-						AND DATEDIFF(
-								curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
-								FROM_UNIXTIME(P.CreateTimestamp)
-							) >= 0
-					GROUP BY month, provision ",$addDays,$startMonth,"Review",$addDays,$startMonth);
-	
-		//var_dump($oc);
+				floor(
+				DATEDIFF(
+				curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+				FROM_UNIXTIME(P.CreateTimestamp)
+		)/30.3
+		) as month
+				FROM app_ReviewProgress AS P join app_ReviewProgressReview AS R on P.ID=R.ID
+				WHERE P.Type=?
+				AND R.Result=0
+				AND P.Dead=0
+				AND DATEDIFF(
+				curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+				FROM_UNIXTIME(P.CreateTimestamp)
+		) >= 0
+				GROUP BY month, provision ",$addDays,$startMonth,"Review",$addDays,$startMonth);
+		
 		$res["248"]=array();//----[0]->299000 [1]->40000
 		$res["109"]=array();
 		$res["528"]=array();
 		$res[""]=array();//some of them has not been set unfortunately
 		$res["total"]=array(
-						""=>0,
-						"109"=>0,
-						"248"=>0,
-						"528"=>0
-						);
+				""=>0,
+				"109"=>0,
+				"248"=>0,
+				"528"=>0
+		);
 		//-----------------making $res------------------
 		foreach ($oc as $t)
 		{
@@ -521,11 +520,11 @@ class ReviewProgressReviewRepository extends EntityRepository
 				$res["total"][$provision]+= $t['amount'];
 			}
 		}
-		
+	
 		//------------------fill none existing fields of arrays and sort---------
 		foreach ($res as $key=>$pv) //only 4 : $res['248'], $res['109'], $res['528'], $res['']
 		{//ex: $pv = $p['248']
-			
+	
 			//------------------make total array------------------
 			if($key=="total")
 			{
@@ -533,23 +532,22 @@ class ReviewProgressReviewRepository extends EntityRepository
 				{
 					$res[$key][$k]= round($v/1000000,1);
 				}
-				continue;  
+				continue;
 			}//---------------------------------------------------
-			
+	
 			for($i=$startMonth;$i<$startMonth+$monthCount;$i++)
 			{
 				if(!array_key_exists($i,$pv))
 				{
 					$pv[$i]=0;//array('count'=>0,'month'=>$i);
 				}
-				else 
+				else
 					$pv[$i]=round($pv[$i]/1000000,1);
 			}
 			krsort($pv);
 			$res[$key]=$pv; // !important : for applying changes in $pv (overwrite changes into $res)
 			//--------sort array by key high to low
 		}
-		//var_dump($res);
 		return $res;
 	}
 }

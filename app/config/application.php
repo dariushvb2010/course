@@ -46,7 +46,7 @@ else
  */
 if (reg("app/state")=="develop")
 {
-	include('developer.php');
+	require 'developer.php';
 }
 elseif (reg("app/state")=="deploy")
 {

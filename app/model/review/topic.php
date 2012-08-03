@@ -2,6 +2,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 
 /** 
+ * @TODO موقع نصب نصب در رجایی دقت شود rajaie => mygate
  * @Entity Table(name="ReviewTopic")
  * @Entity(repositoryClass="ReviewTopicRepository")
  * */
@@ -41,10 +42,28 @@ class ReviewTopic
 	* @var string
 	*/
 	protected $Type;
-	public function Type()
+	public function Type($persian=false)
 	{
 		return $this->Type;
 	}
+	 /**
+    * @Column(type="integer", nullable="true")
+    * @var integer
+    */
+    protected $GateCode;
+    function GateCode()
+    {
+    	return $this->GateCode;
+    }
+    /**
+     * @Column(type="boolean")
+     * @var boolean
+     */
+    protected $DeleteAccess;
+    function DeleteAccess()
+    {
+    	return $this->DeleteAccess;
+    }
 	/**
 	* @OneToMany(targetEntity="MailReceive", mappedBy="SenderTopic")
 	* @var arrayCollectionOfMailReceive
@@ -57,25 +76,34 @@ class ReviewTopic
 	*/
 	protected $MailSend;
 	function MailSend(){ return $this->MailSend; }
-	
-	function __construct($topic=null,$comment='',$type='')
+
+	function __construct($topic=null,$comment='',$type='', $GateCode=GateCode, $DeleteAccess=true)
 	{
 		if($topic)
 			$this->Topic=$topic;
 
 		$this->Comment=$comment;
 		$this->Type=$type;
+		$this->GateCode = $GateCode;
+		$this->DeleteAccess = $DeleteAccess;
 		$this->MailReceive= new ArrayCollection();
 		$this->MailSend= new ArrayCollection();
 	}
-	static $TYPES=array(
+	
+	static function TypeArray(){
+		return $TYPES=array(
 	 				"othergates"=>"گمرک های اجرایی",
-	 				"rajaie"=> "بخش های گمرک شهید رجایی",
-	 				"iran"=>"بخش های گمرک ایران",
+	 				"mygate"=> "گمرک ".GateName,
+	 				"iran"=>"گمرک ایران",
 	 				"other"=>"سایر(ارسال بایگانی بازبینی)",
 	 				"correspondent"=>"طرف مکاتبه",
-	 				"comment"=>"توضیحات",
-	);
+	);		
+	}
+	static function GetPersianType($type)
+	{
+		$ar=self::TypeArray();
+		return $ar[$type];
+	}
 	public static function Topics($type='*')
 	{
 		return ORM::Query(new ReviewTopic())->GetTopics($type);
@@ -96,7 +124,7 @@ class ReviewTopic
 	* @param string
 	* @return string on error object on sucsess
 	*/
-	public static function Add($Subject,$Comment,$type='')
+	public static function Add($Subject,$Comment,$type='',$GateCode = GateCode, $DeleteAccess=true)
 	{
 		if ($Subject==null)
 		{
@@ -112,7 +140,7 @@ class ReviewTopic
 		{
 			if($Comment==null)
 				$Comment="";
-			$T=new ReviewTopic($Subject,$Comment,$type);
+			$T=new ReviewTopic($Subject,$Comment,$type,$GateCode, $DeleteAccess);
 			ORM::Persist($T);
 			return true;
 		}
@@ -127,9 +155,9 @@ class ReviewTopicRepository extends EntityRepository
 	public function GetTopics($type='*')
 	{
 		if($type=='*')
-			$r=j::DQL("SELECT T FROM ReviewTopic AS T");
+			$r=j::DQL("SELECT T FROM ReviewTopic AS T order by T.Type");
 		else
-			$r=j::DQL("SELECT T FROM ReviewTopic AS T WHERE T.Type=?",$type);
+			$r=j::DQL("SELECT T FROM ReviewTopic AS T WHERE T.Type=? order by T.Type",$type);
 		return $r;	
 	}
 	

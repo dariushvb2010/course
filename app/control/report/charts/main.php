@@ -29,7 +29,6 @@ class ReportChartsMainController extends JControl
 										"disabled";
 		
 		$q = $vi->GetRequest();
-		var_dump($q);
 		$this->VI=$vi;
 		$c = new CalendarPlugin();
 		$nn = $c->TodayJalaliArray();
@@ -52,8 +51,6 @@ class ReportChartsMainController extends JControl
 		$startMonth = $FdiffMonth;
 		$monthCount = $CdiffMonth - $FdiffMonth + 1;
 		
-		echo $startMonth."   ";
-		echo $monthCount;
 		//--------------------------------------------------------------
 		$r = ORM::Query("ReviewProgressSend")->SendCountPerMonth(12);
 		
@@ -127,7 +124,6 @@ class ReportChartsMainController extends JControl
 				$this->out=$r;
 				
 				$bb = FPlugin::PersianMonthesInInterval($startMonth, $monthCount);
-				//var_dump($bb);
 				
 				foreach ($bb as $value){
 					$X[]="'".$value['monthName']." ".substr($value['year'],2)."'";

@@ -7,7 +7,7 @@ class ManagerTopicController extends JControl
 		//add topic
 		if(isset($_POST['Topic']))
 		{
-			$r=ReviewTopic::Add($_POST['Topic'],$_POST['Comment'],$_POST['Type']);
+			$r=ReviewTopic::Add($_POST['Topic'],$_POST['Comment'],$_POST['Type'],$_POST['GateCode']);
 			if(is_string($r))
 				$Error[]=$r;
 		}
@@ -55,9 +55,10 @@ class ManagerTopicController extends JControl
 				$al->TierLabel="ردیف";
 				$al->Width="auto";
 				$al->SetHeader('Select', 'انتخاب',true);
-				$al->SetHeader('ID', 'شماره');
+				$al->SetHeader('ID', 'شناسه');
 				$al->SetHeader('Topic', 'عنوان',true);
 				$al->SetHeader('Type', 'نوع',true);
+				$al->SetHeader('GateCode', 'کد',true);
 				$al->SetHeader('Comment', 'توضیحات',true);
 				$al->SetFilter(array($this,"myfilter"));
 				$this->TopicList=$al;
@@ -79,7 +80,7 @@ class ManagerTopicController extends JControl
 		}
 		elseif($k=='Type')
 		{
-			return ReviewTopic::$TYPES[$v];
+			return ReviewTopic::GetPersianType($v);
 		}
 		else
 		{
@@ -99,16 +100,13 @@ class ManagerTopicController extends JControl
 				"Name"=>"Type",
 				"Type"=>"select",
 				"Width"=>"150px",
-				"Options"=>array(
-								"othergates"=>"گمرک های اجرایی",
-								"rajaie"=> "بخش های گمرک شهید رجایی",
-								"iran"=>"بخش های گمرک ایران",
-								"other"=>"سایر(ارسال بایگانی بازبینی)",
-								"correspondent"=>"طرف مکاتبه",
-								"comment"=>"توضیحات",
-								
-														),
+				"Options"=>ReviewTopic::TypeArray(),
 				"Label"=>"نوع",
+		));
+		$f->AddElement(array(
+				"Name"=>"GateCode",
+				"Type"=>"text",
+				"Label"=>"کد گمرک",
 		));
 		$f->AddElement(array(
 				"Type"=>"textarea",

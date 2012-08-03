@@ -54,18 +54,14 @@ ViewResultPlugin::Show($this->Result,$this->Error);
 <?php }	?>
 <br/>
 
-<div id='add_form'>
-	<a href='/help/#correspondence_topic'>
-	<img src='/img/web/icon/help32.png' style='border:0px solid gray; float:left; margin:0;' />
-	</a>
-	
-	<h4 >اضافه کردن عنوان</h4>
+
+	<h4 style="text-align: center;">اضافه کردن عنوان</h4>
 	
 	<?php $this->Form->PresentHTML();?>
 	<script>
 	<?php $this->Form->PresentScript();?>
 	</script>
-</div>
+
 
 <script>
 	$("#SelectAll").click(function()

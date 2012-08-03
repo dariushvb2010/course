@@ -37,7 +37,7 @@ class ReviewFile
 	/**
 	 * شماره مجوز بارگیری
 	 * Bargiri Serail
-	 * @Column(type="string")
+	 * @Column(type="string", nullable="true")
 	 * @var string
 	 */
 	protected $BarSerial;
@@ -46,7 +46,7 @@ class ReviewFile
 		return $this->BarSerial;
 	}
 	/**
-	 * @Column(type="integer")
+	 * @Column(type="integer", nullable="true")
 	 * @var integer
 	 */
 	protected $RegYear;

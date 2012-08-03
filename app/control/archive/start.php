@@ -10,7 +10,6 @@ class ArchiveStartController extends JControl
 	function Start()
 	{
 		j::Enforce("Archive");
-		//ORM::Dump(MyGroup::Archive());
 		//////////////////////////////////////
 
 		if (count($_POST))

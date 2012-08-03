@@ -19,4 +19,5 @@ reg("my/DirectDownloadLink",SiteRoot."/file/trunk/jf3.1.22.tar.gz");
 reg("link/MohamadTavbal","http://10.64.0.18:8080");
 define ('GateCode',"45100");
 define ('GateName',"بوشهر");
+
 ?>

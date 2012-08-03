@@ -380,8 +380,8 @@ $(function() {
 				</a>
 			</li>
 			<li>
-					<a href='/archive/transfer/toout?Taraf=rajaie'>
-				<!--  <a href='/archive/send?to=rajaie&from=Archive'> -->
+					<a href='/archive/transfer/toout?Taraf=mygate'>
+				<!--  <a href='/archive/send?to=mygate&from=Archive'> -->
 							<span class='ui-icon-extlink ui-icon'></span> 
 							سایر دوائر گمرگ رجایی
 				</a>
@@ -423,8 +423,8 @@ $(function() {
 				</a>
 			</li>
 			<li>
-					<a href='/archive/transfer/fromout?Taraf=rajaie'>
-				<!--  <a href='/archive/send?to=rajaie&from=Archive'> -->
+					<a href='/archive/transfer/fromout?Taraf=mygate'>
+				<!--  <a href='/archive/send?to=mygate&from=Archive'> -->
 							<span class='ui-icon-extlink ui-icon'></span> 
 							سایر دوائر گمرگ رجایی
 				</a>
@@ -483,7 +483,7 @@ $(function() {
 					</a>
 				</li>
 				<li>
-					<a href='/raked/transfer/fromout?Taraf=rajaie'>
+					<a href='/raked/transfer/fromout?Taraf=mygate'>
 								<span class='ui-icon-extlink ui-icon'></span> 
 								سایر دوائر گمرگ رجایی
 					</a>
@@ -516,7 +516,7 @@ $(function() {
 		<ul class='menu'>
 			
 			<li>
-				<a href='/raked/transfer/toout?Taraf=rajaie'>
+				<a href='/raked/transfer/toout?Taraf=mygate'>
 							<span class='ui-icon-extlink ui-icon'></span> 
 							سایر دوائر گمرگ رجایی
 				</a>

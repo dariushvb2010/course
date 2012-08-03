@@ -93,7 +93,6 @@ class ReviewProgressSendRepository extends EntityRepository
 					( ( CURRENT_TIMESTAMP() + ? * 24*3600 - ? * 30*24*3600 ) - S.CreateTimestamp ) 
 					>=0
 				GROUP BY T.Type",$addDays,$startMonth,$addDays,$startMonth);
-		ORM::Dump($r);
 	}
 	
 }

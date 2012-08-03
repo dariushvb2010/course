@@ -75,7 +75,6 @@ class ReviewProgressStartRepository extends EntityRepository
 	 */
 	public function AddToFile($Cotag,$IsPrint=false,$StartGroup =null)
 	{
-		//ORM::Dump($StartGroup);die();
 		if(b::CotagValidation($Cotag)==false)
 			return "کوتاژ ناصحیح است.";
 		//		else if(! j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag)))

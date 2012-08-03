@@ -140,6 +140,16 @@ class ViewIntervalPlugin extends JPlugin
 		form#<?php echo $this->FormAttr["id"];?> input[type='submit'] { width:200px; margin:5px; }
 		form#<?php echo $this->FormAttr["id"];?> .date{ width:30px; margin :3px; }
 		form#<?php echo $this->FormAttr["id"];?> .year{width:46px;margin :3px;text-align:left;}
+		form#<?php echo $this->FormAttr["id"];?>
+		{
+			background: -moz-linear-gradient(top,  rgba(113,167,221,1) 0%, rgba(125,185,232,0) 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(113,167,221,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top,  rgba(113,167,221,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top,  rgba(113,167,221,1) 0%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top,  rgba(113,167,221,1) 0%,rgba(125,185,232,0) 100%); /* IE10+ */
+			background: linear-gradient(to bottom,  rgba(113,167,221,1) 0%,rgba(125,185,232,0) 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71a7dd', endColorstr='#007db9e8',GradientType=0 ); /* IE6-9 */	
+		}
 		
 	<?php 
 	}
