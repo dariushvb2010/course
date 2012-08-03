@@ -26,15 +26,15 @@ if (jURL::HTTPHost()=="localhost")
 elseif (
 strpos(jURL::HTTPHost(),".ir")!==false
 or strpos(jURL::HTTPHost(),".com")!==false
-or jURL::HTTPHost()=="10.32.0.19"
+or jURL::HTTPHost()=="10.64.0.19"
 or jURL::HTTPHost()=="10.2.16.139"
 or strpos(jURL::HTTPHost(),"192.168")!==false
 ) #replace this with your site
 	reg("app/state","deploy");
 elseif (php_sapi_name()=="cli")
-	reg("app/state","develop");
+	reg("app/state","deploy");
 else 
-	reg("app/state","develop");
+	reg("app/state","deploy");
 
 /**
  * Database Setup
