@@ -34,7 +34,7 @@ or strpos(jURL::HTTPHost(),"192.168")!==false
 elseif (php_sapi_name()=="cli")
 	reg("app/state","deploy");
 else 
-	reg("app/state","deploy");
+	reg("app/state","develop");
 
 /**
  * Database Setup
