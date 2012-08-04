@@ -45,6 +45,10 @@ class ReviewFile
 	{
 		return $this->BarSerial;
 	}
+	function SetBarSerial($BarSerial)
+	{
+		$this->BarSerial = $BarSerial;
+	}
 	/**
 	 * @Column(type="integer", nullable="true")
 	 * @var integer
@@ -53,6 +57,10 @@ class ReviewFile
 	function RegYear()
 	{
 		return $this->RegYear;
+	}
+	function SetRegYear($RegYear)
+	{
+		$this->RegYear = $RegYear;
 	}
     /**
      * @Column(type="integer")

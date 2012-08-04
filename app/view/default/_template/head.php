@@ -270,7 +270,7 @@ $(function() {
 <span id="toolbar" class="ui-widget-header ui-corner-all">	
 	<span id='repeat'>
 <?php if (j::Check("Scan")) :?>
-	<button id='scanMenu' class="mymenu" >واحد اسکن</button>
+	<button id='scanMenu' class="mymenu" >اسکن</button>
 	<ul class='menu' style="display: none;">
 		
 		<li>
@@ -292,7 +292,7 @@ $(function() {
 	
 <?php endif;?>
 <?php if (j::Check("CotagBook")) :?>
-	<button id='cotagMenu' class="mymenu" >دفتر کوتاژ</button>
+	<button id='cotagMenu' class="mymenu" >ورودی</button>
 	<ul class='menu' style="display: none;">
 		
 		<li>
@@ -330,7 +330,7 @@ $(function() {
 	
 <?php endif;?>
 <?php if (j::Check("Archive")) :?>
-	<button id='archiveMenu' class="mymenu" > بایگانی بازبینی</button>
+	<button id='archiveMenu' class="mymenu" > بایگانی </button>
 	<ul class='menu' style="display: none;">
 		<li>
 			<a href='/archive/start'>
@@ -383,7 +383,7 @@ $(function() {
 					<a href='/archive/transfer/toout?Taraf=mygate'>
 				<!--  <a href='/archive/send?to=mygate&from=Archive'> -->
 							<span class='ui-icon-extlink ui-icon'></span> 
-							سایر دوائر گمرگ رجایی
+							سایر دوائر گمرگ <?php echo GateName;?>
 				</a>
 			</li>
 			<li>
@@ -426,7 +426,7 @@ $(function() {
 					<a href='/archive/transfer/fromout?Taraf=mygate'>
 				<!--  <a href='/archive/send?to=mygate&from=Archive'> -->
 							<span class='ui-icon-extlink ui-icon'></span> 
-							سایر دوائر گمرگ رجایی
+							سایر دوائر گمرگ <?php echo GateName;?>
 				</a>
 			</li>
 			<li>
@@ -462,7 +462,7 @@ $(function() {
 	</ul>
 <?php endif;?>
 <?php if (j::Check("Raked")) :?>
-	<button class='mymenu' id='staticArchiveMenu'>بایگانی راکد</button>
+	<button class='mymenu' id='staticArchiveMenu'>راکد</button>
 	<ul class='menu' style='width:160px;display: none;'>
 		<li>
 			<a href='/raked/start'>
@@ -485,7 +485,7 @@ $(function() {
 				<li>
 					<a href='/raked/transfer/fromout?Taraf=mygate'>
 								<span class='ui-icon-extlink ui-icon'></span> 
-								سایر دوائر گمرگ رجایی
+								سایر دوائر گمرگ <?php echo GateName;?>
 					</a>
 				</li>
 				<li>
@@ -518,7 +518,7 @@ $(function() {
 			<li>
 				<a href='/raked/transfer/toout?Taraf=mygate'>
 							<span class='ui-icon-extlink ui-icon'></span> 
-							سایر دوائر گمرگ رجایی
+							سایر دوائر گمرگ <?php echo GateName;?>
 				</a>
 			</li>
 			<li>
@@ -544,7 +544,7 @@ $(function() {
 	</ul>
 <?php endif;?>
 <?php if (j::Check("Reviewer")) :?>
-	<button class='mymenu' id='reviewMenu'>بازبینی</button>
+	<button class='mymenu' id='reviewMenu'>کارشناسی</button>
 	<ul class='menu' style='width:150px;display: none;'>
 		<li>
 			<a href='/review/select'>
@@ -598,7 +598,7 @@ $(function() {
 	</ul>
 <?php endif;?>
 <?php if (j::Check("MasterHand")) :?>
-	<button style="" class='mymenu' id='ManagerMenu'>مدیریت</button>
+	<button style="" class='mymenu' id='ManagerMenu'>مدیر</button>
 	<ul class='menu' style="display: none;">
 		<li>
 			<a href='/manager/topic'>
@@ -662,7 +662,7 @@ $(function() {
 		</li>
 	</ul>
 <?php endif;?>
-	<button class='mymenu' id='reportMenu'>گزارش‌ها</button>
+	<button class='mymenu' id='reportMenu'>گزارش‌</button>
 
 	<ul class='menu' style='width:160px;display: none;'>
 <?php if ( j::Check("CotagList")) :?>

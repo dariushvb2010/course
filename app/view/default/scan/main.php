@@ -50,7 +50,7 @@ form input[type='text'] {
 </style>
 <div id='exceptBarcode'>
 <h1><img src="/img/h/h1-start-50.png"/>
-اسکن اظهارنامه</h1>
+اظهارنامه الکترونیک</h1>
 <?php if (isset($this->sid)){?>
 	<applet code="com.openkm.applet.Scanner" width="3" height="3" mayscript archive="<?php echo "file:///c:" ;//echo SiteRoot."file:///c://script"?>/scanner.jar">
     <param name="token" value="<?php echo $this->sid?>" />
