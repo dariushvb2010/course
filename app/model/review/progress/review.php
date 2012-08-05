@@ -20,8 +20,21 @@ class ReviewProgressReview extends ReviewProgress
 	function SetResult($value){
 		$this->Result=$value;
 	}
-	function Result(){
+	
+	function Result($type='field')
+	{
+		if ($type=='persian'){
+			return $t[$this->Result];
+		}
 		return $this->Result;
+	}
+	
+	public static function PersianResult($Value)
+	{
+		$t=array(0=>'مشکلدار',
+				1=>'بدون مشکل');
+		
+		return (isset($t[$Value])?$t[$Value]:$Value);
 	}
 
 	/**
@@ -43,6 +56,16 @@ class ReviewProgressReview extends ReviewProgress
 		$res = explode(",", $this->Provision);
 		return $res;
 	}
+
+	public static function PersianProvision($Value)
+	{
+		$t=array(''=>'بدون خطا',
+				'109'=>"109",
+				'248'=>"248",
+				'528'=>'528',);
+
+		return (isset($t[$Value])?$t[$Value]:$Value);
+	}
 	/**
 	 * @Column(type="string")
 	 * @var string
@@ -50,10 +73,6 @@ class ReviewProgressReview extends ReviewProgress
 	protected $Difference;
 	function Difference($type='field')
 	{
-		$t=array('Tariff'=>'تعرفه',
-				'Value'=>'ارزش',
-				'Other'=>'سایر',
-		);
 		if ($type=='persian'){
 			return self::PersianDifference($this->Difference);
 		}
