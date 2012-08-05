@@ -52,7 +52,7 @@ form input[type='text'] {
 <h1><img src="/img/h/h1-start-50.png"/>
 اظهارنامه الکترونیک</h1>
 <?php if (isset($this->sid)){?>
-	<applet code="com.openkm.applet.Scanner" width="3" height="3" mayscript archive="<?php echo "file:///c:" ;//echo SiteRoot."file:///c://script"?>/scanner.jar">
+	<applet code="com.openkm.applet.Scanner" width="3" height="3" mayscript archive="<?php echo SiteRoot."/script"?>/scanner.jar">
     <param name="token" value="<?php echo $this->sid?>" />
     <param name="path" value="<?php echo SiteRoot.'/scan/responder';?>"/>
     <param name="lang" value="en_EN" />
