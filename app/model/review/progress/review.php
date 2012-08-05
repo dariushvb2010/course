@@ -158,7 +158,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		$Reviewer=MyUser::CurrentUser();
 		if ($Cotag<1 || $Cotag==null)
 		{
-			$Error="کوتاژ ناصحیح است.";
+			$Error=v::Ecnv($Cotag);
 			return $Error;
 		}
 		else
@@ -309,7 +309,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		$Amount=str_replace(",", "", $Amount);
 		//----------------input Validation--------------------
 		if ($Cotag<1 && $Cotag==null)
-			return "کوتاژ ناصحیح است.";
+			return v::Ecnv($Cotag);
 
 		$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
 

@@ -13,5 +13,5 @@
 		<input type="submit" value="تحویل گرفتن" name="register" />
 	</p>
 </form>
-<script type="text/javascript"> const CotagLength=<?php echo CotagLength;?></script>
+<script type="text/javascript"> const CotagLength=<?php echo b::CotagLength;?></script>
 <script src='/script/addlist.js'></script>

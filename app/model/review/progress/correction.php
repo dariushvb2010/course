@@ -77,7 +77,7 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 		$file1 = ORM::query(new ReviewFile)->GetRecentFile($OldCotag);
 		if($OldCotag==null OR $file1==null)
 		{
-			$Error="چنین کوتاژی موجود نیست.";
+			$Error=v::Ecnf($OldCotag);
 			return $Error;
 		}
 		
@@ -90,7 +90,7 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 		
 		if (strlen($NewCotag)!=b::CotagLength)
 		{
-			$Error="کوتاژ باید ".b::CotagLength." رقمی باشد.";
+			$Error=v::Ecnv($NewCotag);
 			return $Error;
 		}
 		

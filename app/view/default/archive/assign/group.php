@@ -84,5 +84,5 @@ if (count($this->ResultList) && count($this->ResultList->Data)): //results?>
 		?><a class='noprint' href="./group">بازگشت</a>
 	</div>
 <?php endif;?>
-<script type="text/javascript"> const CotagLength=<?php echo CotagLength;?></script>
+<script type="text/javascript"> const CotagLength=<?php echo b::CotagLength;?></script>
 <script src='/script/addlist.js'></script>

@@ -12,7 +12,7 @@ class CorrespondenceClassController extends JControl
 				$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 				if ($File==null)
 				{
-					$Error[]="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
+					$Error[]=v::Ecnf($Cotag);
 				}else{
 					$class=$File->GetClass();
 					if($class>0){

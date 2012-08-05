@@ -72,7 +72,7 @@ class AlarmAutoRepository extends EntityRepository
 			$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
 		}
 		if(!$File)
-			$Error[]="اظهارنامه با کوتاژ ".$Cotag."یافت نشد.";
+			$Error[]=v::Ecnf($Cotag);
 		if(!$ConfigAlarm)
 			$Error[]="ConfigAlarm not provided!";
 		if($User==null)

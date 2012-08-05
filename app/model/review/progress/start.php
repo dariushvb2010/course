@@ -116,7 +116,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		if($Cotag == false)
 		{
 			$ret['result'] = false;
-			$ret['message']="کوتاژ ناصحیح است.کوتاژ باید هفت رقمی باشد.";
+			$ret['message']=v::Ecnv();
 			return $ret;
 		}
 		
@@ -126,7 +126,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		if ($File==null)
 		{
 			$ret['result'] = false;
-			$ret['message'] = "این کوتاژ وصول نشده است.";
+			$ret['message'] = v::Ecnf();
 			return $ret;
 		}
 		
@@ -179,11 +179,11 @@ class ReviewProgressStartRepository extends EntityRepository
 	public function UntiEbtalCotag($Cotag)
 	{
 		if(b::CotagValidation($Cotag)==false)
-			return "کوتاژ ناصحیح است.";
+			return v::Ecnv();
 
 		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 		if($File==null)
-			return "اظهارنامه در سیستم ثبت نگردیده است!";
+			return v::Ecnf();
 
 		$start=new ReviewProgressStart($File,false,false);
 		$ch=$start->Check();

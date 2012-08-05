@@ -1,14 +1,25 @@
 <?php
 class v
 {
+	/**
+	 * Persian Cotag
+	 * @var string
+	 */
+	const PCOT = "کوتاژ";
+	/**
+	 * Persian File
+	 * @var string
+	 */
+	const PFL = "اظهارنامه";
 	
 	/**
 	 * bold tag
 	 */
-	public static function b($cot)
+	public static function b($str)
 	{
-		return "<b>".$cot."</b>";
+		return "<b>".$str."</b>";
 	}
+	
 	/**
 	 * Green Cotag
 	 * @param unknown_type $cot
@@ -58,5 +69,32 @@ class v
 		return "<span class='v-cotag v-blue v-big'>".$cot."</span>";
 	}
 	
+	////////////////////////////////////////////////////////
+	/**
+	 * ERROR: cotag not found
+	 *  کوتاژ یافت نشد!
+	 * @param integer_string $Cot
+	 */
+	static function Ecnf($Cot=null)
+	{
+		return ( $Cot==null ? 
+					"اظهارنامه با این کوتاژ یافت نشد!"
+					:
+					"کوتاژ ".self::rc($Cot)." یافت نشد!"
+				);
+	}
+	/**
+	 * ERROR:contag not valid
+	 *  کوتاژ ناصحیح است!
+	 * @param integer_string $Cot
+	 */
+	static function Ecnv($Cot=null)
+	{
+		return ( $Cot==null ?
+				"کوتاژ باید ".b::CotagLength." رقمی باشد!"
+				:
+				"کوتاژ ".self::rc($Cot)." ناصحیح است."
+		);
+	}
 	
 }

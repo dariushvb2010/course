@@ -61,7 +61,7 @@ class ReviewProcessRefundRepository extends EntityRepository
 
 		if ($File==null)
 		{
-			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
+			$res['Error']=v::Ecnf();
 		}
 		else{
 			if(FsmGraph::NextState($File->State(),"Refund"))

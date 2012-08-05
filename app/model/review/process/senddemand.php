@@ -70,7 +70,7 @@ class ReviewProcessSenddemandRepository extends EntityRepository
 
 		if ($File==null)
 		{
-			$Res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
+			$Res['Error']=v::Ecnf();
 		}
 		else{
 			$R=new ReviewProcessSenddemand($File,$DemandStep,$Indicator,$CurrentUser);

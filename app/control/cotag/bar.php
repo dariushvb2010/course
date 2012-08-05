@@ -12,7 +12,7 @@ class CotagBarController extends JControl
 		{
 			$File=ORM::Query("ReviewFile")->GetRecentFile($_GET['cotag']);
 			if($File==null)
-				$this->BarePresentString("اظهارنامه ای با این کوتاژ وجود ندارد.");
+				$this->BarePresentString(v::Ecnf());
 			else 
 				$this->BarePresent();
 				

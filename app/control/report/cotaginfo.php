@@ -49,7 +49,7 @@ class ReportCotaginfoController extends JControl
 
 				$arr=array(
 				array(
-				"Key"=>"کوتاژ",
+				"Key"=>v::PCOT,
 					"Value"=>$permitObj->Kootaj),
 				array(
 									"Key"=>"شماره پروانه",
