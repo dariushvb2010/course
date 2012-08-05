@@ -13,7 +13,7 @@ class ArchiveAssignGroupController extends JControl
 				if($t)
 					$myfiles[]=$t[0];
 				else 
-					$Error[]=" اظهارنامه با کوتاژ".$value."یافت نشد !";
+					$Error[]=v::Ecnf($value);
 			}
 			$this->Files=$myfiles;
 			if (!$this->Files or count($this->Files)==0)

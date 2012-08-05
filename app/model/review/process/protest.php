@@ -62,7 +62,7 @@ class ReviewProcessProtestRepository extends EntityRepository
 
 		if ($File==null)
 		{
-			$res['Error']="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
+			$res['Error']=v::Ecnf();
 		}
 		else{
 			$R=new ReviewProcessProtest($File,$ProtestRequest,$Indicator,$CurrentUser);

@@ -67,7 +67,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 		}
 		if ($File==null)
 		{
-			$Error="اظهارنامه‌ای با شماره کوتاژ داده شده در سیستم ثبت نشده است.";
+			$Error=v::Ecnf();
 			return $Error;
 		}
 		else

@@ -39,7 +39,7 @@ class ReviewProgressScanRepository extends EntityRepository
 	public function AddToFile($Cotag)
 	{
 		if(b::CotagValidation($Cotag)==false)
-		return "کوتاژ ناصحیح است.";
+		return v::Ecnv();
 //		else if(! j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag)))
 //		{
 //			$Error="کوتاژ در سرور اسیکودا ثبت نشده , خطا در ارتباط با سرور اسیکودا .";
@@ -73,15 +73,14 @@ class ReviewProgressScanRepository extends EntityRepository
 	{
 		if(b::CotagValidation($Cotag)==false)
 		{
-			$Error=" کوتاژ ناصحیح است.کوتاژ باید هفت رقمی باشد.";
-			return $Error;
+			return v::Ecnv();
 		}
 		$Cotag=$Cotag*1;
 		
 		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 		if ($File==null)
 		{
-			$Error="این کوتاژ وصول نشده است.";
+			$Error=v::Ecnf();
 			return $Error;
 		}
 			
@@ -115,7 +114,7 @@ class ReviewProgressScanRepository extends EntityRepository
 	public function UntiEbtalCotag($Cotag)
 	{
 		if(b::CotagValidation($Cotag)==false)
-			return "کوتاژ ناصحیح است.";
+			return v::Ecnv();
 		
 		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 		if($File==null)

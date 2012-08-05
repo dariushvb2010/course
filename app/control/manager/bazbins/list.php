@@ -47,7 +47,6 @@ class ManagerBazbinsListController extends JControl
 			$al->HasTier=true;
 			$al->TierLabel="ردیف";
 			$al->SetHeader("Select", "انتخاب",true);
-			$al->SetHeader('ID', 'شناسه');
 			$al->SetHeader('View', 'مشاهده',true);
 			
 			$al->SetHeader("State","وضعیت",true);
@@ -143,7 +142,6 @@ class ManagerBazbinsListController extends JControl
 		$al->Width="auto";
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
-		$al->SetHeader('ID', 'شناسه');
 		$al->SetHeader('Firstname', 'نام',true);
 		$al->SetHeader('Lastname', 'نام خانوادگی',true);
 		$al->SetHeader("GroupRTitle", "بخش");

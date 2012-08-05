@@ -158,7 +158,7 @@ class AlarmFreeRepository extends EntityRepository
 			$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
 			if($File==null)
 			{
-				$Error[]="اظهارنامه با کوتاژ ".$Cotag."يافت نشد.";
+				$Error[]=v::Ecnf($Cotag);
 				return $Error;
 			}
 			

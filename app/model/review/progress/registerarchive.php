@@ -120,9 +120,9 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 	public function CancelCotag($Cotag)
 	{
 		return 'this function is deprecated.';
-		if ($Cotag<1)
+		if (!b::CotagValidation($Cotag))
 		{
-			$Error="کوتاژ ناصحیح است.";
+			$Error=v::Ecnv($Cotag);
 			return $Error;
 		}
 		else

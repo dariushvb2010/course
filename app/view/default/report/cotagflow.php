@@ -102,7 +102,7 @@ $(document).ready(function(){
 <form class="CGFForm" onsubmit="CGF.button(); return false;">
 	<div class="input" style="text-align:center;">
 		<img class="CGFAnimator" src="<?php echo SiteRoot;?>/img/loading.gif" title="درحال کار کردن..." />
-		<input type="text" class="CGFField" maxlength="<?php echo CotagLength;?>" />
+		<input type="text" class="CGFField" maxlength="<?php echo b::CotagLength;?>" />
 		<input type="submit"   class="GetReport" class="CGFSendButton"value="گزارش گیری"/>
 	</div>
 </form>

@@ -64,7 +64,7 @@ class ReviewProgressClasseconfirmRepository extends EntityRepository
 		$file = ORM::query(new ReviewFile)->GetRecentFile($cotag);
 		if($cotag==null OR $file==null)
 		{
-			$Error="چنین کوتاژی موجود نیست.";
+			$Error=v::Ecnf();
 			return $Error;
 		}
 		

@@ -54,7 +54,7 @@ class ReviewProgressRemoveRepository extends EntityRepository
 			return "فرایندی نداده اید.";
 		}
 		if(!$Slain->File()){
-			return "کوتاژ صحیح نیست.";
+			return v::Ecnv();
 		}
 		if($Slain->PrevState()==0)
 		{

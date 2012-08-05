@@ -43,7 +43,7 @@ class ReportNotrecievedController extends JControl
 				}
 			}
 			$tableparamlist=array(
-					'Cotag'=>'کوتاژ'
+					'Cotag'=>v::PCOT
 				);
 			$al=new AutolistPlugin($UnRecievedFile,$tableparamlist,'UnRecievedTable');
 			$al->SetHeader("Cotag", "کوتاژ");

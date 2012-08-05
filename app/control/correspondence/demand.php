@@ -24,7 +24,7 @@ class CorrespondenceDemandController extends JControl
 					}				
 				}
 			}else{
-				$Error[]='کوتاژی با شماره ی'.$Cotag.'موجود نیست.';
+				$Error[]=v::Ecnf($Cotag);
 			}
 			$this->Cotag=$Cotag;
 			$this->input_class=$this->get_input_class();

@@ -32,7 +32,7 @@ class ReviewProgressEbtalRepository extends EntityRepository
 	{
 		if(b::CotagValidation($Cotag)==false)
 		{
-			$Error=" کوتاژ ناصحیح است.کوتاژ باید هفت رقمی باشد.";
+			$Error=v::Ecnv();
 			return $Error;
 		}
 		$Cotag=$Cotag*1;
@@ -40,7 +40,7 @@ class ReviewProgressEbtalRepository extends EntityRepository
 		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
 		if ($File==null)
 		{
-			$Error="این کوتاژ وصول نشده است.";
+			$Error=v::Ecnf($Cotag);
 			return $Error;
 		}
 		
