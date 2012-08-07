@@ -9,7 +9,7 @@
 reg( "app/version", "3.4" );
 reg( "app/name", "CustomsReview" );
 reg( "app/title", "نرم‌افزار جامع بازبینی گمرک" );
-
+reg( "app/sherkat/title","پژوهشکده سامانه های هوشمند کاربردی دانشگاه تهران");
 
 
 /** custom application settings

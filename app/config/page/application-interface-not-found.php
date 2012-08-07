@@ -14,7 +14,7 @@ $j=new jURL();
 	</style>
 </head><body>
 	<div id="top"></div>
-	<div id="body">
+	<div id="body"class="bazbox">
 		<h1><img src="<?php echo SiteRoot;?>/img/h/h1-alert-red-50.png"/>
 		صفحه یافت نشد</h1>
 		<p>صفحه درخواستی شما وجود ندارد:</p><p>

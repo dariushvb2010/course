@@ -4,7 +4,7 @@
 	.sortbox {
 		display: none;
 	}
-	#smenuBar {
+	#smenuBar, #footer {
 		display: none;
 	}
 	#body {
@@ -40,7 +40,7 @@
 		display:none !important;
 	}
 	.autolistprint{
-		margin: -10px;
+		margin: -5px;
 	}
 	td.radif{
 	width:15px;
@@ -50,7 +50,5 @@
 	}
 }
 @media screen {
-	#datetime.Footer {
-		display:none;
-	}
+	
 }

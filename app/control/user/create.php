@@ -121,7 +121,8 @@ class UserCreateController extends BaseControllerClass
 		$Group=ORM::Find1("MyGroup", "Title",$Role);
 		if(!$Group)
 		{
-			$res=ORM::Query("MyGroup")->Add($Role,$Role);
+			$persianTitle = (isset(ConfigData::$GROUPS[$Role]) ? ConfigData::$GROUPS[$Role] : $Role);
+			$res=ORM::Query("MyGroup")->Add($Role,$persianTitle);
 			if(is_string($res))
 			{
 				return false;

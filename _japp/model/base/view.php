@@ -48,7 +48,43 @@ class BaseViewClass extends BaseApplicationClass
 		}
 		$template_root = "view" . $d . $this->CurrentView () . $d . "_template" . $d . "head";
 		return $this->App->LoadModule ( $template_root, true, array (
-			"Title" => $PageTitle, "Extra" => $Extra 
+			"Title" => $PageTitle, "Extra" => $Extra
+		) );
+	}
+	
+	/**
+	 * Loads the header from _template/head.php
+	 * if a _template folder exists on the view file's folder, its header would be loaded (ignore on head.php not exists)
+	 * otherwise, global header would be loaded (error on head.php not exists)
+	 *
+	 * @param String $PageTitle
+	 * @param String $ViewTitle
+	 */
+	function PresentLayout($PageTitle, $ViewTitle = "", $Extra = null,$Content=null)
+	{
+		$d = constant ( "jf_jPath_Module_Delimiter" );
+	
+		if (reg("jf/view/templates/iterative"))
+			$Iteration = reg("jf/view/templates/iterations");
+		else
+			$Iteration = 1;
+	
+		$n = 0;
+		while (  $n <= $Iteration )
+		{
+			$template = new jpTrimEnd ( $ViewTitle, $d, ++ $n );
+			$template=$template->__toString();
+			if ($template == "") break;
+			$template = $d . $template;
+			$template = "view" . $d . $this->CurrentView () . $template . $d . "_template" . $d . "layout";
+			$x=new jpModule2FileSystem ( $template );
+			if (file_exists ( $x->__toString() )) return $this->App->LoadModule ( $template, true, array (
+					"Title" => $PageTitle, "Extra" => $Extra, "Content" => $Content
+			) );
+		}
+		$template_root = "view" . $d . $this->CurrentView () . $d . "_template" . $d . "layout";
+		return $this->App->LoadModule ( $template_root, true, array (
+				"Title" => $PageTitle, "Extra" => $Extra , "Content" => $Content
 		) );
 	}
 
@@ -99,25 +135,24 @@ class BaseViewClass extends BaseApplicationClass
 				if (file_exists ( $File )) include $File;
 				$Content = $this->EndBuffering ();
 				$Parser->Parse ( $Content );
-				
+
 				$Extra = "";
 				$Extra .= $Parser->FormatMeta ();
 				reg("app/view/title",$Parser->Title);
 				$this->StartBuffering ();
-				$this->PresentHeader ( $Parser->Title, $ViewTitle, $Extra );
-				$HeadContent = $this->EndBuffering ();
+				$this->PresentLayout( $Parser->Title, $ViewTitle, $Extra,$Content );
+				$LayoutContent = $this->EndBuffering ();
 
-
-				$Parser->FixLinks ( $HeadContent );
-				echo $HeadContent;
+				$Parser->FixLinks ( $LayoutContent );
 				
-				echo $Content;
+				//$this->StartBuffering ();
+				//$this->PresentFooter ( $ViewTitle );
+				//$FootContent = $this->EndBuffering ();
+				//$Parser->FixLinks ( $FootContent );
 				
-				$this->StartBuffering ();
-				$this->PresentFooter ( $ViewTitle );
-				$FootContent = $this->EndBuffering ();
-				$Parser->FixLinks ( $FootContent );
-				echo $FootContent;
+				echo $LayoutContent;				
+				//echo $Content;
+				//echo $FootContent;
 				return true;
 			}
 			else

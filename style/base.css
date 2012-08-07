@@ -7,33 +7,34 @@ body {
 	padding:0px;
 	background-color:#F2F2F2;
 }
-#body,#header {
-	margin:auto;
-	min-width:770px;
-	width:930px;
-	min-height:520px;
+div.bazbox{
 	margin-top:0px;
 	padding:10px;
 	padding-top:6px;
-	-moz-border-radius:5px;
+	border-radius:5px; -moz-border-radius:5px;
 	border:2px #E7E7E7 solid;
 	background-color:#FAFAFA;
+	margin:auto;
+	min-width:770px;
+	width:930px;
 }
-#header{
-	margin-top:0px;
-	height:66px;
-	overflow:hidden;
-	min-height:0;
-	-moz-border-radius:5px 5px 0px 0px;
+#body {
+	min-height:520px;
 }
-.Footer
+#sherkat{
+	margin-top:3px;
+	margin-bottom:-5px;
+	font-size:13px;
+}
+
+
+#footer
 {
 	font-family: "Tahoma";
 	font-size: 10px;
 	text-align: center;
-}
-.header {
-	font-size: small;
+	background:url("../img/ui-bg_gloss-wave_55_5c9ccc_500x100.png") repeat-x scroll 50% 50% #5C9CCC;
+	position: relative;
 }
 p {
 	text-align:justify;
@@ -152,3 +153,5 @@ span.v-green{
 	font-size:21px;
 }
 /*-------------------v class---------------------------------------------*/
+
+
