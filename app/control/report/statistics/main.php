@@ -45,12 +45,9 @@ class ReportStatisticsMainController extends JControl
 				$r=ORM::Query("ReviewProgressReview")->ReviewStatistics($StartTimestamp,$FinishTimestamp,'Result');
 				$al1=new AutolistPlugin($r,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
+				$al1->SetHeader('Result', 'نتیجه');
 				$al1->SetHeader('Count', 'تعداد');
 				$al1->SetHeader('Sum', 'جمع اختلاف');
-				$al1->HasLeftData=true;
-				$al1->LeftData=array('مشکلدار',
-									'بدون مشکل');
-				$al1->LeftDataLabel="نتیجه";
 				$al1->InputValues['ColsCount']=1;
 				$al1->InputValues['RowsCount']=2;
 				$al1->SetFilter(array($this,"myfilter"));
@@ -59,15 +56,10 @@ class ReportStatisticsMainController extends JControl
 				$r2=ORM::Query("ReviewProgressReview")->ReviewStatistics($StartTimestamp,$FinishTimestamp,'Provision');
 				$al2=new AutolistPlugin($r2,null,"Select");
 				//				$al1->SetHeader('Key', 'اطلاعات');
+				$al2->SetHeader('Provision', 'شماره کلاسه');
 				$al2->SetHeader('Count', 'تعداد');
 				$al2->SetHeader('Sum', 'جمع اختلاف');
-				$al2->HasLeftData=true;
-				$al2->LeftData=array('بدون خطا',
-									'109',
-									'248',
-									'528',);
-				$al2->LeftDataLabel="شماره کلاسه";
-				$al2->InputValues['ColsCount']=1	;
+				$al2->InputValues['ColsCount']=1;
 				$al2->InputValues['RowsCount']=4;
 				$al2->SetFilter(array($this,"myfilter"));
 				$this->AutoListProvision=$al2;
@@ -85,7 +77,7 @@ class ReportStatisticsMainController extends JControl
 				break;
 			/////////////////////////////////////////////////////	
 			case 'percentage':
-				$r=ORM::Query("ReviewProgressReview")->ReviewPercentage();
+				/*$r=ORM::Query("ReviewProgressReview")->ReviewPercentage();
 				$percentarray=array(
 					'خطا' => $r['oked'] ,
 					'کسر دریافتی'=> $r['a528'],
@@ -95,10 +87,10 @@ class ReportStatisticsMainController extends JControl
 					$out_ar[]="['{$key}' ,{$value}]";
 				}
 				$this->percentarray=$out_ar;
-				break;
+				break;*/
 			/////////////////////////////////////////////////////	
 			case 'karshenas_work_volume':
-				$r=ORM::Query("ReviewProgressReview")->karshenas_work_lastmounth();
+				/*$r=ORM::Query("ReviewProgressReview")->karshenas_work_lastmounth();
 				$names=array();
 				$values=array();
 				foreach ($r as $value){
@@ -108,10 +100,10 @@ class ReportStatisticsMainController extends JControl
 				$this->values=$values;
 				//$this->values=array(5,5);
 				$this->names=$names;
-				break;
+				break;*/
 			/////////////////////////////////////////////////////	
 			case 'bazbini_speed':
-				$r=ORM::Query("ReviewProgressReview")->BazbiniPerMonth();
+				//$r=ORM::Query("ReviewProgressReview")->BazbiniPerMonth();
 				/*$r=array(
 					array('monthname'=>'aaa','month'=>'3','year'=>'1390','count'=>555),
 					array('monthname'=>'aaa','month'=>'4','year'=>'1390','count'=>555),
@@ -121,7 +113,7 @@ class ReportStatisticsMainController extends JControl
 					array('monthname'=>'aaa','month'=>'2','year'=>'1391','count'=>555),
 					array('monthname'=>'aaa','month'=>'3','year'=>'1391','count'=>555),
 				);*/
-				$names=array();
+				/*$names=array();
 				$values=array();
 				foreach ($r as $value){
 					$X[]="'".$value['monthname']." ".$value['year']."'";
@@ -129,7 +121,7 @@ class ReportStatisticsMainController extends JControl
 				}
 				$this->values=$values;
 				$this->X=$X;
-				break;
+				break;*/
 			
 		}
 		
@@ -144,11 +136,14 @@ class ReportStatisticsMainController extends JControl
 	
 	function myfilter($k,$v,$D)
 	{
-	
-		if(!$v || $v==' ')
+		if($k=='Result')
+			return ReviewProgressReview::PersianResult($v);
+		elseif(!$v || $v==' ')
 			return '-';
 		elseif($k=='Difference')
 			return ReviewProgressReview::PersianDifference($v);
+		elseif($k=='Provision')
+			return ReviewProgressReview::PersianProvision($v);
 		elseif($k=='Sum')
 			return number_format($v);
 		else
