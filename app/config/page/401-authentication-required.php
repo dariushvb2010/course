@@ -13,7 +13,7 @@ h1{color:#d00; border-bottom:3px double #d00;}
 </style>
 </head><body>
 <div id="top"></div>
-<div id="body">
+<div id="body" class="bazbox">
 <h1><img src="<?php echo SiteRoot;?>/img/h/h1-alert-red-50.png"/>
 دسترسی غیرمجاز</h1>
 <p>شما اجازه دسترسی به این صفحه را ندارید.</p><p>

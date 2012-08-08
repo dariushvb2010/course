@@ -28,6 +28,7 @@ class ConfigData
 		 "Typist"=>"تایپیست",
 		 "Programmer"=>" ویژه",
 	 	 "Nazer"=>"مدیریت ارشد",
+	 	 "Scan"=>"مسئول اسکن"
 	 );
 	
 	 static $MAIN=array(

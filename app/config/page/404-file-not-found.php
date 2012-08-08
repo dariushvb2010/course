@@ -13,7 +13,7 @@
 	</style>
 </head><body>
 	<div id="top"></div>
-	<div id="body">
+	<div id="body" class="bazbox">
 		<h1><img src="<?php echo SiteRoot;?>/img/h/h1-alert-red-50.png"/>
 		یافت نشد</h1>
 		<p>آدرس درخواستی شما یافت نشد:</p><p>
