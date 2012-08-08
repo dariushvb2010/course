@@ -17,7 +17,7 @@ reg( "app/sherkat/title","پژوهشکده سامانه های هوشمند کا
  */
 reg("my/DirectDownloadLink",SiteRoot."/file/trunk/jf3.1.22.tar.gz");
 
-reg("link/MohamadTavbal","http://10.64.0.18:8080");
+reg("link/switch/url","http://10.64.0.18:8080/swich");
 define ('GateCode',"45100");
 define ('GateName',"بوشهر");
 

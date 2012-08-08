@@ -17,27 +17,75 @@ class ConnectionBakedata extends JModel
 	
 	function __construct()
 	{
-		$this->hoststring=reg("link/MohamadTavbal");
+		$this->hoststring=reg("link/switch/url");
 	}
 	
+	/**
+	 * 
+	 * @param ConnectionGetdata $getdata
+	 */
+	private function Handle_DataError($getdata){
+		//GetData() must be in the first line
+		$d=$getdata->GetData();
+		$this->Error=null;
+		
+		if($getdata->error){
+			$this->Error=array($getdata->error);
+			$this->datapackage=null;
+		}else{
+			$this->Error=null;
+			$this->datapackage=$d;
+			
+			if(!isset($d->isSuccess)){
+				$this->Error[]= 'bad return.';
+			}elseif($d->isSuccess==false){
+				$this->Error[]= $d->messages;
+			}else{
+				return true;
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * returns the mojavez bargiri from exit door 
+	 * and registers the bazbini request for it
+	 * and is accessible after exit door makes the mojavez bargiri
+	 * (not good yet for us)
+	 * @param unknown_type $Cotag
+	 * @param unknown_type $Year
+	 */
 	public function GetMojavezBargiriYear($Cotag,$Year){
 		$RequestArray=array(
-				'kutaj'=>$Cotag,
+				'kootaj'=>$Cotag,
 				"year"=>$Year,
 		);
 		$c=new ConnectionGetdata($this->hoststring."/GetMojavezBargiri", $RequestArray);
-		$this->datapackage=$c->GetData();
+		$this->Handle_DataError($c);
 	}
 
+	/**
+	 * returns the asyquda data for a kootaj and year
+	 * it registers nothing and is accessible where exit door is installed
+	 * @param unknown_type $Cotag
+	 * @param unknown_type $Year
+	 */
 	public function GetParvanehFromAsycudaYear($Cotag,$Year){
 		$RequestArray=array(
-				'kutaj'=>$Cotag,
+				'kootaj'=>$Cotag,
 				"year"=>$Year,
 		);
 		$c=new ConnectionGetdata($this->hoststring."/GetParvanehFromAsycuda", $RequestArray);
-		$this->datapackage=$c->GetData();
+		$this->Handle_DataError($c);
 	}
 	
+	/**
+	 * returns the asyquda data
+	 * checks if the kootaj request with in three years if found then return else false
+	 * @param unknown_type $Cotag
+	 * @param unknown_type $Reapeat
+	 */
 	public function GetMojavezBargiri($Cotag,$Reapeat=3)
 	{
 			$calendar=new CalendarPlugin();
@@ -60,25 +108,36 @@ class ConnectionBakedata extends JModel
 		}
 	}
 	
-	public function GetParvaneyeVaredat($Mojavez)
+	/**
+	 * returns parvane varedat from exit door 
+	 * by its serial number 
+	 * and is accessible when mojavez bargiri is generated
+	 * @param unknown_type $Serial
+	 */
+	public function GetParvaneyeVaredat($Serial)
 	{
 		$RequestArray=array(
-				'mojavez'=>$Mojavez,
+				'serial'=>$Serial,
 		);
-		$c=new ConnectionGetdata($this->hoststring."/GetParvaneyeVaredat", $RequestArray);
-		$this->datapackage=$c->GetData();
+		$c=new ConnectionGetdata($this->hoststring."/GetParvaneh2", $RequestArray);
+		$this->Handle_DataError($c);
+	}
+
+	/**
+	 * /GetBijaks_Entrance    {kootaj} : List<VorudeEttelaatDarbeKhorujVaredat>
+	 * @param unknown_type $Serial
+	 */
+	public function GetBijaks_Entrance($Serial)
+	{
+		$RequestArray=array(
+				'kootaj'=>$Serial,
+		);
+		$c=new ConnectionGetdata($this->hoststring."/GetBijaks_Entrance", $RequestArray);
+		$this->Handle_DataError($c);
 	}
 	
 	public function Validate(){
-		$d=$this->datapackage;
-		if(!isset($d->isSuccess)){
-			$this->Error= 'Request Timeout.';
-		}elseif($d->isSuccess==false){
-			$this->Error= $d->messages;
-		}else{
-			return true;
-		}
-		return false;
+		return ($this->Error==null);
 	}
 	
 	public function GetResult(){

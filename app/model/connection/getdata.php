@@ -12,12 +12,14 @@ class ConnectionGetdata extends JModel
 	private $url;
 	private $RequestArray;
 	public $timeout;
+	public $error;
 	
 	function __construct($url,$RequestArray)
 	{
 		$this->url=$url;		 
 		$this->RequestArray=$RequestArray;
-		$this->timeout=5;		 
+		$this->timeout=2;
+		$this->error=null;		 
 	}
 	
 	public function GetData(){
@@ -25,7 +27,6 @@ class ConnectionGetdata extends JModel
 		$hexdata= $this->get_data($url);
 		$json=$this->hex2str($hexdata);
 		$ret=json_decode($json);
-		var_dump($ret);
 		return $ret;
 		
 	}
@@ -60,15 +61,25 @@ class ConnectionGetdata extends JModel
 	/* gets the data from a URL */
 	private function get_data($url)
 	{
-		echo $url;
+		//echo $url;
+		$ret=null;
 		$ch = curl_init();
 		$timeout = 5;
 		curl_setopt($ch,CURLOPT_URL,$url);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-		curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+		curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$this->timeout);
 		
 		$data = curl_exec($ch);
+		if($data === false)
+		{
+			$this->error= curl_error($ch);
+			$ret=false;
+		}
+		else
+		{
+			$ret=$data;
+		}
 		curl_close($ch);
-		return $data;
+		return $ret;		
 	}
 }
