@@ -73,15 +73,20 @@ class v
 	/**
 	 * ERROR: cotag not found
 	 *  کوتاژ یافت نشد!
-	 * @param integer_string $Cot
+	 * @param integer|string|ReviewFile $Cot
 	 */
 	static function Ecnf($Cot=null)
 	{
-		return ( $Cot==null ? 
-					"اظهارنامه با این کوتاژ یافت نشد!"
-					:
-					"کوتاژ ".self::rc($Cot)." یافت نشد!"
-				);
+		if($Cot==null){ 
+			return "اظهارنامه با این کوتاژ یافت نشد!";
+		}else{
+			if($Cot instanceof ReviewFile)
+				$myCot=$Cot->Cotag();
+			else
+				$myCot=strval($Cot);
+			
+			return "اظهارنامه ".self::rc($myCot)." یافت نشد!";
+		}
 	}
 	/**
 	 * ERROR:contag not valid

@@ -167,20 +167,18 @@ class ReviewFile
     protected $Stock;
     function Stock(){ return $this->Stock;}
     function SetStock($Stock){ $this->Stock=$Stock; }
+    
     /**
      * returns the recent file
      * @param  integer or string or ReviewFile
+     * @return ReviewFile
      */
-    static function GetRecentFile($File)
+    static function GetRecentFile($input)
     {
-    	if($File instanceof ReviewFile)
-    	return $File;
-    	elseif(b::CotagValidation($File))
-    	{
-    		$File=self::GetRecentFile($File);
-    		if($File instanceof ReviewFile)
-    		return $File;
-    	}
+    	if($input instanceof ReviewFile)
+    		return $input;
+    	elseif(b::CotagValidation($input))
+    		return ORM::Query("ReviewFile")->GetRecentFile($input);
     }
     /**
      * Has to get the cotages or even files and only return the ReviewFile type
@@ -209,18 +207,14 @@ class ReviewFile
     	if($Files)
     	foreach ($Files as $File)
     	{
-    		$var=self::GetRecentFile($File);
+    		$var=b::GetFile($File);
     		if($var instanceof ReviewFile)
+    		{	
     			$res[]=$var;
+    		}
     		else 
     		{
-    			$error='کوتاژ ';
-    			if($File instanceof ReviewFile)
-    				$error.=$File->Cotag();
-    			else 
-    				$error.=strval($File);
-    			$error.="  یافت نشد.";
-    			$res[]=strval($error);
+    			$res[]=v::Ecnf($File->Cotag());
     		}
     		
     	}

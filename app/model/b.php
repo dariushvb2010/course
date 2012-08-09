@@ -117,9 +117,20 @@ class b
 	 * 
 	 * @param unknown_type $input
 	 * @return ReviewFile
+	 * @author morteza kavakebi
 	 */
 	public static function GetFile($input){
-		return ORM::Query("ReviewFile")->GetRecentFile($input);
+		return ReviewFile::GetRecentFile($input);
+	}
+	
+	/**
+	 * dumps orm object with orm::dump
+	 * and simple variables by dump
+	 * @param unknown_type $inp
+	 * @author morteza kavakebi
+	 */
+	public static function Dump($inp){
+		ORM::Dump($inp);
 	}
 
 }

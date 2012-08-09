@@ -35,7 +35,6 @@ class CotagTransferToarchiveController extends JControl
 		{
 			$this->Handler=new HandleTransferCotagbookPublic("Give","CotagBook","Archive");
 		}
-		
 		$this->Handler->Perform();
 		$this->Error=$Error;
 		if (count($Error))

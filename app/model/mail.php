@@ -309,6 +309,7 @@ abstract class Mail
 			ORM::Delete($s);
 		}
 	}
+	
 	function Save($Files, $RemoveCalled, &$Error)
 	{
 		if($this->State()==self::STATE_EDITING)
@@ -344,7 +345,7 @@ abstract class Mail
 				$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
 				if(is_string($P))
 				{
-					$E=$P;
+					$Error[]=$P;
 					$ErrorCount++;
 				}
 				else
@@ -364,9 +365,12 @@ abstract class Mail
 		}
 		return $ErrorCount;
 	}
+	
 	function Act($Files, $RemoveCalled, &$Error)
 	{
+		echo 'Act;';
 		$SaveResult=$this->Save($Files, $RemoveCalled, $Error);
+		var_dump($SaveResult);
 		if($Files AND $SaveResult===0)
 		{
 			$T=$this->Type();

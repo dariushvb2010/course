@@ -12,10 +12,8 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 			return ;
 		}
 		$this->MakeMainList(null);
-		
-			$Cotages=$this->MainList->GetRequest("Cotag");
-			$Files=ReviewFile::RegulateWithError($Cotages);
-		
+		$Cotages=$this->MainList->GetRequest("Cotag");
+		$Files=ReviewFile::RegulateWithError($Cotages);
 		//-------------------------------------SAVE------------------------
 		if(isset($_POST['Save']))
 		{
@@ -48,7 +46,7 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 		//-------------------------------------ACT: [Gvie], [Get], [Send], [Receive]-------------------------
 		elseif(isset($_POST[$this->Action]))
 		{
-				$res=$Mail->Complete($Files, false, $this->Error);
+			$res=$Mail->Complete($Files, false, $this->Error);
 			if($res)
 			{
 				$this->Result="اظهارنامه ها با موفقیت ارسال شدند.";

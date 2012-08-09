@@ -75,6 +75,7 @@ class HandleTransferSingle extends HandleTransfer
 		{
 			$ID=$_POST['MailID'];
 			$Mail=ORM::Find("Mail", $ID);
+			
 			if(!$Mail)
 			{
 				$this->Error[]="نامه یافت نشد.";
