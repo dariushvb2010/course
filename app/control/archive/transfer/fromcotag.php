@@ -30,7 +30,7 @@ class ArchiveTransferFromcotagController extends JControl
 			else
 			{
 				$this->Result.="اظهارنامه های زیر به کارشناس بازبینی";
-				$this->Result.="<b> ".$Reviewer->getFullName()." </b> تخصیص داده شدند.<br/>";
+				$this->Result.=v::b($Reviewer->getFullName())." تخصیص داده شدند.".BR;
 				foreach ($Files as $File)
 				{
 					if(!($File instanceof ReviewFile))

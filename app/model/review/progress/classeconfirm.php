@@ -34,7 +34,7 @@ class ReviewProgressClasseconfirm extends ReviewProgress
 			if($Confirm){
 				return "اعلام اشکال اظهارنامه توسط مدیر تایید گردید و به مکاتبات ارسال شد. ";
 			}else{
-				return "اعلام اشکال اظهارنامه توسط مدیر تایید نگردید و به کارشناس جهت بازبینی مجدد مرجوع شد. ".'<br>'.$this->Comment;
+				return "اعلام اشکال اظهارنامه توسط مدیر تایید نگردید و به کارشناس جهت بازبینی مجدد مرجوع شد. ".BR.$this->Comment;
 			}
 		else 
 			return "خطا در گزارش گیری";

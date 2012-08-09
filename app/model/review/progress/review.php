@@ -137,9 +137,9 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		$sum="کارشناسی انجام شد و نتیجه آن، ";
 		if($this->Result==false)
-			$sum.='مشکلدار طبق کلاسه'."<b> «".$this->Provision."» </b>".
-			"با علت تفاوت"."<b> «".$this->Difference('persian').
-			"» </b>"."و مبلغ تفاوت"."<b> «".$this->Amount('formatted')."»</b> ریال ";
+			$sum.='مشکلدار طبق کلاسه '.v::b("«".$this->Provision."»").
+			" با علت تفاوت ".v::b("«".$this->Difference('persian')).
+			"»"." و مبلغ تفاوت ".v::b("«".$this->Amount('formatted')."»")." ریال ";
 		else
 			$sum.=' بدون مشکل ';
 

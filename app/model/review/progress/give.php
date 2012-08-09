@@ -48,7 +48,9 @@ class ReviewProgressGive extends ReviewProgress
 		if(!$this->MailGive)
 			return "نامه یافت نشد.";
 		$href=ViewMailPlugin::GetHref($this->MailGive, "Give");
-		$r="اظهارنامه از ".$this->MailGive->GiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailGive->Num()."</a> به <b>".$this->MailGive->GetterGroup()->PersianTitle()."</b> تحویل داده شد.";
+		$destGroup=$this->MailGive->GetterGroup()->PersianTitle();
+		$fromGroup=$this->MailGive->GiverGroup()->PersianTitle();
+		$r="اظهارنامه از ".$fromGroup." با شماره نامه ".v::link($this->MailGive->Num(),$href)." به ".v::b($destGroup)." تحویل داده شد.";
 		return $r;
 	}
 	function Title()

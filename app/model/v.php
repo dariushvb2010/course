@@ -102,4 +102,15 @@ class v
 		);
 	}
 	
+	/**
+	 * 'a' tag
+	 * link with href and label
+	 * @param integer_string $Cot
+	 */
+	static function link($label='',$href='')
+	{
+		$t='<a href="'.$href.'">'.$label.'</a>';
+		return $t;
+	}
+	
 }

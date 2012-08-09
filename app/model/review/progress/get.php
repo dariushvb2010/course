@@ -40,7 +40,7 @@ class ReviewProgressGet extends ReviewProgress
 		if(!$Mail)
 			return "نامه یافت نشد.";
 		$href=ViewMailPlugin::GetHref($Mail, "Get");
-		$r="اظهارنامه توسط ".$Mail->GetterGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$Mail->Num()."</a> از <b>".$Mail->GiverGroup()->PersianTitle()."</b> تحویل گرفته شد.";
+		$r="اظهارنامه توسط ".$Mail->GetterGroup()->PersianTitle()." با شماره نامه ".v::link($Mail->Num(),$href)." از ".v::b($Mail->GiverGroup()->PersianTitle())." تحویل گرفته شد.";
 		return $r;
 	}
 	function Title()

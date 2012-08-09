@@ -104,7 +104,7 @@ class CorrespondenceMainController extends JControl
 					$res='ارسال مطالبه نامه ثبت گردید.';
 					break;
 				case 'ProcessAssign':
-					$res="ارجاع پرونده به کارشناس <b> {$Reviewer}</b> ثبت گردید.";
+					$res="ارجاع پرونده به کارشناس ".v::b($Reviewer)." ثبت گردید.";
 					break;
 				case 'Protest':
 					$res='اعتراض صاحب کالا ثبت گردید.';

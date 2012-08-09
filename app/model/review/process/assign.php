@@ -31,7 +31,7 @@ class ReviewProcessAssign extends ReviewProgress
 	function  Summary()
 	{
 		if($this->Reviewer)
-			return "پرونده به کارشناس بازبینی "."<b>".$this->Reviewer()->getFullName()."</b>"."  تخصیص داده شد.";
+			return "پرونده به کارشناس بازبینی ".v::b($this->Reviewer()->getFullName())."  تخصیص داده شد.";
 		else 
 			return "خطا در گزارش گیری";
 	}

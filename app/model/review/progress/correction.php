@@ -47,7 +47,7 @@ class ReviewProgressCorrection extends ReviewProgress
 	function  Summary()
 	{
 		if($this->User())
-			return "شماره کوتاژ اظهارنامه از ".$this->OldCotag()." به ".$this->NewCotag()."اصلاح گردید.".'<br>'.$this->Comment();
+			return "شماره کوتاژ اظهارنامه از ".$this->OldCotag()." به ".$this->NewCotag()."اصلاح گردید.".BR.$this->Comment();
 		else 
 			return "خطا در گزارش گیری";
 	}

@@ -32,7 +32,9 @@ class ReviewProgressReceive extends ReviewProgress
 		if(!$this->MailReceive)
 			return "نامه یافت نشد.";
 		$href=ViewMailPlugin::GetHref($this->MailReceive, "Receive");
-		$r="اظهارنامه توسط ".$this->MailReceive->ReceiverGroup()->PersianTitle()." با شماره نامه <a href='".$href."'>".$this->MailReceive->Num()."</a> از <b>".$this->MailReceive->SenderTopic()->Topic()."</b> دریافت شد.";
+		$senderTopic=$this->MailReceive->SenderTopic()->Topic();
+		$rcvGroup=$this->MailReceive->ReceiverGroup()->PersianTitle();
+		$r="اظهارنامه توسط ".$rcvGroup." با شماره نامه ".v::link($this->MailReceive->Num(),$href)." از ".v::b($senderTopic)." دریافت شد.";
 		return $r;
 	}
 	function Title()
