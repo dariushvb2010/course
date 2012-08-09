@@ -27,9 +27,9 @@ class RequirementsConnectionController extends JControl
 		}
 		echo BR;
 		//------------------------------------------------------
-		echo ''.' GetParvaneyeVaredat ';
+		echo ''.' GetParvaneVaredati ';
 		$cq=new ConnectionBakedata();
-		$cq->GetParvaneyeVaredat("21598");
+		$cq->GetParvanehVaredati("21598");
 		if($cq->Validate()){
 			//check the data
 			echo 'ok';

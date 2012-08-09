@@ -28,7 +28,6 @@ class ConnectionGetdata extends JModel
 		$json=$this->hex2str($hexdata);
 		$ret=json_decode($json);
 		return $ret;
-		
 	}
 	
 	private function hex2str($hex) {

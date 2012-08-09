@@ -114,12 +114,12 @@ class ConnectionBakedata extends JModel
 	 * and is accessible when mojavez bargiri is generated
 	 * @param unknown_type $Serial
 	 */
-	public function GetParvaneyeVaredat($Serial)
+	public function GetParvaneVaredati($Serial)
 	{
 		$RequestArray=array(
 				'serial'=>$Serial,
 		);
-		$c=new ConnectionGetdata($this->hoststring."/GetParvaneh2", $RequestArray);
+		$c=new ConnectionGetdata($this->hoststring."/GetParvanehVaredati", $RequestArray);
 		$this->Handle_DataError($c);
 	}
 
