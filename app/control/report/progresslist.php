@@ -16,7 +16,7 @@ class ReportProgresslistController extends JControl
 			else 
 			{
 				
-				$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+				$File=b::GetFile($Cotag);
 				if ($File==null)
 				{
 					$Error[]="یافت نشد.";

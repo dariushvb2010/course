@@ -7,7 +7,7 @@ class ReviewSelectController extends JControl
 		if($_REQUEST['Class'])
 		{
 			$Class=$_POST['Classe']*1;
-			$File=ORM::Query(new ReviewFile())->GetRecentFileByClasse($Class);
+			$File=ORM::Query("ReviewFile")->GetRecentFileByClasse($Class);
 			$Cotag=$File->Cotag();	
 		}
 		else if ($_REQUEST['Cotag'])

@@ -7,7 +7,7 @@ class ReviewDossierMainController extends JControl
 		
 		$Error=array();
 		$Cotag=$_REQUEST['Cotag']*1;
-		$File=ORM::Query(new ReviewFile())->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File)
 			$State=$File->State();
 		if(FsmGraph::IsReviewerDisturbState($State))

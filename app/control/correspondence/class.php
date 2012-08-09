@@ -9,7 +9,7 @@ class CorrespondenceClassController extends JControl
 			if (isset($_GET['Cotag']))
 			{
 				$Cotag=$_GET['Cotag'];
-				$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+				$File=b::GetFile($Cotag);
 				if ($File==null)
 				{
 					$Error[]=v::Ecnf($Cotag);

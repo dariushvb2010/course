@@ -74,14 +74,14 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 		
 		$CurrentUser=MyUser::CurrentUser();
 		
-		$file1 = ORM::query(new ReviewFile)->GetRecentFile($OldCotag);
+		$file1 = b::GetFile($OldCotag);
 		if($OldCotag==null OR $file1==null)
 		{
 			$Error=v::Ecnf($OldCotag);
 			return $Error;
 		}
 		
-		$file2 = ORM::query(new ReviewFile)->GetRecentFile($NewCotag);
+		$file2 = b::GetFile($NewCotag);
 		if($NewCotag==null OR $file2!=null)
 		{
 			$Error="کوتاژ جدید به اظهارنامه ی  دیگری متعلق است.";

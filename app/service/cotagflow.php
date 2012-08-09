@@ -7,7 +7,7 @@ class CotagflowService extends BaseService
 		$this->App->LoadModule("model.review.file");
         
         $Cotag=$Params[Cotag]*1;
-        $File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+        $File=b::GetFile($Cotag);
         if(!$File)
         {
         	$res[Err]='1';

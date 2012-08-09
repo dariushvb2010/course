@@ -9,7 +9,7 @@ class ReviewEditController extends JControl
 	 */
 	private function getReviewInfo($Cotag)
 	{
-		$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File==null)
 			return false;
 		$ProgReview=$File->LastReview();

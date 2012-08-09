@@ -9,7 +9,7 @@ class ManagerBazbinsAssignedController extends JControl
 		{
 			foreach($_POST['item'] as $key=>$value)
 			{
-				$t=ORM::Find('ReviewFile', $value);
+				$t=b::GetFile($value);
 				if($t)
 				$myfiles[]=$t;
 			}

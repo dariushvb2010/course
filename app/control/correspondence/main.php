@@ -13,7 +13,7 @@ class CorrespondenceMainController extends JControl
 			if($Cotag>0)
 			{
 				$this->Cotag=$Cotag;
-				$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+				$File=b::GetFile($Cotag);
 
 			}
 			

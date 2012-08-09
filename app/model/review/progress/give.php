@@ -85,7 +85,7 @@ class ReviewProgressGiveRepository extends EntityRepository
 	 */
 	public function AddToFile($File=null, MailGive $MailGive=null, $IfPersist=true)
 	{
-		$File=ReviewFile::GetRecentFile($File);
+		$File=b::GetFile($File);
 		if(!($File instanceof ReviewFile))
 		{
 			return "اظهارنامه یافت نشد.";

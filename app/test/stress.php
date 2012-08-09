@@ -42,7 +42,7 @@ class StressTest extends JTest
 		$m=new WebTracker();
 		for ($i=0;$i<$stressCount;$i++)
 		{
-			$f=ORM::Find("ReviewFile", 1000+$i);
+			$f=b::GetFile(1000+$i);
 			for ($j=0;$j<$stressDepth;++$j)
 			{
 				$x=mt_rand(1,1200);

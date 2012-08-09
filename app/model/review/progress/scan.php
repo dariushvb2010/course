@@ -46,7 +46,7 @@ class ReviewProgressScanRepository extends EntityRepository
 //			return $Error;
 //		}
 		
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File==null)
 		{
 			$File=new ReviewFile($Cotag);
@@ -77,7 +77,7 @@ class ReviewProgressScanRepository extends EntityRepository
 		}
 		$Cotag=$Cotag*1;
 		
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if ($File==null)
 		{
 			$Error=v::Ecnf();
@@ -116,7 +116,7 @@ class ReviewProgressScanRepository extends EntityRepository
 		if(b::CotagValidation($Cotag)==false)
 			return v::Ecnv();
 		
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File==null)
 			return "اظهارنامه در سیستم ثبت نگردیده است!";
 		

@@ -182,7 +182,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		}
 		else
 		{
-			$File=ORM::query("ReviewFile")->GetRecentFile($Cotag);
+			$File=b::GetFile($Cotag);
 
 			if ($File==null)
 			{
@@ -253,7 +253,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		else
 			$validInput=$validation;
 
-		$File=ORM::query(new ReviewFile)->GetRecentFile($validInput['Cotag']);
+		$File=b::GetFile($validInput['Cotag']);
 
 		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], false);
 		$R->SetResult($validInput['Result']);
@@ -330,7 +330,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		if ($Cotag<1 && $Cotag==null)
 			return v::Ecnv($Cotag);
 
-		$File=ORM::query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 
 		if ($File==null)
 			return "یافت نشد.";

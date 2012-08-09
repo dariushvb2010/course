@@ -82,7 +82,7 @@ class ReviewImagesRepository extends EntityRepository
 	 */
 	function AllDossierImages($Cotag)
 	{
-		$File=ORM::Query(new ReviewFile())->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File)
 		$r=j::ODQL("SELECT I FROM ReviewImages AS I JOIN I.PID AS P WHERE P.File=? AND P.Dead=0 ORDER BY P.CreateTimestamp",$File);
 		return $r;

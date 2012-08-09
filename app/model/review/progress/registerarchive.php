@@ -38,7 +38,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 	public function AddToFile($Cotag,$Time=null)
 	{
 		
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if ($File)
 		{
 			if($File->LLP() instanceof ReviewProgressRegisterarchive)
@@ -127,7 +127,7 @@ class ReviewProgressRegisterarchiveRepository extends EntityRepository
 		}
 		else
 		{
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+			$File=b::GetFile($Cotag);
 			if ($File==null)
 			{
 				$Error="این کوتاژ وصول نشده است.";

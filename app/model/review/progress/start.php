@@ -83,7 +83,7 @@ class ReviewProgressStartRepository extends EntityRepository
 // 									return $Error;
 			// 					}
 
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File==null)
 		{
 			$File=new ReviewFile($Cotag);
@@ -122,7 +122,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		
 		$resLast = "وصول اظهارنامه با شماره کوتاژ ".v::bgc($Cotag)."لغو شد.";
 		$resMessage = "";
-		$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if ($File==null)
 		{
 			$ret['result'] = false;
@@ -181,7 +181,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		if(b::CotagValidation($Cotag)==false)
 			return v::Ecnv();
 
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if($File==null)
 			return v::Ecnf();
 

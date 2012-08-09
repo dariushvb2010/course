@@ -10,7 +10,7 @@ class CotagBarController extends JControl
 		}
 		else 
 		{
-			$File=ORM::Query("ReviewFile")->GetRecentFile($_GET['cotag']);
+			$File=b::GetFile($_GET['cotag']);
 			if($File==null)
 				$this->BarePresentString(v::Ecnf());
 			else 

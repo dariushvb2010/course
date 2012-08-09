@@ -37,7 +37,7 @@ class ReviewProgressEbtalRepository extends EntityRepository
 		}
 		$Cotag=$Cotag*1;
 		
-		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		if ($File==null)
 		{
 			$Error=v::Ecnf($Cotag);

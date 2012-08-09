@@ -9,7 +9,7 @@ class ArchiveAssignGroupController extends JControl
 		{
 			foreach($_POST['item'] as $key=>$value)
 			{
-				$t=ORM::Find('ReviewFile',"Cotag", $value);
+				$t=b::GetFile($value);
 				if($t)
 					$myfiles[]=$t[0];
 				else 

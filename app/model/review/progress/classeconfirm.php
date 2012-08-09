@@ -61,7 +61,7 @@ class ReviewProgressClasseconfirmRepository extends EntityRepository
 	{
 		$CurrentUser=MyUser::CurrentUser();
 		
-		$file = ORM::query(new ReviewFile)->GetRecentFile($cotag);
+		$file = b::GetFile($cotag);
 		if($cotag==null OR $file==null)
 		{
 			$Error=v::Ecnf();

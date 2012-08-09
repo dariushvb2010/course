@@ -28,7 +28,7 @@ class ReviewProcessRegisterTest extends JTest
 		
 		$id=123;
 		do {
-			$f=ORM::Find("ReviewFile",$id);
+			$f=b::GetFile($id);
 			$id++;
 		}
 		while(!$f);

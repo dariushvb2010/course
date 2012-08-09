@@ -10,7 +10,7 @@ class RakedFinishListController extends JControl
 			$FinishError=false;
 			foreach($_POST['item'] as $key=>$value)
 			{
-				$somefile=ORM::Find('ReviewFile', $value);
+				$somefile=b::GetFile($value);
 				if($somefile){
 					$Res=ORM::Query(new ReviewProgressFinish())->FinishByCotag($somefile->Cotag());
 					if(!is_string($Res))

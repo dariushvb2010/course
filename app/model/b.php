@@ -112,6 +112,15 @@ class b
 		}
 		return $password;
 	}
+	
+	/**
+	 * 
+	 * @param unknown_type $input
+	 * @return ReviewFile
+	 */
+	public static function GetFile($input){
+		return ORM::Query("ReviewFile")->GetRecentFile($input);
+	}
 
 }
 ?>

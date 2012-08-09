@@ -116,7 +116,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 	{
 		$Cotag=$Data['Cotag']*1;
 		$Comment=$Data['Comment'];
-		$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		$this->Comment=$Comment;
 		$str="کوتاژ:".$Cotag." ";
 		//-------too short comment
@@ -151,7 +151,7 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$Cotag=$Data['Cotag']*1;
 		$RID=$Data['ID'];
 		$Comment=$Data['Comment'];
-		$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+		$File=b::GetFile($Cotag);
 		$Reviewer=ORM::Find("MyUser",$RID);
 		$this->Comment=$Comment;
 			

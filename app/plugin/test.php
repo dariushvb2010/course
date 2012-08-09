@@ -62,7 +62,7 @@ class TestPlugin extends JPlugin
 		while(!$File)
 		{
 			$randID=rand(1,$count);
-			$File=ORM::Find("ReviewFile", $randID);
+			$File=b::GetFile($randID);
 		}
 		return $File;
 	}

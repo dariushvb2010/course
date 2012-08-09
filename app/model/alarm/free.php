@@ -155,7 +155,7 @@ class AlarmFreeRepository extends EntityRepository
 		if(is_numeric($File))
 		{
 			$Cotag=$File;
-			$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+			$File=b::GetFile($Cotag);
 			if($File==null)
 			{
 				$Error[]=v::Ecnf($Cotag);

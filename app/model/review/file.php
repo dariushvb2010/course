@@ -177,7 +177,7 @@ class ReviewFile
     	return $File;
     	elseif(b::CotagValidation($File))
     	{
-    		$File=ORM::Query("ReviewFile")->GetRecentFile($File);
+    		$File=self::GetRecentFile($File);
     		if($File instanceof ReviewFile)
     		return $File;
     	}

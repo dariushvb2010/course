@@ -9,7 +9,7 @@ class ArchiveAssignSingleController extends JControl
 			if (isset($_POST['Cotag']))
 			{
 				$Cotag=$_POST['Cotag'];
-				$File=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+				$File=b::GetFile($Cotag);
 				$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($File);
 				if(is_string($AssignResult))
 				{

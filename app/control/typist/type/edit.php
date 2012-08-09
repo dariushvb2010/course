@@ -8,7 +8,7 @@ class TypistTypeEditController extends BaseControllerClass
 	    	if(isset($_POST['ID']))
 	    	{
 	    		$Cotag=$_GET['Cotag'];
-	    		$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+	    		$File=b::GetFile($Cotag);
 	    	
 	    		$MyTemplate=Template::TemplateByFile($File);
     			if ($MyTemplate){
@@ -23,7 +23,7 @@ class TypistTypeEditController extends BaseControllerClass
     			$Error[]="خطا";
 	    }else{
 	    	$Cotag=$_GET['Cotag'];
-	    	$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+	    	$File=b::GetFile($Cotag);
 	    	if ($File==null)
 	    	{
 	    		$Error="این کوتاژ وصول نشده است.";

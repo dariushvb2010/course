@@ -9,7 +9,7 @@ class CorrespondenceDemandController extends JControl
 		if (count($_REQUEST))
 		{
 			$Cotag=$_REQUEST['Cotag']*1;
-			$File=ORM::Query(new ReviewFile)->GetRecentFile($Cotag);
+			$File=b::GetFile($Cotag);
 			if($File)
 			{ 
 				$types=$this->get_input_class('string');

@@ -102,7 +102,7 @@ class ReviewFileTest extends JTest
 		$this->assertNotNull($progress);
 		$this->assertTrue(count($progress)==0);
 		ORM::Clear();
-		$f2=ORM::Find("ReviewFile",$ID);
+		$f2=b::GetFile($ID);
 		//ORM::Dump($f);
 		$this->assertTrue($f->ID()==$f2->ID());
 		$this->assertEqual($f->Cotag(),$f2->Cotag());

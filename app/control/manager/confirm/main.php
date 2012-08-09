@@ -11,7 +11,7 @@ class ManagerConfirmMainController extends JControl
 		$this->Cotag=$Cotag;
 		
 		
-		$file=ORM::Query("ReviewFile")->GetRecentFile($Cotag);
+		$file=b::GetFile($Cotag);
 		if(!ORM::Query("ReviewProgressClasseconfirm")->ValidateFile($file)){
 			$this->Redirect("./select");
 		}
