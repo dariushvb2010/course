@@ -24,11 +24,11 @@ define ( "SiteRoot", jURL::Root () );
 if (jURL::HTTPHost()=="localhost")
 	reg("app/state","develop");
 elseif (
-strpos(jURL::HTTPHost(),".ir")!==false
-or strpos(jURL::HTTPHost(),".com")!==false
+strpos(jURL::HTTPHost(),".ir")!=    false
+or strpos(jURL::HTTPHost(),".com")!=false
 or jURL::HTTPHost()=="10.64.0.19"
 or jURL::HTTPHost()=="10.2.16.139"
-or strpos(jURL::HTTPHost(),"192.168")!==false
+or strpos(jURL::HTTPHost(),"192.168")!=false
 ) #replace this with your site
 	reg("app/state","deploy");
 elseif (php_sapi_name()=="cli")
@@ -84,7 +84,7 @@ if (reg("app/state")=="develop")
 else
 	reg("jf/setting/PresentErrors",false);
 
-reg("jf/setting/ErrorHandler",false); //Enables jFramework's built-in error handler
+reg("jf/setting/ErrorHandler",true); //Enables jFramework's built-in error handler
 	
 	
 /**

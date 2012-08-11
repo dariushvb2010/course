@@ -34,9 +34,12 @@ class ReviewProgressScanRepository extends EntityRepository
 	/**
 	 * 
 	 * @param integer $Cotag
+         * @param boolean $CreateFile 
+         * if true create a assume its first time to scan and file needed to be create 
+         * and if false assume its adding a picture to currently created file
 	 * @return string for error object for true;
 	 */
-	public function AddToFile($Cotag)
+	public function AddToFile($Cotag,$CreateFile=true)
 	{
 		if(b::CotagValidation($Cotag)==false)
 		return v::Ecnv();
@@ -47,26 +50,29 @@ class ReviewProgressScanRepository extends EntityRepository
 //		}
 		
 		$File=b::GetFile($Cotag);
-		if($File==null)
+		if($File==null && $CreateFile==TRUE)
 		{
 			$File=new ReviewFile($Cotag);
 			ORM::Write($File);
-			$start=new ReviewProgressScan($File, false);
-			$ch=$start->Check();
-			if(is_string($ch))
-				return $ch;
-			
-			$start= new ReviewProgressScan($File, true);
-			$start->Apply();
-			ORM::Write($start);
-			   
-			return $start;
-		}
-		else
-		{
-			$Error="اظهارنامه قبلا وصول گردیده است!";
+                }
+                else if($File!=null && $CreateFile==TRUE)
+                {
+                    $Error="اظهارنامه قبلا وصول گردیده است!";
 			return $Error;
-		}
+                }
+                else if($File==null && $CreateFile==false)
+                {
+                     $Error="اظهارنامه یافت نشد";
+			return $Error;
+                }
+		$start=new ReviewProgressScan($File, false);
+                $ch=$start->Check();
+		if(is_string($ch))
+        		return $ch;
+                $start= new ReviewProgressScan($File, true);
+		$start->Apply();
+		ORM::Write($start);
+		return $start;
 		
 	}
 	public function CancelCotag($Cotag)

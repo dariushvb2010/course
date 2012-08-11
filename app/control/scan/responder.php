@@ -118,7 +118,16 @@ class ScanResponderController extends JControl
 		else
 		{
 			$Cotag=$_POST['cotag'];
-			$AddRes=ORM::Query("ReviewProgressScan")->AddToFile($Cotag);
+                        $action=$_POST['action'];
+                        if($action == 'create')
+                        {
+                            $createFile=true;
+                        }
+                        else
+                        {
+                            $createFile=false;
+                        }
+			$AddRes=ORM::Query("ReviewProgressScan")->AddToFile($Cotag,$createFile);
 			if(is_string($AddRes))
 			{
 				$resultMsg=$AddRes;
