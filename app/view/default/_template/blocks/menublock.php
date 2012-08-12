@@ -22,6 +22,20 @@
 		</li>
 		
 		<li>
+			<a href='/scan/add'>
+				<span class='ui-icon-circle-arrow-s ui-icon'></span>
+				 اضافه کردن سند
+			</a>
+		</li>
+		
+		<li>
+			<a href='/review/dossier/digital'>
+				<span class='ui-icon-close ui-icon'></span>
+				مشاهده اظهارنامه دیجیتال 
+			</a>
+		</li>
+		
+		<li>
 			<a href='/scan/cancel'>
 				<span class='ui-icon-close ui-icon'></span>
 				لغو وصول 
