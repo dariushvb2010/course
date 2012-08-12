@@ -27,25 +27,29 @@ class ConnectionBakedata extends JModel
 	private function Handle_DataError($getdata){
 		//GetData() must be in the first line
 		$d=$getdata->GetData();
-		$this->Error=null;
+		//echo BR;
+		//var_dump($d);
+		//echo BR;
+		$this->Error=array();
 		
 		if($getdata->error){
 			$this->Error=array($getdata->error);
 			$this->datapackage=null;
 		}else{
-			$this->Error=null;
+			$this->Error=array();
 			$this->datapackage=$d;
 			
 			if(!isset($d->isSuccess)){
 				$this->Error[]= 'bad return.';
 			}elseif($d->isSuccess==false){
-				$this->Error[]= $d->messages;
+				$this->Error =array_merge( $this->Error, $d->messages);
 			}else{
-				return true;
+				$ret=false;
 			}
 			
 		}
-		
+		//var_dump($d->messages);
+		return $ret;
 	}
 	
 	/**

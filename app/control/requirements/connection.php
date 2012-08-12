@@ -4,39 +4,48 @@ class RequirementsConnectionController extends JControl
 	
 	function Start()
 	{
-
 		//------------------------------------------------------
+		echo '<div class="box">';
 		echo ''.' GetParvanehFromAsycudaYear ';
 		$c=new ConnectionBakedata();
-		$c->GetParvanehFromAsycudaYear("4000013", "1391");
+		$c->GetParvanehFromAsycudaYear("4005903", "1391");
 		if($c->Validate()){
-			//check the data
+			echo '<p>';
+			var_dump($c->GetResult());
+			echo '</p>';
 		}else{
+			//var_dump($c->Error);
 			echo $c->Error[0];
 		}
-		echo BR;
+		echo '</div>';
 		//------------------------------------------------------
+		echo '<div class="box">';
+		
 		echo ''.' GetBijaks_Entrance ';
 		$cq=new ConnectionBakedata();
-		$cq->GetBijaks_Entrance("12344");
+		$cq->GetBijaks_Entrance("27386");
 		if($cq->Validate()){
 			//check the data
-			echo 'ok';
+			echo 'ok'.BR;
+			var_dump($cq->GetResult());
 		}else{
 			echo $cq->Error[0];
 		}
-		echo BR;
+		echo '</div>';
 		//------------------------------------------------------
+		echo '<div class="box">';
 		echo ''.' GetParvaneVaredati ';
 		$cq=new ConnectionBakedata();
-		$cq->GetParvanehVaredati("21598");
+		$cq->GetParvaneVaredati("27386");
 		if($cq->Validate()){
 			//check the data
 			echo 'ok';
+			var_dump($cq->GetResult());
 		}else{
 			echo $cq->Error[0];
 		}
 		echo BR;
+		echo '</div>';
 		//------------------------------------------------------
 		return $this->BarePresent();
 	}
