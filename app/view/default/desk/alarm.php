@@ -12,5 +12,5 @@ ViewAlarmPlugin::GroupShow($this->Alarm_Group,"پیام های مربوط به �
 ?>
 
 <script>
-<?php ViewAlarmPlugin::PresentScritp();?>
+<?php ViewAlarmPlugin::PresentScript();?>
 </script>

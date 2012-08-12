@@ -138,7 +138,7 @@ class ViewAlarmPlugin extends JPlugin
 		echo "</td></tr></table>";
 		echo "</div>";
 	}
-	public static function PresentScritp()
+	public static function PresentScript()
 	{ ?>
 		$("span.moredetails").click(function(){
 			$(this).parents("div.comment").siblings("div.more").toggle("slow");

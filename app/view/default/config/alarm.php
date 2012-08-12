@@ -33,6 +33,6 @@
 <script> 
 <?php  $this->Form->PresentScript(); ?>
 <?php $this->List->PresentScript();?>
-<?php ViewAlarmPlugin::PresentScritp();?>
+<?php ViewAlarmPlugin::PresentScript();?>
 <?php ?>
 </script>

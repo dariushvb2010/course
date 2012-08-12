@@ -46,5 +46,5 @@ form input[type='text'] {
 <script src="/script/editlist.js"></script>
 <script>
 <?php  $this->Form->PresentScript(); ?>
-<?php ViewAlarmPlugin::PresentScritp();?>
+<?php ViewAlarmPlugin::PresentScript();?>
 </script>

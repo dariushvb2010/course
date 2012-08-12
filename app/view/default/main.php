@@ -66,7 +66,7 @@ ViewAlarmPlugin::GroupShow($this->Alarm_Group,"پیام های مربوط به �
  	</div> 
 -->
 <script>
-<?php ViewAlarmPlugin::PresentScritp();?>
+<?php ViewAlarmPlugin::PresentScript();?>
 $("iframe.jChat").css("top",top+"px");
 $(document).ready(function(){
 	$("div.jChat").show("slow");
