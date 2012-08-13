@@ -68,6 +68,18 @@ class v
 	{
 		return "<span class='v-cotag v-blue v-big'>".$cot."</span>";
 	}
+
+	/**
+	 * Custom Cotag Show
+	 * @param unknown_type $cot
+	 */
+	public static function cuc($cot,$attr='')
+	{
+		$classes=array('v-cotag', 'v-blue', 'v-big');
+		$ClassStr=implode(' ',$Classes);
+		//if ($attrib)
+		return "<span class='$ClassStr'>$cot</span>";
+	}
 	
 	////////////////////////////////////////////////////////
 	/**

@@ -114,12 +114,13 @@ embed.sound{margin:0; padding:0; height:0.5px;  visibility: hidden;}
 div#top{height:30px; overflow:hidden; margin:4px auto -1px auto; min-width:770px; width:930px; z-index: 10; display:block;}
 div#top>div{ display:table-cell; height:100%; vertical-align: top;  }
 div#top>div span{margin:0 7px; display:inline-block; height:100%; vertical-align: top;}
-div#top>div#topright{width:30%;}
-div#top>div#topleft{ width:40%;}
+div#top>div#topright{float:right;width:30%;}
+div#top>div#topleft{ float:left;width:40%;}
 div#top div img{}
 div#top>div#topright img.on{display:none;}
 a img{border:none}
 div#top>div#topleft span{margin-top:7px;}
+div#top>div#http {float:right;}
 /*-------------------T D ------------------------*/
 
 

@@ -5,7 +5,7 @@ class ReportProgresslistController extends JControl
 	{
 		if(j::Check("ProgressList"));
 		
-		if (count($_POST)){
+		if (count($_REQUEST['Cotag'])){
 			$Error=array();
 			$Reviewer=ORM::find(new MyUser,j::UserID());
 			$Cotag=$_REQUEST['Cotag']*1;

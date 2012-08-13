@@ -92,13 +92,12 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 		$al->Width="80%";
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
-		$al->HasFormTag=ture;
+		$al->HasFormTag=true;
 		$al->HasRemove=false;
 		$al->ObjectAccess=true;
 		$al->InputValues['ColsCount']=5;
 		$al->InputValues['RowsCount']=30;
 		$al->_TierAttr=array("style"=>"font-size:11pt;");//ردیف
-		
 		$f=new AutoformPlugin();
 		$f->HasFormTag=false;
 		if($this->Mail->State()==Mail::STATE_EDITING)
