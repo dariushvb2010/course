@@ -11,9 +11,7 @@ class ReviewMainController extends JControl
 		{
 			$dataArray=$_POST;
 			$dataArray['Cotag']=$Cotag;
-	
-			$Res=
-			NewReview($dataArray);
+			$Res=ORM::Query("ReviewProgressReview")->NewReview($dataArray);
 		}
 		$this->makeForm();
 		if(is_string($Res))
