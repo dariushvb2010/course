@@ -3,7 +3,7 @@ class ReviewDossierDigitalController extends JControl
 {
 	function Start()
 	{
-		j::Enforce("Reviewer");
+		//j::Enforce("Reviewer");
 		
 		$Cotag=$_REQUEST['Cotag']*1;
 		if (isset($Cotag))
