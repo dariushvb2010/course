@@ -4,7 +4,7 @@
  * @author dariush
  *
  */
-class ArchiveStartController extends JControl
+class ArchiveStartController extends CotagStartController
 {
 
 	function Start()
@@ -12,25 +12,6 @@ class ArchiveStartController extends JControl
 		j::Enforce("Archive");
 		//////////////////////////////////////
 
-		if (count($_POST))
-		{
-			$Cotag=$_POST['Cotag'];
-			$IsPrint=isset($_POST['print']) ? true : false;
-			$Res=ORM::Query("ReviewProgressStart")->AddToFile($Cotag,$IsPrint,MyGroup::Archive());
-			if(is_string($Res))
-			{
-				$Error[]=$Res;
-			}
-			else
-			{
-				$this->Result = " اظهارنامه با شماره کوتاژ ".v::bgc($Cotag)." با موفقیت وصول گردید. ";
-			}
-		}
-		$this->Error=$Error;
-		if (count($Error)) $this->Result=false;
-
-		//return $this->Present();
-		return $this->Present("",'cotag/start');
-		//$this->Prese
+		return $this->SemiStart(MyGroup::Archive());
 	}
 }

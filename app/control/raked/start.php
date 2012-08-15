@@ -4,34 +4,12 @@
  * @author dariush
  *
  */
-class RakedStartController extends JControl
+class RakedStartController extends CotagStartController
 {
 
 	function Start()
 	{
 		j::Enforce("Raked");
-		//ORM::Dump(MyGroup::Archive());
-		//////////////////////////////////////
-
-		if (count($_POST))
-		{
-			$Cotag=$_POST['Cotag'];
-			$IsPrint=isset($_POST['print']) ? true : false;
-			$Res=ORM::Query("ReviewProgressStart")->AddToFile($Cotag,$IsPrint,MyGroup::Raked());
-			if(is_string($Res))
-			{
-				$Error[]=$Res;
-			}
-			else
-			{
-				$this->Result = " اظهارنامه با شماره کوتاژ ".v::bgc($Cotag)." با موفقیت وصول گردید. ";
-			}
-		}
-		$this->Error=$Error;
-		if (count($Error)) $this->Result=false;
-
-		//return $this->Present();
-		return $this->Present("",'cotag/start');
-		//$this->Prese
+		return $this->SemiStart(MyGroup::Raked());
 	}
 }

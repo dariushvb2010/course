@@ -17,8 +17,8 @@ class FsmGraph extends JModel
 	 */
 	private static $StateGraph=array(
 	//-----------------------Review---------------------
-	0=>array('Scan'=>1,'Start_cotagbook'=>2, 'Start_archive'=>4, 'Start_raked'=>14),
-	1=>array('Scan'=>1,'Start_cotagbook'=>2, 'Start_archive'=>4, 'Start_raked'=>14),
+	0=>array('Scan'=>1,'Start_cotagbook'=>2, 'Start_archive'=>4, 'Start_raked'=>14, 'Start_correspondence'=>9),
+	1=>array('Scan'=>1,'Start_cotagbook'=>2, 'Start_archive'=>4, 'Start_raked'=>14, 'Start_correspondence'=>9),
 	2=>array('Give_cotagbook_to_archive'=>3),
 	3=>array('Get_archive_from_cotagbook'=>4),
 	4=>array('Assign'=>5),

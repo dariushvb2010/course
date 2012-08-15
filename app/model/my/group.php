@@ -141,6 +141,10 @@ class MyGroup
 	{
 		return ORM::Find1("MyGroup", "Title", "Raked");
 	}
+	static function Correspondence()
+	{
+		return ORM::Find1("MyGroup", "Title", "Correspondence");
+	}
 	static function GetGroup($GroupName)
 	{
 		return ORM::Find1("MyGroup", "Title", $GroupName);
