@@ -337,6 +337,12 @@
 	<button style="" class='mymenu' id='correspondenceMenu'>مکاتبات</button>
 	<ul class='menu' style="display: none;">
 		<li>
+			<a href='/correspondence/start'>
+				<span class='ui-icon-image ui-icon'></span> 
+				ورود اظهارنامه
+			</a>
+		</li>
+		<li>
 			<a href='/correspondence/main'>
 				<span class='ui-icon-image ui-icon'></span> 
 				ثبت فرآیندهای پرونده
