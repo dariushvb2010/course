@@ -65,7 +65,7 @@ Internet Explorer
 	جهت دریافت
 	فایل نصب آن
 	،
-	<a href='http://31.24.203.28/dl/'>اینجا</a>
+	<a href='<?php echo SiteRoot;?>FF14.exe'>اینجا</a>
 	کلیک نمایید.
 	</p>
 	</li>

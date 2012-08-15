@@ -173,12 +173,15 @@ class ReviewFile
      * @param  integer or string or ReviewFile
      * @return ReviewFile
      */
-    static function GetRecentFile($input)
+    static function GetRecentFile($input,$gateCode=null)
     {
     	if($input instanceof ReviewFile)
     		return $input;
     	elseif(b::CotagValidation($input))
-    		return ORM::Query("ReviewFile")->GetRecentFile($input);
+    	{
+    		$goodGate=($gateCode==null?GateCode:$gateCode);
+    		return ORM::Query("ReviewFile")->GetRecentFile($input,$goodGate);
+    	}
     }
     /**
      * Has to get the cotages or even files and only return the ReviewFile type
@@ -400,9 +403,9 @@ class ReviewFileRepository extends EntityRepository
 	 * @param integer $Cotag
 	 * @return ReviewFile
 	 */
-	public function GetRecentFile($Cotag)
+	public function GetRecentFile($Cotag,$gateCode)
 	{
-		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.Cotag=?",$Cotag);
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.Cotag=? AND F.Gatecode=?",$Cotag,$gateCode);
 		if(count($r))
 			return $r[0];
 		else

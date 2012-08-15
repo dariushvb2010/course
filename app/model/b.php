@@ -120,7 +120,12 @@ class b
 	 * @author morteza kavakebi
 	 */
 	public static function GetFile($input){
-		return ReviewFile::GetRecentFile($input);
+		$inpAr=explode('-',$input);
+		if (count($inpAr)=2){
+			return ReviewFile::GetRecentFile($inpAr[1],$inpAr[0]);
+		}else{
+			return ReviewFile::GetRecentFile($inpAr[0]);
+		}
 	}
 	
 	/**
