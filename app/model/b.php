@@ -8,6 +8,7 @@ class b
 	const file_initial_state = 0;
 	const file_initial_class = 0;
 	const upload_folder_root="../../../upload/";
+	const Cotag_jsPattern="/^0{0,2}\d{7}$/";
 
 	static function upload_folder_relative_from_japp()
 	{
@@ -63,7 +64,7 @@ class b
 	public static function CotagValidation($Cotag)
 	{
 		$Cotag=strval($Cotag);
-		$pattern="/\A[1-9]{1}\d{".(self::CotagLength-1)."}\z/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
+		$pattern="/\A[\d{1,4}-]{0,1}[1-9]{1}\d{".(self::CotagLength-1)."}\z/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
 		$res=preg_match($pattern,$Cotag);
 		return $res==0 ? false : true;
 	}
@@ -120,8 +121,11 @@ class b
 	 * @author morteza kavakebi
 	 */
 	public static function GetFile($input){
+		if($input instanceof ReviewFile){
+			return ReviewFile::GetRecentFile($input);
+		}
 		$inpAr=explode('-',$input);
-		if (count($inpAr)=2){
+		if (count($inpAr)==2){
 			return ReviewFile::GetRecentFile($inpAr[1],$inpAr[0]);
 		}else{
 			return ReviewFile::GetRecentFile($inpAr[0]);

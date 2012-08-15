@@ -108,7 +108,7 @@ class v
 	static function Ecnv($Cot=null)
 	{
 		return ( $Cot==null ?
-				"کوتاژ باید ".b::CotagLength." رقمی باشد!"
+				"کوتاژ صحیح نیست."
 				:
 				"کوتاژ ".self::rc($Cot)." ناصحیح است."
 		);

@@ -88,7 +88,7 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 			return $Error;
 		}
 		
-		if (strlen($NewCotag)!=b::CotagLength)
+		if (!b::CotagValidation($NewCotag))
 		{
 			$Error=v::Ecnv($NewCotag);
 			return $Error;

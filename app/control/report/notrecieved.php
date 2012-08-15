@@ -7,17 +7,12 @@ class ReportNotrecievedController extends JControl
 		
 		if(isset($_POST['RangeStart']) && isset($_POST['RangeEnd']))
 		{
-			$start=$_REQUEST['RangeStart']*1;
-			$end=$_REQUEST['RangeEnd']*1; 
-			if ($end-$start<=0 || $start<1)
-			{
-				$Error[]="بازه تعریف شده ناصحیح است.";
+			$start=$_REQUEST['RangeStart'];
+			$end=$_REQUEST['RangeEnd']; 
 				
-			}
-				
-			elseif (strlen($_POST['RangeStart'])!= b::CotagLength ||strlen($_POST['RangeEnd'])!= b::CotagLength)
+			if (!(b::CotagValidation($start) AND b::CotagValidation($end)))
 			{
-				$Error[]="کوتاژ باید  ".b::CotagLength." رقمی باشد . ";
+				$Error[]="کوتاژ صحیح نیست . ";
 			}	
 			else
 			{

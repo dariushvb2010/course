@@ -90,6 +90,8 @@ ViewResultPlugin::Show($this->Result,$this->Error);
 		var cotag=$('#cotag').val();
 		cotag=trimZero(cotag);
 		cotag=trim(cotag);
+		//var RE = "<?php echo b::Cotag_jsPattern; ?>";
+	    //return (RE.test(input));
 		if(!IsNumeric(cotag) || parseInt(cotag)<1 || cotag.length!=<?php echo b::CotagLength?>)
 		{
 			alert("کوتاژ ناصحیح است ");

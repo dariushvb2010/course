@@ -83,7 +83,7 @@ form input[type='text'] {
 <?php }?>
 <script>
 function IsNumeric(input){
-	    var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+	    var RE = "<?php echo b::Cotag_jsPattern; ?>";
 	    return (RE.test(input));
 	}
 	function trim(str)
