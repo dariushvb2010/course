@@ -62,7 +62,7 @@
 	<input type='submit' name="Create" id='sub' value='ایجاد نامه' />
 </form>
 <?php endif;?>
-	<!-- --------------------------main form of the mail -->
+	<!-- ***********************main form of the mail*********************** -->
 <?php if($this->Handler->MainList):?>
 	<div class="mainList" >
 		<?php ViewMailPlugin::SingleShow($this->Handler->Mail, "float:left;","Give"); 

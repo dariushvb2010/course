@@ -1,5 +1,6 @@
 
 	var a=0;
+	
 	function IsNumeric(input){
 	    var RE = /^-{0,1}\d*\.{0,1}\d+$/;
 	    return (RE.test(input));
@@ -17,7 +18,7 @@
 		var cotag=$('#cotag').val();
 		cotag=trimZero(cotag);
 		cotag=trim(cotag);
-		if(!IsNumeric(cotag) || parseInt(cotag)<1 || cotag.length!=CotagLength)
+		if(!CotagPattern.test(cotag))
 		{
 			alert("کوتاژ ناصحیح است ");
 			return false;

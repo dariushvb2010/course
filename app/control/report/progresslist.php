@@ -8,10 +8,10 @@ class ReportProgresslistController extends JControl
 		if (count($_REQUEST['Cotag'])){
 			$Error=array();
 			$Reviewer=ORM::find(new MyUser,j::UserID());
-			$Cotag=$_REQUEST['Cotag']*1;
-			if ($Cotag<1)
+			$Cotag=$_REQUEST['Cotag'];
+			if (!b::CotagValidation($Cotag))
 			{
-				$Error[]="کوتاژ ناصحیح است.";
+				$Error[]=v::Ecnv($Cotag);
 			}
 			else 
 			{
@@ -19,10 +19,10 @@ class ReportProgresslistController extends JControl
 				$File=b::GetFile($Cotag);
 				if ($File==null)
 				{
-					$Error[]="یافت نشد.";
+					$Error[]=v::Ecnf($Cotag);
+					$this->Cotag=$Cotag;
 				}else{
 					$this->Data=$File->AllProgress();
-					$this->Cotag=$Cotag;
 					$this->File=$File;
 					if(count($this->Data)==0)
 						$Error[]='هیچ فرایندی در پرونده ی این کوتاژ موجود نیست.';

@@ -77,7 +77,8 @@ form input[type='text'] {
 <?php if( !($this->Result==false) && $this->IsPrint==true){ ?>
 <div id="BarcodeContainer" align="center">
 	<div>
-		<img src='<?php echo jURL::Root();?>/barcode?number=<?php echo  $this->Cotag;?>&width=3&height=100&font=18'>
+		<?php $printURL= jURL::Root()."/barcode?number=".urlencode($this->Cotag)."&width=3&height=100&font=18";?>
+		<img src='<?php echo $printURL;?>'>
 	</div>
 </div>
 <?php }?>

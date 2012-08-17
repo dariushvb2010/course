@@ -21,9 +21,11 @@ class CotagTransferToarchiveController extends JControl
 				$MailID=$_POST['MailID']*1;
 			else 
 				$MailID=$_GET['MailID']*1;
+			
 			$Mail=ORM::Find("MailGive", $MailID);
 			if(!$this->SecurityCheck($Mail))
 				return $this->Present();
+			
 			$this->Handler=new HandleTransferCotagbookSingle("Give","CotagBook","Archive", $Mail);
 		}
 		elseif(isset($_POST['Search']))

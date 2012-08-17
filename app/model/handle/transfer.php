@@ -245,7 +245,7 @@ abstract class HandleTransfer
 			{
 				$s="checked='checked'";
 			}
-			return "<input type='checkbox' name='Cotag[]' value='".$D->Cotag()."' class='item' {$s}/>";
+			return "<input type='checkbox' name='Cotag[]' value='{$D->File()->Gatecode()}-{$D->File()->Cotag()}' class='item' {$s}/>";
 		}
 		else 
 			return $v;

@@ -5,7 +5,7 @@ class ReviewMainController extends JControl
 	{
 		j::Enforce("Reviewer");
 		$Error=array();
-		$Cotag=$_REQUEST['Cotag']*1;
+		$Cotag=$_REQUEST['Cotag'];
 		
 		if(count($_POST))
 		{

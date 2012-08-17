@@ -54,7 +54,7 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	if($H->CreateForm)
 		$H->CreateForm->PresentHTML();
 	?>
-	<!-- --------------------------main form of the mail -->
+	<!-- main form of the mail -->
 	<?php if($H->MainForm):?>
 			<div class="mainform" ><?php 
 			ViewMailPlugin::SingleShow($H->Mail, "float:left;",$H->Action());
@@ -84,17 +84,27 @@ static function Present(BaseViewClass $View, $Title="ارسال اظهارنام
 	function Select(Cotag)
 	{
 		res=false;
-		td=$("table.autolist td[Header='Cotag']");
-		$.each(td,function(i,n){
-			MyCotag=$(this).html();
-			if(MyCotag==Cotag)
-			{
-				sibs=$(this).siblings("td[header=Select]");
-				check=sibs.children("input");
-				check.attr('checked','checked');
-				res=true;				
+		//td=$("table.autolist td[Header='Cotag']");
+		//$.each(td,function(i,n){
+		//	MyCotag=$(this).html();
+		//	if(MyCotag==Cotag)
+		//	{
+		//		sibs=$(this).siblings("td[header=Select]");
+		//		check=sibs.children("input");
+		//		check.attr('checked','checked');
+		//		res=true;				
+		//	}
+		//});
+			var myselect=".item[value='"+<?php echo "'".GateCode."-'";?>+Cotag+"']";
+			if ($(myselect).length) {
+				$(myselect).attr('checked', true);
+				res=true;
 			}
-		});
+			var myselect=".item[value='"+Cotag+"']";
+			if ($(myselect).length) {
+				$(myselect).attr('checked', true);
+				res=true;
+			}
 		return res;
 	}
 	function ShowResult(res)

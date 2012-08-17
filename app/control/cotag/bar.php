@@ -3,7 +3,11 @@ class CotagBarController extends JControl
 {
 	function Start()
 	{
-		$this->PersianCotag=$this->gNumberCallBack_faIR($_GET['cotag']);
+		if(b::CotagValidation($_GET['cotag'])){			
+			$Cotag=$_GET['cotag'];
+		}
+		$this->PersianCotag=$this->gNumberCallBack_faIR($Cotag);
+		$this->cotag=$Cotag;
 		if(!isset($_GET['chk']))
 		{
 			$this->BarePresent();	

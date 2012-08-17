@@ -76,6 +76,7 @@ $(function(){
 	$("input[name='add']").click(function (){
 		x=$("input[name='Cotag']").val();
 		$(".item[value='"+x+"']").attr('checked', true);
+		$(".item[value='"+<?php echo "'".GateCode."-'";?>+x+"']").attr('checked', true);
 		$("form input[name='Cotag']").val('');
 		$("form input[name='Cotag']").focus();
 		return false;

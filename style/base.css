@@ -83,6 +83,7 @@ a:HOVER {
 	margin-right:15px;
 }
 .clear{clear: both;}
+input[type=text]{direction: ltr; text-align: right;}
 .autoform input[type=text]{text-align:center;}
 .autolist, .autolistprint{
 	-moz-border-radius:6px;
@@ -126,11 +127,12 @@ div#top>div#http {float:right;}
 
 /*----------------- V CLASS----------------------*/
 span.v-cotag{
-	
+	direction: ltr;
 	margin: 0 2px;
 	padding: 0 3px;
 	border-radius: 3px;
 	font-weight:bold;
+	
 }
 span.v-red{
 	color: maroon;

@@ -8,7 +8,8 @@ class b
 	const file_initial_state = 0;
 	const file_initial_class = 0;
 	const upload_folder_root="../../../upload/";
-	const Cotag_jsPattern="/^0{0,2}\d{7}$/";
+	//const Cotag_jsPattern="/^0{0,2}\d{7}$/";
+	const Cotag_jsPattern="/^(\d{2,6}-)?[1-9]?\d{6}$/";
 
 	static function upload_folder_relative_from_japp()
 	{
@@ -64,22 +65,12 @@ class b
 	public static function CotagValidation($Cotag)
 	{
 		$Cotag=strval($Cotag);
-		$pattern="/\A[\d{1,4}-]{0,1}[1-9]{1}\d{".(self::CotagLength-1)."}\z/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
+		//$pattern="/^(\d{2,6}-)?[1-9]?\d{".b::CotagLength-1."}$/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
+		$pattern="/^(\d{2,6}-)?[1-9]?\d{6}$/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
 		$res=preg_match($pattern,$Cotag);
 		return $res==0 ? false : true;
 	}
-	/**
-	 * returns an integer value of $cotag
-	 * @param string_or_int $cotag
-	 * @return int_or_bool {int if cotag is validated} {false if cotag is not validated}
-	 */
-	public static function BakeCotag($rawCotag)
-	{
-		if(self::CotagValidation($rawCotag))
-			return $rawCotag*1;
-		else
-			return false;
-	}
+	
 	static public function __Initialize ()
 	{
 	}

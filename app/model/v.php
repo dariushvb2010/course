@@ -75,9 +75,32 @@ class v
 	 */
 	public static function cuc($cot,$attr='')
 	{
-		$classes=array('v-cotag', 'v-blue', 'v-big');
-		$ClassStr=implode(' ',$Classes);
-		//if ($attrib)
+		$attr=explode(',',$attr);
+		$attrClasses=array(
+				'Cb'=>'v-blue',
+				'Cg'=>'v-green',
+				'Sb'=>'v-big',
+				);
+		
+		$link=false;
+		$classes=array('v-cotag');
+		foreach ($attr as $a){
+			if(array_key_exists($a, $attrClasses)){
+				$classes[]=$attrClasses[$a];
+			}else{
+				switch ($a) {
+					case 'link':
+						$link=true;
+					break;
+				}
+			}
+		}
+		
+		$ClassStr=implode(' ',$classes);
+
+		if($link){
+			$cot=self::link($cot,SiteRoot."/report/progresslist?Cotag=".$cot);
+		}
 		return "<span class='$ClassStr'>$cot</span>";
 	}
 	

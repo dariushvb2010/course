@@ -13,7 +13,7 @@
 }
 </style>
 <div id='barcode'>
-	<img src='<?php echo jURL::Root()."/barcode?number=".$_GET["cotag"]."&width=3&height=100&font=18"?>'   />
+	<img src='<?php echo jURL::Root()."/barcode?number=".urlencode($this->cotag)."&width=3&height=100&font=10"?>'   />
 	
 </div>
 

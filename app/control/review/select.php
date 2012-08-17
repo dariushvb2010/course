@@ -28,6 +28,7 @@ class ReviewSelectController extends JControl
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
 		$al->ObjectAccess=true;
+		$al->SetHeader('GateCode', 'کد گمرک',true);
 		$al->SetHeader('assignCreateTimestamp', 'زمان تخصیص',true);
 		$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
 		$al->SetFilter(array($this,"myfilter"));
@@ -57,7 +58,11 @@ class ReviewSelectController extends JControl
 		}
 		elseif($k=='Cotag')
 		{
-			return "<a class='link_but' href='./?Cotag={$D->Cotag()}'>{$D->Cotag()}</a>";
+			return "<a class='link_but' href='./?Cotag={$D->Gatecode()}-{$D->Cotag()}'>{$D->Cotag()}</a>";
+		}
+		elseif($k=='GateCode')
+		{
+			return $D->GateCode();
 		}
 		else
 		{

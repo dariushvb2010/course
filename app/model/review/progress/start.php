@@ -112,8 +112,8 @@ class ReviewProgressStartRepository extends EntityRepository
 	public function CancelCotag($Cotag)
 	{
 		$ret = array(); // the return value
-		$Cotag = b::BakeCotag($Cotag);
-		if($Cotag == false)
+
+		if(b::CotagValidation($Cotag) == false)
 		{
 			$ret['result'] = false;
 			$ret['message']=v::Ecnv();

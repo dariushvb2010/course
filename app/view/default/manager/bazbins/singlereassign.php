@@ -29,7 +29,7 @@ h3{
 <h1><img src="/img/h/h1-cancelassign-50.png"/>
 مدیریت تخصیص</h1>
 <p>وارد کردن توضیحات الزامی است.</p>
-<!-- ----------------------------------------cancel assign------------- -->
+<!-- ***********************cancel assign*********************** -->
 <h3>لغو تخصیص اظهارنامه</h3>
 <?php if (isset($_POST['CancelAssign']))
 ViewResultPlugin::Show($this->CancelResult,$this->CancelError);
@@ -37,7 +37,7 @@ $this->CancelForm->presentHTML();
 ?>
 
 <br/>
-<!-- ----------------------------------------reassign----------------- -->
+<!-- ***********************reassign*********************** -->
 <h3>تخصیص مجدد اظهارنامه</h3>
 <?php if (isset($_POST['Reassign']))
 ViewResultPlugin::Show($this->ReassignResult,$this->ReassignError);

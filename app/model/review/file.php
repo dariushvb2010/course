@@ -227,13 +227,27 @@ class ReviewFile
     {
     	$this->CreateTimestamp=time();
     	$this->FinishTimestamp=0;
-		$this->Cotag=$Cotag;    		
     	$this->Progress= new ArrayCollection();
     	$this->Alarm=new ArrayCollection();
     	$this->Class=b::file_initial_class;
-    	$this->Gatecode=GateCode;
     	$this->State=b::file_initial_state;
+		if($Cotag){
+			$g=$this->ParseCotag($Cotag);
+			if(count($g)==2){
+	    		$this->Cotag=$g[1];    		
+	    		$this->Gatecode=$g[0];
+			}
+		}
     	
+    }
+    
+    private function ParseCotag($Cotag){
+    	$inpAr=explode('-',$Cotag);
+    	if (count($inpAr)==2){
+    		return array($inpAr[0],$inpAr[1]);
+    	}else{
+    		return array(GateCode,$inpAr[0]);
+    	}
     }
     
     public function Finish()

@@ -79,7 +79,7 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 
 <form id="formedit" method="post">
 	<div>
-		<!-- --------------------------fieldlist----------- -->
+		<!-- ***********************fieldlist*********************** -->
 		<div id="fieldlist" class="gradient-back">
 			<?php
 			if (count($this->AllFields))
@@ -93,7 +93,7 @@ div.fieldelement{ display:inline-block; margin: 4px 6px; padding:0 10px; cursor:
 				}
 			} 
 			?>
-		</div><!-- ---------------------------------------- -->
+		</div><!-- ********************************************** -->
 			
 		<!-- Gets replaced with TinyMCE, remember HTML in a textarea should be encoded -->
 		<input type="hidden" name="ID" value="<?php echo $this->Template->ID();?>">

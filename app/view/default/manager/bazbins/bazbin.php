@@ -26,7 +26,7 @@ ViewResultPlugin::Show($this->Result,$this->Error);
 <?php }	?>
 
 
-<!-- --------------------------------------List of Assigned Files-------------- -->
+<!-- ***********************List of Assigned Files***********************  -->
 <h3>اظهارنامه های نزد کارشناس</h3>
 <?php if (count($this->MyUnreviewedFiles)) {	?>
 	<span style='margin-right: 100px; float: right;'>
@@ -49,4 +49,4 @@ ViewResultPlugin::Show($this->Result,$this->Error);
 				$(".item").attr("checked",$("#SelectAll").attr("checked"));
 			});
 </script>
-<!-- ----------------------------------L O A F--------------------------------- -->
+<!-- ***********************L O A F*********************** -->

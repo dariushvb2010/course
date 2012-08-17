@@ -4,16 +4,17 @@ class ArchiveAssignGroupController extends JControl
 	function Start()
 	{
 		j::Enforce("Archive");
-		
+
 		if (count($_POST['item']))
 		{
 			foreach($_POST['item'] as $key=>$value)
 			{
 				$t=b::GetFile($value);
 				if($t)
-					$myfiles[]=$t[0];
+					$myfiles[]=$t;
 				else 
 					$Error[]=v::Ecnf($value);
+				
 			}
 			$this->Files=$myfiles;
 			if (!$this->Files or count($this->Files)==0)

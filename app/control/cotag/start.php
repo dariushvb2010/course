@@ -32,7 +32,7 @@ class CotagStartController extends JControl
 				}
 				else
 				{
-					$this->Result = " اظهارنامه با شماره کوتاژ ".v::bgc($Cotag)." با موفقیت وصول گردید. ";
+					$this->Result = " اظهارنامه با شماره کوتاژ ".v::cuc($Cotag,'Sb,Cg,link')." با موفقیت وصول گردید. ";
 				}
 			}else{
 				$Error[]="";

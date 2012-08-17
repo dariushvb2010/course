@@ -28,6 +28,7 @@ class ReviewSayokController extends JControl
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
 		$al->ObjectAccess=true;
+		$al->SetHeader('GateCode', 'کد گمرک',true);
 		$al->SetHeader('assignCreateTimestamp', 'زمان تخصیص',true);
 		$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
 		$al->SetHeader('error', '',true);
@@ -52,18 +53,22 @@ class ReviewSayokController extends JControl
 		elseif($k=='assignCreateTimestamp')
 		{
 			$c=new CalendarPlugin();
-			/*if($D->LLP('Assign'))
+			if($D->LLP('Assign'))
 				return "<span dir='ltr'>{$c->JalaliFullTime($D->LLP('Assign')->CreateTimestamp())}</span>";
-			else*/ 	
+			else 	
 				return '-';
 		}
 		elseif($k=='Select')
 		{
-			return "<input type='checkbox' class='item' value='".$D->Cotag()."' name='item[]' />";
+			return "<input type='checkbox' class='item' value='{$D->Gatecode()}-{$D->Cotag()}' name='item[]' />";
 		}
 		elseif($k=='Cotag')
 		{
-			return "<a class='link_but' href='./?Cotag={$D->Cotag()}'>{$D->Cotag()}</a>";
+			return "<a class='link_but' href='./?Cotag={$D->Gatecode()}-{$D->Cotag()}'>{$D->Cotag()}</a>";
+		}
+		elseif($k=='GateCode')
+		{
+			return $D->GateCode();
 		}
 		elseif($k=='error')
 		{

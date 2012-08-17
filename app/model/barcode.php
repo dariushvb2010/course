@@ -86,8 +86,12 @@ class BarcodeModel extends JModel
 		for ($i=0;$i<strlen($data);++$i)
 			imagefilledrectangle($img,$i*$barWidth,0,($i+1)*$barWidth-1, $activeHeight, $data[$i]?$black:$white);
 		//($width-strlen($Number)*$fontSize)/2
-		imagettftext($img, $fontSize, 90, $width+30, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $Number);
-		imagettftext($img, $fontSize-2, 90, $width+60, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $c->JalaliFromTimestamp(Time()));
+		$Numbers=explode('-',$Number);
+		if(count($Numbers)>1){
+			imagettftext($img, $fontSize, 90, $width+35, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $Numbers[1]);
+		}
+		imagettftext($img, $fontSize, 90, $width+20, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $Numbers[0]);
+		imagettftext($img, $fontSize-2, 90, $width+50, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $c->JalaliFromTimestamp(Time()));
 //		imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text)
 		imagejpeg($img);
 	}
