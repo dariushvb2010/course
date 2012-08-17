@@ -6,7 +6,7 @@ class CotagCancelController extends JControl
 		j::Enforce("CotagBook");
 		if (count($_POST))
 		{
-			$Cotag=$_POST['Cotag']*1;
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 			$Res=ORM::Query("ReviewProgressStart")->CancelCotag($Cotag);
 			if(is_array($Res))
 			{

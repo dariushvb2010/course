@@ -17,7 +17,7 @@ class ReportCotaginfoController extends JControl
 		if (count($_POST))
 		{
 
-			$Cotag=$_POST['Cotag'];
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 			//			$r=j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag));
 			//			$r=j::CallService("http://192.168.0.20/customs/vehicle_permit.asmx", "SearchBy_Kootaj",array("kootaj"=>($Cotag."")));
 			try {

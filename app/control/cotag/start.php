@@ -21,7 +21,7 @@ class CotagStartController extends JControl
 // 			if($startGroup==null)
 // 				throw new Exception("startGroup cannot be null. we dont have a group name [".$gname."]");
 			$IsPrint=isset($_POST['print']) ? true : false;
-			$Cotag=$_POST['Cotag'];
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 			$this->Cotag=$Cotag;
 		
 			if(empty($Error)){

@@ -5,7 +5,7 @@ class ManagerRemoveController extends JControl
 	{
 		j::Enforce("MasterHand");
 
-		$Cotag=$_POST['Cotag']*1;
+		$Cotag=b::CotagFilter($_POST['Cotag']);
 		$File=b::GetFile($Cotag);
 		$LLP=ORM::Query("ReviewFile")->LastLiveProgress($Cotag);
 		

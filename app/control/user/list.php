@@ -12,7 +12,7 @@ class UserListController extends JControl
 		}
 		else if ($_REQUEST['Cotag'])
 		{
-			$Cotag=$_POST['Cotag']*1;
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 		}
 		
 		$AllUsers= ORM::Query(new MyUser())->GetAll();

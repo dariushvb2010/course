@@ -12,7 +12,7 @@ class ReviewSelectController extends JControl
 		}
 		else if ($_REQUEST['Cotag'])
 		{
-			$Cotag=$_POST['Cotag']*1;
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 		}
 		if($Cotag>0){
 			$Res=ORM::Query("ReviewProgressReview")->IsAddable($Cotag);

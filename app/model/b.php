@@ -71,6 +71,15 @@ class b
 		return $res==0 ? false : true;
 	}
 	
+	public static function CotagFilter($Cotag)
+	{
+		$Cotag=trim($Cotag);
+		if(count(explode('-',$Cotag))==1){
+			$Cotag=$Cotag*1;
+		}
+		return $Cotag;
+	}
+	
 	static public function __Initialize ()
 	{
 	}

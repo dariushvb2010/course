@@ -14,7 +14,7 @@ class CotagPrintController extends JControl
 			$FYear=$_POST['FYear'];
 			$FMonth=$_POST['FMonth'];
 			$FDay=$_POST['FDay'];
-			$Cotag=$_POST['Cotag']*1;
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 			$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
 			$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
 			$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]);

@@ -6,7 +6,7 @@ class ArchiveRegisterController extends JControl
 		j::Enforce("Archive");
 		if(isset($_POST["register"]))
 		{
-			$Cotag = $_POST["Cotag"]*1;
+			$Cotag = $_POST["Cotag"];
 			$res=ORM::Query("ReviewProgressRegisterarchive")->AddToFile($Cotag);
 			if(is_string($res))
 				$Error[]=$res;

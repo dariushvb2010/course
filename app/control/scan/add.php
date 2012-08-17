@@ -6,7 +6,8 @@ class ScanAddController extends JControl
                 $this->title="اضافه کردن عکس";
 		if (count($_POST))
 		{
-			$this->cotag=$_POST['Cotag'];
+			$Cotag=b::CotagFilter($_POST['Cotag']);
+			$this->cotag=$Cotag;
 			$sid2=session_id();
                         $this->action='add';
                         

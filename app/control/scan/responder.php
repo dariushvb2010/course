@@ -117,7 +117,7 @@ class ScanResponderController extends JControl
 		}
 		else
 		{
-			$Cotag=$_POST['cotag'];
+			$Cotag=b::CotagFilter($_POST['Cotag']);
                         $action=$_POST['action'];
                         if($action == 'create')
                         {

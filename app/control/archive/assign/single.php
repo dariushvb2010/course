@@ -8,7 +8,7 @@ class ArchiveAssignSingleController extends JControl
 		{
 			if (isset($_POST['Cotag']))
 			{
-				$Cotag=$_POST['Cotag'];
+				$Cotag=b::CotagFilter($_POST['Cotag']);
 				$File=b::GetFile($Cotag);
 				$AssignResult=ORM::Query("ReviewProgressAssign")->AddToFile($File);
 				if(is_string($AssignResult))
@@ -20,9 +20,8 @@ class ArchiveAssignSingleController extends JControl
 					$this->Reviewer=$AssignResult->Reviewer();
 				}
 				
+				$this->Cotag=$Cotag;
 			} 
-				
-			$this->Cotag=$_POST['Cotag'];
 		}
 		$this->Error=$Error;
 		if (count($Error))

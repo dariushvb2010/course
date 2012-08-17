@@ -35,7 +35,7 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 			$FDay=$_POST['FDay'];
 			$FHour=$_POST['FHour'];
 			$FMin=$_POST['FMin'];
-			$Cotag=$_POST['Cotag']*1;
+			$Cotag=b::CotagFilter($_POST['Cotag']);
 			$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
 			$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
 			$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
