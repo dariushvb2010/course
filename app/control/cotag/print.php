@@ -32,7 +32,6 @@ class CotagPrintController extends JControl
 			{
 				
 //				$res=ORM::Query(new ReviewProgressStart())->Prints($StartTimestamp,$FinishTimestamp);
-//				var_dump($StartTimestamp,$FinishTimestamp);
 				$this->Redirect("./barcodes?st=".$StartTimestamp."&ft=".$FinishTimestamp);
 			}
 		}

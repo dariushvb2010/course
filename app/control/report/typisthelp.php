@@ -123,7 +123,7 @@ class ReportTypisthelpController extends JControl
 				else
 				$ComArr[]=$Commodity;
 				foreach ($ComArr as $O) {
-					//				var_dump($O);
+
 					$arr2[]=array(
 									"Value"=>$O->Commodity->Name);
 					$arr2[]=array(

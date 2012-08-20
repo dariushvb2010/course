@@ -132,7 +132,7 @@ class ReportCotaginfoController extends JControl
 				else
 				$ComArr[]=$Commodity;
 				foreach ($ComArr as $O) {
-					//				var_dump($O);
+
 					$arr2[]=array(
 									"Value"=>$O->Commodity->Name);
 					$arr2[]=array(
@@ -303,7 +303,7 @@ class ReportCotaginfoController extends JControl
 				$ExtraArr[]=$ExtraObj;
 				foreach ($ExtraArr as $O)
 				{
-					//					var_dump($O);
+
 					$arr3[]= array(
 									"Value"=>$O->FishNo);
 					$arr3[]= array(
@@ -313,7 +313,6 @@ class ReportCotaginfoController extends JControl
 
 				}
 				$al2=new AutolistPlugin($arr3,null,"Select");
-				//				var_dump($arr3);
 				$al2->SetHeader('Value', 'مشخصات قبض درآمد');
 				$al2->HasLeftData=true;
 				$al2->LeftData=$arrL;

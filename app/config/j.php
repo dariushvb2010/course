@@ -30,9 +30,6 @@ class jExtend
 			$Query=substr($Query,0,$p-1);
 			if ($Offset) $Offset=$Offset[0];
 			$Limit=$Limit[0];
-// 			var_dump($Query);
-// 			var_dump($Offset);
-// 			var_dump($Limit);
 		}
 		
 		

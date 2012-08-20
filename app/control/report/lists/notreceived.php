@@ -1,5 +1,5 @@
 <?php
-class ReportNotrecievedController extends JControl
+class ReportListsNotreceivedController extends JControl
 {
 	function Start()
 	{

@@ -20,7 +20,7 @@ class AutoformPluginTest extends JTest
 		if($Reviewers)
 		foreach($Reviewers as $R)
 		{
-			$W=ORM::Query("MyUser")->AssignedReviewableFileCount($R);
+			$W=$R->AssignedReviewableFileCount();
 			$W=100-$W;
 			if($W<5)
 			$W=5;

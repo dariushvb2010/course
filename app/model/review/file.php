@@ -316,24 +316,24 @@ class ReviewFileRepository extends EntityRepository
 			return null;
 	}
 	/**
-	*
-	* @param integer or reviewfile $Cotag
-	*/
-	public function LastLiveProgress($Cotag,$Type='all',$IsProcess=false)
+	 * 
+	 * @param ReviewFile $File
+	 * @param unknown_type $Type
+	 * @param Boolean $IsProcess
+	 */
+	public function LastLiveProgress($File,$Type='all',$IsProcess=false)
 	{
-		if($Cotag instanceof ReviewFile)
-		{
-			$Cotag=$Cotag->Cotag();
-		}
 		if($IsProcess) $T="Process";
 		else  $T="Progress";
 		if (strtolower($Type)!=="all")
-			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
-			AND P INSTANCE OF Review{$T}{$Type} 
-			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
+			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F 
+						WHERE P.Dead=0 AND F=?
+						AND P INSTANCE OF Review{$T}{$Type} 
+						ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$File);
 		else 
-			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F WHERE P.Dead=0 AND F.Cotag= ?
-			ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$Cotag);
+			$r=j::ODQL("SELECT P FROM ReviewProgress AS P join P.File AS F 
+						WHERE P.Dead=0 AND F=?
+						ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1 ",$File);
 		return $r[0];
 	}
 
@@ -346,21 +346,18 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function NextLiveProgress($Progress,$Type='all',$IsProcess=false)
 	{
-		if($Cotag instanceof ReviewFile)
-		{
-			$Cotag=$Progress->File()->Cotag();
-		}
+		$File=$Progress->File();
 		
 		if($IsProcess) $T="Process";
 		else  $T="Progress";
 		
 		
 		$Query="SELECT P FROM ReviewProgress AS P join P.File AS F 
-				WHERE P.Dead=0 AND F.Cotag= ? AND P.CreateTimestamp>?".
+				WHERE P.Dead=0 AND F=? AND P.CreateTimestamp>?".
 				(strtolower($Type)!=="all"?"AND P INSTANCE OF Review{$T}{$Type}":"").
 				"ORDER BY P.CreateTimestamp DESC,P.ID DESC LIMIT 1";
 		
-		$r=j::ODQL($Query,$Cotag,$Progress->CreateTimestamp());	 
+		$r=j::ODQL($Query,$File,$Progress->CreateTimestamp());	 
 		if($r)
 			return $r[0];
 		else
@@ -380,7 +377,24 @@ class ReviewFileRepository extends EntityRepository
 	{
 		$states=FsmGraph::Name2State('Cotag');
 		$states=implode(',', $states);
-		$r=j::DQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) 
+					ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
+		return $r;
+	}
+	
+	/**
+	 لیست فایل ها و اخرین ‍فرایند هر کدام برای استفاده در لیست کوتاژ
+	 *
+	 */
+	public function CotagList($Offset,$Limit,$Sort,$SortOrder,$gateCode='',$operation='=')
+	{		
+		if($gateCode!=''){
+			$gateCodeStr=" WHERE F.Gatecode".$operation.$gateCode;
+		}
+		//$r=j::ODQL("SELECT P,F FROM ReviewFile AS F LEFT JOIN F.Progress AS P WHERE P IS NULL OR P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F" 
+				.($gateCode==''?'':$gateCodeStr)
+				." ORDER BY F.{$Sort} {$SortOrder} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
 	public function GetOnlyProgressStartObject($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
@@ -401,12 +415,12 @@ class ReviewFileRepository extends EntityRepository
 								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
-	public function GetFilesWithLastProgress($Progress,$Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
+	public function GetFilesWithLastProgress($ProgressName,$Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
 								WHERE
 									P.ID=(SELECT MAX(P3.ID) FROM ReviewProgress AS P3 WHERE P3.File=F)
-									 AND P INSTANCE OF ReviewProgress{$Progress}   
+									 AND P INSTANCE OF ReviewProgress{$ProgressName}   
 								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
@@ -456,12 +470,12 @@ class ReviewFileRepository extends EntityRepository
 	 * @param unknown_type $From
 	 * @param unknown_type $Limit
 	 */
-	public static function UnassignedFiles($From=0,$Limit=0)
+	public static function UnassignedFiles($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
 		$states=FsmGraph::Name2State('Assignable');
 		$states=implode(',', $states);
-		$r=j::DQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
-					ORDER BY F.Cotag LIMIT {$From},{$Limit}");
+		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
+					ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
 
@@ -507,19 +521,13 @@ class ReviewFileRepository extends EntityRepository
 	 * @param unknown_type $start
 	 * @param unknown_type $end
 	 */
-	public function RecievedInRange($start=0,$end=0)
+	public function RecievedInRange($start=0,$end=0,$GateCode='')
 	{
-		$r=j::DQL("SELECT F.Cotag FROM ReviewFile AS F  WHERE  F.CreateTimestamp > ?  AND F.Cotag BETWEEN {$start} AND {$end}",time()-(365*24*60*60));
-		return $r;
-	}
-	/**
-		لیست فایل ها و اخرین ‍فرایند هر کدام برای استفاده در لیست کوتاژ
-	 * 
-	 */
-	public function CotagList($Offset,$Limit,$Sort,$SortOrder)
-	{
-		$r=j::ODQL("SELECT P,F FROM ReviewFile AS F LEFT JOIN F.Progress AS P WHERE P IS NULL OR P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
-			ORDER BY F.{$Sort} {$SortOrder} LIMIT {$Offset},{$Limit}");
+		if($GateCode=='')
+			$GateCode=GateCode;
+		
+		$r=j::DQL("SELECT F.Cotag FROM ReviewFile AS F
+				WHERE  F.CreateTimestamp > ?  AND F.Cotag BETWEEN {$start} AND {$end} AND F.Gatecode=?",time()-(365*24*60*60),$GateCode);
 		return $r;
 	}
 	
@@ -532,9 +540,12 @@ class ReviewFileRepository extends EntityRepository
 	}
 	
 	
-	public function CotagCount()
+	public function CotagCount($GateCode='')
 	{
-		$r=j::DQL("SELECT COUNT(F) AS Result FROM ReviewFile AS F");
+		if($GateCode=='')
+			$GateCode=GateCode;
+		
+		$r=j::DQL("SELECT COUNT(F) AS Result FROM ReviewFile AS F WHERE F.Gatecode=?",$GateCode);
 		return $r[0]['Result'];
 		
 	}
@@ -550,7 +561,7 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function FilesInTimeRange($TimeStart,$TimeEnd,MyUser $User)
 	{
-		
+		//state name='CotagStart'
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress P 
 						WHERE P INSTANCE OF ReviewProgressStart AND F.State=2 AND P.CreateTimestamp BETWEEN ? AND ? ORDER BY F.Cotag",$TimeStart,$TimeEnd);
 		return $r;

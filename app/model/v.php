@@ -99,7 +99,7 @@ class v
 		$ClassStr=implode(' ',$classes);
 
 		if($link){
-			$cot=self::link($cot,SiteRoot."/report/progresslist?Cotag=".$cot);
+			$cot=self::CotagLink($cot,$cot);
 		}
 		return "<span class='$ClassStr'>$cot</span>";
 	}
@@ -145,6 +145,17 @@ class v
 	static function link($label='',$href='')
 	{
 		$t='<a href="'.$href.'">'.$label.'</a>';
+		return $t;
+	}
+
+	/**
+	 * 'a' tag
+	 * link with href and label
+	 * @param integer_string $Cot
+	 */
+	static function CotagLink($label='',$Cotag='')
+	{
+		$t=self::link($label,SiteRoot."/report/progresslist?Cotag=".$Cotag);
 		return $t;
 	}
 	

@@ -291,12 +291,28 @@ class MyUser extends Xuser
 	}
 	public static function CurrentUser()
 	{
-		$s = ORM::Find("MyUser",j::UserID());
+		return self::getUser(j::UserID());
+	}
+	
+	public static function getUser($UserID)
+	{
+		$s = ORM::Find("MyUser",$UserID);
 		return $s;
 	}
 	
 	function RecentProgresses($count){
 		return ORM::Query($this)->RecentProgresses($this,$count);
+	}
+	
+	/**
+	 * @return array of ReviewFile
+	 */
+	function AssignedReviewableFile(){
+		return ORM::Query(new MyUser)->AssignedReviewableFile($this);
+	}
+
+	function AssignedReviewableFileCount(){
+		return count($this->AssignedReviewableFile());
 	}
 }
 
@@ -334,7 +350,7 @@ class MyUserRepository extends EntityRepository
 		if($Reviewers)
 		foreach($Reviewers as $R)
 		{
-			$W=$this->AssignedReviewableFileCount($R);
+			$W=$R->AssignedReviewableFileCount();
 			$W=100-$W;
 			if($W<5)
 				$W=5;
@@ -360,10 +376,6 @@ class MyUserRepository extends EntityRepository
 		else
 			return $r[0];
 		
-	}
-	public function AssignedReviewableFileCount($Reviewer)
-	{
-		return count($this->AssignedReviewableFile($Reviewer));
 	}
 
 	public function Reviewers($State1="*",$State2=".")
@@ -397,6 +409,11 @@ class MyUserRepository extends EntityRepository
 		return $c[0][1];
 	}
 	
+	/**
+	 * 
+	 * @param MyUser $Reviewer
+	 * @return array of ReviewFile
+	 */
 	public function AssignedReviewableFile($Reviewer)
 	{
 		$states=FsmGraph::Name2State('reviewing');

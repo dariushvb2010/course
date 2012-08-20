@@ -69,7 +69,7 @@ form h3 {
 		$this->al->PresentForPrint();
 		
 ?>
-<a href=./notrecieved>لیست کوتاژ های وصول نشده یک بازه جدید</a>
+<a href=./notreceived>لیست کوتاژ های وصول نشده یک بازه جدید</a>
 	
 <?php } 	else { ?>
 		<form method='post'>

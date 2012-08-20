@@ -341,7 +341,7 @@ class ApplicationController extends BasejFrameworkApplicationController
 	 * @param Boolean $System = false, if set to true, system controllers would be invoked
 	 * @return true on successful controller call, false otherwise
 	 */
-	function StartController($ControllerModule, $System = false)
+	function StartController($ControllerModule,$requestAction='', $System = false)
 	{
 		//Loading controller file
 		if ($System)
@@ -390,12 +390,21 @@ class ApplicationController extends BasejFrameworkApplicationController
 		if (class_exists ( $Classname ))
 		{
 			$control = new $Classname ( $this );
-			if (method_exists ( $control, "Start" ))
-				return $control->Start ();
-			elseif (method_exists ( $control, "Main" ))
-				return $control->Main ();
-			else
-				return false;
+
+			if($requestAction==''){
+				if (method_exists ( $control, "Start" ))
+					return $control->Start ();
+				elseif (method_exists ( $control, "Main" ))
+					return $control->Main ();
+				else
+					return false;
+			}else{
+				$requestAction.="Action";
+				if (method_exists ( $control,$requestAction))
+					return $control->{$requestAction}();
+				else
+					return false;
+			}
 		}
 		if (reg("jf/controller/ForceObjectOriented")) return false;
 		else true; //non OO controller
@@ -432,14 +441,27 @@ class ApplicationController extends BasejFrameworkApplicationController
 		//append .main as the default index page
 		if (substr ( $Request, strlen ( $Request ) - 1, 1 ) == constant ( "jf_jPath_Request_Delimiter" )) $Request .= j::Registry ( "jf/controller/DefaultApplicationInterface", "main" );
 		
+		//Extract Action From Request ANd Pure it
+		//there cant be mutiple '^' in request if was Request's Action wont be handled
+		//if there was only one action Will be Extracted
+		$Temp=explode('/^',$Request);
+		if (count($Temp)==2){
+			$Request=$Temp[0];
+			$ActionName=$Temp[1];
+		}else{
+			$ActionName='';
+		}
+		
 		//processed and fixed request
 		$this->RequestProcessed = $Request;
+		
 		
 		//get the module we need to load now
 		$this->RequestModule = $RequestedModule = new jpRequest2Module ( $Request );
 		$this->RequestModule = $RequestedModule= $RequestedModule->__toString();
 		//load the controller module 
-		if (! $x = $this->StartController ( $RequestedModule ))
+
+		if (! $x = $this->StartController ( $RequestedModule,$ActionName ))
 		{
 			//not found!
 			if (! headers_sent ()) # no output done, this check prevents controllers that don't return true to fail
@@ -459,7 +481,7 @@ $this->LoadCustomApplicationModule ( "config.page.application-interface-not-foun
 		
 		$this->RequestedModule = $RequestedModule = new jpRequest2Module ( $this->RequestRaw );
 		$this->RequestedModule = $RequestedModule =$RequestedModule->__toString();
-		if (! $this->StartController ( $RequestedModule, true ))
+		if (! $this->StartController ( $RequestedModule,'', true ))
 		{
 			if (! headers_sent ()) # no output done, this check prevents controllers that don't return true to fail
 $this->LoadCustomApplicationModule ( "config.page.system-interface-not-found", ".", false, array (

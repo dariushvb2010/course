@@ -3,7 +3,7 @@
 		font-size:small;
 	}
 	.ui-menu {
-	position:absolute;
+		position:absolute;
 	}
 </style>
 
@@ -426,15 +426,57 @@
 	<button class='mymenu' id='reportMenu'>گزارش‌</button>
 
 	<ul class='menu' style='width:160px;display: none;'>
-<?php if ( j::Check("CotagList")) :?>
 		<li>
-			<a href='/report/list'>
-				<span class='ui-icon-calculator ui-icon'></span>
-				 لیست کوتاژها
+			<a href='#'>
+				<span class='ui-icon-plusthick ui-icon'></span> 
+				لیست کوتاژها 
 			</a>
+			<ul class='menu'>
+				<?php if ( j::Check("CotagList")) :?>
+				<li>
+					<a href='/report/lists/list'>
+						<span class='ui-icon-calculator ui-icon'></span>
+						 لیست کوتاژ گمرک اصلی
+					</a>
+				</li>
+				<?php endif;?>
+				
+				<?php if ( j::Check("CotagList")) :?>
+				<li>
+					<a href='/report/lists/list/^Other'>
+						<span class='ui-icon-calculator ui-icon'></span>
+						 لیست کوتاژ ورودی گمرکات
+					</a>
+				</li>
+				<?php endif;?>
+				
+				<?php if ( j::Check("NotReceivedInCotagBook")) :?>
+				<li>
+					<a href='/report/lists/notreceived'>
+						<span class='ui-icon-grip-dotted-vertical ui-icon'></span>
+						وصول نشده های دفترکوتاژ
+					</a>
+				</li>
+				<?php endif;?>
+				
+				<?php if ( j::Check("AssignableList")) :?>
+				<li>
+					<a href='/report/lists/list/^Assignable'>
+						<span class='ui-icon-check ui-icon'></span> 
+						کوتاژهای قابل تخصیص
+					</a>
+				</li>
+				<?php endif;?>
+				<?php if ( j::Check("NotArchivedList")) :?>
+				<li>
+					<a href='/report/lists/list/^NotArchived'>
+						<span class='ui-icon-folder-collapsed ui-icon'></span>
+						وصول نشده های بایگانی
+					</a>
+				</li>
+				<?php endif;?>
+			</ul>
 		</li>
-<?php endif;?>
-
 <?php if ( j::Check("ProgressList")) :?>
 		<li>
 			<a href='/report/progresslist'>
@@ -459,38 +501,7 @@
 			</a>
 		</li>
 <?php endif;?>
-<?php if (j::UserID()>0) :?>
-		<li>
-			<a href='/report/userprogresslist'>
-				<span class='ui-icon-refresh ui-icon'></span> 
-				فعالیت های ثبت شده توسط شما
-			</a>
-		</li>
-<?php endif;?>
-<?php if ( j::Check("NotReceivedInCotagBook")) :?>
-		<li>
-			<a href='/report/notrecieved'>
-				<span class='ui-icon-grip-dotted-vertical ui-icon'></span>
-				وصول نشده های دفترکوتاژ
-			</a>
-		</li>
-<?php endif;?>
-<?php if ( j::Check("NotArchivedList")) :?>
-		<li>
-			<a href='/report/notarchived'>
-				<span class='ui-icon-folder-collapsed ui-icon'></span>
-				وصول نشده های بایگانی
-			</a>
-		</li>
-<?php endif;?>
-<?php if ( j::Check("AssignableList")) :?>
-		<li>
-			<a href='/report/assignable'>
-				<span class='ui-icon-check ui-icon'></span> 
-				کوتاژهای قابل تخصیص
-			</a>
-		</li>
-<?php endif;?>
+
 <?php if ( j::Check("ExitInfo")) :?>
 <li>
 			<a href='/report/cotaginfo'>
@@ -583,6 +594,14 @@
 		
 		</ul>
 	</li>
+		<?php if (j::UserID()>0) :?>
+		<li>
+			<a href='/report/userprogresslist'>
+				<span class='ui-icon-refresh ui-icon'></span> 
+				فعالیت های ثبت شده توسط شما
+			</a>
+		</li>
+		<?php endif;?>
 		<li>
 			<a href='/user/pass'>
 				<span class='ui-icon-key ui-icon'></span> 

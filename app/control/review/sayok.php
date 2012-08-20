@@ -20,7 +20,8 @@ class ReviewSayokController extends JControl
 		
 		ORM::Flush();
 		
-		$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile(j::UserID());
+		$CurrentUser=MyUser::CurrentUser();
+		$MyUnreviewedFiles=$CurrentUser->AssignedReviewableFile();
 		$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
 		$al->SetHeader('Select', 'انتخاب',true);

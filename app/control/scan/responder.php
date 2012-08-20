@@ -72,7 +72,6 @@ class ScanResponderController extends JControl
 				umask($old_umask);
 			}
 			if (!is_writable($folder)){
-				// 			var_dump(realpath(("../../upload/")));
 // 				echo  "Server error. Upload directory isn't writable.";
 				$result[]=array("isSuccess"=>false,
 								"Error"=>"خطا2");

@@ -23,7 +23,7 @@ class ManagerBazbinsBazbinController extends JControl
 			}else{
 				$this->ID=$_GET['id'];
 				$this->State=$my_reviewer->Enabled();
-				$this->CotagCount=ORM::Query(new MyUser)->AssignedReviewableFileCount($my_reviewer);
+				$this->CotagCount=$my_reviewer->AssignedReviewableFileCount();
 				$this->Name=$my_reviewer->getFullName();				
 			}
 		}		
@@ -68,8 +68,8 @@ class ManagerBazbinsBazbinController extends JControl
 		}
 		elseif($_GET['id']) //listing items
 		{
-		
-			$MyUnreviewedFiles=$this->Count=ORM::Query("MyUser")->AssignedReviewableFile($_GET['id']);
+			$AUser=MyUser::getUser($_GET['id']);
+			$MyUnreviewedFiles=$AUser->AssignedReviewableFile();
 			if($MyUnreviewedFiles){
 				$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));

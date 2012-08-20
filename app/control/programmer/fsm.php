@@ -37,7 +37,6 @@ class ProgrammerFsmController extends JControl
 		$al->ObjectAccess=true;
 		$al->Width="auto";
 		//$al->SetFilter(array($this,'myfilter'));
-		//var_dump($al);
 		$this->List=$al;
 		
 		$this->Error=$Error;

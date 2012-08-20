@@ -94,7 +94,7 @@ class ManagerBazbinsListController extends JControl
 		}
 		else if($k=="Count")
 		{
-			$c=ORM::Query(new MyUser)->AssignedReviewableFileCount($D);
+			$c=$D->AssignedReviewableFileCount();
 			if(!$c)
 				$c=0;
 			return $c;

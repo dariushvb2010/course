@@ -43,8 +43,8 @@ class ManagerBazbinsAssignedController extends JControl
 		}
 		elseif($_GET['id']) //listing items
 		{
-
-			$MyUnreviewedFiles=$this->Count=ORM::Query("MyUser")->AssignedReviewableFile($_GET['id']);
+			$AUser=MyUser::getUser($_GET['id']);
+			$MyUnreviewedFiles=$AUser->AssignedReviewableFile();
 			if($MyUnreviewedFiles){
 				$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));

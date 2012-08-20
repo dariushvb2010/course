@@ -21,7 +21,8 @@ class ReviewSelectController extends JControl
 			else
 				$this->Redirect("./?Cotag={$Cotag}");
 		}
-		$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile(j::UserID());
+		$CurrentUser=MyUser::CurrentUser();
+		$MyUnreviewedFiles=$CurrentUser->AssignedReviewableFile();
 		$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
 		$al->SetHeader('Cotag', 'کوتاژ',true);

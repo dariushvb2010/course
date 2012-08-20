@@ -7,7 +7,6 @@ class MainController extends BaseControllerClass
 	{
 		
 // 		echo b::CotagValidation(1234567);
-// 		var_dump(strval(123));
 // 		echo b::GenerateClassNum(248);
 		//file_put_contents("a.txt", "salam", FILE_APPEND | LOCK_EX);
 		
@@ -25,7 +24,6 @@ class MainController extends BaseControllerClass
 //$header .= "Organization: The organization\r\n";
 //$header .= "Content-Type: text/plain\r\n";
 
-//var_dump(mail("taram.mohammad@gmail.com", $subject, $message, $header));
 //
 //		$con=oci_connect("root", "root","192.168.0.1/ASY_DB");
 //		if (!$conn) {

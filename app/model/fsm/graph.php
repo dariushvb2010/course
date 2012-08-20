@@ -211,24 +211,32 @@ class FsmGraph extends JModel
 	static function PossibleProgresses($state){
 		$Graph=self::$StateGraph;
 		$ar2=array();
+		echo 'A';
 		foreach($Graph as $s=>$ar){
 			if( self::StateMatch($s, $state))
 			{
+				echo 'B';
 				foreach ($ar as $key=> $value){
+					echo 'C'.$key;
 					$c=self::GetProgressByName($key);
+					echo 'D';
 					$c->beginState=$state;
+					echo 'E';
 					$c->Name=$key;
 					$c->nxtState=self::$StateGraph[$state][$key];
+					echo 'F';
 					$ar2[$key]=$c;
 				}
 			}
 		}
 		
+				echo 'H';
 		return $ar2;
 	}
 	
 	static function GetProgressByName($name){
-		return new FileProgressclass(self::$ProcessList[$name]);
+		$a=self::$ProcessList[$name];
+		return new FileProgressclass($a);
 	}
 
 	

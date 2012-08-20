@@ -16,7 +16,8 @@ class ReviewEditselectController extends JControl
 			
 		}
 		
-		$MyUnreviewedFiles=$this->Count=ORM::Query(new MyUser)->AssignedReviewableFile(j::UserID());
+		$CurrentUser=MyUser::CurrentUser();
+		$MyUnreviewedFiles=$CurrentUser->AssignedReviewableFile();
 		
 		
 		$this->Count=count($MyUnreviewedFiles);
