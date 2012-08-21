@@ -1,7 +1,21 @@
 <?php 
 class FPlugin
 {
-
+        public static function hex2str($hex) {
+		for($i=0;$i<strlen($hex);$i+=2)
+			$str .= chr(hexdec(substr($hex,$i,2)));
+	
+		return $str;
+	}
+	public static function str2hex($string)
+	{
+		$hex='';
+		for ($i=0; $i < strlen($string); $i++)
+		{
+		$hex .= dechex(ord($string[$i]));
+		}
+		return $hex;
+	}
 	public static function RandomString($len=null, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 	{
 		$string = '';
