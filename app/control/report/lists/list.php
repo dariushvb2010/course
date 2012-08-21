@@ -52,6 +52,20 @@ class ReportListsListController extends JControl
 		$this->PrepareToShow($CotList);
 
 	}
+
+	function MoshkeldarAction()
+	{
+		//j::Enforce("AssignableList");
+		
+		$this->ParamFilter();
+
+		$this->HeadTitle="لیست اظهارنامه های مکاتباتی بدون کلاسه";
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query("ReviewFile")->FilesByStateName('review_notok','all',$Pagination);
+		
+		$this->PrepareToShow($CotList);
+
+	}
 	
 	function ParamFilter(){
 		if(count($_GET))

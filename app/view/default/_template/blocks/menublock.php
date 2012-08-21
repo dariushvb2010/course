@@ -358,6 +358,55 @@
 		
 	</ul>
 <?php endif;?>
+<?php //if (j::Check("Correspondence")) :?>
+	<button style="" class='mymenu' id='TypistMenu'>تایپیست</button>
+	<ul class='menu' style="display: none;">
+		<li>
+			<a href='#'>
+				<span class='ui-icon-plusthick ui-icon'></span> 
+				نگارش 
+			</a>
+			<ul class='menu'>
+				<li>
+					<a href='/typist/type/list'>
+						<span class='ui-icon-image ui-icon'></span> 
+						صف نگارش
+					</a>
+				</li>
+				
+				<li>
+					<a href='/typist/type/edit'>
+						<span class='ui-icon-image ui-icon'></span> 
+						ویرایش نگارش
+					</a>
+				</li>
+			</ul>
+		</li>
+
+		<li>
+			<a href='#'>
+				<span class='ui-icon-plusthick ui-icon'></span> 
+				قالب نگارش 
+			</a>
+			<ul class='menu'>
+				<li>
+					<a href='/typist/template/list'>
+						<span class='ui-icon-image ui-icon'></span> 
+						لیست قالب ها
+					</a>
+				</li>
+				
+				<li>
+					<a href='/typist/template/edit'>
+						<span class='ui-icon-image ui-icon'></span> 
+						ویرایش قالب
+					</a>
+				</li>
+			</ul>
+		</li>
+		
+	</ul>
+<?php //endif;?>
 <?php if (j::Check("MasterHand")) :?>
 	<button style="" class='mymenu' id='ManagerMenu'>مدیر</button>
 	<ul class='menu' style="display: none;">
@@ -472,6 +521,14 @@
 					<a href='/report/lists/list/^NotArchived'>
 						<span class='ui-icon-folder-collapsed ui-icon'></span>
 						وصول نشده های بایگانی
+					</a>
+				</li>
+				<?php endif;?>
+				<?php if ( j::Check("NotArchivedList")) :?>
+				<li>
+					<a href='/report/lists/list/^Moshkeldar'>
+						<span class='ui-icon-folder-collapsed ui-icon'></span>
+						اظهارنامه های مکاتباتی بدون کلاسه
 					</a>
 				</li>
 				<?php endif;?>

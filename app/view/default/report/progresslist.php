@@ -33,40 +33,14 @@ span.summaryinfo{
 span.footinfo{
 	font-size:12px;
 }
-#fileinfo{
-	font-weight:bold;
-	padding:4px;
-	margin:5px;
-	margin-right:50px;
-	margin-left:50px;
-	border:1px solid blue;
-	height:90px;
-}
-#fileinfo p{
-	margin:0;
-	height:30px;
-	width:50%;
-}
-#fileinfo p.left{
-	float:left;
-}
-#fileinfo p.right{
-	float:right;
-}
 </style>
 
 <h1><img src="/img/h/h1-workflow2-50.png" />
 گردش کار اظهارنامه</h1>
 
 <?php if (is_array($this->Data)){?>
-	<div id="fileinfo">
-		<p class="left">وضعیت: <?php echo $this->File->State();?></p>
-		<p class="right">شماره کوتاژ: <?php echo v::bbc($this->File->Cotag());?></p>
-		<p class="left">سریال اظهارنامه: <?php echo $this->File->BarSerial();?></p>
-		<p class="right">کد گمرک: <?php echo $this->File->GateCode();?></p>
-		<p class="right">تاریخ وصول: <span dir=ltr><?php echo $this->File->CreateTime();?></span></p>
-	</div>
-	
+	<?php include 'blocks/fileinfobox.php';?>
+			
 	<div id="progresses">
 	<?php $i=0; foreach ($this->Data as $D){ $i++;?>
 		<div class="progress">

@@ -173,6 +173,8 @@ abstract class ReviewProgress
 		$this->Dead=0;
 	}
 
+	public $error=null;
+	
 	abstract function Summary();
 	/**
 	 * Returns Persian name of this progress
@@ -255,6 +257,9 @@ abstract class ReviewProgress
 	 */
 	function Apply()
 	{
+		if ($this->error!=null)
+			return $this->error;
+
 		$res=$this->DoFileState(true);
 		if(!is_string($res))
 		{
@@ -268,6 +273,8 @@ abstract class ReviewProgress
 	 */
 	function Check()
 	{
+		if ($this->error!=null)
+			return $this->error;
 		return $this->DoFileState(false);
 	}
 }

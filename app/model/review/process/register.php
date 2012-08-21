@@ -16,17 +16,21 @@ class ReviewProcessRegister extends ReviewProgress
 		$Class++;
 		return $Class;
 	}
-	function __construct(ReviewFile $File=null,MyUser $User=null)
+	function __construct(ReviewFile $File=null,MyUser $User=null, $IfPersist=true)
 	{
-		parent::__construct($File,$User);
+		parent::__construct($File,$User,$IfPersist);
 		if($File)
 		{
 			if($File->LLP("Review"))
 			{
 				$Pre=$File->LLP("Review")->Provision();
 				$Classe=b::GenerateClassNum($Pre);
-				$File->SetClass($Classe);
-				
+				if($Classe==0){
+					$this->error='مشکلی در تخصیص شماره کلاسه پیش آمده است.';
+					return false;
+				}
+				if($IfPersist)
+					$File->SetClass($Classe);
 			}
 			
 		}
@@ -61,13 +65,16 @@ class ReviewProcessRegisterRepository extends EntityRepository
 		$CurrentUser=MyUser::CurrentUser();
 		if($File)
 		{
-			$R=new ReviewProcessRegister($File, $CurrentUser);
-			$err=$R->Apply();
+			$R=new ReviewProcessRegister($File, $CurrentUser,false);
+			$err=$R->Check();
 			if(!is_string($err)){
+				$R=new ReviewProcessRegister($File, $CurrentUser,true);
+				$R->Apply();
+				ORM::Persist($R);
 				ORM::Persist($File);
-				ORM::Write($R);
 				$res['Class']=$File->GetClass();
 			}else{
+				//ORM::Clear();
 				$res['Error']=$err;
 			}
 		}

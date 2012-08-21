@@ -58,6 +58,12 @@ $(function() {
 			primary: "ui-icon-triangle-1-s"
 		}
 	});
+	$("#TypistMenu").button({
+		icons: {
+			secondary: "ui-icon-note",
+			primary: "ui-icon-triangle-1-s"
+		}
+	});
 	$("#staticArchiveMenu").button({
 		icons: {
 			secondary: "ui-icon-trash",

@@ -74,8 +74,13 @@ class FsmGraph extends JModel
 	'Review_nok'=>'*********',
 	'Give_archive_to_raked'=>'*********',
 	'Send_archive_to_out'=>'*********',
-	'Review_ok'=>'*********',
-	'Review_nok'=>'*********',
+	'Review_ok'=>array(
+			'Label'=>'*********',
+			'is_MokatebatViewable'=>false,
+			),
+	'Review_nok'=>array(
+			'Label'=>'*********',
+			),
 	'Assign_by_manager'=>'*********',
 	'Give_archive_to_raked'=>'*********',
 	'Send_archive_to_out'=>'*********',
@@ -211,32 +216,26 @@ class FsmGraph extends JModel
 	static function PossibleProgresses($state){
 		$Graph=self::$StateGraph;
 		$ar2=array();
-		echo 'A';
 		foreach($Graph as $s=>$ar){
 			if( self::StateMatch($s, $state))
 			{
-				echo 'B';
 				foreach ($ar as $key=> $value){
-					echo 'C'.$key;
 					$c=self::GetProgressByName($key);
-					echo 'D';
 					$c->beginState=$state;
-					echo 'E';
 					$c->Name=$key;
 					$c->nxtState=self::$StateGraph[$state][$key];
-					echo 'F';
 					$ar2[$key]=$c;
 				}
 			}
 		}
 		
-				echo 'H';
 		return $ar2;
 	}
 	
 	static function GetProgressByName($name){
 		$a=self::$ProcessList[$name];
-		return new FileProgressclass($a);
+		return new FsmProgress($a);
+		//return new FileProgressclass($a);
 	}
 
 	

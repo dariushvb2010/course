@@ -20,6 +20,9 @@ form input[type='text'] {
 <h1><img src="/img/h/h1-correspondence-50.png"/>
 مکاتبات</h1>
 
+<?php if(isset($this->File)){
+	include dirname(__FILE__).'/'.'../report/blocks/fileinfobox.php';
+}?>
 
 <form method='post' action="?">
 <?php if (isset($this->Result))
@@ -29,11 +32,8 @@ form input[type='text'] {
 	<a href='/help/#correspondence_sendfile'>
 	<img src='/img/web/icon/help32.png' style='border:0px solid gray; float:left; margin:0;' />
 	</a>
-	
 	<label>شماره کوتاژ</label>
 	<input type='text' name='Cotag' value='<?php echo $this->Cotag?>'/><br/>
-	<label>شماره کلاسه</label>
-	<input type='text' name='Classe' value='<?php echo $this->Classe?>'/>
 	<input type='submit' value='ورود'/>	
 </form>
 

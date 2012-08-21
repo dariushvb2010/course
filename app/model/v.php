@@ -103,6 +103,52 @@ class v
 		}
 		return "<span class='$ClassStr'>$cot</span>";
 	}
+
+	/**
+	 * Custom Cotag Show
+	 * @param unknown_type $cot
+	 */
+	public static function Filecuc($File,$attr='')
+	{
+		$attr=explode(',',$attr);
+		$attrClasses=array(
+				'Cb'=>'v-blue',
+				'Cg'=>'v-green',
+				'Sb'=>'v-big',
+				);
+		
+		$link=false;
+		$full=false;
+		
+		$classes=array('v-cotag');
+		foreach ($attr as $a){
+			if(array_key_exists($a, $attrClasses)){
+				$classes[]=$attrClasses[$a];
+			}else{
+				switch ($a) {
+					case 'link':
+						$link=true;
+					break;
+					case 'full':
+						$full=true;
+					break;
+				}
+			}
+		}
+		
+		$ClassStr=implode(' ',$classes);
+
+		if($full){
+			$cot=$File->Gatecode().'-'.$File->Cotag();
+		}else{
+			$cot=$File->Cotag();
+		}
+		
+		if($link){
+			$cot=self::CotagLink($cot,$File->Gatecode().'-'.$File->Cotag());
+		}
+		return "<span class='$ClassStr'>$cot</span>";
+	}
 	
 	////////////////////////////////////////////////////////
 	/**

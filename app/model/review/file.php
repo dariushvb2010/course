@@ -481,17 +481,44 @@ class ReviewFileRepository extends EntityRepository
 
 	/**
 	 *
-	 * لیست کوتاژهای بر اساس نام وضعیت
 	 * @param string $StateName
 	 * @return array of ReviewFile
+	 */
+	
+	/**
+	 * لیست کوتاژهای بر اساس نام وضعیت
+	 * @param string or Integer $StateName
+	 * @param integer OR 'all' $GateCode
+	 * @param array $Pagination
+	 * $Pagination is Like 
+	 * array('Sort'=>'Cotag','Order'=>'ASC','Offset'=>0,'Limit'=>100)
 	 * @author Morteza Kavakebi
 	 */
-	public static function FilesByStateName($StateName)
+	public static function FilesByStateName($StateName,$GateCode='all',$Pagination=null)
 	{
 		$states=FsmGraph::Name2State($StateName);
 		$states=implode(',', $states);
-		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
-					ORDER BY F.Cotag");
+		$QueryStr="SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
+		if($GateCode!='all')
+			$QueryStr.=" F.Gatecode={$GateCode} ";
+		
+		//----------Pagination
+		if($Pagination==null){
+			$QueryStr.=" ORDER BY F.Cotag ";
+		}else{
+			if(isset($Pagination['Sort'])){
+				$QueryStr.=" ORDER BY F.{$Pagination['Sort']} ";
+				if(isset($Pagination['Order']))
+					$QueryStr.=" {$Pagination['Order']} ";
+			}
+			if(isset($Pagination['Offset'])){
+				$QueryStr.=" Limit {$Pagination['Offset']} ";
+				if(isset($Pagination['Limit']))
+					$QueryStr.=" {$Pagination['Limit']} ";
+			}
+		}
+		
+		$r=j::ODQL($QueryStr);
 		return $r;
 	}
 

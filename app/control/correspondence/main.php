@@ -6,29 +6,24 @@ class CorrespondenceMainController extends JControl
 	{
 		j::Enforce("Correspondence");
 
-		if (count($_REQUEST['Cotag'])||count($_REQUEST['Classe']))
+		if (count($_REQUEST['Cotag']))
 		{
 			$Cotag=B::CotagFilter($_REQUEST['Cotag']);
-			$Classe=$_POST['Classe']*1;
 
 			$this->Cotag=$Cotag;
 			$File=b::GetFile($Cotag);
 
 			if($File)
 			{
-				$this->Classe=$File->GetClass();
+				$this->File=$File;
 				$FileState=$File->State();
 				if(FsmGraph::StateMatch($FileState, 'Mokatebat'))
 				{
-					echo 44;
 					$ProcessArrayraw=FsmGraph::PossibleProgresses($FileState);
-					echo 55;
 					$ProcessArray=array();
-					echo 66;
 					foreach ($ProcessArrayraw as $r){
 						if($r->is_MokatebatViewable()!==false)$ProcessArray[]=$r;
 					}
-					echo 77;
 					
 					$er=$this->ManageProcesses($File);
 					if($er)
