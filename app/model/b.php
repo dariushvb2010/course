@@ -66,7 +66,7 @@ class b
 	{
 		$Cotag=strval($Cotag);
 		//$pattern="/^(\d{2,6}-)?[1-9]?\d{".b::CotagLength-1."}$/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
-		$pattern="/^(\d{2,6}-)?[1-9]?\d{6}$/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
+		$pattern="/^(\d{2,6}-)?[0]?[1-9]?\d{6}$/";// "/\A\d{7}\z/" -------\A: start of string--------\z: end of string--------\d{7}: 7 digits
 		$res=preg_match($pattern,$Cotag);
 		return $res==0 ? false : true;
 	}
@@ -126,9 +126,9 @@ class b
 		}
 		$inpAr=explode('-',$input);
 		if (count($inpAr)==2){
-			return ReviewFile::GetRecentFile($inpAr[1],$inpAr[0]);
+			return ReviewFile::GetRecentFile($inpAr[1]*1,$inpAr[0]*1);
 		}else{
-			return ReviewFile::GetRecentFile($inpAr[0]);
+			return ReviewFile::GetRecentFile($inpAr[0]*1);
 		}
 	}
 	
