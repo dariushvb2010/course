@@ -36,7 +36,35 @@ class RequirementsConnectionController extends JControl
 		echo '<div class="box">';
 		echo ''.' GetParvaneVaredati ';
 		$cq=new ConnectionBakedata();
-		$cq->GetParvaneVaredati("27386");
+		$cq->GetParvaneVaredati("1882531");
+		if($cq->Validate()){
+			//check the data
+			echo 'ok';
+			var_dump($cq->GetResult());
+		}else{
+			echo $cq->Error[0];
+		}
+		echo BR;
+		echo '</div>';
+		//------------------------------------------------------
+		echo '<div class="box">';
+		echo ''.' GetMojavezBargiriYear ';
+		$cq=new ConnectionBakedata();
+		$cq->GetMojavezBargiriYear("4032253", "1391");
+		if($cq->Validate()){
+			//check the data
+			echo 'ok';
+			var_dump($cq->GetResult());
+		}else{
+			echo $cq->Error[0];
+		}
+		echo BR;
+		echo '</div>';
+		//------------------------------------------------------
+		echo '<div class="box">';
+		echo ''.' GetMojavezBargiriYear ';
+		$cq=new ConnectionBakedata();
+		$cq->GetMojavezBargiri("4032253");
 		if($cq->Validate()){
 			//check the data
 			echo 'ok';

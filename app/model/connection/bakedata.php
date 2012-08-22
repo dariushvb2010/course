@@ -102,7 +102,7 @@ class ConnectionBakedata extends JModel
 		{
 			//$this->GetMojavezBargiriYear($Cotag, $year+$i-1);
 			//$this->GetParvanehFromAsycudaYear($Cotag, $year+$i-1);
-			$this->GetMojavezBargiriYear($Cotag, $year+$i-1);
+			$this->GetMojavezBargiriYear($Cotag, ($year+$i-1)."");
 			if($this->Validate())
 				break;
 		}

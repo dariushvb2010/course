@@ -291,6 +291,20 @@ class ReviewFile
     	
     	$LLP->kill();
     }
+    
+    function UpdateSerial(){
+    	if($this->BarSerial()>0)
+    		return;
+    	
+    	if ($this->Gatecode()!=GateCode)
+    		return;
+    	
+    	$cq=new ConnectionBakedata();
+    	$cq->GetMojavezBargiri($this->Cotag());
+    	if($cq->Validate()){
+    		$this->SetBarSerial($cq->GetResult());
+    	}
+    }
 }
 
 

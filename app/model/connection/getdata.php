@@ -24,9 +24,9 @@ class ConnectionGetdata extends JModel
 	
 	public function GetData(){
 		$url=$this->make_url();
-		echo '<p>url: ';
-		var_dump($url);
-		echo '</p>';
+		//echo '<p>url: ';
+		//var_dump($url);
+		//echo '</p>';
 		$hexdata= $this->get_data($url);
 		$json=$this->hex2str($hexdata);
 		$ret=json_decode($json);
