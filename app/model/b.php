@@ -128,7 +128,9 @@ class b
 			$inpAr=explode('-',$input);
 			if (count($inpAr)==2){
 				return ReviewFile::GetRecentFile($inpAr[1]*1,$inpAr[0]*1);
+				echo 'F';
 			}else{
+				echo 'C';
 				return ReviewFile::GetRecentFile($inpAr[0]*1);
 			}
 			echo 'B';
