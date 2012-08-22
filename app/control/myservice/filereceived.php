@@ -12,7 +12,7 @@ class MyserviceFilereceivedController extends JControl
             $File=b::GetFile($Cotag);
             if(!$File)
             {
-               $this->wrongInput();
+                $res=false;
             }
             else
             {
@@ -20,14 +20,21 @@ class MyserviceFilereceivedController extends JControl
             }
             $result=json_encode(array('reuslt'=>$res,'isSuccess'=>true,'messages'=>null));
             
-            echo FPlugin::strToHex($result);
+            if(isset($_REQUEST['test']))
+            	echo $result;
+            else
+            	echo FPlugin::strToHex($result);
             //echo FPlugin::strToHex($File->Cotag());
             exit();
 	}
 	
 	function wrongInput(){
 		$r=json_encode(array('reuslt'=>null,'isSuccess'=>false,'messages'=>array("خطا در ورودی")));
-		return FPlugin::strToHex($r);
+		
+		if(isset($_REQUEST['test']))
+			return $r;
+		else
+			return FPlugin::strToHex($r);
 		exit();
 	}
 }
