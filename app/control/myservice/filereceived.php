@@ -5,7 +5,7 @@ class MyserviceFilereceivedController extends JControl
 	{
             if(!isset($_GET['Cotag'])||!isset($_GET['Year']))
             {
-               $this->wrongInput();
+               return $this->wrongInput();
             }
             $Cotag=  FPlugin::hex2str($_GET['Cotag']);
             
@@ -29,12 +29,12 @@ class MyserviceFilereceivedController extends JControl
 	}
 	
 	function wrongInput(){
-		$r=json_encode(array('reuslt'=>null,'isSuccess'=>false,'messages'=>array("خطا در ورودی")));
-		
+		$r=json_encode(array('reuslt'=>null,'isSuccess'=>false,'messages'=>array('خطا در ورودی')));
+
 		if(isset($_REQUEST['test']))
-			return $r;
+			echo $r;
 		else
-			return FPlugin::strToHex($r);
+			echo FPlugin::strToHex($r);
 		exit();
 	}
 }
