@@ -28,32 +28,16 @@ class ConnectionGetdata extends JModel
 		//var_dump($url);
 		//echo '</p>';
 		$hexdata= $this->get_data($url);
-		$json=$this->hex2str($hexdata);
+		$json=FPlugin::hex2str($hexdata);
 		$ret=json_decode($json);
 		return $ret;
-	}
-	
-	private function hex2str($hex) {
-		for($i=0;$i<strlen($hex);$i+=2)
-			$str .= chr(hexdec(substr($hex,$i,2)));
-	
-		return $str;
-	}
-	private function strToHex($string)
-	{
-		$hex='';
-		for ($i=0; $i < strlen($string); $i++)
-		{
-		$hex .= dechex(ord($string[$i]));
-		}
-		return $hex;
 	}
 	
 	private function make_url(){
 		$req=array();
 		foreach ($this->RequestArray as $par=>$val)
 		{
-			$req[]=$par."=".$this->strToHex($val);
+			$req[]=$par."=".FPlugin::strToHex($val);
 		}
 		
 		$req=implode('&',$req);
