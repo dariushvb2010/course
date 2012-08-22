@@ -132,7 +132,7 @@ class b
 			}
 		}
 		if($ret->State()>=4){
-			$ret->UpdateSerial();
+			//$ret->UpdateSerial();
 		}
 		return $ret;
 	}
