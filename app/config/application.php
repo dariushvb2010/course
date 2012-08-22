@@ -84,10 +84,10 @@ $x=$x->__toString();
  * So keep in mind to set this to false when releasing your software.
  * You can view errors in logs anytime.
  */
-if (reg("app/state")=="develop")
+//if (reg("app/state")=="develop")
 	reg("jf/setting/PresentErrors",true);
-else
-	reg("jf/setting/PresentErrors",false);
+//else
+//	reg("jf/setting/PresentErrors",false);
 
 reg("jf/setting/ErrorHandler",true); //Enables jFramework's built-in error handler
 	
