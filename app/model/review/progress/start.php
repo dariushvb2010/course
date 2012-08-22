@@ -48,7 +48,7 @@ class ReviewProgressStart extends ReviewProgress
 	}
 	function  Summary()
 	{
-		$sgn = ''.//$this->StartGroup()->Title();
+		$sgn = '';//$this->StartGroup()->Title();
 		return "اظهارنامه توسط ".v::b(ConfigData::$GROUPS[$sgn])." در سیستم ثبت شد. ";
 	}
 
