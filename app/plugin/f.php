@@ -10,6 +10,7 @@ class FPlugin
 	public static function strToHex($input)
 	{
 		$hex='';
+		//var_dump($input);
 		$string=$input.'';
 		for ($i=0; $i < strlen($string); $i++)
 		{
