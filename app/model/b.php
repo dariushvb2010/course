@@ -134,6 +134,7 @@ class b
 		
 		if(!$ret)
 			return null;
+		
 		if($ret->State()>=4){
 			//$ret->UpdateSerial();
 		}
