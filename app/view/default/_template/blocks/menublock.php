@@ -10,7 +10,7 @@
 <div id='smenuBar'>
 <span id="toolbar" class="ui-widget-header ui-corner-all">	
 	<span id='repeat'>
-<?php if (j::Check("Scan")) :?>
+<?php if (j::Check("Scan")&&0) :?>
 	<button id='scanMenu' class="mymenu" >اسکن</button>
 	<ul class='menu' style="display: none;">
 		
@@ -358,7 +358,7 @@
 		
 	</ul>
 <?php endif;?>
-<?php //if (j::Check("Correspondence")) :?>
+<?php if (j::Check("Typist")) :?>
 	<button style="" class='mymenu' id='TypistMenu'>تایپیست</button>
 	<ul class='menu' style="display: none;">
 		<li>
@@ -406,7 +406,7 @@
 		</li>
 		
 	</ul>
-<?php //endif;?>
+<?php endif;?>
 <?php if (j::Check("MasterHand")) :?>
 	<button style="" class='mymenu' id='ManagerMenu'>مدیر</button>
 	<ul class='menu' style="display: none;">
