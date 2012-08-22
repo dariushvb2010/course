@@ -18,7 +18,7 @@ reg( "app/sherkat/title","پژوهشکده سامانه های هوشمند کا
 reg("my/DirectDownloadLink",SiteRoot."/file/trunk/jf3.1.22.tar.gz");
 
 reg("link/switch/url","http://10.32.0.18:8080/Swich");
-define ('GateCode',"45100");
+define ('GateCode',"50100");
 define ('GateName',"بوشهر");
 
 ?>
