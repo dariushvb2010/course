@@ -10,73 +10,43 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 
---
--- Table structure for table `jf_rbac_permissions`
---
-
-CREATE TABLE IF NOT EXISTS `jf_rbac_permissions` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Left` int(11) NOT NULL,
-  `Right` int(11) NOT NULL,
-  `Title` char(64) NOT NULL,
-  `Description` text NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `Title` (`Title`),
-  KEY `Left` (`Left`),
-  KEY `Right` (`Right`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
-
 truncate table jf_rbac_permissions;
 --
 -- Dumping data for table `jf_rbac_permissions`
 --
 
 INSERT INTO `jf_rbac_permissions` (`ID`, `Left`, `Right`, `Title`, `Description`) VALUES
-(0, 1, 54, 'root', 'root'),
-(1, 2, 53, 'Review', ''),
-(2, 51, 52, 'CreateUser', ''),
-(3, 33, 50, 'Reports', ''),
-(4, 31, 32, 'Correspondence', ''),
-(5, 29, 30, 'Reviewer', ''),
-(6, 27, 28, 'Archive', ''),
-(7, 25, 26, 'MasterHand', 'who can view manager menu'),
-(8, 23, 24, 'Raked', 'Raked Archive '),
-(9, 21, 22, 'Reassign', 'Reassigns Files to Reviewers '),
-(10, 19, 20, 'CotagBook', 'daftare cotags Permision '),
-(17, 48, 49, 'CotagList', 'see list of cotages and their last progress'),
-(18, 46, 47, 'ProgressList', 'see list of progress for a spc Cotag '),
-(19, 44, 45, 'AssignedList', 'see LIst of Assigned Declares and their Reviewer '),
-(20, 42, 43, 'NotReceivedInCotagBook', 'see cotages which not received in cotag book yet '),
-(21, 40, 41, 'AssignableList', ''),
-(22, 38, 39, 'ExitInfo', 'see information from exit door server'),
-(23, 36, 37, 'NotArchivedList', ''),
-(24, 5, 18, 'Alarm', ''),
-(25, 16, 17, 'AlarmToAdmin', ''),
-(26, 14, 15, 'AlarmToArchive', ''),
-(27, 12, 13, 'AlarmToCotagBook', ''),
-(28, 10, 11, 'AlarmToReviewer', ''),
-(29, 8, 9, 'AlarmToRaked', ''),
-(30, 6, 7, 'AlarmToCorrespondence', ''),
-(31, 34, 35, 'TypistHelp', ''),
-(32, 3, 4, 'scan', '');
+(0, 1, 58, 'root', 'root'),
+(1, 2, 57, 'Review', 'Review means all'),
+(2, 55, 56, 'CreateUser', ''),
+(3, 37, 54, 'Reports', ''),
+(4, 35, 36, 'Correspondence', ''),
+(5, 33, 34, 'Reviewer', ''),
+(6, 31, 32, 'Archive', ''),
+(7, 29, 30, 'MasterHand', 'who can view manager menu'),
+(8, 27, 28, 'Raked', 'Raked Archive '),
+(9, 25, 26, 'Reassign', 'Reassigns Files to Reviewers '),
+(10, 23, 24, 'CotagBook', 'daftare cotags Permision '),
+(17, 52, 53, 'CotagList', 'see list of cotages and their last progress'),
+(18, 50, 51, 'ProgressList', 'see list of progress for a spc Cotag '),
+(19, 48, 49, 'AssignedList', 'see LIst of Assigned Declares and their Reviewer '),
+(20, 46, 47, 'NotReceivedInCotagBook', 'see cotages which not received in cotag book yet '),
+(21, 44, 45, 'AssignableList', ''),
+(22, 42, 43, 'ExitInfo', 'see information from exit door server'),
+(23, 40, 41, 'NotArchivedList', ''),
+(24, 9, 22, 'Alarm', ''),
+(25, 20, 21, 'AlarmToAdmin', ''),
+(26, 18, 19, 'AlarmToArchive', ''),
+(27, 16, 17, 'AlarmToCotagBook', ''),
+(28, 14, 15, 'AlarmToReviewer', ''),
+(29, 12, 13, 'AlarmToRaked', ''),
+(30, 10, 11, 'AlarmToCorrespondence', ''),
+(31, 38, 39, 'TypistHelp', ''),
+(32, 7, 8, 'scan', ''),
+(33, 3, 6, 'Typist', 'typist permission tree'),
+(34, 4, 5, 'TemplateEdit', 'to edit typist templates');
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `jf_rbac_roles`
---
-
-CREATE TABLE IF NOT EXISTS `jf_rbac_roles` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Left` int(11) NOT NULL,
-  `Right` int(11) NOT NULL,
-  `Title` varchar(128) NOT NULL,
-  `Description` text NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `Title` (`Title`),
-  KEY `Left` (`Left`),
-  KEY `Right` (`Right`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 truncate table jf_rbac_roles;
 --
@@ -150,7 +120,8 @@ INSERT INTO `jf_rbac_rolepermissions` (`RoleID`, `PermissionID`, `AssignmentDate
 (10, 31, 1329512814),
 (5, 18, 1330913100),
 (11, 3, 1338038851),
-(13, 32, 1344335440);
+(13, 32, 1344335440),
+(10, 33, 1345594248);
 
 -- --------------------------------------------------------
 
