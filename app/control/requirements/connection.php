@@ -64,7 +64,7 @@ class RequirementsConnectionController extends JControl
 		echo '<div class="box">';
 		echo ''.' GetMojavezBargiriYear ';
 		$cq=new ConnectionBakedata();
-		$cq->GetMojavezBargiri("4032253");
+		$cq->GetMojavezBargiri("4030937");
 		if($cq->Validate()){
 			//check the data
 			echo 'ok';
