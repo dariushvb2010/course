@@ -122,19 +122,19 @@ class b
 	 */
 	public static function GetFile($input){
 		if($input instanceof ReviewFile){
-			$ret=ReviewFile::GetRecentFile($input);
-		}else{
+			 return ReviewFile::GetRecentFile($input);
+		}
 			$inpAr=explode('-',$input);
 			if (count($inpAr)==2){
-				$ret=ReviewFile::GetRecentFile($inpAr[1]*1,$inpAr[0]*1);
+				return ReviewFile::GetRecentFile($inpAr[1]*1,$inpAr[0]*1);
 			}else{
-				$ret=ReviewFile::GetRecentFile($inpAr[0]*1);
+				return ReviewFile::GetRecentFile($inpAr[0]*1);
 			}
-		}
+		
 		//if($ret->State()>=4){
 			//$ret->UpdateSerial();
 		//}
-		return $ret;
+		return null;
 	}
 	
 	/**
