@@ -131,9 +131,9 @@ class b
 				$ret=ReviewFile::GetRecentFile($inpAr[0]*1);
 			}
 		}
-		//if($ret->State()>=4){
+		if($ret->State()>=4){
 			//$ret->UpdateSerial();
-		//}
+		}
 		return $ret;
 	}
 	
