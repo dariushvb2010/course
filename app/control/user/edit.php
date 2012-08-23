@@ -32,7 +32,7 @@ class UserEditController extends BaseControllerClass
 	    $this->Error=$Error;
 	    $this->Result=$Result;
     	$this->Autoform=$f;
-    	return $this->Present("",'User.Create');
+    	return $this->Present("",'user.create');
     }
     
 	
