@@ -236,7 +236,7 @@ class DynamiclistPlugin extends AutolistPlugin
 		$CV=$this->MetaData[$name]['CustomValidation'];
 		if($CV)
 		{
-			$arr=explode("?", $CV);
+			$arr=explode("##", $CV);
 			$n=count($arr);
 			
 			if($n>1)

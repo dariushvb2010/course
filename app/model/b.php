@@ -9,7 +9,7 @@ class b
 	const file_initial_class = 0;
 	const upload_folder_root="../../../upload/";
 	//const Cotag_jsPattern="/^0{0,2}\d{7}$/";
-	const Cotag_jsPattern="/^(\d{2,6}-)?[1-9]?\d{6}$/";
+	const Cotag_jsPattern="/^[0]?(\d{2,6}-)?[1-9]\d{6}$/";
 
 	static function upload_folder_relative_from_japp()
 	{

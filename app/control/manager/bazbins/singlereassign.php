@@ -63,11 +63,11 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$al->EnterTextName="Cotag";
 		//--------al custom javascript code for validating the format of the Cotag-------------
 		$CotagCode="var patt=".b::Cotag_jsPattern.";";
-		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
+		$CotagCode.="if(patt.test(##)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$CommentCode="var patt=/.{".b::$CommentMinLength."}/;";//patt=/.{6}/
-		$CommentCode.="if(patt.test(?)); else {alert('توضیحات کامل بنویسید.'); return false;}";
+		$CommentCode.="if(patt.test(##)); else {alert('توضیحات کامل بنویسید.'); return false;}";
 		$al->SetHeader("Cotag", "کوتاژ", "div.autoform[num=first] :text[name=Cotag]","Text",$CotagMetaData);
 		$al->SetHeader("Comment", "توضیحات", "div.autoform[num=first] textarea[name=Comment]","Textarea",array("CustomValidation"=>$CommentCode));
 		$al->Autoform=$f;
@@ -96,11 +96,11 @@ class ManagerBazbinsSinglereassignController extends JControl
 		$al->EnterTextName="Cotag";
 		//--------al custom javascript code for validating the format of the Cotag-------------
 		$CotagCode="var patt=".b::Cotag_jsPattern.";";
-		$CotagCode.="if(patt.test(?)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
+		$CotagCode.="if(patt.test(##)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		//----------A C J C------------------------------
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$CommentCode="var patt=/.{".b::$CommentMinLength."}/;";//patt=/.{6}/
-		$CommentCode.="if(patt.test(?)); else {alert('توضیحات کامل بنویسید.'); return false;}";
+		$CommentCode.="if(patt.test(##)); else {alert('توضیحات کامل بنویسید.'); return false;}";
 		$al->SetHeader("Cotag", "کوتاژ", "div.autoform[num=last] :text[name=Cotag]","Text",$CotagMetaData);
 		$al->SetHeader("ID", "کارشناس", "div.autoform[num=last] select[name=ID] option:selected","Select");
 		$al->SetHeader("Comment", "توضیحات", "div.autoform[num=last] textarea[name=Comment]","Textarea",array("CustomValidation"=>$CommentCode));
