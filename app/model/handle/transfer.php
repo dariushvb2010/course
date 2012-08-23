@@ -352,7 +352,7 @@ abstract class HandleTransfer
 		//TODO:b::Cotag_jsPattern
 		$CotagCode="var patt=".b::Cotag_jsPattern.";\n";  //javascript code
 		//$CotagCode.="if(patt.test(##)); else {alert('فرمت کوتاژ رعایت نشده است.'+patt); return false;}";
-		$CotagCode.="if(patt.test(##)); else {alert('فرمت کوتاژ رعایت نشده است.'+patt); return false;}";
+		$CotagCode.="if(patt.test(##)); else {alert('فرمت کوتاژ رعایت نشده است.'); return false;}";
 		$CotagMetaData=array("Unique"=>true,"Clear"=>true, "CustomValidation"=>$CotagCode);
 		$al->SetHeader("Cotag", "کوتاژ", "div.autoform :text[name=Cotag]","Text",$CotagMetaData);
 		
