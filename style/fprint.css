@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+
+@media print {
+	
+	#body {
+		background-color: white;
+		width:auto;
+		border:none;
+	}
+	
+	body {
+		width:auto;
+	}
+	.security {
+		display:none !important;
+	}
+	.autolist tr:nth-child(even) , .autolistprint tr:nth-child(even) {
+	background-color:rgb(216,233,245);
+}
+}

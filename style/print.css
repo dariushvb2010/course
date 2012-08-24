@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+
+@media print {
+	.sortbox {
+		display: none;
+	}
+	#smenuBar, #footer {
+		display: none;
+	}
+	#body {
+		background-color: white;
+		width:10cm;
+		border:none;
+	}
+	#Tracker {
+		display: none;
+	}
+	.noprint {
+		display: none !important;
+	}
+	body {
+		width:10cm;
+	}
+	input[type=button], input [type=submit]{
+		display: none !important;
+	}
+	input[type='submit'], button{display: none !important;}
+	#Copyright.Footer {
+		color:gray;
+		display:none;
+	}
+	#Copyright.Footer a {
+		color:black;
+		font-decoration:none;
+	}
+	#datetime.Footer {
+		display:block;
+	}
+	.security {
+		display:none !important;
+	}
+	.autolistprint{
+		margin: -5px;
+	}
+	td.radif{
+	width:15px;
+	}
+	td.cotags{
+	width:50px;
+	}
+}
+@media screen {
+	
+}
