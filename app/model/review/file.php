@@ -311,8 +311,7 @@ class ReviewFile
 
     	if($this->RegYear()>0)
     		return true;
-    	 
-    
+    	
     	$cq=new ConnectionBakedata();
     	$r=$cq->GetYear($this->Cotag());
     	if($r){
@@ -346,7 +345,7 @@ class ReviewFile
     }
     function CheckUp(){
     	$p=$this->UpdateYear();
-    	if(!$P)
+    	if(!$p)
     		return false;
     	
     	$p=$this->UpdateSerial();
