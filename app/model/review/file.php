@@ -432,19 +432,87 @@ class ReviewFileRepository extends EntityRepository
 	}
 	
 	/**
+	 * لیست کوتاژهای بر اساس نام وضعیت
+	 * @param string or Integer $StateName
+	 * @param integer OR 'all' $GateCode
+	 * @param array $Pagination
+	 * $Pagination is Like
+	 * array('Sort'=>'Cotag','Order'=>'ASC','Offset'=>0,'Limit'=>100)
+	 * @author Morteza Kavakebi
+	 */
+	public static function FilesByStateName($StateName,$GateCode='all',$Pagination=null)
+	{
+		$states=FsmGraph::Name2State($StateName);
+		$states=implode(',', $states);
+		if($Pagination=='CountAll'){
+			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
+			$r=j::ODQL($QueryStr);
+			return $r[0]['result'];
+		}else{
+			$QueryStr="SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
+			if($GateCode!='all')
+				$QueryStr.=" F.Gatecode={$GateCode} ";
+				
+			//----------Pagination
+			if($Pagination==null){
+				$QueryStr.=" ORDER BY F.Cotag ";
+			}else{
+				if(isset($Pagination['Sort'])){
+					$QueryStr.=" ORDER BY F.{$Pagination['Sort']} ";
+					if(isset($Pagination['Order']))
+						$QueryStr.=" {$Pagination['Order']} ";
+				}
+				if(isset($Pagination['Offset'])){
+					$QueryStr.=" Limit {$Pagination['Offset']} ";
+					if(isset($Pagination['Limit']))
+						$QueryStr.=" {$Pagination['Limit']} ";
+				}
+			}
+			$r=j::ODQL($QueryStr);
+			return $r;
+		}
+	}
+	
+	/**
 	 لیست فایل ها و اخرین ‍فرایند هر کدام برای استفاده در لیست کوتاژ
 	 *
 	 */
-	public function CotagList($Offset,$Limit,$Sort,$SortOrder,$gateCode='',$operation='=')
+	public function CotagList($Pagination=null,$gateCode='All',$operation='=')
 	{		
-		if($gateCode!=''){
+		if($gateCode!='All'){
 			$gateCodeStr=" WHERE F.Gatecode".$operation.$gateCode;
 		}
-		//$r=j::ODQL("SELECT P,F FROM ReviewFile AS F LEFT JOIN F.Progress AS P WHERE P IS NULL OR P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
-		$r=j::ODQL("SELECT F FROM ReviewFile AS F" 
-				.($gateCode==''?'':$gateCodeStr)
-				." ORDER BY F.{$Sort} {$SortOrder} LIMIT {$Offset},{$Limit}");
-		return $r;
+		if($Pagination=='CountAll'){
+			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F ";
+			
+			if($GateCode!='all')
+				$QueryStr.=" WHERE F.Gatecode".$operation.$gateCode;
+			
+			$r=j::ODQL($QueryStr);
+			return $r[0]['result'];
+		}else{
+			$QueryStr="SELECT F FROM ReviewFile AS F ";
+			if($GateCode!='all')
+				$QueryStr.=" WHERE F.Gatecode".$operation.$gateCode;
+		
+			//----------Pagination
+			if($Pagination==null){
+				$QueryStr.=" ORDER BY F.Cotag ";
+			}else{
+				if(isset($Pagination['Sort'])){
+					$QueryStr.=" ORDER BY F.{$Pagination['Sort']} ";
+					if(isset($Pagination['Order']))
+						$QueryStr.=" {$Pagination['Order']} ";
+				}
+				if(isset($Pagination['Offset'])){
+					$QueryStr.=" Limit {$Pagination['Offset']} ";
+					if(isset($Pagination['Limit']))
+						$QueryStr.=" {$Pagination['Limit']} ";
+				}
+			}
+			$r=j::ODQL($QueryStr);
+			return $r;
+		}
 	}
 	
 	public function GetOnlyProgressStartObject($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
@@ -523,47 +591,6 @@ class ReviewFileRepository extends EntityRepository
 	 * @return array of ReviewFile
 	 */
 	
-	/**
-	 * لیست کوتاژهای بر اساس نام وضعیت
-	 * @param string or Integer $StateName
-	 * @param integer OR 'all' $GateCode
-	 * @param array $Pagination
-	 * $Pagination is Like 
-	 * array('Sort'=>'Cotag','Order'=>'ASC','Offset'=>0,'Limit'=>100)
-	 * @author Morteza Kavakebi
-	 */
-	public static function FilesByStateName($StateName,$GateCode='all',$Pagination=null)
-	{
-		$states=FsmGraph::Name2State($StateName);
-		$states=implode(',', $states);
-		if($Pagination=='CountAll'){
-			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
-			$r=j::ODQL($QueryStr);
-			return $r[0]['result'];
-		}else{
-			$QueryStr="SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
-			if($GateCode!='all')
-				$QueryStr.=" F.Gatecode={$GateCode} ";
-			
-			//----------Pagination
-			if($Pagination==null){
-				$QueryStr.=" ORDER BY F.Cotag ";
-			}else{
-				if(isset($Pagination['Sort'])){
-					$QueryStr.=" ORDER BY F.{$Pagination['Sort']} ";
-					if(isset($Pagination['Order']))
-						$QueryStr.=" {$Pagination['Order']} ";
-				}
-				if(isset($Pagination['Offset'])){
-					$QueryStr.=" Limit {$Pagination['Offset']} ";
-					if(isset($Pagination['Limit']))
-						$QueryStr.=" {$Pagination['Limit']} ";
-				}
-			}
-			$r=j::ODQL($QueryStr);
-			return $r;
-		}
-	}
 
 	/**
 	 * 

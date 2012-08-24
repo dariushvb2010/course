@@ -8,9 +8,11 @@ class ReportListsListController extends JControl
 		$this->ParamFilter();
 
 		$this->HeadTitle="لیست کوتاژهای گمرک ".GateName;
-		$CotList=ORM::Query(new ReviewFile)->CotagList($this->Offset,$this->Limit,$this->Sort,$this->Order,GateCode);
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query(new ReviewFile)->CotagList($Pagination,GateCode);
+		$Count=ORM::Query(new ReviewFile)->CotagList('CountAll',GateCode);
 		
-		$this->PrepareToShow($CotList,0);
+		$this->PrepareToShow($CotList,$Count+1);
 
 	}
 
@@ -21,9 +23,11 @@ class ReportListsListController extends JControl
 		$this->ParamFilter();
 
 		$this->HeadTitle="لیست کوتاژهای گمرکات دیگر";
-		$CotList=ORM::Query(new ReviewFile)->CotagList($this->Offset,$this->Limit,$this->Sort,$this->Order,GateCode,'!=');
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query(new ReviewFile)->CotagList($Pagination,GateCode,'!=');
+		$Count=ORM::Query(new ReviewFile)->CotagList('CountAll',GateCode,'!=');
 
-		$this->PrepareToShow($CotList,0);
+		$this->PrepareToShow($CotList,$Count);
 
 	}
 

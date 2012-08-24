@@ -18,7 +18,7 @@ class ConnectionGetdata extends JModel
 	{
 		$this->url=$url;		 
 		$this->RequestArray=$RequestArray;
-		$this->timeout=2;
+		$this->timeout=1;
 		$this->error=null;		 
 	}
 	
