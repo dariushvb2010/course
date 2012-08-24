@@ -16,10 +16,9 @@
 <li><a href="?charttype=0" class="red">دفتر کوتاژ</a></li>
 <li><a href="?charttype=1" class="orange">نتایج کارشناسی</a></li>
 <li><a href="?charttype=2" class="yellow">حجم کاری کارشناسان</a></li>
-<li><a href="?charttype=3" class="green">سرعت کار بازبینی</a></li>
-<li><a href="?charttype=4" class="blue">ورودی خروجی</a></li>
-<li><a href="?charttype=5" class="teal">حذف فرآیندها</a></li>
-<li><a href="?charttype=6" style="background:teal">مبلغ اختلاف</a></li>
+<li><a href="?charttype=3" class="blue">ورودی خروجی</a></li>
+<li><a href="?charttype=4" class="teal">حذف فرآیندها</a></li>
+<li><a href="?charttype=5" style="background:teal">مبلغ اختلاف</a></li>
 </ul>
 </div>
 
@@ -46,14 +45,6 @@
  			chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->names);?>];
  			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->values);?>];
 <?php 	break;
-	 	case 'bazbini_speed':
-?>
- 			
- 			chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->X);?>];
- 			chartconfig['series'][0]['data']= [<?php echo implode(',',$this->values);?>];
- 			chartconfig['series'][1]['data']= [<?php echo implode(',',$this->values);?>];
-<?php
-	 	break;
 	 	case 'in_vs_out':
 ?>	
  	 		chartconfig['xAxis']['categories']= [<?php echo implode(',',$this->X);?>];

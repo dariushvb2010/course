@@ -101,27 +101,6 @@ class ReportStatisticsMainController extends JControl
 				//$this->values=array(5,5);
 				$this->names=$names;
 				break;*/
-			/////////////////////////////////////////////////////	
-			case 'bazbini_speed':
-				//$r=ORM::Query("ReviewProgressReview")->BazbiniPerMonth();
-				/*$r=array(
-					array('monthname'=>'aaa','month'=>'3','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'4','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'5','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'6','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'1','year'=>'1391','count'=>555),
-					array('monthname'=>'aaa','month'=>'2','year'=>'1391','count'=>555),
-					array('monthname'=>'aaa','month'=>'3','year'=>'1391','count'=>555),
-				);*/
-				/*$names=array();
-				$values=array();
-				foreach ($r as $value){
-					$X[]="'".$value['monthname']." ".$value['year']."'";
-					$values[]=$value['count'];
-				}
-				$this->values=$values;
-				$this->X=$X;
-				break;*/
 			
 		}
 		

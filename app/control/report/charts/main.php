@@ -3,7 +3,7 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','bazbini_speed','in_vs_out','progress_remove','review_amount');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','in_vs_out','progress_remove','review_amount');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -92,27 +92,6 @@ class ReportChartsMainController extends JControl
 				$this->names=$names;
 				break;
 			/////////////////////////////////////////////////////	
-			case 'bazbini_speed':
-				$r=ORM::Query("ReviewProgressReview")->BazbiniPerMonth();
-				/*$r=array(
-					array('monthname'=>'aaa','month'=>'3','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'4','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'5','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'6','year'=>'1390','count'=>555),
-					array('monthname'=>'aaa','month'=>'1','year'=>'1391','count'=>555),
-					array('monthname'=>'aaa','month'=>'2','year'=>'1391','count'=>555),
-					array('monthname'=>'aaa','month'=>'3','year'=>'1391','count'=>555),
-				);*/
-				$names=array();
-				$values=array();
-				foreach ($r as $value){
-					$X[]="'".$value['monthname']." ".$value['year']."'";
-					$values[]=$value['count'];
-				}
-				$this->values=$values;
-				$this->X=$X;
-				break;
-			////////////////////////////////////////////////////////
 			case 'in_vs_out':
 				
 				
