@@ -430,24 +430,6 @@ class ReviewFileRepository extends EntityRepository
 		else
 			return null;
 	}
-	/**
-	 * 
-	 * in report use only
-	 * @param unknown_type $Offset
-	 * @param unknown_type $Limit
-	 * @param unknown_type $Sort
-	 * @param unknown_type $Order
-	 * @return array of ReviewFile
-	 * @author Morteza Kavakebi
-	 */
-	public function CotagBookNotSentFiles($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
-	{
-		$states=FsmGraph::Name2State('Cotag');
-		$states=implode(',', $states);
-		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) 
-					ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
-		return $r;
-	}
 	
 	/**
 	 لیست فایل ها و اخرین ‍فرایند هر کدام برای استفاده در لیست کوتاژ
@@ -464,6 +446,7 @@ class ReviewFileRepository extends EntityRepository
 				." ORDER BY F.{$Sort} {$SortOrder} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
+	
 	public function GetOnlyProgressStartObject($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
@@ -473,6 +456,7 @@ class ReviewFileRepository extends EntityRepository
 							ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
+	
 	public function GetOnlyProgressStartObject2($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
@@ -482,6 +466,7 @@ class ReviewFileRepository extends EntityRepository
 								ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
 		return $r;
 	}
+	
 	public function GetFilesWithLastProgress($ProgressName,$Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	{
 		$r=j::ODQL("SELECT F FROM ReviewFile AS F JOIN F.Progress AS P
@@ -531,20 +516,6 @@ class ReviewFileRepository extends EntityRepository
 			$f[]=$D->File();
 		return $f;
 	}
-	/**
-	 *
-	 * برای استفاده در گزلرش گیری
-	 * @param unknown_type $From
-	 * @param unknown_type $Limit
-	 */
-	public static function UnassignedFiles($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
-	{
-		$states=FsmGraph::Name2State('Assignable');
-		$states=implode(',', $states);
-		$r=j::ODQL("SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states})
-					ORDER BY F.{$Sort} {$Order} LIMIT {$Offset},{$Limit}");
-		return $r;
-	}
 
 	/**
 	 *
@@ -565,28 +536,33 @@ class ReviewFileRepository extends EntityRepository
 	{
 		$states=FsmGraph::Name2State($StateName);
 		$states=implode(',', $states);
-		$QueryStr="SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
-		if($GateCode!='all')
-			$QueryStr.=" F.Gatecode={$GateCode} ";
-		
-		//----------Pagination
-		if($Pagination==null){
-			$QueryStr.=" ORDER BY F.Cotag ";
+		if($Pagination=='CountAll'){
+			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
+			$r=j::ODQL($QueryStr);
+			return $r[0]['result'];
 		}else{
-			if(isset($Pagination['Sort'])){
-				$QueryStr.=" ORDER BY F.{$Pagination['Sort']} ";
-				if(isset($Pagination['Order']))
-					$QueryStr.=" {$Pagination['Order']} ";
+			$QueryStr="SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
+			if($GateCode!='all')
+				$QueryStr.=" F.Gatecode={$GateCode} ";
+			
+			//----------Pagination
+			if($Pagination==null){
+				$QueryStr.=" ORDER BY F.Cotag ";
+			}else{
+				if(isset($Pagination['Sort'])){
+					$QueryStr.=" ORDER BY F.{$Pagination['Sort']} ";
+					if(isset($Pagination['Order']))
+						$QueryStr.=" {$Pagination['Order']} ";
+				}
+				if(isset($Pagination['Offset'])){
+					$QueryStr.=" Limit {$Pagination['Offset']} ";
+					if(isset($Pagination['Limit']))
+						$QueryStr.=" {$Pagination['Limit']} ";
+				}
 			}
-			if(isset($Pagination['Offset'])){
-				$QueryStr.=" Limit {$Pagination['Offset']} ";
-				if(isset($Pagination['Limit']))
-					$QueryStr.=" {$Pagination['Limit']} ";
-			}
+			$r=j::ODQL($QueryStr);
+			return $r;
 		}
-		
-		$r=j::ODQL($QueryStr);
-		return $r;
 	}
 
 	/**

@@ -10,7 +10,7 @@ class ReportListsListController extends JControl
 		$this->HeadTitle="لیست کوتاژهای گمرک ".GateName;
 		$CotList=ORM::Query(new ReviewFile)->CotagList($this->Offset,$this->Limit,$this->Sort,$this->Order,GateCode);
 		
-		$this->PrepareToShow($CotList);
+		$this->PrepareToShow($CotList,0);
 
 	}
 
@@ -22,8 +22,8 @@ class ReportListsListController extends JControl
 
 		$this->HeadTitle="لیست کوتاژهای گمرکات دیگر";
 		$CotList=ORM::Query(new ReviewFile)->CotagList($this->Offset,$this->Limit,$this->Sort,$this->Order,GateCode,'!=');
-		
-		$this->PrepareToShow($CotList);
+
+		$this->PrepareToShow($CotList,0);
 
 	}
 
@@ -34,9 +34,11 @@ class ReportListsListController extends JControl
 		$this->ParamFilter();
 
 		$this->HeadTitle="بایگانی: لیست کوتاژهای وصول نشده از دفتر کوتاژ";
-		$CotList=ORM::Query(new ReviewFile)->CotagBookNotSentFiles($this->Offset,$this->Limit,$this->Sort,$this->Order);
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query(new ReviewFile)->FilesByStateName('Cotag','all',$Pagination);		
+		$Count=ORM::Query(new ReviewFile)->FilesByStateName('Cotag','all','CountAll');		
 		
-		$this->PrepareToShow($CotList);
+		$this->PrepareToShow($CotList,$Count);
 
 	}
 
@@ -47,9 +49,11 @@ class ReportListsListController extends JControl
 		$this->ParamFilter();
 
 		$this->HeadTitle="لیست اظهارنامه های تخصیص نیافته";
-		$CotList=ORM::Query(new ReviewFile)->UnassignedFiles($this->Offset,$this->Limit,$this->Sort,$this->Order);
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query(new ReviewFile)->FilesByStateName('Assignable','all',$Pagination);
+		$Count=ORM::Query(new ReviewFile)->FilesByStateName('Assignable','all','CountAll');
 		
-		$this->PrepareToShow($CotList);
+		$this->PrepareToShow($CotList,$Count);
 
 	}
 
@@ -62,8 +66,9 @@ class ReportListsListController extends JControl
 		$this->HeadTitle="لیست اظهارنامه های مکاتباتی بدون کلاسه";
 		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
 		$CotList=ORM::Query("ReviewFile")->FilesByStateName('review_notok','all',$Pagination);
+		$Count=ORM::Query(new ReviewFile)->FilesByStateName('review_notok','all','CountAll');
 		
-		$this->PrepareToShow($CotList);
+		$this->PrepareToShow($CotList,$Count);
 
 	}
 	
@@ -90,12 +95,15 @@ class ReportListsListController extends JControl
 	 * @param ReviewFile $CotList
 	 * @return boolean
 	 */
-	function PrepareToShow($CotList){
+	function PrepareToShow($CotList,$countAll=0){
 		
 		if(count($CotList))
 		{
 			$this->CotList=$CotList;
-			$this->RecordCount=count($CotList);
+			if($countAll==0)
+				$this->RecordCount=count($CotList);
+			else
+				$this->RecordCount=$countAll;
 		}
 		else
 		{
