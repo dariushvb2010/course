@@ -96,9 +96,16 @@ class ConnectionAsy extends JModel
 		if($ans){
 			return $ans;
 		}else{
-			$c=new ConnectionBakedata();
-			//$c->GetAsycuda($Cotag);
-			//$r=new ConnectionAsy(); 
+			return null;
+		}
+	}
+
+	static function DeleteAsyByFile($File){
+		$ans=ORM::Query("ConnectionAsy")->GetAsyByFile($File);
+		if($ans){
+			ORM::Delete($ans);
+		}else{
+			return null;
 		}
 	}
 }

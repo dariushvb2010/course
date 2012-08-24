@@ -294,10 +294,10 @@ class ReviewFile
     
     function UpdateSerial(){
     	if ($this->Gatecode()!=GateCode)
-    		return;
+    		return false;
 
     	if($this->BarSerial()>1)
-    		return;
+    		return true;
     	
 
     	$cq=new ConnectionBakedata();
@@ -305,24 +305,30 @@ class ReviewFile
     	if($cq->Validate()){
     		$s=$cq->GetResult();
     		$this->SetBarSerial($s);
+    		ORM::Write($this);
+    		return true;
+    	}else{
+    		return false;
     	}
-    	ORM::Write($this);
     }
     
     function UpdateYear(){
     	if ($this->Gatecode()!=GateCode)
-    		return;
+    		return false;
 
     	if($this->RegYear()>0)
-    		return;
+    		return true;
     	 
     
     	$cq=new ConnectionBakedata();
     	$r=$cq->GetYear($this->Cotag());
     	if($r){
     		$this->SetRegYear($r);
+    		ORM::Write($this);
+    		return true;
+    	}else{
+    		return false;
     	}
-    	ORM::Write($this);
     }
     
     function UpdateAsycuda(){
@@ -346,9 +352,19 @@ class ReviewFile
     	
     }
     function CheckUp(){
-    	$this->UpdateYear();
-    	$this->UpdateSerial();
+    	$p=$this->UpdateYear();
+    	if(!$P)
+    		return false;
+    	
+    	$p=$this->UpdateSerial();
     	return $this->UpdateAsycuda();
+    }
+    
+    function CheckUpForce(){
+    	ConnectionAsy::DeleteAsyByFile($this);
+    	$this->SetRegYear(0);
+    	$this->SetBarSerial(0);
+    	$this->CheckUp();
     }
 }
 

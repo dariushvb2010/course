@@ -107,6 +107,7 @@ class ReviewProgressCorrectionRepository extends EntityRepository
 		$R->setNewCotag($NewCotag);
 		
 		$file1->setCotag($NewCotag);
+		$file1->CheckUpForce();
 		ORM::Persist($file1);
 		
 		ORM::Persist($R);
