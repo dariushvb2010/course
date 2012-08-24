@@ -20,7 +20,7 @@ class CorrespondenceDemandController extends JControl
 					if(isset($Res['Error'])){
 						$Error[]=$Res['Error'];
 					}else{
-						$this->Redirect("./?Cotag={$File->Cotag()}&success={$types}");
+						$this->Redirect("./addprocess?Cotag={$File->Cotag()}&success={$types}");
 					}				
 				}
 			}else{

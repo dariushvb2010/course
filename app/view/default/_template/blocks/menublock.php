@@ -343,7 +343,7 @@
 			</a>
 		</li>
 		<li>
-			<a href='/correspondence/main'>
+			<a href='/correspondence/addprocess'>
 				<span class='ui-icon-image ui-icon'></span> 
 				ثبت فرآیندهای پرونده
 			</a>

@@ -8,7 +8,7 @@ class CorrespondenceBlacklistController extends JControl
 		if ($_REQUEST['Cotag'])
 		{
 			$Cotag=b::CotagFilter($_POST['Cotag']);
-			$this->Redirect("./?Cotag={$Cotag}");	 						
+			$this->Redirect("./addprocess?Cotag={$Cotag}");	 						
 			
 		}
 		
@@ -51,7 +51,7 @@ class CorrespondenceBlacklistController extends JControl
 		}
 		elseif($k=='Select')
 		{
-			return v::link('کارشناسی',"./?Cotag={$D->Cotag()}");	
+			return v::link('کارشناسی',"./addprocess?Cotag={$D->Cotag()}");	
 		}
 		elseif($k=='Digital')
 		{

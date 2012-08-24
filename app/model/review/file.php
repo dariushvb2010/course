@@ -250,13 +250,6 @@ class ReviewFile
     	}
     }
     
-    public function Finish()
-    {
-    	$thisUser=ORM::Find("MyUser", j::UserID());
-		$p=new ReviewProgressFinish($this,$thisUser);
-		ORM::Persist($p);
-    	$this->FinishTimestamp=time();
-    }
 	function LastProgress($Type="all",$IsProcess=false)
 	{
 		return ORM::Query($this)->GetLastProgress($this,$Type,$IsProcess);		
