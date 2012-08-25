@@ -464,7 +464,7 @@ class ReviewFileRepository extends EntityRepository
 				if(isset($Pagination['Offset'])){
 					$QueryStr.=" Limit {$Pagination['Offset']} ";
 					if(isset($Pagination['Limit']))
-						$QueryStr.=" {$Pagination['Limit']} ";
+						$QueryStr.=", {$Pagination['Limit']} ";
 				}
 			}
 			$r=j::ODQL($QueryStr);
@@ -506,7 +506,7 @@ class ReviewFileRepository extends EntityRepository
 				if(isset($Pagination['Offset'])){
 					$QueryStr.=" Limit {$Pagination['Offset']} ";
 					if(isset($Pagination['Limit']))
-						$QueryStr.=" {$Pagination['Limit']} ";
+						$QueryStr.=", {$Pagination['Limit']} ";
 				}
 			}
 			$r=j::ODQL($QueryStr);
