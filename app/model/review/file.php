@@ -322,6 +322,27 @@ class ReviewFile
     	}
     }
     
+    /**
+     * if Asycuda Contains it
+     * @param unknown_type $input
+     * @return boolean
+     */
+    public static function AsyValidation($input){
+    	$ar=self::ParseCotag($input);
+    	if(count($ar)>1 AND $ar[0]!=GateCode)
+    		return true;
+    	
+    	$cotag=(count($ar)>1?$ar[1]:$ar[0]);	
+    	
+    	$cq=new ConnectionBakedata();
+    	$r=$cq->GetYear($cotag);
+    	if($r){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
     function UpdateAsycuda(){
     	if ($this->Gatecode()!=GateCode)
     		return false;
