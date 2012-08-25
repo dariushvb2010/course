@@ -39,7 +39,7 @@ span.footinfo{
 گردش کار اظهارنامه</h1>
 
 <?php if (is_array($this->Data)){?>
-	<?php include '/../blocks/fileinfobox.php';?>
+	<?php include dirname(dirname(__File__)).'/blocks/fileinfobox.php';?>
 			
 	<div id="progresses">
 	<?php $i=0; foreach ($this->Data as $D){ $i++;?>
