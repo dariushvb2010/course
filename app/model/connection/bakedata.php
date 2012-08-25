@@ -100,7 +100,7 @@ class ConnectionBakedata extends JModel
 		$i=0;//@todo use a constant for retry number
 		while($i++<$Reapeat)
 		{
-			$myYear=$year+$i-1;
+			$myYear=$year-$i+1;
 			$this->GetMojavezBargiriYear($Cotag, $myYear."");
 			if($this->Validate())
 				return $myYear;
@@ -126,7 +126,7 @@ class ConnectionBakedata extends JModel
 		$i=0;//@todo use a constant for retry number
 		while($i++<$Reapeat)
 		{
-			$myYear=$year+$i-1;
+			$myYear=$year-$i+1;
 			$this->GetParvanehFromAsycudaYear($Cotag, $myYear."");
 			if($this->Validate())
 				return $myYear;
