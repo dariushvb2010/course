@@ -37,7 +37,7 @@ class MainController extends BaseControllerClass
 		
 		$this->Alarm_Personal=ORM::Query("Alarm")->CurrentUserAlarms_Personal();
 		$this->Alarm_Group=ORM::Query("Alarm")->CurrentUserAlarms_Group();
-		ORM::Query("ConnectionAsy")->UpdateAll();
+		//ORM::Query("ConnectionAsy")->UpdateAll();
 		if(count($this->Error))
 			$this->Result=false;
 		return $this->Present ();
