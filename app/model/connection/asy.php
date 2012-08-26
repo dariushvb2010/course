@@ -48,21 +48,6 @@ class ConnectionAsy extends JModel
 	}
 
 	/**
-	 * Masir
-	 * @Column(type="string", length="30")
-	 * @var string
-	 */
-	protected $Masir;
-	function Masir()
-	{
-		return $this->Masir;
-	}
-	function SetMasir($w)
-	{
-		$this->Masir=$w;
-	}
-
-	/**
 	 * کد صاحب کالا
 	 * @Column(type="string", length="30")
 	 * @var string
