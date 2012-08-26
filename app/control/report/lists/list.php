@@ -156,10 +156,10 @@ class ReportListsListController extends JControl
 				return $D->Gatecode();
 		}elseif ($k=="AsyState"){
 			//to complete remote data of files
-			//$r=$D->CheckUp();
-			//if(!$r){
-			//	return 'خطا';
-			//}
+			$r=$D->CheckUp();
+			if(!$r){
+				return 'خطا';
+			}
 		}else{
 			return $v;
 		}
