@@ -90,7 +90,7 @@ class ConnectionBakedata extends JModel
 	 * @param unknown_type $Cotag
 	 * @param unknown_type $Reapeat
 	 */
-	public function GetMojavezBargiri($Cotag,$Reapeat=4)
+	public function GetMojavezBargiri($Cotag,$Reapeat=3)
 	{
 			$calendar=new CalendarPlugin();
 			$today=$calendar->TodayJalali();
@@ -116,7 +116,7 @@ class ConnectionBakedata extends JModel
 	 * @param unknown_type $Cotag
 	 * @param unknown_type $Reapeat
 	 */
-	public function GetYear($Cotag,$Reapeat=4)
+	public function GetYear($Cotag,$Reapeat=3)
 	{
 			$calendar=new CalendarPlugin();
 			$today=$calendar->TodayJalali();
