@@ -93,7 +93,7 @@ class BarcodeModel extends JModel
 		imagettftext($img, $fontSize, 90, $width+20, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $Numbers[0]);
 		imagettftext($img, $fontSize-2, 90, $width+50, $height, $black, dirname(__FILE__)."/../../files/font/XBRoya.ttf", $c->JalaliFromTimestamp(Time()));
 //		imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text)
-		imagejpeg($img);
+		imagejpeg($img,null,100);
 	}
 	
 }
