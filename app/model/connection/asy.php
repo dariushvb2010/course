@@ -89,7 +89,7 @@ class ConnectionAsy extends JModel
 		$this->SetFileID($File->ID());
 		$this->SetDeclarantCoding("");
 		$this->SetOwnerCoding("");
-		$this->SetMasir('');
+		//$this->SetMasir('');
 	}
 	
 	static function GetAsyByFile($File){
