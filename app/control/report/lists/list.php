@@ -12,7 +12,7 @@ class ReportListsListController extends JControl
 		$CotList=ORM::Query(new ReviewFile)->CotagList($Pagination,GateCode);
 		$Count=ORM::Query(new ReviewFile)->CotagList('CountAll',GateCode);
 		
-		$this->PrepareToShow($CotList,$Count+1);
+		$this->PrepareToShow($CotList,$Count);
 
 	}
 

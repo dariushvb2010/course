@@ -48,6 +48,21 @@ class ConnectionAsy extends JModel
 	}
 
 	/**
+	 * Masir
+	 * @Column(type="string", length="30")
+	 * @var string
+	 */
+	protected $Masir;
+	function Masir()
+	{
+		return $this->Masir;
+	}
+	function SetMasir($w)
+	{
+		$this->Masir=$w;
+	}
+
+	/**
 	 * کد صاحب کالا
 	 * @Column(type="string", length="30")
 	 * @var string
@@ -89,6 +104,7 @@ class ConnectionAsy extends JModel
 		$this->SetFileID($File->ID());
 		$this->SetDeclarantCoding("");
 		$this->SetOwnerCoding("");
+		$this->SetMasir('');
 	}
 	
 	static function GetAsyByFile($File){
@@ -108,6 +124,8 @@ class ConnectionAsy extends JModel
 			return null;
 		}
 	}
+	
+	
 }
 
 use \Doctrine\ORM\EntityRepository;
@@ -124,6 +142,16 @@ class ConnectionAsyRepository extends EntityRepository
 		$fileID=$File->ID();
 		$r=j::DQL("SELECT A FROM ConnectionAsy as A WHERE A.FileID=?",$fileID);
 		return $r;
+	}
+	static function UpdateAll(){
+		$r=j::DQL("SELECT A FROM ConnectionAsy as A LIMIT 1,20");
+		/**foreach ($r as $v) {
+		 $d=$v->Masir();
+		if(!isset($d)){
+		$t=json_decode($v->Whole());
+		$v->setMasir($t->masir);
+		}
+		}**/
 	}
 	
 }

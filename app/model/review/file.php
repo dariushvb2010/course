@@ -499,15 +499,11 @@ class ReviewFileRepository extends EntityRepository
 	 */
 	public function CotagList($Pagination=null,$gateCode='All',$operation='=')
 	{		
-		if($gateCode!='All'){
-			$gateCodeStr=" WHERE F.Gatecode".$operation.$gateCode;
-		}
 		if($Pagination=='CountAll'){
 			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F ";
 			
 			if($GateCode!='all')
 				$QueryStr.=" WHERE F.Gatecode".$operation.$gateCode;
-			
 			$r=j::ODQL($QueryStr);
 			return $r[0]['result'];
 		}else{
