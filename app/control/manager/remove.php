@@ -7,10 +7,10 @@ class ManagerRemoveController extends JControl
 
 		$Cotag=b::CotagFilter($_POST['Cotag']);
 		$File=b::GetFile($Cotag);
-		$LLP=$File->LLP();
 		
 		if (isset($_POST['Cotag']) && !isset($_POST['confirm']))
 		{
+			$LLP=$File->LLP();
 			$this->LLP=$LLP;
 		}
 		else if(isset($_POST['confirm']))
