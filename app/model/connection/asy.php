@@ -35,15 +35,15 @@ class ConnectionAsy extends JModel
 	 * @var integer
 	 */
 	protected $FileID;
-	function FileID()
-	{
-		return $this->FileID;
-	}
-	function SetFileID($w)
-	{
-		$this->FileID=$w;
-	}
-	
+	function FileID(){ return $this->FileID; }
+	function SetFileID($w){ $this->FileID=$w; }
+	/**
+	 * تاریخ ثبت کوتاژ cotag register date
+	 * @Column(type="integer")
+	 * @var integer
+	 */
+	protected $RegTimestamp;
+	function RegTimestamp(){ return $this->RegTimestamp; }
 	/**
 	 * کد اظهارکننده
 	 * @Column(type="string", length="30")
@@ -65,15 +65,65 @@ class ConnectionAsy extends JModel
 	 * @var string
 	 */
 	protected $OwnerCoding;
-	function OwnerCoding()
-	{
-		return $this->OwnerCoding;
-	}
-	function SetOwnerCoding($w)
-	{
-		$this->OwnerCoding=$w;
-	}
-	
+	function OwnerCoding(){ return $this->OwnerCoding; }
+	function SetOwnerCoding($w){ $this->OwnerCoding=$w; }
+	/**
+	 * نام صاحب کالا
+	 * @Column(type="string")
+	 * @var string
+	 */
+	protected $OwnerName;
+	function OwnerName(){ return $this->OwnerName; }
+	function SetOwnerName($val){ $this->OwnerName=$val; }
+	/**
+	 * ارزیاب
+	 * @Column(type="string", length="150")
+	 * @var string
+	 */
+	protected $Arzyab;
+	function Arzyab(){ return $this->Arzyab; }
+	/**
+	 * کارشناس سالن
+	 * @Column(type="string", length="150")
+	 * @var string
+	 */
+	protected $Karshenas_salon;
+	function Karshenas_salon(){ return $this->Karshenas_salon; }
+	/**
+	 * کارشناس ارزش
+	 * @Column(type="string", length="150")
+	 * @var string
+	 */
+	protected $Karshenas_arzesh;
+	function Karshenas_arzesh(){ return $this->Karshenas_arzesh; }
+	/**
+	 * مسیر اظهارنامه
+	 * 1:green, 2:yellow, 3:red
+	 * @example 1,2,3
+	 * @Column(type="smallint", nullable=TRUE)
+	 * @var integer
+	 */
+	protected $Masir;
+	function Masir(){ return $this->Masir; }
+	function setMasir($val){ $this->Masir = $val; }
+	/**
+	 * @Column (type="string", length="50")
+	 * @var string
+	 */
+	protected $ArzPrice;
+	function ArzPrice(){ return $this->ArzPrice; }
+	/**
+	 * @Column (type="string", length="50")
+	 * @var string
+	 */
+	protected $RialPrice;
+	function RialPrice(){ return $this->RialPrice; }
+	/**
+	 * @Column (type="string", length="50")
+	 * @var string
+	 */
+	protected $TotalTexes;
+	function TotalTaxes(){ return $this->TotalTexes; }
 	/**
 	 * همه اطلاعات آسی کودا
 	 * @Column(type="text")
@@ -81,7 +131,7 @@ class ConnectionAsy extends JModel
 	 */
 	protected $Whole;
 	function Whole()
-	{
+	{		
 		$w=$this->Whole;
 		return json_decode($w);
 	}
@@ -90,7 +140,10 @@ class ConnectionAsy extends JModel
 		$w=json_encode($w);
 		$this->Whole=$w;
 	}
-	
+	function UpdateFieldsFromWhole()
+	{
+		
+	}
 	/**
 	 * 
 	 * @param ReviewFile $File
@@ -113,7 +166,7 @@ class ConnectionAsy extends JModel
 			return null;
 		}
 	}
-
+	
 	static function DeleteAsyByFile($File){
 		$ans=self::GetAsyByFile($File);
 		if($ans){

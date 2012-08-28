@@ -365,12 +365,16 @@ abstract class Mail
 		}
 		return $ErrorCount;
 	}
-	
+	/**
+	 * give  | send | receive
+	 * @param array $Files
+	 * @param boolean $RemoveCalled
+	 * @param array $Error
+	 * @return boolean
+	 */
 	function Act($Files, $RemoveCalled, &$Error)
 	{
-		echo 'Act;';
 		$SaveResult=$this->Save($Files, $RemoveCalled, $Error);
-		var_dump($SaveResult);
 		if($Files AND $SaveResult===0)
 		{
 			$T=$this->Type();
