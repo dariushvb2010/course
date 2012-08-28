@@ -64,9 +64,7 @@ class ConnectionBaghicuda extends JModel
 		if($ans){
 			return $ans;
 		}else{
-			$c=new ConnectionBakedata();
-			//$c->GetAsycuda($Cotag);
-			//$r=new ConnectionAsy(); 
+			return null; 
 		}
 	}
 }
