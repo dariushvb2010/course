@@ -102,9 +102,10 @@ class ConnectionAsy extends JModel
 	}
 
 	static function DeleteAsyByFile($File){
-		$ans=ORM::Query("ConnectionAsy")->GetAsyByFile($File);
+		$ans=self::GetAsyByFile($File);
 		if($ans){
 			ORM::Delete($ans);
+			ORM::Flush();
 		}else{
 			return null;
 		}

@@ -1,29 +1,53 @@
 <?php
 class ReviewSelectController extends JControl
 {
-	function Start()
-	{
-		j::Enforce("Reviewer");
-		if($_REQUEST['Class'])
-		{
-			$Class=$_POST['Classe']*1;
-			$File=ORM::Query("ReviewFile")->GetRecentFileByClasse($Class);
-			$Cotag=$File->Cotag();	
-		}
-		else if ($_REQUEST['Cotag'])
+	function CheckCotag($Error){
+		if ($_REQUEST['Cotag'])
 		{
 			$Cotag=b::CotagFilter($_POST['Cotag']);
 		}
 		if($Cotag>0){
 			$Res=ORM::Query("ReviewProgressReview")->IsAddable($Cotag);
-			if(is_string($Res))
+			if(is_string($Res)){
 				$Error[]=$Res;
-			else
+				return $Error;
+			}else{
 				$this->Redirect("./?Cotag={$Cotag}");
+			}
 		}
-		$CurrentUser=MyUser::CurrentUser();
-		$MyUnreviewedFiles=$CurrentUser->AssignedReviewableFile();
-		$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
+	}
+	function Start()
+	{
+		//j::Enforce("Reviewer");
+		$this->CheckCotag($Error);
+		if(isset($_REQUEST['ID'])){
+			$CurrentUser=MyUser::getUser($_REQUEST['ID']);
+			$this->PageType="OtherView";
+			$this->Title="مشاهده کوتاژ های باکس کارشناس";
+		}else{
+			$CurrentUser=MyUser::CurrentUser();
+			$this->PageType="ReviewerView";
+			$this->Title="انتخاب اظهارنامه جهت کارشناسی";
+		}
+		
+		if($CurrentUser){
+			$MyUnreviewedFiles=$CurrentUser->AssignedReviewableFile();
+			$this->FileAutoList=$this->CreateReviewList($MyUnreviewedFiles);
+			
+			$this->Count=count($MyUnreviewedFiles);
+			$this->MyUnreviewedFiles=$MyUnreviewedFiles;
+		}else{
+			$Error[]="کاربر موجود نیست.";
+		}
+		
+		$this->Error=$Error;
+		if (count($Error)) $this->Result=false;
+		return $this->Present();
+	}
+	
+	
+	function CreateReviewList($FileArray){
+		$al=new AutolistPlugin($FileArray,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
 		$al->SetHeader('Cotag', 'کوتاژ',true);
 		$al->HasTier=true;
@@ -33,13 +57,7 @@ class ReviewSelectController extends JControl
 		$al->SetHeader('assignCreateTimestamp', 'زمان تخصیص',true);
 		$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
 		$al->SetFilter(array($this,"myfilter"));
-		$this->FileAutoList=$al;
-		
-		$this->Count=count($MyUnreviewedFiles);
-		$this->MyUnreviewedFiles=$MyUnreviewedFiles;
-		$this->Error=$Error;
-		if (count($Error)) $this->Result=false;
-		return $this->Present();
+		return $al;
 	}
 	
 	function myfilter($k,$v,$D)
@@ -59,7 +77,11 @@ class ReviewSelectController extends JControl
 		}
 		elseif($k=='Cotag')
 		{
+			if($this->PageType=="ReviewerView"){
 			return "<a class='link_but' href='./?Cotag={$D->Gatecode()}-{$D->Cotag()}'>{$D->Cotag()}</a>";
+			}else{
+				return $D->Cotag();
+			}
 		}
 		elseif($k=='GateCode')
 		{

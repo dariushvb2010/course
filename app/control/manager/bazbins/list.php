@@ -97,7 +97,7 @@ class ManagerBazbinsListController extends JControl
 			$c=$D->AssignedReviewableFileCount();
 			if(!$c)
 				$c=0;
-			return $c;
+			return "<a href='".SiteRoot."/review/select?ID=".$D->ID."'>{$c}</a>";
 		}
 		else if($k=="State")
 		{

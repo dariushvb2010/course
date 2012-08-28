@@ -22,13 +22,14 @@ form input[type='text'] {
 </style>
 
 <h1><img src="/img/h/h1-review-50.png"/>
-انتخاب اظهارنامه جهت کارشناسی</h1>
+<?php echo $this->Title;?></h1>
 <p>
-تعداد اظهارنامه‌های در انتظار کارشناسی توسط شما : 
+تعداد اظهارنامه‌های در انتظار کارشناسی : 
 <strong> 
 <?php echo $this->Count; ?> 
  </strong>
 </p>
+<?php if ($this->PageType=="ReviewerView"){?>
 <p>
 شماره کوتاژ اظهارنامه‌ای که به شما تخصیص یافته وارد نمایید تا نتایج بازبینی مربوطه را وارد نمایید.
 </p>
@@ -46,6 +47,8 @@ form input[type='text'] {
 
 <input type='submit' value='انتخاب' />
 </div>
+<?php } ?>
+
 <?php if($this->Count){ ?>
 	<div id="filelist">
 		<?php
