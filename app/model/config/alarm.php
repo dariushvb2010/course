@@ -62,7 +62,7 @@ class ConfigAlarm extends Config
 	{
 		$this->Moratorium=$Moratorium*TIMESTAMP_DAY;
 	}
-	public function MoratoriumToDays()
+	public function MoratoriumInDays()
 	{
 		return $this->Moratorium/TIMESTAMP_DAY;
 	}
@@ -199,7 +199,7 @@ class ConfigAlarmRepository extends EntityRepository
 			$this->AddMakers($Makers,$CA);
 			
 			if(ORM::Query("AlarmFree")->Validation($CA))
-			ORM::Persist($CA);
+			ORM::Write($CA);
 			else
 			$Error[]="حداقل يک گروه کاربري يا يک کاربر بايد انتخاب شود.";
 			
