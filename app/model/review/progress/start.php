@@ -90,7 +90,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		if($File==null)
 		{
 			$File=new ReviewFile($Cotag);
-			$File->CheckUp();
+			//$File->CheckUp();
 			ORM::Persist($File);
 		}
 		$start=new ReviewProgressStart($File,$IsPrint, false, $StartGroup);
