@@ -3,6 +3,7 @@ class ConfigAlarmController extends AlarmController
 {
 	function Start()
 	{
+		file_put_contents("a.txt", "hi", FILE_APPEND | LOCK_EX);
 		if(count($_POST) AND !isset($_POST['AutoEditSave']))
 		{
 			
@@ -44,7 +45,7 @@ class ConfigAlarmController extends AlarmController
 		$al->SetHeader("ID", "شناسه",false,false,false);
 		$al->SetHeader("Title", "عنوان");
 		$al->SetHeader("Context", "متن");
-		$al->SetHeader("MoratoriumInDays", "مهلت");
+		$al->SetHeader("MoratoriumToDays", "مهلت");
 		$al->SetHeader("Context", "متن");
 		$al->SetHeader("Style", "نوع", false,false,false);
 		$al->EnableEdit("ویرایش","ID");
