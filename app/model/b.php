@@ -136,7 +136,7 @@ class b
 			return null;
 		
 		//if($ret->State()>=4){
-		$ret->CheckUp();
+		//$ret->CheckUp();
 		//}
 		return $ret;
 	}

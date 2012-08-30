@@ -377,7 +377,7 @@ class ReviewFile
     	ConnectionAsy::DeleteAsyByFile($this);
     	$this->SetRegYear(0);
     	$this->SetBarSerial(0);
-    	$this->CheckUp();
+    	//$this->CheckUp();
     }
 }
 
