@@ -364,6 +364,7 @@ class ReviewFile
     	
     }
     function CheckUp(){
+    	return true;
     	$p=$this->UpdateYear();
     	if(!$p)
     		return false;
