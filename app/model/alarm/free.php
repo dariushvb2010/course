@@ -41,7 +41,7 @@ class AlarmFree extends Alarm
 	{
 		return $this->Moratorium;
 	}
-	public function MoratoriumToDays()
+	public function MoratoriumInDays()
 	{
 		return $this->Moratorium/TIMESTAMP_DAY;
 	}
