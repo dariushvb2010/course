@@ -31,10 +31,8 @@ class ReportStatisticsMainController extends JControl
 					$FDay=$_POST['FDay'];
 					$FHour=$_POST['FHour'];
 					$FMin=$_POST['FMin'];
-					$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
-					$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay); 
-					$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
-					$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
+					$StartTimestamp=$c->Jalali2Timestamp($CYear,$CMonth, $CDay, $CHour, $CMin);
+					$FinishTimestamp=$c->Jalali2Timestamp($FYear, $FMonth, $FDay, $FHour, $FMin);
 				}else{					
 					$StartTimestamp=strtotime("-30 days");
 					$FinishTimestamp=time();

@@ -193,6 +193,18 @@ class JalaliCalendar extends BasePluginClass
 			$gy, $gm, $gd 
 		);
 	}
+	
+	function Jalali2Timestamp($year, $month, $day,$hour=0,$min=0)
+	{
+		$gDate=$this->JalaliToGregorian($year,$month, $day);
+		return strtotime($gDate[0]."/".$gDate[1]."/".$gDate[2]." ".$hour.":".$min);
+	}
+	
+	function ExtractElements($str){
+		$str=str_replace('-','/',$str);
+		$ar=explode('/',$str);
+		return $ar;
+	}
 
 	function div($a, $b)
 	{

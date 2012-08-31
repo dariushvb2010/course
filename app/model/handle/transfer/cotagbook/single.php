@@ -36,10 +36,9 @@ class HandleTransferCotagbookSingle extends HandleTransferSingle
 			$FHour=$_POST['FHour'];
 			$FMin=$_POST['FMin'];
 			$Cotag=b::CotagFilter($_POST['Cotag']);
-			$CDate=$c->JalaliToGregorian($CYear,$CMonth, $CDay);
-			$FDate=$c->JalaliToGregorian($FYear, $FMonth, $FDay);
-			$StartTimestamp=strtotime($CDate[0]."/".$CDate[1]."/".$CDate[2]." ".$CHour.":".$CMin);
-			$FinishTimestamp=strtotime($FDate[0]."/".$FDate[1]."/".$FDate[2]." ".$FHour.":".$FMin);
+			$StartTimestamp=$c->Jalali2Timestamp($CYear,$CMonth, $CDay, $CHour, $CMin);
+			$FinishTimestamp=$c->Jalali2Timestamp($FYear,$FMonth, $FDay, $FHour, $FMin);
+			
 			$NewFiles=ORM::Query("ReviewFile")->FilesInTimeRange($StartTimestamp,$FinishTimestamp,MyUser::CurrentUser());
 			$this->MakeMainList($NewFiles);
 		}

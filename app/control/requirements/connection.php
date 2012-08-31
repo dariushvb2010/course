@@ -8,6 +8,20 @@ class RequirementsConnectionController extends JControl
 		echo '<div class="box">';
 		echo ''.' GetParvanehFromAsycudaYear ';
 		$c=new ConnectionBakedata();
+		$c->GetParvanehFromAsycudaYear("4032322", "1391");
+		if($c->Validate()){
+			echo '<p>';
+			var_dump($c->GetResult());
+			echo '</p>';
+		}else{
+			//var_dump($c->Error);
+			echo $c->Error[0];
+		}
+		echo '</div>';
+		//------------------------------------------------------
+		echo '<div class="box">';
+		echo ''.' GetParvanehFromAsycudaYear ';
+		$c=new ConnectionBakedata();
 		$c->GetParvanehFromAsycudaYear("4005903", "1391");
 		if($c->Validate()){
 			echo '<p>';
