@@ -78,8 +78,8 @@ class ReviewProgressStartRepository extends EntityRepository
 		if(b::CotagValidation($Cotag)==false)
 			return "کوتاژ ناصحیح است.";
 
-		//if(ReviewFile::AsyValidation($Cotag)==false)
-		//	return "کوتاژ در آسیکودا یافت نشد.";
+		if(ReviewFile::AsyValidation($Cotag)==false)
+			return "کوتاژ در آسیکودا یافت نشد.";
 		//		else if(! j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag)))
 			// 					{
 			// 						$Error="کوتاژ در سرور اسیکودا ثبت نشده , خطا در ارتباط با سرور اسیکودا .";
@@ -90,7 +90,7 @@ class ReviewProgressStartRepository extends EntityRepository
 		if($File==null)
 		{
 			$File=new ReviewFile($Cotag);
-			//$File->CheckUp();
+			$File->CheckUp();
 			ORM::Persist($File);
 		}
 		$start=new ReviewProgressStart($File,$IsPrint, false, $StartGroup);

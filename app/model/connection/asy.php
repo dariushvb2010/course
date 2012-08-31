@@ -17,17 +17,7 @@ class ConnectionAsy extends JModel
 		return $this->ID;
 	}
 	
-	/**
-	 * @Column(type="integer")
-	 * @var integer
-	 */
-	protected $CreateTimestamp;
 	
-	function CreateTime()
-	{
-		$jc=new CalendarPlugin();
-		return $jc->JalaliFromTimestamp($this->CreateTimestamp)." ".date("H:i:s",$this->CreateTimestamp);
-	}
 	
 	/**
 	 * ID of ReviewFile
@@ -150,12 +140,13 @@ class ConnectionAsy extends JModel
 	 * @param unknown_type $AsyArray
 	 */
 	function __construct($File,$AsyArray){
-		$this->CreateTimestamp=time();
+		//$this->CreateTimestamp=time();
 		$this->SetWhole($AsyArray);
 		$this->SetFileID($File->ID());
 		$this->SetDeclarantCoding("");
 		$this->SetOwnerCoding("");
 		//$this->SetMasir('');
+		$this->TotalTexes="";
 	}
 	
 	static function GetAsyByFile($File){
