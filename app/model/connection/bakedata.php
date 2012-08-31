@@ -116,7 +116,7 @@ class ConnectionBakedata extends JModel
 	 * @param unknown_type $Cotag
 	 * @param unknown_type $Reapeat
 	 */
-	public function GetYear($Cotag,$Reapeat=5)
+	public function GetYear($Cotag,$Reapeat=4)
 	{
 			$calendar=new CalendarPlugin();
 			$today=$calendar->TodayJalali();
