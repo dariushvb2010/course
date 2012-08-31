@@ -88,7 +88,7 @@ class ConnectionAsy extends JModel
 	 * مسیر اظهارنامه
 	 * 1:green, 2:yellow, 3:red
 	 * @example 1,2,3
-	 * @Column(type="smallint", nullable=TRUE)
+	 * @Column(type="smallint")
 	 * @var integer
 	 */
 	protected $Masir;
@@ -100,6 +100,18 @@ class ConnectionAsy extends JModel
 	 */
 	protected $ArzPrice;
 	function ArzPrice(){ return $this->ArzPrice; }
+	/**
+	 * @Column (type="string", length="8")
+	 * @var string
+	 */
+	protected $ArzType;
+	function ArzType(){ return $this->ArzType; }
+	/**
+	 * @Column (type="string", length="50")
+	 * @var string
+	 */
+	protected $ArzNerkh;
+	function ArzNerkh(){ return $this->ArzNerkh; }
 	/**
 	 * @Column (type="string", length="50")
 	 * @var string
@@ -132,23 +144,98 @@ class ConnectionAsy extends JModel
 	{
 		
 	}
+	
 	/**
 	 * 
 	 * @param ReviewFile $File
 	 * @param unknown_type $AsyArray
 	 */
 	function __construct($File,$AsyArray){
+		$AsyArray=$this->MaintainJsonInput($AsyArray);
+
+		
 		$this->SetWhole($AsyArray);
 		$this->SetFileID($File->ID());
-		$this->SetDeclarantCoding("");
-		$this->SetOwnerCoding("");
-		//$this->SetMasir('');
-		$this->TotalTexes="";
+		$this->CreateTimestamp=time();
+		
+		$this->UpdateFields();
+	}
+	
+	/**
+	 * trims all array cells 
+	 * and remove multiple spaces
+	 * @param unknown_type $inp
+	 */
+	private function MaintainJsonInput($inp){
+		$AsyArray=json_decode(json_encode($inp),true);
+		
+		array_walk_recursive($AsyArray, array($this,'trim_value'));
+		$AsyArray=json_decode(json_encode($AsyArray));
+		return $AsyArray;
+	}
+	function trim_value(&$value)
+	{
+		$value = trim($value);
+		$value = preg_replace('/\s+/', ' ',$value);
+	}
+	
+	private function FixNulls($value){
+		return ($value==null?'':$value);
+	}
+	
+	function UpdateFields(){
+		$AsyArray=$this->Whole();
+		
+		
+		if($this->RegTimestamp) return;
+		
+		$c=new CalendarPlugin();
+		$dat=$c->ExtractElements($AsyArray->kutajDateS);
+		$this->RegTimestamp=$c->Jalali2Timestamp($dat[0], $dat[1], $dat[2]);;
+		
+		
+		$this->Karshenas_salon=$AsyArray->asyKarshenas;
+		
+		$arzar=explode('-',$AsyArray->asyArzyab);
+		if (count($arzar)<2)$arzar=array('','');
+		$this->Arzyab=$arzar[0];
+		$this->Karshenas_arzesh=$arzar[1];
+		
+		$this->OwnerName=$AsyArray->owner->nameOfPerson;
+		$this->SetOwnerCoding($AsyArray->owner->personCode);
+		
+		$this->SetDeclarantCoding($AsyArray->claimer->personCode);
+		
+		$this->ArzType=$AsyArray->arzType;
+		$this->ArzNerkh=$AsyArray->arzNerkh;
+		$this->ArzPrice=$AsyArray->totalGheimatBehArz;
+		$this->RialPrice=$AsyArray->totalGheimatBehRial;
+		
+		$this->setMasir($this->getMasir($AsyArray->masir));
+		
+		$this->TotalTexes=$AsyArray->totalTaxes;		
+	}
+	
+	private function startsWith($haystack, $needle)
+	{
+		$length = strlen($needle);
+		return (substr($haystack, 0, $length) === $needle);
+	}
+	private function getMasir($inp) {
+		if($this->startsWith($inp, "YEL"))
+			$str='yellow';
+		else if($this->startsWith($inp, "RED"))
+			$str='red';
+		else
+			$str='green';
+		$prefix='';
+		return $prefix.$str;
 	}
 	
 	static function GetAsyByFile($File){
 		$ans=ORM::Query("ConnectionAsy")->GetAsyByFile($File);
 		if($ans){
+			$ans->UpdateFields();
 			return $ans;
 		}else{
 			return null;
@@ -180,8 +267,8 @@ class ConnectionAsyRepository extends EntityRepository
 	{
 		
 		$fileID=$File->ID();
-		$r=j::DQL("SELECT A FROM ConnectionAsy as A WHERE A.FileID=?",$fileID);
-		return $r;
+		$r=j::ODQL("SELECT A FROM ConnectionAsy as A WHERE A.FileID=?",$fileID);
+		return $r[0];
 	}
 	static function UpdateAll(){
 		$r=j::DQL("SELECT A FROM ConnectionAsy as A LIMIT 1,20");

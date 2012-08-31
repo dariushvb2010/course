@@ -349,6 +349,8 @@ class ReviewFile
     
     	if(ConnectionAsy::GetAsyByFile($this))
     		return true;
+
+    	//return false;
     	 
     
     	$cq=new ConnectionBakedata();
@@ -356,7 +358,9 @@ class ReviewFile
     	if($cq->Validate()){
     		$s=$cq->GetResult();
     		$r=new ConnectionAsy($this, $s);
-    		ORM::Write($r);
+    		
+    		ORM::Persist($r);
+    		//ORM::Flush();
     		return true;
     	}else{
     		return false;
@@ -364,11 +368,10 @@ class ReviewFile
     	
     }
     function CheckUp(){
-    	//return true;
     	$p=$this->UpdateYear();
     	if(!$p)
     		return false;
-    	
+
     	$p=$this->UpdateSerial();
     	return $this->UpdateAsycuda();
     }
