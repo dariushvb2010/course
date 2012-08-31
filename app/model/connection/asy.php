@@ -143,6 +143,7 @@ class ConnectionAsy extends JModel
 		$this->SetDeclarantCoding("");
 		$this->SetOwnerCoding("");
 		//$this->SetMasir('');
+		$this->TotalTexes="";
 	}
 	
 	static function GetAsyByFile($File){
