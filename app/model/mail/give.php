@@ -34,7 +34,7 @@ class MailGive extends Mail
 	function AssignGetterGroup(MyGroup $GetterGroup)
 	{
 		$this->GetterGroup=$GetterGroup;
-		$GetterGroup->MailGet()->add($this);
+		$GetterGroup->MailGet->add($this);
 	}
 	
 	/**
@@ -42,7 +42,9 @@ class MailGive extends Mail
 	* @var arrayCollectionOfReviewProgressGive
 	*/
 	protected $ProgressGive;
-	function ProgressGive(){ return $this->ProgressGive;}
+	function ProgressGive(){ 
+		return $this->ProgressGive;
+	}
 	function GiveTimestamp()
 	{
 		if($this->ProgressGive)
@@ -217,7 +219,7 @@ class MailGive extends Mail
 	function MyBox()
 	{
 		if($this->State()==self::STATE_CLOSED)
-		return $this->ProgressGive;
+			return $this->ProgressGive;
 	
 	}
 	function GetProgress()
@@ -322,7 +324,7 @@ class MailGiveRepository extends EntityRepository
 	}
 	function GetProgress($Mail)
 	{
-		$r=j::ODQL("SELECT P FROM ReviewProgressGive P JOIN P.MailGive M JOIN P.File F WHERE M=? ORDER BY F.Cotag", $Mail);
+		$r=j::ODQL("SELECT P FROM ReviewProgressGive P JOIN P.MailGive M JOIN P.File F WHERE M=? AND P.Dead=0 ORDER BY F.Cotag", $Mail);
 		return $r;
 	}
 }
