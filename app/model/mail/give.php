@@ -34,7 +34,7 @@ class MailGive extends Mail
 	function AssignGetterGroup(MyGroup $GetterGroup)
 	{
 		$this->GetterGroup=$GetterGroup;
-		$GetterGroup->MailGet->add($this);
+		$GetterGroup->MailGet()->add($this);
 	}
 	
 	/**
