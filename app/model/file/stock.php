@@ -33,6 +33,7 @@ class FileStock
 	function Act(){ return $this->Act; }
 	function SetAct($Act){ $this->Act=$Act; }
 	/**
+	 * it is usefull when the mail state is GETTING. if this boolean is true the checkbox will be check
 	* @Column(type="boolean")
 	* @var boolean
 	*/

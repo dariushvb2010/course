@@ -36,7 +36,17 @@ class ReviewProgressGive extends ReviewProgress
 		if($this->File()->Stock())
 		return $this->File()->Stock()->Error();
 	}
-	
+	function kill(){
+		parent::kill();
+		$m = $this->MailGive();
+		$f = $this->File();
+		$s = $f->Stock();
+ 		if($s){
+			$f->SetStock(null);
+			$m->Stock()->remove($s);
+			ORM::Delete($s);
+ 		}
+	}
 	function __construct(ReviewFile $File=null, MailGive $MailGive=null, $IfPersist=true)
 	{
 		parent::__construct($File, null, $IfPersist);
