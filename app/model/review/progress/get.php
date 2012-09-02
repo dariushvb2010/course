@@ -25,11 +25,11 @@ class ReviewProgressGet extends ReviewProgress
 		$this->ProgressGive=$ProgressGive;
 		$ProgressGive->SetProgressGet($this);
 	}
-	function __construct(ReviewProgressGive $ProgressGive=null, $IfPersist=true)
+	function __construct(ReviewProgressGive $ProgressGive=null)
 	{
 		$User=MyUser::CurrentUser();
-		parent::__construct($ProgressGive->File(), $User, $IfPersist);
-		$IfPersist ? $this->AssignProgressGive($ProgressGive) : $this->SetProgressGive($ProgressGive);
+		parent::__construct($ProgressGive->File(), $User);
+		$this->SetProgressGive($ProgressGive);
 		
 	}
 	function  Summary()
@@ -60,6 +60,10 @@ class ReviewProgressGet extends ReviewProgress
 		$res="Get_".$Getter."_from_".$Giver;
 		return $res;
 	}
+	public function AddAssociations(){
+		parent::AddAssociations();
+		$this->ProgressGive->SetProgressGet($this);
+	}
 }
 
 
@@ -70,20 +74,16 @@ class ReviewProgressGetRepository extends EntityRepository
 	* @param ReviewFile|string|integer $File
 	* @return string|Ambigous <string, number>
 	*/
-	public function AddToFile(ReviewProgressGive $ProgressGive=null, $IfPersist=true)
+	public function AddToFile(ReviewProgressGive $ProgressGive=null)
 	{
-		$P=new ReviewProgressGet($ProgressGive, false);
+		$P=new ReviewProgressGet($ProgressGive);
 		$ch= $P->Check();
 		if(is_string($ch))
 			return $ch;
-		if($IfPersist)
-		{
-			$R=new ReviewProgressGet($ProgressGive, true);
-			$R->Apply();
-			ORM::Persist($R);
-			return $R;
-		}
-		else
-			return $P;
+		
+		//$P=new ReviewProgressGet($ProgressGive, true);
+		$P->Apply();
+		ORM::Persist($P);
+		return $P;
 	}
 }

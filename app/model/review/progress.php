@@ -32,7 +32,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  *  "Protest"="ReviewProcessProtest",
  *  "Refund"="ReviewProcessRefund",
  *  "RegisterClasse"="ReviewProcessRegister",
- *  "Senddemand"="ReviewProcessSenddemand"
+ *  "Senddemand"="ReviewProcessSenddemand",
+ *  "Clearance"="ReviewProcessClearance"
  * })
  * */
 abstract class ReviewProgress
@@ -157,22 +158,26 @@ abstract class ReviewProgress
 	 * @param ReviewFile $File
 	 * @param MyUser $User
 	 */
-	function __construct(ReviewFile $File=null,MyUser $User=null,$IfPersist=true)
+	function __construct(ReviewFile $File=null,MyUser $User=null)
 	{
 		$this->CreateTimestamp=time();
 		$this->EditTimestamp=0;
 		if($File)
-			$IfPersist ? $this->AssignFile($File) : $this->SetFile($File);
+			$this->SetFile($File);
 		if(!$User)
 			$User=MyUser::CurrentUser();
 		if($User)
-			$IfPersist ? $this->AssignUser($User) : $this->SetUser($User);
+			$this->SetUser($User);
 		$this->Comment="";
 		$this->MailNum="";
 		$this->PrevState=0;
 		$this->Dead=0;
 	}
 
+	/**
+	 * @author Morteza ;)
+	 * @var unknown_type
+	 */
 	public $error=null;
 	
 	abstract function Summary();
@@ -252,6 +257,12 @@ abstract class ReviewProgress
 			$this->File()->SetState($NewState);
 		return $NewState;
 	}
+	public function AddAssociations(){
+		if($this->File->Progress()->contains($this))
+			throw new Exception("AddAssociation Exception!!!!");
+		$this->File->Progress()->add($this);
+		$this->User->Progress()->add($this);
+	}
 	/**
 	 * Has to check the situations and apply the changes and make the entities
 	 */
@@ -264,6 +275,7 @@ abstract class ReviewProgress
 		if(!is_string($res))
 		{
 			$this->ApplyAlarm();
+			$this->AddAssociations();
 		}
 		return $res;
 	}

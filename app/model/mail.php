@@ -342,10 +342,26 @@ abstract class Mail
 			}
 			if(!$File->Stock() or !$File->Stock()->Act())
 			{
-				$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
-				if(is_string($P))
+				//$P=ORM::Query("ReviewProgress".$T)->AddToFile($File,$this,false);//progress is not persist, it is just for error reporting
+				//$r="ReviewProgress".$T;
+				//$P = new {$r}();
+				switch ($T){
+					case "Give":
+						$P = new ReviewProgressGive($File,$this);
+						break;
+					case "Send":
+						$P = new ReviewProgressSend($File,$this);
+						break;
+					case "Receive":
+						$P = new ReviewProgressReceive($File,$this);
+						break;
+					default:
+						throw new Exception("model.mail Exception");
+				}
+				$ch = $P->Check();
+				if(is_string($ch))
 				{
-					$Error[]=$P;
+					$Error[]=$ch;
 					$ErrorCount++;
 				}
 				else

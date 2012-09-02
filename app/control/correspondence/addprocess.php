@@ -71,8 +71,15 @@ class CorrespondenceAddprocessController extends JControl
 				case 'ProcessAssign':
 					$Res=ORM::Query("ReviewProcessAssign")->AddToFile($File);
 					if(!isset($Res['Error'])){
-//						orm::Dump($Res);
 						$this->Redirect("./addprocess?Cotag={$File->Cotag()}&success={$input_class}&Reviewer={$Res['Class']->Reviewer()->getFullName()}");
+					}
+					break;
+				case 'ProcessClearance':
+					echo 1;
+					$Res=ORM::Query("ReviewProcessClearance")->AddToFile($File);
+					echo 2;
+					if(!isset($Res['Error'])){
+						//$this->Redirect("./addprocess?Cotag={$File->Cotag()}&success={$input_class}");
 					}
 					break;
 				default:
@@ -100,6 +107,9 @@ class CorrespondenceAddprocessController extends JControl
 					break;
 				case 'ProcessAssign':
 					$res="ارجاع پرونده به کارشناس ".v::b($Reviewer)." ثبت گردید.";
+					break;
+				case 'ProcessClearance':
+					$res="پرونده مختومه و از مکاتبات خارج گردید.";
 					break;
 				case 'Protest':
 					$res='اعتراض صاحب کالا ثبت گردید.';

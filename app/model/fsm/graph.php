@@ -38,16 +38,16 @@ class FsmGraph extends JModel
 	41=>array('Protest'=>42,'P1415'=>1514),
 	42=>array('ProcessAssign'=>43),
 	43=>array('Judgement_ok'=>44,'Judgement_nok'=>45,'Judgement_commission'=>59,'Judgement_setad'=>55),
-	44=>array('ProcessConfirm_ok'=>80,'ProcessConfirm_nok'=>45),
+	44=>array('ProcessConfirm_ok'=>7,'ProcessConfirm_nok'=>45),
 	45=>array('Senddemand_karshenas'=>46),
 	46=>array('Prophecy_second'=>47,'Protest'=>49),
-	47=>array('Payment'=>80,'Protest'=>49,'P1415'=>1415),
+	47=>array('Payment'=>7,'Protest'=>49,'P1415'=>1415),
 	49=>array('ProcessAssign'=>50),
 	50=>array('Judgement_ok'=>51,'Judgement_setad'=>55,'Judgement_commission'=>59),
-	51=>array('Processconfirm_ok'=>80,'Processconfirm_nok'=>55),
+	51=>array('Processconfirm_ok'=>7,'Processconfirm_nok'=>55),
 	52=>array('Judgement_ok'=>53,'Judgement_commission'=>59,'Judgement_setad'=>55),
 	53=>array('Processconfirm_ok'=>54,'Processconfirm_nok'=>55),
-	54=>array('Refund'=>80),
+	54=>array('Refund'=>7),
 	75=>array('Feedback_setad_toowner'=>68,'Feedback_setad_togomrok'=>56),
 	56=>array('Senddemand_setad'=>57),	
 	57=>array('Prophecy_setad'=>58,'Protest'=>59),
@@ -61,6 +61,7 @@ class FsmGraph extends JModel
 	67=>array('Payment'=>68),
 	69=>array('Protest'=>70),
 	70=>array('ProcessAssign'=>52),
+	'Mokatebat'=>array('ProcessClearance'=>7),
 	);
 	
 	Public static $ProcessList=array(
@@ -80,6 +81,11 @@ class FsmGraph extends JModel
 			),
 	'Review_nok'=>array(
 			'Label'=>'*********',
+			'is_MokatebatViewable'=>false,
+			),
+	'ProcessClearance'=>array(
+			'Label'=>'تصفیه و مختومه',
+			'is_MokatebatViewable'=>true,
 			),
 	'Assign_by_manager'=>'*********',
 	'Give_archive_to_raked'=>'*********',

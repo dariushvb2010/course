@@ -31,7 +31,7 @@ class ReviewProgressStart extends ReviewProgress
 	function SetStartGroup(MyGroup $G){
 		$this->StartGroup=$G;
 	}
-	function __construct(ReviewFile $File=null,$IsPrint=false, $IfPersist=true, MyGroup $StartGroup=null)
+	function __construct(ReviewFile $File=null,$IsPrint=false, MyGroup $StartGroup=null)
 	{	
 		if($IsPrint!=null)
 			$this->IsPrint=$IsPrint;
@@ -43,7 +43,7 @@ class ReviewProgressStart extends ReviewProgress
 		{
 			$this->StartGroup = $StartGroup;
 		}
-		parent::__construct($File, null, $IfPersist);
+		parent::__construct($File, null);
 
 	}
 	function  Summary()
@@ -93,14 +93,14 @@ class ReviewProgressStartRepository extends EntityRepository
 			$File->CheckUp();
 			ORM::Persist($File);
 		}
-		$start=new ReviewProgressStart($File,$IsPrint, false, $StartGroup);
+		$start=new ReviewProgressStart($File,$IsPrint, $StartGroup);
 		$ch=$start->Check();
 		if(is_string($ch))
 		{
 			return $ch;
 		}
 
-		$start= new ReviewProgressStart($File, $IsPrint, true, $StartGroup);
+		//$start= new ReviewProgressStart($File, $IsPrint, true, $StartGroup);
 		$start->Apply();
 		ORM::Persist($start);
 

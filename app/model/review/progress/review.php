@@ -118,9 +118,9 @@ class ReviewProgressReview extends ReviewProgress
 		$this->Amount=$a;
 	}
 
-	function __construct(ReviewFile $File=null, $Dif=null,$Amount=null, $IfPersist=true)
+	function __construct(ReviewFile $File=null, $Dif=null,$Amount=null)
 	{
-		parent::__construct($File,null, $IfPersist);
+		parent::__construct($File);
 		$this->SetResult(false);
 		$this->Provision="";
 		if($Dif==null)
@@ -216,7 +216,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 				}
 				else
 				{
-					$R=new ReviewProgressReview($File,"","", false);
+					$R=new ReviewProgressReview($File,"","");
 					$R->SetResult(1);
 					$R->SetProvision("");
 					$ch=$R->Check();
@@ -224,11 +224,10 @@ class ReviewProgressReviewRepository extends EntityRepository
 					if(is_string($ch))
 						return $ch;
 						
-					$R=new ReviewProgressReview($File,"","", true);
-					$R->SetResult(1);
-					$R->SetProvision("");
+					//$R=new ReviewProgressReview($File,"","", true);
+					//$R->SetResult(1);
+					//$R->SetProvision("");
 					$R->Apply();
-						
 					ORM::Persist($R);
 					return true;
 				}
@@ -255,7 +254,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 
 		$File=b::GetFile($validInput['Cotag']);
 
-		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], false);
+		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount']);
 		$R->SetResult($validInput['Result']);
 		$R->SetProvision($validInput['Provision']);
 		$ch=$R->Check();
@@ -268,11 +267,10 @@ class ReviewProgressReviewRepository extends EntityRepository
 			$ProgReview->kill();
 		}
 
-		$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], true);
-		$R->SetResult($validInput['Result']);
-		$R->SetProvision($validInput['Provision']);
+		//$R=new ReviewProgressReview($File,$validInput['Difference'],$validInput['Amount'], true);
+		//$R->SetResult($validInput['Result']);
+		//$R->SetProvision($validInput['Provision']);
 		$ch=$R->Apply();
-
 		ORM::Persist($R);
 		return $R;
 	}

@@ -16,9 +16,24 @@ class ReviewProcessRegister extends ReviewProgress
 		$Class++;
 		return $Class;
 	}
-	function __construct(ReviewFile $File=null,MyUser $User=null, $IfPersist=true)
+	
+	/**
+	 * @Column(type="string")
+	 * @var string
+	 */
+	protected  $Classe;
+	function Classe()
 	{
-		parent::__construct($File,$User,$IfPersist);
+		return $this->Classe;
+	}
+	function setClasse($value)
+	{
+		$this->Classe=$value;
+	}
+	
+	function __construct(ReviewFile $File=null,MyUser $User=null)
+	{
+		parent::__construct($File,$User);
 		if($File)
 		{
 			if($File->LLP("Review"))
@@ -28,9 +43,9 @@ class ReviewProcessRegister extends ReviewProgress
 				if($Classe==0){
 					$this->error='مشکلی در تخصیص شماره کلاسه پیش آمده است.';
 					return false;
+				}else{
+					$this->SetClass($Classe);
 				}
-				if($IfPersist)
-					$File->SetClass($Classe);
 			}
 			
 		}
@@ -60,28 +75,22 @@ class ReviewProcessRegisterRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null)
+	public function AddToFile(ReviewFile $File)
 	{
 		$CurrentUser=MyUser::CurrentUser();
-		if($File)
-		{
-			$R=new ReviewProcessRegister($File, $CurrentUser,false);
+			$R=new ReviewProcessRegister($File, $CurrentUser);
 			$err=$R->Check();
 			if(!is_string($err)){
-				$R=new ReviewProcessRegister($File, $CurrentUser,true);
+				//$R=new ReviewProcessRegister($File, $CurrentUser,true);
 				$R->Apply();
 				ORM::Persist($R);
-				ORM::Persist($File);
-				$res['Class']=$File->GetClass();
+				//ORM::Persist($File);
+				$res['Class']=$R->GetClass();
 			}else{
 				//ORM::Clear();
 				$res['Error']=$err;
 			}
-		}
-		else 
-		{
-			$res['Error']="اظهارنامه وجود ندارد.";	
-		}
+
 		return $res;
 	}
 	public function GetMaxClass()
