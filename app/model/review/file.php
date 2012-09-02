@@ -17,23 +17,14 @@ class ReviewFile
      * @var integer
      */
     protected $ID;
-	function ID()
-	{
-		return $this->ID;
-	}
+	function ID(){ return $this->ID;	}
 	/**
 	 * @Column(type="integer")
 	 * @var integer
 	 */
 	protected $Cotag;
-	function Cotag()
-	{
-		return $this->Cotag;
-	}
-	function setCotag($value)
-	{
-		$this->Cotag=$value;
-	}
+	function Cotag(){ return $this->Cotag; }
+	function setCotag($value){	$this->Cotag=$value; }
 	/**
 	 * شماره مجوز بارگیری
 	 * Bargiri Serail
@@ -41,39 +32,25 @@ class ReviewFile
 	 * @var string
 	 */
 	protected $BarSerial;
-	function BarSerial()
-	{
-		return $this->BarSerial;
-	}
-	function SetBarSerial($BarSerial)
-	{
-		$this->BarSerial = $BarSerial;
-	}
+	function BarSerial(){ return $this->BarSerial; }
+	function SetBarSerial($BarSerial){ $this->BarSerial = $BarSerial;	}
 	/**
 	 * @Column(type="integer", nullable="true")
 	 * @var integer
 	 */
 	protected $RegYear;
-	function RegYear()
-	{
-		return $this->RegYear;
-	}
-	function SetRegYear($RegYear)
-	{
-		$this->RegYear = $RegYear;
-	}
+	function RegYear(){ return $this->RegYear; }
+	function SetRegYear($RegYear){ $this->RegYear = $RegYear;	}
     /**
      * @Column(type="integer")
      * @var integer
      */
     protected $CreateTimestamp;
     
-    function CreateTime()
-    {
+    function CreateTime(){	
     	$jc=new CalendarPlugin();
     	return $jc->JalaliFromTimestamp($this->CreateTimestamp)." ".date("H:i:s",$this->CreateTimestamp);
     }
-    
     /**
      * @Column(type="integer")
      * @var integer
@@ -92,58 +69,26 @@ class ReviewFile
     {
 	    $this->FinishTimestamp=$time;
     }
-    
-    
     /**
-    *
     * @OneToMany(targetEntity="ReviewProgress", mappedBy="File")
     * @var ReviewProgress
     */
     protected $Progress;
-    function Progress()
-    {
-    	return $this->Progress;
-    }     
-    
-    
-    /**
-     * @Column(type="integer")
-     * @var integer
-     */
-    protected $Class;
-    function GetClass()
-    {
-    	return $this->Class;
-    }
-    function SetClass($c)
-    {
-    	$this->Class=$c;
-    }
+    function Progress(){  return $this->Progress; }     
     /**
     * @Column(type="integer")
     * @var integer
     */
     protected $Gatecode;
-    function Gatecode()
-    {
-    	return $this->Gatecode;
-    }
+    function Gatecode(){ return $this->Gatecode;  }
     /**
     * @Column(type="integer")
     * @var integer
     */
     protected $State;
-    function State()
-    {
-    	return $this->State;
-    }
-    function SetState($value)
-    {
-    	$this->State=$value;
-    }
-    
+    function State(){ 	return $this->State;  }
+    function SetState($value){	$this->State=$value; }
     /**
-    *
     * @OneToOne(targetEntity="ReviewDossier", inversedBy="File")
     * @JoinColumn(name="DossierID", referencedColumnName="ID", nullable=true);
     * @var ReviewDossier
@@ -168,6 +113,10 @@ class ReviewFile
     function Stock(){ return $this->Stock;}
     function SetStock($Stock){ $this->Stock=$Stock; }
     
+    public function GetClass(){
+    	$p = $this->LLP("Register",true);
+    	return $p ? $p->Classe() : null;
+    }
     /**
      * returns the recent file
      * @param  integer or string or ReviewFile

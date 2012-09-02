@@ -44,7 +44,9 @@ class ReviewProgressClasseconfirm extends ReviewProgress
 	{
 		return "تایید مسئول بازبینی";
 	}
-	
+	function Event(){
+		return "";
+	}
 }
 
 

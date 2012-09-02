@@ -44,7 +44,7 @@ class ReviewProcessRegister extends ReviewProgress
 					$this->error='مشکلی در تخصیص شماره کلاسه پیش آمده است.';
 					return false;
 				}else{
-					$this->SetClass($Classe);
+					$this->SetClasse($Classe);
 				}
 			}
 			
@@ -85,7 +85,7 @@ class ReviewProcessRegisterRepository extends EntityRepository
 				$R->Apply();
 				ORM::Persist($R);
 				//ORM::Persist($File);
-				$res['Class']=$R->GetClass();
+				$res['Class']=$R->Classe();
 			}else{
 				//ORM::Clear();
 				$res['Error']=$err;

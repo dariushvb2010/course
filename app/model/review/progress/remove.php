@@ -35,6 +35,9 @@ class ReviewProgressRemove extends ReviewProgress
 	{
 		return "حذف یک فرآیند";
 	}
+	function Event(){
+		return 'Remove';
+	}
 
 }
 

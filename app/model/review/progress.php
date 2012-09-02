@@ -190,7 +190,7 @@ abstract class ReviewProgress
 	 * returns the final name of the progress
 	 * @return string
 	 */
-	//abstract function Event();
+	abstract function Event();
 	/**
 	 * Has to return a texual name of the progress depending on result of the progress
 	 * @return string

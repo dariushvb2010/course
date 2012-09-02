@@ -45,20 +45,19 @@ class ReviewProcessClearanceRepository extends EntityRepository
 	 */
 	public function AddToFile(ReviewFile $File=null,$Comment=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
 
 		if ($File==null)
 		{
 			$Res['Error']=v::Ecnf();
 		}
 		else{
-			$R=new ReviewProcessClearance($File,$CurrentUser);
+			$R=new ReviewProcessClearance($File);
 			$R->setComment(($Comment==null?"":$Comment));
 			$er=$R->Check();
 			if(!is_string($er)){
 				$R->Apply();
 				echo 'F';	
-				//ORM::Write($R);
+				ORM::Persist($R);
 				echo 'G';	
 				$Res['Class']=$R;
 			}else{
