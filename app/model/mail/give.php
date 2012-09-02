@@ -128,10 +128,12 @@ class MailGive extends Mail
 			$ProgressGive=$File->LLP("Give");
 			if($this->ProgressGive->contains($ProgressGive))
 			{
-				$P=ORM::Query("ReviewProgressGet")->AddToFile($ProgressGive,false);//progress is not persist, it is just for error reporting
-				if(is_string($P))
+				//$P=ORM::Query("ReviewProgressGet")->AddToFile($ProgressGive,false);//progress is not persist, it is just for error reporting
+				$P=new ReviewProgressGet($ProgressGive);
+				$ch= $P->Check();
+				if(is_string($ch))
 				{
-					$E=$P;
+					$E=$ch;
 					$ErrorCount++;
 				}
 				else

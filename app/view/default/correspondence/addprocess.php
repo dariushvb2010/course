@@ -24,7 +24,7 @@ form input[type='text'] {
 	include dirname(__FILE__).'/'.'../report/blocks/fileinfobox.php';
 }?>
 
-<form method='post' action="?">
+<form method='post' action="">
 <?php if (isset($this->Result))
 	ViewResultPlugin::Show($this->Result,$this->Error);
 ?>
@@ -38,7 +38,7 @@ form input[type='text'] {
 </form>
 
 <?php if($this->ProcessArray){ ?>
-<form method='post' action="./">
+<form method='post' action="">
 	<input type='hidden' name='Cotag' value='<?php echo $this->Cotag;?>'>	
 	<?php 
 	foreach ($this->ProcessArray as $p){

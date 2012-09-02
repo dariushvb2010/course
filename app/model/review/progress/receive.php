@@ -27,10 +27,11 @@ class ReviewProgressReceive extends ReviewProgress
 // 		$m->ProgressReceive()->remove($this);
 // 		$this->MailReceive=null;
 	}
-	function __construct(ReviewFile $File=null, MailReceive $Mail=null, $IfPersist=true)
+	function __construct(ReviewFile $File=null, MailReceive $Mail=null)
 	{
 		parent::__construct($File, null, $IfPersist);
-		$IfPersist ? $this->AssignMailReceive($Mail) : $this->SetMailReceive($Mail);
+		if($Mail)
+			$this->SetMailReceive($Mail);
 	}
 	
 	function  Summary()
@@ -53,29 +54,27 @@ class ReviewProgressReceive extends ReviewProgress
 		$r="Receive_".strtolower($R)."_from_out";
 		return $r;
 	}
+	public function AddAssociations(){
+		parent::AddAssociations();
+		$this->MailReceive->ProgressReceive()->add($this);
+	}
 }
 
 
 use \Doctrine\ORM\EntityRepository;
 class ReviewProgressReceiveRepository extends EntityRepository
 {
-	public function AddToFile(ReviewFile $File,MailReceive $Mail, $IfPersist=true)
+	public function AddToFile(ReviewFile $File,MailReceive $Mail)
 	{
-		$File=b::GetFile($File);
-		if(!$File)
-		{
-			return "اظهارنامه یافت نشد.";
-		}
-		$P=new ReviewProgressReceive($File, $Mail, false);
+		$P=new ReviewProgressReceive($File, $Mail);
 		$ch=$P->Check();
 		if(is_string($ch))
 			return $ch;
-		if($IfPersist) 
-		{
-			$P=new ReviewProgressReceive($File, $Mail, true);
-			$P->Apply();
-			ORM::Persist($P);
-		}
+		
+		//$P=new ReviewProgressReceive($File, $Mail, true);
+		$P->Apply();
+		ORM::Persist($P);
+		
 		return $P;
 	}
 }

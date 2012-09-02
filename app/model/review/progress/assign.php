@@ -20,9 +20,9 @@ class ReviewProgressAssign extends ReviewProgress
 		return $this->Reviewer;
 	}
 	
-	function __construct(ReviewFile $File=null,MyUser $Reviewer=null, $IfPersist=true)
+	function __construct(ReviewFile $File=null,MyUser $Reviewer=null)
 	{
-		parent::__construct($File,null, $IfPersist);
+		parent::__construct($File);
 		
 		$this->Reviewer=$Reviewer;
 	}
@@ -72,7 +72,7 @@ class ReviewProgressAssignRepository extends EntityRepository
 		}
 		else
 		{
-			$R=new ReviewProgressAssign($File, $Reviewer,false);
+			$R=new ReviewProgressAssign($File, $Reviewer);
 			if($Comment==null)
 				$Comment="";
 			$R->setComment($Comment);
