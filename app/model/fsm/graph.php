@@ -141,21 +141,21 @@ class FsmGraph extends JModel
 	);
 	
 	public static $Name2State=array(	
-		'CotagStart'=>2,
-		'CotagSend'=>3,
+		'CotagStart'=>array(2),
+		'CotagSend'=>array(3),
 		'Cotag'=>array('CotagStart','CotagSend'),
-		'archive'=>4,
-		'Assignable'=>'archive',
-		'reviewing'=> 5,
-		'review_notok'=> 9,
-		'ProcessRegister'=> 18,
-		'Prophecy_first'=>41,
-		'Prophecy_second'=>47,
-		'Prophecy_setad'=>58,
-		'Prophecy_commission'=>63,
-		'Senddemand_demand'=>40,
-		'Senddemand_setad'=>57,
-		'Senddemand_karshenas'=>46,
+		'archive'=>array(4),
+		'Assignable'=>array('archive'),
+		'reviewing'=> array(5),
+		'review_notok'=> array(9),
+		'ProcessRegister'=> array(18),
+		'Prophecy_first'=>array(41),
+		'Prophecy_second'=>array(47),
+		'Prophecy_setad'=>array(58),
+		'Prophecy_commission'=>array(63),
+		'Senddemand_demand'=>array(40),
+		'Senddemand_setad'=>array(57),
+		'Senddemand_karshenas'=>array(46),
 		'Ebtalable'=>array(2,3,4,5,9,11,7),
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
 		'Senddemands'=>array('Senddemand_demand','Senddemand_setad','Senddemand_karshenas'),
@@ -175,8 +175,6 @@ class FsmGraph extends JModel
 		if (!array_key_exists($name,self::$Name2State))
 			return null;
 		$Temp=self::$Name2State[$name];
-		if(!is_array($Temp))
-			$Temp=Array($Temp);
 		
 		$res=array();
 		foreach ($Temp as $val){
