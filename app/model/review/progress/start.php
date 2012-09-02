@@ -142,7 +142,7 @@ class ReviewProgressStartRepository extends EntityRepository
 			$ret['message'] = "شما اجازه لغو این کوتاژ را ندارید." ;
 			return $ret;
 		}
-		else if($LastProg instanceof ReviewProgressStart or  $progressCount == 0)
+		else if(($LastProg instanceof ReviewProgressStart and count($File->Progress())==1) or  $progressCount == 0)
 		{
 			$thisUser=MyUser::CurrentUser();
 			if($progressCount!=0)

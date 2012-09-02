@@ -271,9 +271,9 @@ abstract class Mail
 	function Box()
 	{
 		if($this->State()==self::STATE_EDITING)
-			return $this->Stock;
+			return $this->Stock();
 		elseif($this->State()==self::STATE_INWAY or $this->State()==self::STATE_GETTING)
-			return $this->ProgressGive();
+			return $this->GetProgress();
 		else 
 			return $this->MyBox();
 	}

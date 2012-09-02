@@ -23,7 +23,9 @@ class ReviewProgressReceive extends ReviewProgress
 	}
 	function kill(){
 		parent::kill();
-		
+// 		$m = $this->MailReceive();
+// 		$m->ProgressReceive()->remove($this);
+// 		$this->MailReceive=null;
 	}
 	function __construct(ReviewFile $File=null, MailReceive $Mail=null)
 	{

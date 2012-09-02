@@ -30,7 +30,7 @@ class ViewAlarmPlugin extends JPlugin
 		?>
 		<div class="alarm <?php echo ($HasKiller ? "dead" : "live"); ?>" >
 			<?php if(!count($Killers) AND $IsAlarm):?>
-			<div class="delete"><a href="?DeleteAlarmID=<?php echo $A->ID();?>">
+			<div class="delete"><a href="#" data-ID="<?php echo $A->ID();?>" >
 				<img src="/img/alarm/delete-square-blue-15.png" title="حذف"/></a>
 			</div>
 			<?php endif;?>
@@ -128,13 +128,6 @@ class ViewAlarmPlugin extends JPlugin
 			if($As[$k])
 			self::SingleShow($As[$k]);
 		}
-		/*
-		echo "</td><td>";
-		for($k=($n/2); $k<$n; $k++)
-		{
-			//if($As[$k])
-			self::SingleShow($As[$k]);
-		} */
 		echo "</td></tr></table>";
 		echo "</div>";
 	}
@@ -154,6 +147,26 @@ class ViewAlarmPlugin extends JPlugin
 		$("div.alarmtoggle").click(function(){
 			$(this).siblings("table.alarm").toggle("slow");
 		});
+		$("div.delete a").click(function(event){
+			event.preventDefault();
+			id = $(this).data('ID');
+			$.get("<?php echo SiteRoot."/service/alarm/delete?output=json"; ?>",
+				{'ID':id},
+			  	deletecallback
+			);
+		});
+		function deletecallback(data){
+			eval("x=" + data);
+			if(x.Err=='1')
+			{
+				alert('حذف نشد!'+x.data);
+				return;
+			}
+			if(x.Res=='1'){
+				alert('حذف شد.'+x.data);
+				return;
+			}
+		}
 	<?php 	
 	}
 	public static function EchoCSS()
