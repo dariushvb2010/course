@@ -41,7 +41,7 @@ class ReviewProgressReceive extends ReviewProgress
 		$href=ViewMailPlugin::GetHref($this->MailReceive, "Receive");
 		$senderTopic=$this->MailReceive->SenderTopic()->Topic();
 		$rcvGroup=$this->MailReceive->ReceiverGroup()->PersianTitle();
-		$r="اظهارنامه توسط ".$rcvGroup." با شماره نامه ".v::link($this->MailReceive->Num(),$href)." از ".v::b($senderTopic)." دریافت شد.";
+		$r="اظهارنامه توسط ".$rcvGroup." با شماره نامه ".v::link($this->MailReceive->Num(),array('href'=>$href))." از ".v::b($senderTopic)." دریافت شد.";
 		return $r;
 	}
 	function Title()

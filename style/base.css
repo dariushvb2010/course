@@ -132,20 +132,21 @@ span.v-cotag{
 	padding: 0 3px;
 	border-radius: 3px;
 	font-weight:bold;
-	
 }
+span.v-red a{ color:maroon; }
 span.v-red{
 	color: maroon;
 	background: -moz-radial-gradient(center, ellipse cover, rgba(255,89,71,0.6) 0%, rgba(255,175,168,0.45) 50%, rgba(255,177,170,0.44) 51%, rgba(255,203,199,0.16) 74%, rgba(255,233,232,0) 100%); /* FF3.6+ */
 	background: radial-gradient(ellipse at center, rgba(255,89,71,0.6) 0%,rgba(255,175,168,0.45) 50%,rgba(255,177,170,0.44) 51%,rgba(255,203,199,0.16) 74%,rgba(255,233,232,0) 100%); /* W3C */
 }
-
+span.v-blue a{ color:navy; }
 span.v-blue
 {
 	color: navy;
 	background: -moz-radial-gradient(center, ellipse cover, rgba(99,147,193,0.59) 4%, rgba(136,173,208,0.59) 27%, rgba(201,218,234,0.25) 67%, rgba(230,238,245,0) 85%, rgba(242,246,250,0) 92%, rgba(255,255,255,0) 100%); /* FF3.6+ */
 	background: radial-gradient(ellipse at center, rgba(99,147,193,0.59) 4%,rgba(136,173,208,0.59) 27%,rgba(201,218,234,0.25) 67%,rgba(230,238,245,0) 85%,rgba(242,246,250,0) 92%,rgba(255,255,255,0) 100%); /* W3C */
 }
+span.v-green a{ color:darkgreen; }
 span.v-green{
 	color: darkgreen;
 	background: -moz-radial-gradient(center, ellipse cover, rgba(128,229,105,0.48) 19%, rgba(128,229,105,0.45) 28%, rgba(124,238,116,0.41) 40%, rgba(122,244,122,0.37) 47%, rgba(145,242,130,0.22) 70%, rgba(149,240,135,0.21) 72%, rgba(203,219,203,0) 100%); /* FF3.6+ */

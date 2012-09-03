@@ -160,13 +160,14 @@ class ReviewFile
     	foreach ($Files as $File)
     	{
     		$var=b::GetFile($File);
+    		ORM::Dump($var);
     		if($var instanceof ReviewFile)
     		{	
     			$res[]=$var;
     		}
     		else 
     		{
-    			$res[]=v::Ecnf($File->Cotag());
+    			$res[]=v::Ecnf($File);
     		}
     		
     	}

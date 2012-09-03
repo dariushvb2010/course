@@ -3,7 +3,7 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','in_vs_out','progress_remove','review_amount');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','in_vs_out','progress_remove','review_amount','review_amount_karshenas');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -53,7 +53,7 @@ class ReportChartsMainController extends JControl
 		
 		//--------------------------------------------------------------
 		$r = ORM::Query("ReviewProgressSend")->SendCountPerMonth(12);
-		
+		var_dump($ChartType);
 		switch ($ChartType){
 			//////////////////////////////////////////////////////
 			case 'daftar_cotag':
@@ -143,6 +143,9 @@ class ReportChartsMainController extends JControl
 				}
 				$this->X=$X;
 				break;
+			case 'review_amount_karshenas':
+				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerKarshenas();
+				ORM::Dump($r);
 		}
 		
 		$this->Error=$Error;

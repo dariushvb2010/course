@@ -84,7 +84,7 @@ class FsmGraph extends JModel
 			'is_MokatebatViewable'=>false,
 			),
 	'ProcessClearance'=>array(
-			'Label'=>'تصفیه و مختومه',
+			'Label'=>'تسویه و مختومه',
 			'is_MokatebatViewable'=>true,
 			),
 	'Assign_by_manager'=>'*********',
@@ -141,21 +141,21 @@ class FsmGraph extends JModel
 	);
 	
 	public static $Name2State=array(	
-		'CotagStart'=>2,
-		'CotagSend'=>3,
+		'CotagStart'=>array(2),
+		'CotagSend'=>array(3),
 		'Cotag'=>array('CotagStart','CotagSend'),
-		'archive'=>4,
-		'Assignable'=>'archive',
-		'reviewing'=> 5,
-		'review_notok'=> 9,
-		'ProcessRegister'=> 18,
-		'Prophecy_first'=>41,
-		'Prophecy_second'=>47,
-		'Prophecy_setad'=>58,
-		'Prophecy_commission'=>63,
-		'Senddemand_demand'=>40,
-		'Senddemand_setad'=>57,
-		'Senddemand_karshenas'=>46,
+		'archive'=>array(4),
+		'Assignable'=>array('archive'),
+		'reviewing'=> array(5),
+		'review_notok'=> array(9),
+		'ProcessRegister'=> array(18),
+		'Prophecy_first'=>array(41),
+		'Prophecy_second'=>array(47),
+		'Prophecy_setad'=>array(58),
+		'Prophecy_commission'=>array(63),
+		'Senddemand_demand'=>array(40),
+		'Senddemand_setad'=>array(57),
+		'Senddemand_karshenas'=>array(46),
 		'Ebtalable'=>array(2,3,4,5,9,11,7),
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
 		'Senddemands'=>array('Senddemand_demand','Senddemand_setad','Senddemand_karshenas'),
@@ -175,8 +175,6 @@ class FsmGraph extends JModel
 		if (!array_key_exists($name,self::$Name2State))
 			return null;
 		$Temp=self::$Name2State[$name];
-		if(!is_array($Temp))
-			$Temp=Array($Temp);
 		
 		$res=array();
 		foreach ($Temp as $val){
@@ -243,6 +241,65 @@ class FsmGraph extends JModel
 		return new FsmProgress($a);
 		//return new FileProgressclass($a);
 	}
+	static $StateFeatures  = array(
+			2=>array(
+					'Desc'=>'در دفتر کوتاژ',
+					'Place'=>p::CotagBook),
+			3=>array(
+					'Desc'=>'تحویل شده از دفتر کوتاژ به بایگانی بازبینی',
+					'Place'=>p::Archive),
+			4=>array(
+					'Desc'=>'در بایگانی بازبینی آماده برای کارشناس',
+					'Place'=>p::Archive),
+			5=>array(
+					'Desc'=>'در دست کارشناسی',
+					'Place'=>'دست کارشناس'),
+			7=>array(
+					'Desc'=> 'آماده برای ارسال به بایگانی راکد',
+					'Place'=>p::Archive),
+			11=>array(
+					'Desc'=> 'آماده برای ارسال به بایگانی راکد',
+					'Place'=>p::Archive),
+			9=>array(
+					'Desc'=>'آماده برای ثبت کلاسه مکاتبات',
+					'Place'=>p::Archive),
+			12=>array(
+					'Desc'=>'ارسال شده به خارج توسط بایگانی بازبینی',
+					'Place'=>'خارج'),
+			13=>array(
+					'Desc'=>'تحویل شده از بایگانی بازبینی به بایگانی راکد',
+					'Place'=>p::Raked),
+			14=>array(
+					'Desc'=>'در بایگانی راکد',
+					'Place'=>p::Raked),
+			15=>array(
+					'Desc'=>'ارسال شده به خارج توسط بایگانی راکد',
+					'Place'=>'خارج'),
+			16=>array(
+					'Desc'=>'تحویل شده از بایگانی راکد به بایگانی بازبینی',
+					'Place'=>p::Archive),
+			17=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			18=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			19=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			20=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			21=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			22=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			23=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			);
 
 	
 	/**

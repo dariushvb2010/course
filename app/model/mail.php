@@ -361,7 +361,8 @@ abstract class Mail
 				$ch = $P->Check();
 				if(is_string($ch))
 				{
-					$Error[]=$ch;
+					//$Error[]=$ch;
+					$E = $ch;
 					$ErrorCount++;
 				}
 				else
