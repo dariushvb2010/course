@@ -567,4 +567,75 @@ public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 		}
 		return $res;
 	}
+	function ReviewAmountPerKarshenas(){
+		$r = j::DQL("SELECT R.Amount, U.Lastname , R.Provision  FROM ReviewProgressReview R join R.User U 
+				WHERE R.Dead=0 
+				Group By U, R.Provision");
+		return $r;
+	}
+	/**
+	 * 
+	 * @param array $r input array
+	 * @param string $x xAxis like month, userID
+	 * @param string $y yAxis like Amount
+	 * @param array_of_string $ps provisions: '109','248','528',''
+	 */
+	function BakeArray($r,$x, $y, $ps)
+	{
+		foreach ($ps as $p){
+			$res[$p] = array();//$res['109'], $res['248'], $res['528'], $res['']
+			$res['total'][$p]=0;
+		}
+// 		$res["248"]=array();//----[0]->299000 [1]->40000
+// 		$res["109"]=array();
+// 		$res["528"]=array();
+// 		$res[""]=array();//some of them has not been set unfortunately
+		$res["total"]=array(
+				""=>0,
+				"109"=>0,
+				"248"=>0,
+				"528"=>0
+		);
+		//-----------------making $res------------------
+		foreach ($oc as $t)
+		{
+			$t=array_pop($oc);
+			$month=$t['month'];
+			$provision = $t['provision'];
+			if($month*1<$monthCount)
+			{
+				$res[$provision][$month*1+$startMonth] += $t['amount'];
+				$res["total"][$provision]+= $t['amount'];
+			}
+		}
+		
+		//------------------fill none existing fields of arrays and sort---------
+		foreach ($res as $key=>$pv) //only 4 : $res['248'], $res['109'], $res['528'], $res['']
+		{//ex: $pv = $p['248']
+		
+		//------------------make total array------------------
+		if($key=="total")
+		{
+			foreach ($res[$key] as $k=>$v)//ex: $k=248, $v=232398000
+			{
+				$res[$key][$k]= round($v/1000000,1);
+			}
+			continue;
+		}//---------------------------------------------------
+		
+		for($i=$startMonth;$i<$startMonth+$monthCount;$i++)
+		{
+		if(!array_key_exists($i,$pv))
+		{
+		$pv[$i]=0;//array('count'=>0,'month'=>$i);
+		}
+		else
+			$pv[$i]=round($pv[$i]/1000000,1);
+		}
+		krsort($pv);
+		$res[$key]=$pv; // !important : for applying changes in $pv (overwrite changes into $res)
+		//--------sort array by key high to low
+		}
+		return $res;
+	}
 }

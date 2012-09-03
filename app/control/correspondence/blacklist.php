@@ -51,11 +51,11 @@ class CorrespondenceBlacklistController extends JControl
 		}
 		elseif($k=='Select')
 		{
-			return v::link('کارشناسی',"./addprocess?Cotag={$D->Cotag()}");	
+			return v::link('کارشناسی',array('href'=>"./addprocess?Cotag={$D->Cotag()}"));	
 		}
 		elseif($k=='Digital')
 		{
-			return v::link('مشاهده پرونده دیجیتال',"./digital?Cotag={$D->Cotag()}");
+			return v::link('مشاهده پرونده دیجیتال',array('href'=>"./digital?Cotag={$D->Cotag()}"));
 		}
 		elseif($k=='Cotag')
 		{

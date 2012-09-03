@@ -64,12 +64,9 @@ class ReviewProgressSendRepository extends EntityRepository
 		$ch=$P->Check();
 		if(is_string($ch))
 			return $ch;
-		if($IfPersist) 
-		{
 			//$P=new ReviewProgressSend($File, $Mail, true);
-			$P->Apply();
-			ORM::Persist($P);
-		}
+		$P->Apply();
+		ORM::Persist($P);
 		return $P;
 	}
 	

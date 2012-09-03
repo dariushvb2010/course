@@ -84,7 +84,7 @@ class FsmGraph extends JModel
 			'is_MokatebatViewable'=>false,
 			),
 	'ProcessClearance'=>array(
-			'Label'=>'تصفیه و مختومه',
+			'Label'=>'تسویه و مختومه',
 			'is_MokatebatViewable'=>true,
 			),
 	'Assign_by_manager'=>'*********',
@@ -241,6 +241,65 @@ class FsmGraph extends JModel
 		return new FsmProgress($a);
 		//return new FileProgressclass($a);
 	}
+	static $StateFeatures  = array(
+			2=>array(
+					'Desc'=>'در دفتر کوتاژ',
+					'Place'=>p::CotagBook),
+			3=>array(
+					'Desc'=>'تحویل شده از دفتر کوتاژ به بایگانی بازبینی',
+					'Place'=>p::Archive),
+			4=>array(
+					'Desc'=>'در بایگانی بازبینی آماده برای کارشناس',
+					'Place'=>p::Archive),
+			5=>array(
+					'Desc'=>'در دست کارشناسی',
+					'Place'=>'دست کارشناس'),
+			7=>array(
+					'Desc'=> 'آماده برای ارسال به بایگانی راکد',
+					'Place'=>p::Archive),
+			11=>array(
+					'Desc'=> 'آماده برای ارسال به بایگانی راکد',
+					'Place'=>p::Archive),
+			9=>array(
+					'Desc'=>'آماده برای ثبت کلاسه مکاتبات',
+					'Place'=>p::Archive),
+			12=>array(
+					'Desc'=>'ارسال شده به خارج توسط بایگانی بازبینی',
+					'Place'=>'خارج'),
+			13=>array(
+					'Desc'=>'تحویل شده از بایگانی بازبینی به بایگانی راکد',
+					'Place'=>p::Raked),
+			14=>array(
+					'Desc'=>'در بایگانی راکد',
+					'Place'=>p::Raked),
+			15=>array(
+					'Desc'=>'ارسال شده به خارج توسط بایگانی راکد',
+					'Place'=>'خارج'),
+			16=>array(
+					'Desc'=>'تحویل شده از بایگانی راکد به بایگانی بازبینی',
+					'Place'=>p::Archive),
+			17=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			18=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			19=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			20=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			21=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			22=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			23=>array(
+					'Desc'=>'',
+					'Place'=>''),
+			);
 
 	
 	/**

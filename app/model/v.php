@@ -11,7 +11,6 @@ class v
 	 * @var string
 	 */
 	const PFL = "اظهارنامه";
-	
 	/**
 	 * bold tag
 	 */
@@ -106,7 +105,7 @@ class v
 
 	/**
 	 * Custom Cotag Show
-	 * @param unknown_type $cot
+	 * @param ReviewFile $File
 	 */
 	public static function Filecuc($File,$attr='')
 	{
@@ -147,7 +146,9 @@ class v
 		if($link){
 			$cot=self::CotagLink($cot,$File->Gatecode().'-'.$File->Cotag());
 		}
-		return "<span class='$ClassStr'>$cot</span>";
+		if($File instanceof ReviewFile)
+			$stateDesc = FsmGraph::$StateFeatures[$File->State()]['Desc'];
+		return "<span title='$stateDesc' class='$ClassStr'>$cot</span>";
 	}
 	
 	////////////////////////////////////////////////////////
@@ -188,10 +189,14 @@ class v
 	 * link with href and label
 	 * @param integer_string $Cot
 	 */
-	static function link($label='',$href='')
+	static function link($text='',$attr)
 	{
-		$t='<a href="'.$href.'">'.$label.'</a>';
-		return $t;
+		$ret='<a ';
+		foreach ($attr as $k=>$v){
+			$ret.=$k.'="'.$v.'" ';
+		}
+		$ret.='>'.$text.'</a>';
+		return $ret;
 	}
 
 	/**
@@ -201,7 +206,7 @@ class v
 	 */
 	static function CotagLink($label='',$Cotag='')
 	{
-		$t=self::link($label,SiteRoot."/report/progresslist/file?Cotag=".$Cotag);
+		$t=self::link($label,array('href'=>SiteRoot."/report/progresslist/file?Cotag=".$Cotag));
 		return $t;
 	}
 	

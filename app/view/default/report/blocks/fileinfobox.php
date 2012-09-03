@@ -29,4 +29,5 @@
 		<p class="right">تاریخ وصول: <span dir=ltr><?php echo $this->File->CreateTime();?></span></p>
 		<p class="left">شماره کلاسه: <span dir=ltr><?php echo ($this->File->GetClass()?$this->File->GetClass():'-');?></span></p>
 		<p class="right">سال: <span dir=ltr><?php echo ($this->File->RegYear()?$this->File->RegYear():'-');?></span></p>
+		<p class="left"><?php echo FsmGraph::$StateFeatures[$this->File->State()]['Desc']?></p>
 	</div>
