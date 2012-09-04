@@ -6,7 +6,7 @@ chartconfig={
 			type:'column'
 		},
 		title: {
-			text: 'حجم کاری کارشناسان در 30 روز گذشته'
+			text: 'حجم کاری کارشناسان'
 		},
 		xAxis: {
 			labels: {

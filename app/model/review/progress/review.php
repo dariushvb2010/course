@@ -412,7 +412,20 @@ public function ReviewPercentage()
 	return $res;
 }
 
-public function karshenas_work_lastmounth()
+public function karshenas_work($startTime,$finishTime)
+{
+	$r=j::ODQL("SELECT COUNT(P.ID) as co,U.ID as user
+			FROM ReviewProgress AS P JOIN P.User AS U
+			WHERE P INSTANCE OF	ReviewProgressReview AND P.CreateTimestamp BETWEEN ? AND ?
+			GROUP BY P.User",$startTime,$finishTime);
+	foreach($r as $s)
+	{
+		$u=j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$s['user']);
+		$r2[]=array('count'=>$s['co'],'user'=>$u[0]);
+	}
+	return $r2;
+}
+/*public function karshenas_work($startTime,$finishTime)
 {
 	$r=j::ODQL("SELECT COUNT(P.ID) as co,U.ID as user
 			FROM ReviewProgress AS P JOIN P.User AS U
@@ -424,7 +437,7 @@ public function karshenas_work_lastmounth()
 		$r2[]=array('count'=>$s['co'],'user'=>$u[0]);
 	}
 	return $r2;
-}
+}*/
 
 public function BazbiniPerMonth()
 {
@@ -487,9 +500,10 @@ public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 	 * مقدارهای برگشتی بر حسب میلیون ریال می باشد
 	 * @param integer $monthCount: number of monthes to show
 	 * @param integer $startMonth: how many monthes ago
+	 * @param string $per {'month', 'karshenas'}
 	 * @return 2DArray ['']->{[0]->2342, [1]->2342, ...}, ['109']->{[0]->2342, [1]->2342, ...}, ['248']->{[0]->2342, [1]->2342, ...}, ['528']->{[0]->2342, [1]->2342, ...}, ['total']->{['']->0,['109']->0, ['248']->0, ['528']->0}
 	 */
-	public function ReviewAmountPerMonth($monthCount, $startMonth=0)
+	public function ReviewAmountPer($monthCount, $startMonth=0,$per='month')
 	{
 		//-----get the numberof days of last month---------------------------
 		$c = new CalendarPlugin();
@@ -497,27 +511,42 @@ public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 		$dayOfMonth= $t[2]; //our purpose--------------------------------
 		$addDays = 30 - $dayOfMonth;
 	
-	
-		$oc=j::SQL("SELECT SUM(R.Amount) as amount,R.Provision as provision,
-				floor(
-				DATEDIFF(
-				curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
-				FROM_UNIXTIME(P.CreateTimestamp)
-		)/30.3
-		) as month
-				FROM app_ReviewProgress AS P join app_ReviewProgressReview AS R on P.ID=R.ID
-				WHERE P.Type=?
-				AND R.Result=0
-				AND P.Dead=0
-				AND DATEDIFF(
-				curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
-				FROM_UNIXTIME(P.CreateTimestamp)
-		) >= 0
-				GROUP BY month, provision ",$addDays,$startMonth,"Review",$addDays,$startMonth);
-		
+		switch ($per){
+			case 'month':
+				$oc=j::SQL("SELECT SUM(R.Amount) as amount,R.Provision as provision,
+						floor(
+						DATEDIFF(
+						curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+						FROM_UNIXTIME(P.CreateTimestamp)
+				)/30.3
+				) as per
+						FROM app_ReviewProgress AS P join app_ReviewProgressReview AS R on P.ID=R.ID
+						WHERE P.Type=?
+						AND R.Result=0
+						AND P.Dead=0
+						AND DATEDIFF(
+						curdate() + INTERVAL ? DAY - INTERVAL ? MONTH,
+						FROM_UNIXTIME(P.CreateTimestamp)
+				) >= 0
+						GROUP BY per, provision ",$addDays,$startMonth,"Review",$addDays,$startMonth);
+			break;
+			case 'karshenas':
+				
+				$oc = j::DQL("SELECT R.Amount as amount, U.ID as per, R.Provision as provision FROM ReviewProgressReview R join R.User U
+						WHERE R.Dead=0 AND U.State!=2 AND R.CreateTimestamp BETWEEN ? AND ?
+						Group By U, R.Provision",$monthCount, $startMonth);
+			break;
+			case 'karshenas_arzesh':
+				$oc = j::DQL("SELECT R.Amount as amount, U.ID as per, R.Provision as provision FROM ReviewProgressReview R join R.User U
+						WHERE R.Dead=0 AND R.CreateTimestamp BETWEEN ? AND ?
+						Group By U, R.Provision",$monthCount, $startMonth);
+			break;
+		}
+		//var_dump($oc);
 		$res["248"]=array();//----[0]->299000 [1]->40000
 		$res["109"]=array();
 		$res["528"]=array();
+		$res["per"]=array();
 		$res[""]=array();//some of them has not been set unfortunately
 		$res["total"]=array(
 				""=>0,
@@ -526,43 +555,75 @@ public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 				"528"=>0
 		);
 		//-----------------making $res------------------
-		foreach ($oc as $t)
-		{
-			$t=array_pop($oc);
-			$month=$t['month'];
-			$provision = $t['provision'];
-			if($month*1<$monthCount)
+		if($per=='month'){
+			foreach ($oc as $t)
 			{
-				$res[$provision][$month*1+$startMonth] += $t['amount'];
+				$month=$t['per'];
+				$provision = $t['provision'];
+				if($month*1<$monthCount)
+				{
+					
+					$res[$provision][$month*1+$startMonth] += $t['amount'];
+					$res["total"][$provision]+= $t['amount'];
+				}
+			}
+		}else{
+			foreach ($oc as $t)
+			{
+				$nn=$t['per'];
+				if(!in_array($nn,$res["per"])){
+					$res["per"][$nn]=$nn;
+					$res["248"][$nn]=0;
+					$res["109"][$nn]=0;
+					$res["528"][$nn]=0;
+				}
+			}
+			foreach ($oc as $t)
+			{
+				$person=$t['per'];
+				$provision = $t['provision'];		
+				$res[$provision][$person] += $t['amount'];
 				$res["total"][$provision]+= $t['amount'];
 			}
 		}
-	
 		//------------------fill none existing fields of arrays and sort---------
-		foreach ($res as $key=>$pv) //only 4 : $res['248'], $res['109'], $res['528'], $res['']
+		foreach ($res as $key=>$pv) //only 4 : $res['248'], $res['109'], $res['528'], $res[''], , $res['per']
 		{//ex: $pv = $p['248']
 	
-			//------------------make total array------------------
-			if($key=="total")
-			{
-				foreach ($res[$key] as $k=>$v)//ex: $k=248, $v=232398000
+			if($per=='month'){
+				//------------------make total array------------------
+				if(in_array($key,array('total')))
 				{
-					$res[$key][$k]= round($v/1000000,1);
-				}
-				continue;
-			}//---------------------------------------------------
+					foreach ($res[$key] as $k=>$v)//ex: $k=248, $v=232398000
+					{
+						$res[$key][$k]= round($v/1000000,1);
+					}
+					continue;
+				}//---------------------------------------------------
 	
-			for($i=$startMonth;$i<$startMonth+$monthCount;$i++)
-			{
-				if(!array_key_exists($i,$pv))
+			
+				for($i=$startMonth;$i<$startMonth+$monthCount;$i++)
 				{
-					$pv[$i]=0;//array('count'=>0,'month'=>$i);
+					if(!array_key_exists($i,$pv))
+					{
+						$pv[$i]=0;//array('count'=>0,'month'=>$i);
+					}
+					else
+						$pv[$i]=round($pv[$i]/1000000,1);
 				}
-				else
-					$pv[$i]=round($pv[$i]/1000000,1);
+				krsort($pv);
+				$res[$key]=$pv; // !important : for applying changes in $pv (overwrite changes into $res)
+			}else{
+				//------------------make total array------------------
+				if(in_array($key,array('total','528','109','248','')))
+				{
+					foreach ($res[$key] as $k=>$v)//ex: $k=248, $v=232398000
+					{
+						$res[$key][$k]= round($v/1000000);
+					}
+					continue;
+				}				
 			}
-			krsort($pv);
-			$res[$key]=$pv; // !important : for applying changes in $pv (overwrite changes into $res)
 			//--------sort array by key high to low
 		}
 		return $res;
