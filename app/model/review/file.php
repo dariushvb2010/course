@@ -459,7 +459,7 @@ class ReviewFileRepository extends EntityRepository
 				}
 			}
 			$r=j::ODQL($QueryStr);
-			//echo $QueryStr;
+			echo $QueryStr;
 			//var_dump($r);
 			return $r;
 		}
