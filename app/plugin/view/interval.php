@@ -39,8 +39,20 @@ class ViewIntervalPlugin extends JPlugin
 	 */
 	public $DefaultDate;
 	
-	function __construct()
+	function __construct($timeDetail='month')
 	{
+		//---------------------Detils TextBox-----------------------
+		switch ($timeDetail){
+			case 'month':
+			$this->ElemAttrs['CDay']['disabled'] =
+			$this->ElemAttrs['CHour']['disabled'] =
+			$this->ElemAttrs['CMin']['disabled'] =
+			$this->ElemAttrs['FDay']['disabled'] =
+			$this->ElemAttrs['FHour']['disabled'] =
+			$this->ElemAttrs['FMin']['disabled'] =
+			"disabled";
+			break;
+		}
 		//---------------------Attributes---------------------------
 		$this->FormAttr["method"]="post";
 		$this->FormAttr["id"] = "calendar_".FPlugin::RandomString(5);
@@ -56,7 +68,7 @@ class ViewIntervalPlugin extends JPlugin
 		//----------------------Default Date----------------------
 		$cal = new CalendarPlugin();
 		$F = explode("/", $cal->JalaliFromTimestamp(time()));
-		$C = explode("/", $cal->JalaliFromTimestamp(time()-30*24*3600));
+		$C = explode("/", $cal->JalaliFromTimestamp(time()-12*30*24*3600));
 		
 		$this->DefaultDate['CYear'] = $C[0];
 		$this->DefaultDate['CMonth'] = $C[1];
@@ -184,7 +196,8 @@ class ViewIntervalPlugin extends JPlugin
 				$b = true;
 		}
 		
-		return ($b ? $res : false);
+		return ($b ? $res : $this->DefaultDate);
 	}
+	
 	
 }

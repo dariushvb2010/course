@@ -8,7 +8,7 @@ class RequirementsConnectionController extends JControl
 		echo '<div class="box">';
 		echo ''.' GetParvanehFromAsycudaYear ';
 		$c=new ConnectionBakedata();
-		$c->GetParvanehFromAsycudaYear("4032322", "1391");
+		$c->GetParvanehFromAsycudaYear("4029328", "1391");
 		if($c->Validate()){
 			echo '<p>';
 			var_dump($c->GetResult());
@@ -22,7 +22,7 @@ class RequirementsConnectionController extends JControl
 		echo '<div class="box">';
 		echo ''.' GetParvanehFromAsycudaYear ';
 		$c=new ConnectionBakedata();
-		$c->GetParvanehFromAsycudaYear("4005903", "1391");
+		$c->GetParvanehFromAsycudaYear("4027677", "1391");
 		if($c->Validate()){
 			echo '<p>';
 			var_dump($c->GetResult());
@@ -64,7 +64,7 @@ class RequirementsConnectionController extends JControl
 		echo '<div class="box">';
 		echo ''.' GetMojavezBargiriYear ';
 		$cq=new ConnectionBakedata();
-		$cq->GetMojavezBargiriYear("4032253", "1391");
+		$cq->GetMojavezBargiriYear("4027677", "1391");
 		if($cq->Validate()){
 			//check the data
 			echo 'ok';

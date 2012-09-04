@@ -3,7 +3,7 @@ class ReportChartsMainController extends JControl
 {
 	function Start()
 	{
-		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','in_vs_out','progress_remove','review_amount','review_amount_karshenas');
+		$ChartTypeArray=array('daftar_cotag','percentage','karshenas_work_volume','in_vs_out','progress_remove','review_amount','review_amount_karshenas','karshenas_arzesh');
 		
 		$ChartType=$ChartTypeArray[0];
 		if(isset($_GET['charttype'])){
@@ -19,41 +19,34 @@ class ReportChartsMainController extends JControl
 		$this->ctype=$ChartType;
 		
 		//-----------------------date interval -------------------------
-		$vi = new ViewIntervalPlugin();
-		$vi->ElemAttrs['CDay']['disabled'] =
-			$vi->ElemAttrs['CHour']['disabled'] =
-			$vi->ElemAttrs['CMin']['disabled'] =
-			$vi->ElemAttrs['FDay']['disabled'] =
-			$vi->ElemAttrs['FHour']['disabled'] =
-			$vi->ElemAttrs['FMin']['disabled'] =
-										"disabled";
+		$vi = new ViewIntervalPlugin('month');
 		
 		$q = $vi->GetRequest();
 		$this->VI=$vi;
-		$c = new CalendarPlugin();
+		
+		//$c = new CalendarPlugin();
+		$c = new JalaliCalendar();
 		$nn = $c->TodayJalaliArray();
 		$thisYear = $nn[0];
 		$thisMonth = $nn[1];
+		
 		$vi->DefaultDate['CYear'] = $thisYear-1;
-		//$vi->SetValuesFromDefaultDate();
-		if($q!==false)
-		{
-			$CYear = $q['CYear'];
-			$CMonth = $q['CMonth'];
-		}
-		else
-		{ 
-			$CYear = $vi->DefaultDate['CYear'];
-			$CMonth = $vi->DefaultDate['CMonth'];
-		}
-		$CdiffMonth = ( $thisYear-$q['CYear'] )*12 + $thisMonth - $q['CMonth'];
-		$FdiffMonth = ( $thisYear-$q['FYear'] )*12 + $thisMonth - $q['FMonth'];
+		
+		$CYear = $q['CYear'];
+		$CMonth = $q['CMonth'];
+		$FYear=$q['FYear'];
+		$FMonth=$q['FMonth'];
+		
+		$startTimestamp=$c->Jalali2Timestamp($q['CYear'], $q['CMonth'], $q['CDay']);
+		$finishTimestamp=$c->Jalali2Timestamp($q['FYear'], $q['FMonth'], $q['FDay']);
+		
+		$CdiffMonth = ( $thisYear-$CYear )*12 + $thisMonth - $CMonth;
+		$FdiffMonth = ( $thisYear-$FYear )*12 + $thisMonth - $FMonth;
 		$startMonth = $FdiffMonth;
 		$monthCount = $CdiffMonth - $FdiffMonth + 1;
 		
 		//--------------------------------------------------------------
 		$r = ORM::Query("ReviewProgressSend")->SendCountPerMonth(12);
-		var_dump($ChartType);
 		switch ($ChartType){
 			//////////////////////////////////////////////////////
 			case 'daftar_cotag':
@@ -80,7 +73,7 @@ class ReportChartsMainController extends JControl
 				break;
 			/////////////////////////////////////////////////////	
 			case 'karshenas_work_volume':
-				$r=ORM::Query("ReviewProgressReview")->karshenas_work_lastmounth();
+				$r=ORM::Query("ReviewProgressReview")->karshenas_work($startTimestamp,$finishTimestamp);
 				$names=array();
 				$values=array();
 				foreach ($r as $value){
@@ -114,7 +107,7 @@ class ReportChartsMainController extends JControl
 			case 'progress_remove':
 				
 				$r=ORM::Query("ReviewProgress")->ProgressCountPerMonth("Remove",$monthCount,$startMonth);
-				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerMonth($monthCount, $startMonth);
+				//$r=ORM::Query("ReviewProgressReview")->ReviewAmountPer($monthCount, $startMonth,'month');
 				$this->removes=$r;
 				
 				$bb = FPlugin::PersianMonthesInInterval($startMonth, $monthCount);				
@@ -125,7 +118,7 @@ class ReportChartsMainController extends JControl
 				break;
 			case 'review_amount':
 				
-				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerMonth($monthCount, $startMonth);
+				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPer($monthCount, $startMonth,'month');
 				$this->st248=$r["248"];
 				$this->st528=$r["528"];
 				$this->st109=$r["109"];
@@ -142,10 +135,49 @@ class ReportChartsMainController extends JControl
 					$X[]="'".$value['monthName']." ".substr($value['year'],2)."'";
 				}
 				$this->X=$X;
-				break;
+			break;
 			case 'review_amount_karshenas':
-				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPerKarshenas();
-				ORM::Dump($r);
+				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPer($startTimestamp,$finishTimestamp,'karshenas');				
+				$this->st248=$r["248"];
+				$this->st528=$r["528"];
+				$this->st109=$r["109"];
+				$X=$r["per"];
+				$this->stempty   =$r[""];
+				
+				//----total----
+				$this->totempty=$r["total"][""];
+				$this->tot109=$r["total"]["109"];
+				$this->tot248=$r["total"]["248"];
+				$this->tot528=$r["total"]["528"];
+				
+				
+				foreach ($X as $k=>$v){
+					$u=MyUser::getUser($v);
+					$X2[]="'".$u->getFullName()."'";
+				}
+				$this->X=$X2;
+			break;
+			case 'karshenas_arzesh':
+				$r=ORM::Query("ReviewProgressReview")->ReviewAmountPer($startTimestamp,$finishTimestamp,'karshenas_arzesh');
+				$this->st248=$r["248"];
+				$this->st528=$r["528"];
+				$this->st109=$r["109"];
+				$X=$r["per"];
+				$this->stempty   =$r[""];
+			
+				//----total----
+				$this->totempty=$r["total"][""];
+				$this->tot109=$r["total"]["109"];
+				$this->tot248=$r["total"]["248"];
+				$this->tot528=$r["total"]["528"];
+			
+			
+				foreach ($X as $k=>$v){
+					$u=MyUser::getUser($v);
+					$X2[]="'".$u->getFullName()."'";
+				}
+				$this->X=$X2;
+				break;
 		}
 		
 		$this->Error=$Error;
