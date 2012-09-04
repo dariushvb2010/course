@@ -39,8 +39,8 @@ class ReportListsListController extends JControl
 
 		$this->HeadTitle="بایگانی: لیست کوتاژهای وصول نشده از دفتر کوتاژ";
 		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
-		$CotList=ORM::Query(new ReviewFile)->FilesByStateName('Cotag','all',$Pagination);		
-		$Count=ORM::Query(new ReviewFile)->FilesByStateName('Cotag','all','CountAll');		
+		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Cotag'),'all',$Pagination);		
+		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Cotag'),'all','CountAll');		
 		
 		$this->PrepareToShow($CotList,$Count);
 
@@ -74,6 +74,21 @@ class ReportListsListController extends JControl
 		
 		$this->PrepareToShow($CotList,$Count);
 
+	}
+	
+	function AsyErrorAction()
+	{
+		//j::Enforce("AssignableList");
+	
+		$this->ParamFilter();
+	
+		$this->HeadTitle="لیست اظهارنامه هایی که در آسیکودا موجود نیست";
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query("ReviewFile")->FilesNotAsy('review_notok','all',$Pagination);
+		$Count=ORM::Query(new ReviewFile)->FilesNotAsy('review_notok','all','CountAll');
+	
+		$this->PrepareToShow($CotList,$Count);
+	
 	}
 	
 	function ParamFilter(){
