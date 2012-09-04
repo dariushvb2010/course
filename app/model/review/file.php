@@ -413,18 +413,29 @@ class ReviewFileRepository extends EntityRepository
 	 * array('Sort'=>'Cotag','Order'=>'ASC','Offset'=>0,'Limit'=>100)
 	 * @author Morteza Kavakebi
 	 */
-	public static function FilesByStateName($StateName,$GateCode='all',$Pagination=null)
+	//public static function FilesByStateName(,$GateCode='all',$Pagination=null)
+	public static function FilesByCondition($Conditions,$Pagination=null)
 	{
-		$states=FsmGraph::Name2State($StateName);
-		$states=implode(',', $states);
+		$whereAr=array();
+		foreach($Conditions as $k=>$v){
+			if($k=='State'){
+				$states=FsmGraph::Name2State($StateName);
+				$states=implode(',', $states);
+				$whereAr[]="F.State IN ({$states})";
+			}elseif($k=='Gatecode'){
+				if($v!='all')
+					$whereAr[]="F.Gatecode={$GateCode}";
+			}
+		}
+		if(count($whereAr)){
+			$where=" WHERE ".implode(' AND ',$whereAr);
+		}
 		if($Pagination=='CountAll'){
-			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
+			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F ".$where;
 			$r=j::ODQL($QueryStr);
 			return $r[0]['result'];
 		}else{
-			$QueryStr="SELECT F FROM ReviewFile AS F WHERE F.State IN ({$states}) ";
-			if($GateCode!='all')
-				$QueryStr.=" F.Gatecode={$GateCode} ";
+			$QueryStr="SELECT F FROM ReviewFile AS F ".$where;
 				
 			//----------Pagination
 			if($Pagination==null){
