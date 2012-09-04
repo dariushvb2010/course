@@ -516,6 +516,14 @@
 					</a>
 				</li>
 				<?php endif;?>
+				<?php if ( j::Check("AssignableList")) :?>
+				<li>
+					<a href='/report/lists/list/^NotAsy'>
+						<span class='ui-icon-check ui-icon'></span> 
+						کوتاژهایی که در آسیکودا یافت نشده
+					</a>
+				</li>
+				<?php endif;?>
 				<?php if ( j::Check("NotArchivedList")) :?>
 				<li>
 					<a href='/report/lists/list/^NotArchived'>
