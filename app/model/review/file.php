@@ -416,10 +416,11 @@ class ReviewFileRepository extends EntityRepository
 	//public static function FilesByStateName(,$GateCode='all',$Pagination=null)
 	public static function FilesByCondition($Conditions,$Pagination=null)
 	{
+		//----------------WHERE CLAUSE-----------
 		$whereAr=array();
 		foreach($Conditions as $k=>$v){
 			if($k=='State'){
-				$states=FsmGraph::Name2State($StateName);
+				$states=FsmGraph::Name2State($v);
 				$states=implode(',', $states);
 				$whereAr[]="F.State IN ({$states})";
 			}elseif($k=='Gatecode'){
@@ -429,7 +430,10 @@ class ReviewFileRepository extends EntityRepository
 		}
 		if(count($whereAr)){
 			$where=" WHERE ".implode(' AND ',$whereAr);
+		}else{
+			$where='';
 		}
+		//----------------------------------------------------------
 		if($Pagination=='CountAll'){
 			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F ".$where;
 			$r=j::ODQL($QueryStr);
