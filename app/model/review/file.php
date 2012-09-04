@@ -413,7 +413,6 @@ class ReviewFileRepository extends EntityRepository
 	 * array('Sort'=>'Cotag','Order'=>'ASC','Offset'=>0,'Limit'=>100)
 	 * @author Morteza Kavakebi
 	 */
-	//public static function FilesByStateName(,$GateCode='all',$Pagination=null)
 	public static function FilesByCondition($Conditions,$Pagination=null)
 	{
 		//----------------WHERE CLAUSE-----------
@@ -426,6 +425,8 @@ class ReviewFileRepository extends EntityRepository
 			}elseif($k=='Gatecode'){
 				if($v!='all')
 					$whereAr[]="F.Gatecode={$v}";
+			}elseif($k=='RegYear'){
+				$whereAr[]="F.RegYear{$v}";
 			}
 		}
 		if(count($whereAr)){
@@ -457,7 +458,7 @@ class ReviewFileRepository extends EntityRepository
 				}
 			}
 			$r=j::ODQL($QueryStr);
-			echo $QueryStr;
+			//echo $QueryStr;
 			//var_dump($r);
 			return $r;
 		}

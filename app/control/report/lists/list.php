@@ -54,8 +54,23 @@ class ReportListsListController extends JControl
 
 		$this->HeadTitle="لیست اظهارنامه های تخصیص نیافته";
 		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
-		$CotList=ORM::Query(new ReviewFile)->FilesByStateName('Assignable','all',$Pagination);
-		$Count=ORM::Query(new ReviewFile)->FilesByStateName('Assignable','all','CountAll');
+		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Assignable'),$Pagination);
+		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Assignable'),'CountAll');
+		
+		$this->PrepareToShow($CotList,$Count);
+
+	}
+
+	function NotAsyAction()
+	{
+		j::Enforce("AssignableList");
+		
+		$this->ParamFilter();
+
+		$this->HeadTitle="لیست اظهارنامه هایی که در آسیکودا موجود نیست";
+		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
+		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('RegYear'=>'!=0'),$Pagination);
+		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('RegYear'=>'!=0'),'CountAll');
 		
 		$this->PrepareToShow($CotList,$Count);
 
@@ -69,26 +84,11 @@ class ReportListsListController extends JControl
 
 		$this->HeadTitle="لیست اظهارنامه های مکاتباتی بدون کلاسه";
 		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
-		$CotList=ORM::Query("ReviewFile")->FilesByStateName('review_notok','all',$Pagination);
-		$Count=ORM::Query(new ReviewFile)->FilesByStateName('review_notok','all','CountAll');
+		$CotList=ORM::Query("ReviewFile")->FilesByCondition(array('State'=>'review_notok'),$Pagination);
+		$Count=ORM::Query("ReviewFile")->FilesByCondition(array('State'=>'review_notok'),'CountAll');
 		
 		$this->PrepareToShow($CotList,$Count);
 
-	}
-	
-	function AsyErrorAction()
-	{
-		//j::Enforce("AssignableList");
-	
-		$this->ParamFilter();
-	
-		$this->HeadTitle="لیست اظهارنامه هایی که در آسیکودا موجود نیست";
-		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
-		$CotList=ORM::Query("ReviewFile")->FilesNotAsy('review_notok','all',$Pagination);
-		$Count=ORM::Query(new ReviewFile)->FilesNotAsy('review_notok','all','CountAll');
-	
-		$this->PrepareToShow($CotList,$Count);
-	
 	}
 	
 	function ParamFilter(){
