@@ -69,8 +69,8 @@ class ReportListsListController extends JControl
 
 		$this->HeadTitle="لیست اظهارنامه هایی که در آسیکودا موجود نیست";
 		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
-		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('RegYear'=>'!=0'),$Pagination);
-		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('RegYear'=>'!=0'),'CountAll');
+		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('RegYear'=>'IS NULL'),$Pagination);
+		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('RegYear'=>'IS NULL'),'CountAll');
 		
 		$this->PrepareToShow($CotList,$Count);
 
