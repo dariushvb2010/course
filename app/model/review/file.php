@@ -426,8 +426,8 @@ class ReviewFileRepository extends EntityRepository
 				if($v!='all')
 					$whereAr[]="F.Gatecode={$v}";
 			}elseif($k=='RegYear'){
-				//$whereAr[]="F.RegYear {$v}";
-				$whereAr[]="NOT(F.RegYear>0)";
+				$whereAr[]="F.RegYear {$v}";
+				//$whereAr[]="NOT(F.RegYear>0)";
 			}
 		}
 		if(count($whereAr)){
@@ -459,7 +459,7 @@ class ReviewFileRepository extends EntityRepository
 				}
 			}
 			$r=j::ODQL($QueryStr);
-			echo $QueryStr;
+			//echo $QueryStr;
 			//var_dump($r);
 			return $r;
 		}
