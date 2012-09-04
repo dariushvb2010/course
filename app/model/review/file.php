@@ -41,6 +41,17 @@ class ReviewFile
 	protected $RegYear;
 	function RegYear(){ return $this->RegYear; }
 	function SetRegYear($RegYear){ $this->RegYear = $RegYear;	}
+	/**
+	 * @Column(type="integer", nullable="true")
+	 * @var integer
+	 */
+	protected $ExitdoorState=0;
+	function ExitdoorState(){
+		return $this->ExitdoorState;
+	}
+	function SetExitdoorState($w){
+		$this->ExitdoorState = $w;
+	}
     /**
      * @Column(type="integer")
      * @var integer
