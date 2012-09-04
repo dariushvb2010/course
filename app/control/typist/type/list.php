@@ -3,7 +3,7 @@ class TypistTypeListController extends JControl
 {
 	function Start()
 	{
-		$AllFiles= ORM::Query(new ReviewFile())->FilesByStateName('PrintForDemand');
+		$AllFiles= ORM::Query(new ReviewFile())->FilesByCondition(array('State'=>'PrintForDemand'));
 		$al=new AutolistPlugin($AllFiles,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
 		$al->HasTier=true;
