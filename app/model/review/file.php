@@ -433,6 +433,7 @@ class ReviewFileRepository extends EntityRepository
 		}else{
 			$where='';
 		}
+		echo $where;
 		//----------------------------------------------------------
 		if($Pagination=='CountAll'){
 			$QueryStr="SELECT count(F) as result FROM ReviewFile AS F ".$where;
