@@ -70,9 +70,9 @@ class ReviewSelectController extends JControl
 		elseif($k=='assignCreateTimestamp')
 		{
 			$c=new CalendarPlugin();
-			/*if($D->LLP('Assign'))
+			if($D->LLP('Assign'))
 				return "<span dir='ltr'>{$c->JalaliFullTime($D->LLP('Assign')->CreateTimestamp())}</span>";
-			else*/ 	
+			else
 				return '-';
 		}
 		elseif($k=='Cotag')
