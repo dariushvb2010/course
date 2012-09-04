@@ -39,8 +39,8 @@ class ReportListsListController extends JControl
 
 		$this->HeadTitle="بایگانی: لیست کوتاژهای وصول نشده از دفتر کوتاژ";
 		$Pagination=array('Sort'=>$this->Sort,'Order'=>$this->Order,'Offset'=>$this->Offset,'Limit'=>$this->Limit);
-		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Cotag'),'all',$Pagination);		
-		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Cotag'),'all','CountAll');		
+		$CotList=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Cotag'),$Pagination);		
+		$Count=ORM::Query(new ReviewFile)->FilesByCondition(array('State'=>'Cotag'),'CountAll');		
 		
 		$this->PrepareToShow($CotList,$Count);
 
