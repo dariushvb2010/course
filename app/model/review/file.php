@@ -425,7 +425,7 @@ class ReviewFileRepository extends EntityRepository
 				$whereAr[]="F.State IN ({$states})";
 			}elseif($k=='Gatecode'){
 				if($v!='all')
-					$whereAr[]="F.Gatecode={$GateCode}";
+					$whereAr[]="F.Gatecode={$v}";
 			}
 		}
 		if(count($whereAr)){
