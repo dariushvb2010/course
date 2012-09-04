@@ -419,7 +419,7 @@ class MyUserRepository extends EntityRepository
 		$states=FsmGraph::Name2State('reviewing');
 		$stateString=implode(',', $states);
 		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F 
-					WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString}) ORDER BY P.CreateTimestamp",$Reviewer);
+					WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString})",$Reviewer);
 		
 		foreach($r as $item){
 			$files[]=$item->File();
