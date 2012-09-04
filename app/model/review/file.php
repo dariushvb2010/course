@@ -426,7 +426,7 @@ class ReviewFileRepository extends EntityRepository
 				if($v!='all')
 					$whereAr[]="F.Gatecode={$v}";
 			}elseif($k=='RegYear'){
-				$whereAr[]="F.RegYear{$v}";
+				$whereAr[]="F.RegYear {$v}";
 			}
 		}
 		if(count($whereAr)){
