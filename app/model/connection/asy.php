@@ -16,7 +16,14 @@ class ConnectionAsy extends JModel
 	{
 		return $this->ID;
 	}
-	
+	/**
+	 * SELECT * FROM `app_ConnectionAsy` as A left outer join app_ReviewFile F on A.FileID=F.ID where F.Cotag is null 
+	 * @OneToOne(targetEntity="ReviewFile", inversedBy="Stock")
+	 * @JoinColumn(name="FileID", referencedColumnName="ID")
+	 * @var ReviewFile
+	 */
+	protected $File;
+	function File(){ return $this->File; }
 	/**
 	 * @Column(type="integer")
 	 * @var integer
@@ -29,14 +36,7 @@ class ConnectionAsy extends JModel
 		return $jc->JalaliFromTimestamp($this->CreateTimestamp)." ".date("H:i:s",$this->CreateTimestamp);
 	}
 	
-	/**
-	 * ID of ReviewFile
-	 * @Column(type="integer", unique=true)
-	 * @var integer
-	 */
-	protected $FileID;
-	function FileID(){ return $this->FileID; }
-	function SetFileID($w){ $this->FileID=$w; }
+	
 	/**
 	 * تاریخ ثبت کوتاژ cotag register date
 	 * @Column(type="integer")
