@@ -63,9 +63,4 @@ class User
 use \Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository
 {
-	public function getAllUsersBelow100()
-	{
-		return $this->_em->createQuery('SELECT u FROM User u WHERE u.id < 100')
-		->getResult();
-	}
 }

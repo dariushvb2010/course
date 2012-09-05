@@ -324,11 +324,6 @@ class MyUserRepository extends EntityRepository
 		$r=j::ODQL("SELECT U FROM MyUser U");
 		return $r;
 	}
-	public function getAllUsersBelow100()
-	{
-		return $this->_em->createQuery('SELECT u FROM User u WHERE u.id < 100')
-		->getResult();
-	}
 	/**
 	 * @author Morteza Kavakebi
 	 * @param integer $ID
@@ -346,36 +341,35 @@ class MyUserRepository extends EntityRepository
 	public function getRandomReviewer()
 	{
 		$Reviewers=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1");
-		$WSum=0;
+
 		if($Reviewers)
 		foreach($Reviewers as $R)
 		{
-			$W=$R->AssignedReviewableFileCount();
-			$W=100-$W;
-			if($W<5)
-				$W=5;
-			// R:Reviewer, W:Weight, WSB: weightSum befor me
-			$RS[]=array("R"=>$R,"W"=>$W,"WSB"=>$WSum);
-			$WSum+=$W;
+			$ar[]=$R->AssignedReviewableFileCount();
 		}
-		$Rand=mt_rand(0,$WSum);
-		for($i=count($RS)-1; $i>=0; $i--)
-		{
-			if($Rand>=$RS[$i]['WSB'])
-			{
-				$Selected=$RS[$i]["R"];
-				break;
+		
+		$Chosen=$Reviewers[$this->chooseRandom($ar)];
+		return $Chosen;		
+	}
+	
+	private function chooseRandom($Input){
+		$pivot=max($Input);
+		$sum=array_sum($Input);
+		foreach($Input as $W){
+			$W2=$pivot-$W;
+			if($W2<5)
+				$W2=5;
+			
+			$RS[]=$W2;
+		}
+		$Rand=mt_rand(0,$sum);
+		foreach ($RS as $k=>$v){
+			$Rand-=$v;
+			if($Rand<=0){
+				return $k;
 			}
 		}
-		return $Selected;
-		
-		$Offset=mt_rand(0,$this->getReviewerCount()-1);
-		$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1 LIMIT {$Offset},1");
-		if(empty($r))
-			return null;
-		else
-			return $r[0];
-		
+		return -1;
 	}
 
 	public function Reviewers($State1="*",$State2=".")
