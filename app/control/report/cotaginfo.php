@@ -6,6 +6,7 @@ class ReportCotaginfoController extends JControl
 		j::Enforce("ExitInfo");
 		
 		try {
+			echo reg("link/bagher/permit");
 			$c=new SoapClient(reg("link/bagher/permit"));
 		} catch (Exception $e) {
 			$Error[]=  "ارتباط با سرور قطع است.";
