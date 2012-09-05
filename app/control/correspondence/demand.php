@@ -49,7 +49,7 @@ class CorrespondenceDemandController extends JControl
 		if($imglist=='' OR $imglist==null)
 		{
 			$Res['Error']="هیچ فایل عکسی  بارگذاری نشده است.";
-			return $Res;
+			//return $Res;
 		}
 		
 		$params=array();

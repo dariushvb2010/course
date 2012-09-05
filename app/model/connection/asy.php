@@ -16,15 +16,33 @@ class ConnectionAsy extends JModel
 	{
 		return $this->ID;
 	}
-	
 	/**
-	 * ID of ReviewFile
+	 * SELECT * FROM `app_ConnectionAsy` as A left outer join app_ReviewFile F on A.FileID=F.ID where F.Cotag is null 
+	 * @OneToOne(targetEntity="ReviewFile", inversedBy="Stock")
+	 * @JoinColumn(name="FileID", referencedColumnName="ID")
+	 * @var ReviewFile
+	 */
+	protected $File;
+	function File(){ return $this->File; }
+	function SetFile($File){ $this->File=$File; }
+	function AssignFile(ReviewFile $File)
+	{
+		$this->File=$File;
+		$File->SetAsy($this);
+	}
+	/**
 	 * @Column(type="integer")
 	 * @var integer
 	 */
-	protected $FileID;
-	function FileID(){ return $this->FileID; }
-	function SetFileID($w){ $this->FileID=$w; }
+	protected $CreateTimestamp;
+	
+	function CreateTime()
+	{
+		$jc=new CalendarPlugin();
+		return $jc->JalaliFromTimestamp($this->CreateTimestamp)." ".date("H:i:s",$this->CreateTimestamp);
+	}
+	
+	
 	/**
 	 * تاریخ ثبت کوتاژ cotag register date
 	 * @Column(type="integer")
@@ -155,7 +173,7 @@ class ConnectionAsy extends JModel
 
 		
 		$this->SetWhole($AsyArray);
-		$this->SetFileID($File->ID());
+		$this->AssignFile($File);
 		$this->CreateTimestamp=time();
 		
 		$this->UpdateFields();
@@ -265,9 +283,7 @@ class ConnectionAsyRepository extends EntityRepository
 	 */
 	public function GetAsyByFile($File)
 	{
-		
-		$fileID=$File->ID();
-		$r=j::ODQL("SELECT A FROM ConnectionAsy as A WHERE A.FileID=?",$fileID);
+		$r=j::ODQL("SELECT A FROM ConnectionAsy as A WHERE A.File=?",$File);
 		return $r[0];
 	}
 	static function UpdateAll(){
