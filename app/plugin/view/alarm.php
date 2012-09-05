@@ -19,7 +19,7 @@ class ViewAlarmPlugin extends JPlugin
 		$ID=$A->ID();
 		$Killers= $A->Killer();//count($A->Killer()) ? $A->Killer() : ($A->ConfigAlarm() ? $A->ConfigAlarm()->Killer() : null);
 		$Title=$A->Title();///$A->Title() ? $A->Title() : ($A->ConfigAlarm() ? $A->ConfigAlarm()->Title() : null);
-		$Moratorium=$A->MoratoriumInDays();//$A->ConfigAlarm() ? $A->ConfigAlarm()->Moratorium() : $A->Moratorium();
+		$Moratorium=$A->MoratoriumToDays();//$A->ConfigAlarm() ? $A->ConfigAlarm()->Moratorium() : $A->Moratorium();
 		$Context=$A->Context();//$A->ConfigAlarm() ? $A->ConfigAlarm()->Comment() : $A->Comment();
 		$Users=$A->User();
 		$Group=$A->Group();

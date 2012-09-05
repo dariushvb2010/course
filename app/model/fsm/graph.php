@@ -66,9 +66,9 @@ class FsmGraph extends JModel
 	
 	Public static $ProcessList=array(
 	'Scan'=>'*********',
-	'Start_cotagbook'=>'ورود سند در دفتر کوتاژ',
-	'Give_cotagbook_to_archive'=>'تحویل دادن ـ دفتر کوتاژ به بایگانی',
-	'Get_archive_from_cotagbook'=>'تحویل گرفتن ـ بایگانی از دفتر کوتاژ',
+	'Start'=>'*********',
+	'Give_cotagbook_to_archive'=>'وصول دفتر کوتاژ',
+	'Get_archive_from_cotagbook'=>'دریافت از دفتر کوتاژ',
 	'Assign'=>'تخصیص به کارشناس',
 	'Confirm_ok'=>'*********',
 	'Confirm_nok'=>'*********',

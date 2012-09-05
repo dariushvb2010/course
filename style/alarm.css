@@ -26,7 +26,7 @@ div.alarm div.delete{float:left;  margin:-5px; color:red;}
 
 div.alarm div.more{display:none;}
 
-table.alarm{ background:#59c url('../img1/alarm/alarm-back.png'); border-radius:4px;}
+table.alarm{ background:#59c url('../img1/alarm/alarm-back.png'); border-radius:4px;display:none;}
 table.alarm tr td{vertical-align: top; background:transparent; border-collapse: collapse;}
 
 

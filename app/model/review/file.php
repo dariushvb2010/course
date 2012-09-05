@@ -123,6 +123,14 @@ class ReviewFile
     protected $Stock;
     function Stock(){ return $this->Stock;}
     function SetStock($Stock){ $this->Stock=$Stock; }
+    /**
+     *
+     * @OneToOne(targetEntity="ConnectionAsy", mappedBy="File")
+     * @var ConnectionAsy
+     */
+    protected $Asy;
+    function Asy(){ return $this->Asy; }
+    function SetAsy($val){ $this->Asy=$val; }
     
     public function GetClass(){
     	$p = $this->LLP("Register",true);
