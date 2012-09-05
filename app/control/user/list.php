@@ -18,11 +18,12 @@ class UserListController extends JControl
 		$AllUsers= ORM::Query(new MyUser())->GetAll();
 		$al=new AutolistPlugin($AllUsers,null,"Select");
 		$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
-		$al->SetHeader('Firstname', 'نام',true);
 		$al->HasTier=true;
 		$al->TierLabel="ردیف";
 		$al->ObjectAccess=true;
+		$al->SetHeader('Firstname', 'نام',true);
 		$al->SetHeader('Lastname', 'نام خانوادگی',true);
+		$al->SetHeader('Codemelli', 'کد ملی',true);
 		$al->SetHeader('CreateTimestamp', 'تاریخ ثبت',true);
 		$al->SetHeader('EditButton', 'ویرایش',true);
 		$al->SetHeader('ChPassButton', 'تغییر رمز',true);
@@ -41,7 +42,7 @@ class UserListController extends JControl
 		if($k=='CreateTimestamp')
 		{
 			$c=new CalendarPlugin();
-			return "<span dir='ltr'>{$D->CreateTimestamp}</span>";
+			return "<span dir='ltr'>{$c->JalaliFromTimestamp($D->CreateTimestamp)}</span>";
 		}
 		elseif($k=='EditButton')
 		{
