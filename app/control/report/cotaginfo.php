@@ -6,7 +6,7 @@ class ReportCotaginfoController extends JControl
 		j::Enforce("ExitInfo");
 		
 		try {
-			$c=new SoapClient("http://192.168.0.20/customs/vehicle_permit.asmx?WSDL");
+			$c=new SoapClient(reg("link/bagher/permit"));
 		} catch (Exception $e) {
 			$Error[]=  "ارتباط با سرور قطع است.";
 			$this->Error=$Error;
@@ -21,8 +21,8 @@ class ReportCotaginfoController extends JControl
 			//			$r=j::CallService("https://10.32.0.19/server/service/review/info", "ReviewInfo",array("Cotag"=>$Cotag));
 			//			$r=j::CallService("http://192.168.0.20/customs/vehicle_permit.asmx", "SearchBy_Kootaj",array("kootaj"=>($Cotag."")));
 			try {
-				$c=new SoapClient("http://192.168.0.20/customs/vehicle_permit.asmx?WSDL");
-				$extx=new SoapClient("http://192.168.0.20/customs/extrataxes.asmx?WSDL");
+				$c=new SoapClient(reg("link/bagher/permit"));
+				$extx=new SoapClient(reg("link/bagher/tax"));
 				$r=$c->SearchBy_Kootaj(array("kootaj"=>($Cotag)));
 				$r2=$extx->PreExtraTaxes_ByKootaj(array("kootaj"=>($Cotag)));
 				$r3=$extx->ExtraTaxes_ByKootaj(array("kootaj"=>($Cotag)));

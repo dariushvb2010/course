@@ -17,7 +17,9 @@ reg( "app/sherkat/title","پژوهشکده سامانه های هوشمند کا
  */
 reg("my/DirectDownloadLink",SiteRoot."/file/trunk/jf3.1.22.tar.gz");
 
-reg("link/switch/url","http://10.32.0.18:8080/Swich");
+reg("link/switch/url",'http://10.32.0.18:8080/Swich');
+reg("link/bagher/permit",'http://192.168.0.20/customs/vehicle_permit.asmx?WSDL');
+reg("link/bagher/tax",'http://192.168.0.20/customs/extrataxes.asmx?WSDL');
 define ('GateCode',"50100");
 define ('GateName',"شهید رجایی");
 
