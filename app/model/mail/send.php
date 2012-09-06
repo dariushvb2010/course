@@ -103,11 +103,11 @@ class MailSendRepository extends EntityRepository
 		ORM::Persist($r);
 		return $r;
 	}
-	function GetAll($SenderGroup='all', $ReceiverTopic='all', $State='all')
+	function GetAll($SenderGroup='all', $ReceiverTopic='all', $State='all',$limit=50)
 	{
 		$s=" SELECT M FROM MailSend AS M JOIN M.SenderGroup I JOIN M.ReceiverTopic E ";
 		$w=" WHERE ";
-		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC"." LIMIT 0,{$limit}";
 		if($SenderGroup!='all' AND $ReceiverTopic!='all' AND $State!='all')
 		$r=j::ODQL($s.$w."I=? AND E=? AND M.State=?".$o, $SenderGroup, $ReceiverTopic, $State);
 		elseif($SenderGroup!='all' AND $ReceiverTopic!='all')

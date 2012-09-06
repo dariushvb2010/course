@@ -47,7 +47,10 @@ class CorrespondenceAddprocessController extends JControl
 		if (count($Error)) $this->Result=false;
 		return $this->Present();
 	}
-
+	/**
+	 * finds the clicked button name and returs it
+	 * @return string like 'prophecy'
+	 */
 	function GetInputClass(){
 		$inputclass='';
 		foreach ($_POST as $key=>$value){

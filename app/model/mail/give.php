@@ -272,11 +272,11 @@ class MailGiveRepository extends EntityRepository
 		else
 		return null;
 	}
-	function GetAll($GiverGroup='all', $GetterGroup='all', $State='all')
+	function GetAll($GiverGroup='all', $GetterGroup='all', $State='all',$limit=50)
 	{
 		$s=" SELECT M FROM MailGive AS M JOIN M.GiverGroup I JOIN M.GetterGroup E ";
 		$w=" WHERE ";
-		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC";
+		$o=" ORDER BY M.RetouchTimestamp DESC,M.ID DESC"." LIMIT 0,{$limit}";
 		if($GiverGroup!='all' AND $GetterGroup!='all' AND $State!='all')
 			$r=j::ODQL($s.$w."I=? AND E=? AND M.State=?".$o, $GiverGroup, $GetterGroup, $State);
 		elseif($GiverGroup!='all' AND $GetterGroup!='all')

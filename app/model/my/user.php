@@ -341,27 +341,36 @@ class MyUserRepository extends EntityRepository
 	public function getRandomReviewer()
 	{
 		$Reviewers=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1");
-
 		if($Reviewers)
-		foreach($Reviewers as $R)
-		{
-			$ar[]=$R->AssignedReviewableFileCount();
+			foreach($Reviewers as $R)
+			{
+				$ar[]=$R->AssignedReviewableFileCount();
+			}
+		$test=array();
+		for($t=0;$t<300;$t++){
+			$ind=$this->chooseRandom($ar);
+			$test[$ind]++;
 		}
-		
-		$Chosen=$Reviewers[$this->chooseRandom($ar)];
+		//foreach ($test as $key=>$vlue){
+		//	echo $Reviewers[$key]->getFullName().' '.$vlue.'   #'.$ar[$key].'  ^'.round($ar[$key]*$vlue/100).BR;
+		//}
+		$Chosen=$Reviewers[$ind];
 		return $Chosen;		
 	}
 	
 	private function chooseRandom($Input){
 		$pivot=max($Input);
-		$sum=array_sum($Input);
+		$sorted=$Input;
+		rsort($sorted);
+		$VIP=array_slice($sorted,0,round(count($sorted)/3));
 		foreach($Input as $W){
-			$W2=$pivot-$W;
-			if($W2<5)
-				$W2=5;
+			$W2=pow(($pivot-$W),2);
+			if(in_array($W,$VIP))
+				$W2=1;
 			
 			$RS[]=$W2;
 		}
+		$sum=array_sum($RS);
 		$Rand=mt_rand(0,$sum);
 		foreach ($RS as $k=>$v){
 			$Rand-=$v;
