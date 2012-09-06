@@ -285,16 +285,5 @@ class ConnectionAsyRepository extends EntityRepository
 	{
 		$r=j::ODQL("SELECT A FROM ConnectionAsy as A WHERE A.File=?",$File);
 		return $r[0];
-	}
-	static function UpdateAll(){
-		$r=j::DQL("SELECT A FROM ConnectionAsy as A LIMIT 1,20");
-		/**foreach ($r as $v) {
-		 $d=$v->Masir();
-		if(!isset($d)){
-		$t=json_decode($v->Whole());
-		$v->setMasir($t->masir);
-		}
-		}**/
-	}
-	
+	}	
 }
