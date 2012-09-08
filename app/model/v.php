@@ -183,7 +183,23 @@ class v
 				"کوتاژ ".self::rc($Cot)." ناصحیح است."
 		);
 	}
-	
+	static function Edb(){
+		return 'امکان ذخیره کردن در پایگاه داده وجود ندارد!';
+	}
+	/**
+	 * کارشناس یافت نشد
+	 * ERROR: reviewer not found
+	 */
+	static function Ernf(){
+		return 'کارشناس یافت نشد!';
+	}
+	/**
+	 * کارشناس غیرفعال است
+	 * ERROR: reviewer is disabled(retired or vacation)
+	 */
+	static function Erd(){
+		return 'کارشناس غیرفعال است!';
+	}
 	/**
 	 * 'a' tag
 	 * link with href and label

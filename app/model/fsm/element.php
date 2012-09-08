@@ -6,10 +6,14 @@
  * @author kavakebi
  *
  */
-class FsmElement extends JModel {
+class FsmElement {
 
 	public $Label;
 	public $Name;
+	/**
+	 * @example rawData['is_MokatebatViewable']
+	 * @var array of attributes
+	 */
 	public $rawData;
 	
 	function __construct($inp = null) {

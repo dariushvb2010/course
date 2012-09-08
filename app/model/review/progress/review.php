@@ -151,7 +151,7 @@ class ReviewProgressReview extends ReviewProgress
 	{
 		return "کارشناسی";
 	}
-	function Event()
+	function Manner()
 	{
 		if(!isset($this->Result))
 			throw new Exception("Result is not set!");

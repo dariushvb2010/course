@@ -32,106 +32,44 @@ class FsmGraph extends JModel
 	16=>array('Get_arhive_from_raked'=>4),
 	'Ebtalable'=>array('Ebtal'=>1),
 	//--------------------------Correspondence-----------
-	9=>array('ProcessRegister'=>18, 'Review_ok'=>7, 'Review_nok'=>9),
-	18=>array('Senddemand_demand'=>40),
-	40=>array('Protest'=>42,'Prophecy_first'=>41),
-	41=>array('Protest'=>42,'P1415'=>1514),
+	9=>array('ProcessRegister_109'=>36, 'ProcessRegister_248'=>18,'ProcessRegister_528'=>18, 'Review_ok'=>7, 'Review_nok'=>9),
+	18=>array('Address_first'=>40, 'Protest_first'=>42),
+	40=>array('Protest_first'=>42,'Prophecy_first'=>41),
+	41=>array('Protest_first'=>42,'P7'=>780),
 	42=>array('ProcessAssign'=>43),
-	43=>array('Judgement_ok'=>44,'Judgement_nok'=>45,'Judgement_commission'=>59,'Judgement_setad'=>55),
-	44=>array('ProcessConfirm_ok'=>7,'ProcessConfirm_nok'=>45),
-	45=>array('Senddemand_karshenas'=>46),
-	46=>array('Prophecy_second'=>47,'Protest'=>49),
-	47=>array('Payment'=>7,'Protest'=>49,'P1415'=>1415),
-	49=>array('ProcessAssign'=>50),
-	50=>array('Judgement_ok'=>51,'Judgement_setad'=>55,'Judgement_commission'=>59),
-	51=>array('Processconfirm_ok'=>7,'Processconfirm_nok'=>55),
-	52=>array('Judgement_ok'=>53,'Judgement_commission'=>59,'Judgement_setad'=>55),
-	53=>array('Processconfirm_ok'=>54,'Processconfirm_nok'=>55),
-	54=>array('Refund'=>7),
-	75=>array('Feedback_setad_toowner'=>68,'Feedback_setad_togomrok'=>56),
-	56=>array('Senddemand_setad'=>57),	
-	57=>array('Prophecy_setad'=>58,'Protest'=>59),
-	58=>array('Protest'=>59,'Payment'=>68,'P1415'=>1415),
+	43=>array('ProcessReview_accept'=>44,'ProcessReview_deny'=>45,'ProcessReview_setad'=>53),
+	44=>array('ProcessConfirm_ok'=>80,'ProcessConfirm_nok'=>45),
+	45=>array('Address_second'=>46, 'Protest_second'=>50),
+	46=>array('Prophecy_second'=>47,'Protest_second'=>50),
+	47=>array('Payment'=>48,'Protest_second'=>50,'P7'=>780),
+	48=>array('Clearance'=>11, 'ProcessAssign'=>79),
+	49=>array('ProcessAssign'=>79, 'Clearance'=>11, 'Protest_after_p7'=>50),
+	50=>array('ProcessAssign'=>51),
+	51=>array('ProcessReview_accept'=>52,'ProcessReview_setad'=>53),
+	52=>array('Processconfirm_ok'=>80,'Processconfirm_nok'=>53),
+	53=>array('Forward_setad'=>55),
+	55=>array('Feedback_setad_to_owner'=>78,'Feedback_setad_to_gomrok'=>56),
+	56=>array('Address_setad'=>57,'Protest_setad'=>59),	
+	57=>array('Prophecy_setad'=>58,'Protest_setad'=>59),
+	58=>array('Protest_setad'=>59,'Payment'=>78,'P1415'=>781),
 	59=>array('Forward_commission'=>60),
-	60=>array('Feedback_commission_toowner'=>68,'Feedback_commission_togomrok'=>62),
-	62=>array('Protest'=>64,'Prophecy_commission'=>63),
-	63=>array('Protest'=>64,'Payment'=>68,'P1415'=>1415),
+	60=>array('Feedback_commission_to_owner'=>78,'Feedback_commission_to_gomrok'=>62),
+	62=>array('Protest_commission'=>64,'Prophecy_commission'=>63),
+	63=>array('Protest_commission'=>64,'Payment'=>78,'P7'=>782),
 	64=>array('Forward_appeals'=>65),	
-	65=>array('Feedback_appeals_toowner'=>68,'Feedback_appeals_togomrok'=>67),
-	67=>array('Payment'=>68),
-	69=>array('Protest'=>70),
-	70=>array('ProcessAssign'=>52),
-	'Mokatebat'=>array('ProcessClearance'=>7),
+	65=>array('Feedback_appeals_to_owner'=>78,'Feedback_appeals_to_gomrok'=>67),
+	67=>array('Payment'=>78, 'P7'=>782),
+	78=>array('Clearance'=>11, 'Assign'=>79),
+	79=>array('ProcessReview_ok'=>80),
+	80=>array('Clearance'=>11),
+	85=>array('ProcessAssign'=>79, 'Clearance'=>11, 'Protest_after_p7'=>59),
+	780=>array('Payment'=>49),
+	781=>array('Payment'=>85),
+	782=>array('Payment'=>78),
+	'Mokatebat_Clearancable'=>array('Clearance'=>11),
 	);
 	
-	Public static $ProcessList=array(
-	'Scan'=>'*********',
-	'Start'=>'*********',
-	'Give_cotagbook_to_archive'=>'وصول دفتر کوتاژ',
-	'Get_archive_from_cotagbook'=>'دریافت از دفتر کوتاژ',
-	'Assign'=>'تخصیص به کارشناس',
-	'Confirm_ok'=>'*********',
-	'Confirm_nok'=>'*********',
-	'Review_nok'=>'*********',
-	'Give_archive_to_raked'=>'*********',
-	'Send_archive_to_out'=>'*********',
-	'Review_ok'=>array(
-			'Label'=>'*********',
-			'is_MokatebatViewable'=>false,
-			),
-	'Review_nok'=>array(
-			'Label'=>'*********',
-			'is_MokatebatViewable'=>false,
-			),
-	'ProcessClearance'=>array(
-			'Label'=>'تسویه و مختومه',
-			'is_MokatebatViewable'=>true,
-			),
-	'Assign_by_manager'=>'*********',
-	'Give_archive_to_raked'=>'*********',
-	'Send_archive_to_out'=>'*********',
-	'Receive_archive_from_out'=>'*********',
-	'Get_raked_from_archive'=>'*********',
-	'Send_raked_to_out'=>'*********',
-	'Give_raked_to_archive'=>'*********',
-	'Receive_raked_from_out'=>'*********',
-	'Get_arhive_from_raked'=>'*********',
-	'Ebtal'=>array(
-			'Label'=>'ابطال',
-			'is_MokatebatViewable'=>false,
-			),
-	'Senddemand_demand'=>array(
-			'Label'=>'ارسال مطالبه نامه',
-			'IsPrinting'=>true,
-			),
-	'Senddemand_setad'=>'ارسال رای دفاتر ستادی به صاحب کالا',
-	'Senddemand_karshenas'=>'ارسال نظر کارشناس',
-	'Refund'=>'استرداد',
-	'Forward_commission'=>'ارسال پرونده به کمیسیون',
-	'Forward_setad'=>'ارسال به دفاتر ستادی',
-	'Forward_appeals'=>'ارسال به کمیسیون تجدید نظر',
-	'Feedback_appeals_toowner'=>'رای کمیسون تجدید نظر به نفع صاحب کالا',
-	'Feedback_appeals_togomrok'=>'رای کمیسون تجدید نظر به نفع گمرک',
-	'Feedback_commission_toowner'=>'رای کمیسون به نفع صاحب کالا',
-	'Feedback_commission_togomrok'=>'رای کمیسون به نفع گمرک',
-	'Feedback_setad_toowner'=>'رای دفاتر ستادی به نفع صاحب کالا',
-	'Feedback_setad_togomrok'=>'رای دفاتر ستادی به نفع گمرک',
-	'Prophecy_first'=>'ثبت ابلاغ مطالبه نامه',
-	'Prophecy_second'=>'ثبت ابلاغ ثانویه',
-	'Prophecy_setad'=>'ابلاغ رای دفاتر ستادی',
-	'Prophecy_commission'=>'ابلاغ رای کمیسیون',
-	'ProcessRegister'=>array('Label'=>'ثبت کلاسه'),
-	'ProcessAssign'=>'تحویل به کارشناس',
-	'Payment'=>'تمکین و پرداخت',
-	'Protest'=>'اعتراض صاحب کالا',
-	'Judgement_ok'=>'قبول اعتراض',
-	'Judgement_nok'=>'رد اعتراض',
-	'Judgement_commission'=>'نظر کارشناس ارسال به کمیسیون',
-	'Judgement_setad'=>'نظر کارشناس ارسال به دفاتر ستادی',
-	'ProcessConfirm_ok'=>'تایید مدیر',
-	'ProcessConfirm_nok'=>'عدم تایید مدیر',
-	'P1415'=>'ماده1415',
-	);
+	
 	
 	public static $Persian=array(
 	'setad'=>"دفاتر ستادی",
@@ -147,19 +85,19 @@ class FsmGraph extends JModel
 		'archive'=>array(4),
 		'Assignable'=>array('archive'),
 		'reviewing'=> array(5),
-		'review_notok'=> array(9),
+		'review_nok'=> array(9),
 		'ProcessRegister'=> array(18),
 		'Prophecy_first'=>array(41),
 		'Prophecy_second'=>array(47),
 		'Prophecy_setad'=>array(58),
 		'Prophecy_commission'=>array(63),
-		'Senddemand_demand'=>array(40),
-		'Senddemand_setad'=>array(57),
-		'Senddemand_karshenas'=>array(46),
+		'Address_first'=>array(40),
+		'Address_second'=>array(46),
+		'Address_setad'=>array(57),
 		'Ebtalable'=>array(2,3,4,5,9,11,7),
 		'Prophecies'=>array('Prophecy_first','Prophecy_second','Prophecy_setad','Prophecy_commission'),
-		'Senddemands'=>array('Senddemand_demand','Senddemand_setad','Senddemand_karshenas'),
-		'Mokatebat'=>array('review_notok','ProcessRegister','Prophecies','Senddemands'),
+		'Addresses'=>array('Address_first','Address_setad','Address_second'),
+		'Mokatebat_Clearancable'=>array('review_nok',18,'Prophecies','Addresses'),
 		'PrintForDemand'=>array('ProcessRegister'),
 	);
 	
@@ -214,8 +152,8 @@ class FsmGraph extends JModel
 	/**
 	 * 
 	 * return possible progresses for each input state
-	 * an array with keys as state english name and value as persian label name
-	 * @param integer $state
+	 * @param integer $state\
+	 * @return array with keys as state english name and value as FsmProgress with persian label name
 	 */
 	static function PossibleProgresses($state){
 		$Graph=self::$StateGraph;
@@ -239,8 +177,93 @@ class FsmGraph extends JModel
 	static function GetProgressByName($name){
 		$a=self::$ProcessList[$name];
 		return new FsmProgress($a);
-		//return new FileProgressclass($a);
 	}
+	Public static $ProcessList=array(
+			'Scan'=>'*********',
+			'Start'=>'*********',
+			'Give_cotagbook_to_archive'=>'وصول دفتر کوتاژ',
+			'Get_archive_from_cotagbook'=>'دریافت از دفتر کوتاژ',
+			'Assign'=>'تخصیص به کارشناس',
+			'Confirm_ok'=>'*********',
+			'Confirm_nok'=>'*********',
+			'Review_nok'=>'*********',
+			'Give_archive_to_raked'=>'*********',
+			'Send_archive_to_out'=>'*********',
+			'Review_ok'=>array(
+					'Label'=>'*********',
+					'is_MokatebatViewable'=>false,
+			),
+			'Review_nok'=>array(
+					'Label'=>'*********',
+					'is_MokatebatViewable'=>false,
+			),
+			'Clearance'=>array(
+					'Label'=>'تسویه و مختومه',
+			),
+			'Assign_by_manager'=>'*********',
+			'Give_archive_to_raked'=>'*********',
+			'Send_archive_to_out'=>'*********',
+			'Receive_archive_from_out'=>'*********',
+			'Get_raked_from_archive'=>'*********',
+			'Send_raked_to_out'=>'*********',
+			'Give_raked_to_archive'=>'*********',
+			'Receive_raked_from_out'=>'*********',
+			'Get_arhive_from_raked'=>'*********',
+			'Ebtal'=>array(
+					'Label'=>'ابطال',
+					'is_MokatebatViewable'=>false,
+			),
+			'Address_first'=>array(
+					'Label'=>'ارسال مطالبه نامه',
+			),
+			'Address_setad'=>'ارسال رای دفاتر ستادی به صاحب کالا',
+			'Address_second'=>'ارسال نظر کارشناس',
+			'Forward_commission'=>'ارسال پرونده به کمیسیون',
+			'Forward_setad'=>'ارسال به دفاتر ستادی',
+			'Forward_appeals'=>'ارسال به کمیسیون تجدید نظر',
+			'Feedback_appeals_toowner'=>'رای کمیسون تجدید نظر به نفع صاحب کالا',
+			'Feedback_appeals_togomrok'=>'رای کمیسون تجدید نظر به نفع گمرک',
+			'Feedback_commission_toowner'=>'رای کمیسون به نفع صاحب کالا',
+			'Feedback_commission_togomrok'=>'رای کمیسون به نفع گمرک',
+			'Feedback_setad_toowner'=>'رای دفاتر ستادی به نفع صاحب کالا',
+			'Feedback_setad_togomrok'=>'رای دفاتر ستادی به نفع گمرک',
+			'Prophecy_first'=>'ثبت ابلاغ مطالبه نامه',
+			'Prophecy_second'=>'ثبت ابلاغ ثانویه',
+			'Prophecy_setad'=>'ابلاغ رای دفاتر ستادی',
+			'Prophecy_commission'=>'ابلاغ رای کمیسیون',
+			'ProcessRegister_109'=>array('Label'=>'ثبت کلاسه ۱۰۹'),
+			'ProcessRegister_248'=>'ثبت کلاسه ۲۴۸',
+			'ProcessRegister_528'=>'ثبت کلاسه ۵۲۸',
+			'ProcessAssign'=>'تحویل به کارشناس',
+			'Payment'=>'تمکین و پرداخت',
+			'Protest_first'=>'اعتراض صاحب کالا به مطالبه نامه',
+			'Protest_second'=>'اعتراض صاحب کالا به رای کارشناس',
+			'Protest_setad'=>'اعتراض صاحب کالا به رای دفاتر ستادی',
+			'Protest_commission'=>'اعتراض صاحب کالا به رای کمیسیون بدوی',
+			'Protest_after_p7'=>'اعتراض صاحب کالا بعد از لغو ماده هفت',
+			'ProcessReview_accept'=>array(
+					'Label'=> 'پذیرش اعتراض صاحب کالا',
+					'is_MokatebatViewable'=>false),
+			'ProcessReview_deny'=>array(
+					'Label'=> 'رد اعتراض صاحب کالا',
+					'is_MokatebatViewable'=>false),
+			'ProcessReview_commission'=>array(
+					'Label'=>'نظر کارشناس ارسال به کمیسیون',
+					'is_MokatebatViewable'=>false),
+			'ProcessReview_setad'=>array(
+					'Label'=>'نظر کارشناس ارسال به دفاتر ستادی',
+					'is_MokatebatViewable'=>false),
+			'ProcessReview_ok'=>array(
+					'Label'=>'تایید پرونده',
+					'is_MokatebatViewable'=>false),
+			'ProcessConfirm_ok'=>array(
+					'Label'=>'تایید مدیر',
+					'is_MokatebatViewable'=>false),
+			'ProcessConfirm_nok'=>array(
+					'Label'=>'عدم تایید مدیر',
+					'is_MokatebatViewable'=>false),
+			'P7'=>'ماده هفت',
+	);
 	static $StateFeatures  = array(
 			2=>array(
 					'Desc'=>'در دفتر کوتاژ',
@@ -357,6 +380,7 @@ class FsmGraph extends JModel
 		
 		 
 	}
+	
 	static function Moderate10(){echo 'ss';}
 
 	static function testFsm(){

@@ -11,6 +11,10 @@ class p{
 	const Mokatebat = 'مکاتبات';
 	const Cotag = 'کوتاژ';
 	const File = 'اظهارنامه';
+	const Cat = 'شماره طبقه بندی';
 	
-	
+	const setad = 'دفاتر ستادی';
+	const commission = 'کمیسیون';
+	const appeals = 'کمیسیون تجدید نظر';
+	const desc = 'توضیحات';
 }

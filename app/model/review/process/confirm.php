@@ -37,7 +37,7 @@ class ReviewProcessConfirm extends ReviewProgress
 	{
 		return "تایید مدیر";
 	}
-	function Event()
+	function Manner()
 	{
 		if(isset($this->ConfirmResult))
 		{

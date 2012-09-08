@@ -2,50 +2,64 @@
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * ثبت ابلاغ
  * @Entity
  * @entity(repositoryClass="ReviewProcessProphecyRepository")
  * */
 class ReviewProcessProphecy extends ReviewProgress
 {
-
+	///--------------------///
+	///protected SubManner = 
+	///-------------------///
 	/**
-	 * @Column(type="string")
+	 * ثبت ابلاغ اولیه
 	 * @var string
-	 *
 	 */
-	protected $ProphecyStep;// first,second,setad
-	function ProphecyStep()
-	{
-		return $this->ProphecyStep;
-	}
+	const SubManner_first = 'first';
+	/**
+	 * ثبت ابلاغ ثانویه
+	 * @var string
+	 */
+	const SubManner_second = 'second';
+	/**
+	 * ثبت ابلاغ رای دفاتر ستادی
+	 * @var string
+	 */
+	const SubManner_setad = 'setad';
+	/**
+	 * ثبت ابلاغ رای کمیسیون
+	 * @var string
+	 */
+	const SubManner_commission = 'commission';
 	
-	function __construct(ReviewFile $File=null,$ProphecyStep=null,$Indicator=null,MyUser $User=null)
+	function SubMannerValidation(){
+		$val = $this->SubManner();
+		$r = false;
+		$r |= ($val == self::SubManner_first );
+		$r |= ($val == self::SubManner_second );
+		$r |= ($val == self::SubManner_setad );
+		$r |= ($val == self::SubManner_commission );
+		return $r;
+	}
+	function __construct(ReviewFile $File=null,$SubManner=null,$Indicator=null,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->MailNum=$Indicator;
-		$this->ProphecyStep=$ProphecyStep;
+		$this->setMailNum($Indicator);
+		$this->SetSubManner($SubManner);
 	}
 
 	function  Summary()
 	{
-		switch ($this->ProphecyStep){
-			case 'first':
-				return 'ابلاغ مطالبه نامه به صاحب کالا ثبت گردید.';
-			case 'second':
-			case 'setad':
-		}
+		return '';
 	}
 	function Title()
 	{
-		return 'ثبت ابلاغ';
+		$fsmp = FsmGraph::GetProgressByName($this->Manner());
+		return $fsmp->Label;
 	}
-	function Event()
+	function Manner()
 	{
-		$R="Prophecy_";
-		if(!isset($this->ProphecyStep))
-			throw new Exception("hoooooooooo");
-		$R.=$this->ProphecyStep;
-		return $R;
+		return 'Prophecy_'.$this->SubManner();
 	}
 }
 
@@ -59,27 +73,21 @@ class ReviewProcessProphecyRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null,$ProphecyStep=null,$Indicator,$Comment=null)
+	public function AddToFile(ReviewFile $File, $SubManner ,$Indicator,$Comment=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
 
-		if ($File==null)
-		{
-			$res['Error']=v::Ecnf();
-		}
-		else{
-			$R=new ReviewProcessProphecy($File,$ProphecyStep,$Indicator,$CurrentUser);
-			$R->setComment(($Comment==null?"":$Comment));
-			$er=$R->Apply();
-			if(!is_string($er)){
-				ORM::Persist($R);
-				ORM::Persist($File);
-				$Res['Class']=$R;
-			}else{
-				$Res['Error']=$er;
-			}
-			return $res;
-		}
-
+		$R=new ReviewProcessProphecy($File,$SubManner,$Indicator);
+		$R->setComment(($Comment==null?"":$Comment));
+		var_dump($R->SubManner());
+		if(!$R->SubMannerValidation())
+			return v::Edb();
+		var_dump($R->Manner());
+		$er=$R->Check();
+		if(is_string($er))
+			return $er;
+			
+		$R->Apply();
+		ORM::Persist($R);
+		return $R;
 	}
 }

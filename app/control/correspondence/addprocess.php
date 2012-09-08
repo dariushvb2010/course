@@ -17,12 +17,12 @@ class CorrespondenceAddprocessController extends JControl
 			{
 				$this->File=$File;
 				$FileState=$File->State();
-				if(FsmGraph::StateMatch($FileState, 'Mokatebat'))
-				{
+				//if(FsmGraph::StateMatch($FileState, 'Mokatebat'))
+				//{
 					$ProcessArrayraw=FsmGraph::PossibleProgresses($FileState);
 					$ProcessArray=array();
 					foreach ($ProcessArrayraw as $r){
-						if($r->is_MokatebatViewable()!==false)$ProcessArray[]=$r;
+						if($r->is_MokatebatViewable())$ProcessArray[]=$r;
 					}
 					
 					$er=$this->ManageProcesses($File);
@@ -31,11 +31,11 @@ class CorrespondenceAddprocessController extends JControl
 						$Error[]=$er;
 					}
 					$this->Result=$this->ManageSuccesses();
-				}
-				else
-				{
-					$Error[]="هیچ فرایند مکاتباتی برای این پرونده امکان پذیر نیست";
-				}
+				//}
+				//else
+				//{
+				//	$Error[]="هیچ فرایند مکاتباتی برای این پرونده امکان پذیر نیست";
+				//}
 			}
 			else
 			{
@@ -48,7 +48,7 @@ class CorrespondenceAddprocessController extends JControl
 		return $this->Present();
 	}
 	/**
-	 * finds the clicked button name and returs it
+	 * finds the name of the button clicked and returns it
 	 * @return string like 'prophecy'
 	 */
 	function GetInputClass(){
@@ -61,29 +61,43 @@ class CorrespondenceAddprocessController extends JControl
 		return $inputclass;
 	}
 
+	/**
+	 * redirects to the convinient page else returns
+	 * @param ReviewFile $File
+	 */
 	function ManageProcesses(ReviewFile $File){
 		$input_class=$this->GetInputClass();
 		if($input_class!=''){
 			switch ($input_class){
-				case 'ProcessRegister':
-					$Res=ORM::Query("ReviewProcessRegister")->AddToFile($File);
-					if(!$Res['Error']){
-						$this->Redirect("./addprocess?Cotag={$File->Cotag()}&success={$input_class}&classe={$File->GetClass()}");
-					}
-					break;
+				case 'ProcessRegister_109':
+				case 'ProcessRegister_248':
+				case 'ProcessRegister_528':
+					$this->Redirect("./register?Cotag={$File->Cotag()}&input_class={$input_class}");
+				break;
+				case 'Address_first':
+				case 'Address_second':
+				case 'Address_setad':
+				case 'Address_commission': // this case is not usefull in rajaie
+					$this->Redirect("./address?Cotag={$File->Cotag()}&input_class={$input_class}");			
+				break;
+				case 'Prophecy_first':
+				case 'Prophecy_second':
+				case 'Prophecy_setad':
+				case 'Prophecy_commission':
+					$this->Redirect("./prophecy?Cotag={$File->Cotag()}&input_class={$input_class}");
+				break;
+				case 'Protest_first':
+				case 'Protest_second':
+				case 'Protest_setad':
+				case 'Protest_commission':
+				case 'Protest_after_p7':
+					$this->Redirect("./protest?Cotag={$File->Cotag()}&input_class={$input_class}");
+				break;
 				case 'ProcessAssign':
-					$Res=ORM::Query("ReviewProcessAssign")->AddToFile($File);
-					if(!isset($Res['Error'])){
-						$this->Redirect("./addprocess?Cotag={$File->Cotag()}&success={$input_class}&Reviewer={$Res['Class']->Reviewer()->getFullName()}");
-					}
-					break;
-				case 'ProcessClearance':
-					echo 1;
-					$Res=ORM::Query("ReviewProcessClearance")->AddToFile($File);
-					echo 2;
-					if(!isset($Res['Error'])){
-						//$this->Redirect("./addprocess?Cotag={$File->Cotag()}&success={$input_class}");
-					}
+					$this->Redirect("./assign?Cotag={$File->Cotag()}&input_class={$input_class}");
+				break;
+				case 'Clearance':
+					$this->Redirect("./clearance?Cotag={$File->Cotag()}&input_class={$input_class}");
 					break;
 				default:
 					
@@ -105,7 +119,7 @@ class CorrespondenceAddprocessController extends JControl
 				case 'ProcessRegister':
 					$res="شماره کلاسه {$classe} ثبت گردید.";
 					break;
-				case 'Senddemand':
+				case 'Address':
 					$res='ارسال مطالبه نامه ثبت گردید.';
 					break;
 				case 'ProcessAssign':

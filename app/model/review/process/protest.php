@@ -7,41 +7,64 @@ use Doctrine\Common\Collections\ArrayCollection;
  * */
 class ReviewProcessProtest extends ReviewProgress
 {
-
+	///--------------------///
+	///protected SubManner = 
+	///-------------------///
 	/**
-	 * @Column(type="string")
+	 * اعتراض به مطالبه نامه
 	 * @var string
-	 *
 	 */
-	protected $ProtestRequest;//karshenas,setad,commission,appeals
-	function ProtestRequest()
-	{
-		return $this->ProtestRequest;
-	}
+	const SubManner_first = 'first';
+	/**
+	 * اعتراض به نظر کارشناس
+	 * @var string
+	 */
+	const SubManner_second = 'second';
+	/**
+	 * اعتراض به رای دفاتر ستادی
+	 * @var string
+	 */
+	const SubManner_setad = 'setad';
+	/**
+	 * اعتراض به رای کمیسیون
+	 * @var string
+	 */
+	const SubManner_commission = 'commission';
+	/**
+	 * اعتراض بعد از ماده هفت شدن
+	 * @var string
+	 */
+	const SubManner_after_p7 = 'after_p7';
 	
-	function __construct(ReviewFile $File=null,$ProtestRequest=null,$Indicator=null,MyUser $User=null)
+	function SubMannerValidation(){
+		$val = $this->SubManner();
+		$r = false;
+		$r |= ($val == self::SubManner_first );
+		$r |= ($val == self::SubManner_second );
+		$r |= ($val == self::SubManner_setad );
+		$r |= ($val == self::SubManner_commission );
+		$r |= ($val == self::SubManner_after_p7 );
+		return $r;
+	}
+	function __construct(ReviewFile $File=null,$SubManner,$Indicator='',MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->MailNum=$Indicator;
-		$this->ProtestRequest=$ProtestRequest;
+		$this->setMailNum($Indicator);
+		$this->SetSubManner($SubManner);
 	}
 
 	function  Summary()
 	{
-		$R= "اعتراض صاحب کالا با درخواست ارسال به";
-		$R.=' ';
-		$R.=FsmGraph::$Persian[$this->ProtestRequest];
-		$R.=' ';
-		$R.="ثبت شد.";
-		return $R;
+		$fsmp = FsmGraph::GetProgressByName($this->Manner());
+		return 'اعتراض صاحب کالا ثبت شد: '. $fsmp->Label;
 	}
 	function Title()
 	{
-		return "اعتراض";
+		return 'اعتراض صاحب کالا';
 	}
-	function Event()
+	function Manner()
 	{
-		return "Protest";
+		return 'Protest_'.$this->SubManner();
 	}
 
 }
@@ -56,28 +79,19 @@ class ReviewProcessProtestRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null,$ProtestRequest=null,$Indicator=null,$Comment=null)
+	public function AddToFile(ReviewFile $File,$SubManner, $Indicator, $Comment=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
-
-		if ($File==null)
-		{
-			$res['Error']=v::Ecnf();
-		}
-		else{
-			$R=new ReviewProcessProtest($File,$ProtestRequest,$Indicator,$CurrentUser);
-			$R->setComment(($Comment==null?"":$Comment));
-			$er=$R->Check();
-			if(!is_string($er)){
-				$R->Apply();
-				ORM::Write($R);
-				$Res['Class']=$R;
-			}else{
-				$Res['Error']=$er;
-			}
-		}
-
-		return $Res;
+		$R=new ReviewProcessProtest($File,$SubManner,$Indicator);
+		$R->setComment($Comment);
+		if(!$R->SubMannerValidation())
+			return v::Edb();
+		$er=$R->Check();
+		if(is_string($er))
+			return $er;
+		
+		$R->Apply();
+		ORM::Persist($R);
+		return $R;
 
 	}
 }

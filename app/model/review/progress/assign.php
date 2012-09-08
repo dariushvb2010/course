@@ -38,7 +38,7 @@ class ReviewProgressAssign extends ReviewProgress
 	{
 		return "تخصیص";
 	}
-	function Event()
+	function Manner()
 	{
 		return "Assign";
 	}

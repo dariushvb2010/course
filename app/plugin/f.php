@@ -82,5 +82,21 @@ class FPlugin
 		return $res;
 		
 	}
+	static function str_startsWith($haystack, $needle)
+	{
+		$length = strlen($needle);
+		return (substr($haystack, 0, $length) === $needle);
+	}
+	
+	static function str_endsWith($haystack, $needle)
+	{
+		$length = strlen($needle);
+		if ($length == 0) {
+			return true;
+		}
+	
+		return (substr($haystack, -$length) === $needle);
+	}
+	
 	
 }

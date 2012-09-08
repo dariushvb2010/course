@@ -20,7 +20,12 @@ class FsmProgress extends FsmElement {
 	}
 	
 	function is_MokatebatViewable(){
-		return $this->getAttribute('is_MokatebatViewable');
+		$r = $this->getAttribute('is_MokatebatViewable');
+		var_dump($r);
+		if($r===false)
+			return false;
+		else
+			return true;
 	}
 	
 }

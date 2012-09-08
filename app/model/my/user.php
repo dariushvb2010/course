@@ -72,9 +72,6 @@ class MyUser extends Xuser
 		$this->gender=$iswoman;
 	}
 	
-	const STATE_VACATION=0;
-	const STATE_WORK=1;
-	const STATE_RETIRED=2;
 	/**
 	* @Column(type="integer")
 	* @var integer
@@ -88,7 +85,22 @@ class MyUser extends Xuser
 		$Real=array(0=>"Vacation",1=>"Work",2=>"Retired");
 		return $Real[$this->State];
 	}
-	
+	public function getState(){ return $this->State; }
+	/**
+	 * کارشناس مرخصی است
+	 * @var integer
+	 */
+	const State_vacation = 0;
+	/**
+	 * کارشناس مشغول کار است
+	 * @var string
+	 */
+	const State_work = 1;
+	/**
+	 * کارشناس بازنشست شده و غیر فعال است
+	 * @var string
+	 */
+	const State_retired = 2;
 	/**
 	 * 
 	 * returns the state as a number
@@ -385,6 +397,8 @@ class MyUserRepository extends EntityRepository
 	{
 		if($State1==='*'){
 			$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1");
+		}elseif($State2==='.'){
+			$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=?",$State1);
 		}else{
 			$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND (U.State=? OR U.State=?)",$State1, $State2);
 		}

@@ -7,30 +7,43 @@ use Doctrine\Common\Collections\ArrayCollection;
  * */
 class ReviewProcessFeedback extends ReviewProgress
 {
-
+	///--------------------///
+	///protected $SubManner = 'setad', 'commission', 'appeals'
+	///-------------------///
 	/**
-	 * @Column(type="string")
+	 * دریافت از دفاتر ستادی
 	 * @var string
-	 *
 	 */
-	protected $FeedbackOffice;// setad,commission,appeals
-	function FeedbackOffice()
-	{
-		return $this->FeedbackOffice;
-	}
-	
+	const SubManner_setad = 'setad';
+	/**
+	 * دریافت از کمیسیون
+	 * @var string
+	 */
+	const SubManner_commission = 'commission';
+	/**
+	 * دریافت از کمیسیون تجدید نظر
+	 * @var string
+	 */
+	const SubManner_appeals = 'appeals';
 	/**
 	 * togomrok=1(it is good and for us, thus it is 1)
 	 * toowner=0
-	 * @Column(type="boolean",name="feedback_FeedbackResult")
+	 * @Column(type="boolean")
 	 * @var boolean
 	 *
 	 */
 	protected $FeedbackResult; // togomrok=1,toowner=0
-	function FeedbackResult()
-	{
-		return $this->FeedbackResult;
-	}
+	function FeedbackResult(){ return $this->FeedbackResult; }
+	/**
+	 * به نفع صاحب کالا
+	 * @var integer
+	 */
+	const Result_ToOwner = 0;
+	/**
+	 *  به نفع گمرک
+	 * @var integer
+	 */
+	const Result_ToGomrok = 1;
 	
 	function __construct(ReviewFile $File=null,$FeedbackResult,$FeedbackOffice,$Indicator,MyUser $User=null)
 	{
@@ -61,7 +74,7 @@ class ReviewProcessFeedback extends ReviewProgress
 		if($E)
 			return $E->PersianTitle();
 	}
-	function Event()
+	function Manner()
 	{
 		if(!isset($this->FeedbackResult) OR !isset($this->FeedbackOffice))
 			throw new Exception("hooooooooooo");

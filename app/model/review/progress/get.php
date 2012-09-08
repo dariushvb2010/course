@@ -47,7 +47,7 @@ class ReviewProgressGet extends ReviewProgress
 	{
 		return "تحویل گرفتن ";
 	}
-	function Event()
+	function Manner()
 	{
 		$GiverGroup=$this->ProgressGive->MailGive()->GiverGroup();
 		$GetterGroup=$this->ProgressGive->MailGive()->GetterGroup();

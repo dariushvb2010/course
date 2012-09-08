@@ -22,7 +22,7 @@ class ReviewProgressRegisterarchive extends ReviewProgress
 	{
 		return "وصول بایگانی بازبینی";
 	}
-	function Event()
+	function Manner()
 	{
 		return "Get_archive_from_cotag";
 	}

@@ -20,7 +20,7 @@ class ReviewProgressEbtal extends ReviewProgress
 	{
 		return "ابطال";
 	}
-	function Event()
+	function Manner()
 	{
 		return "Ebtal";
 	}

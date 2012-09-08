@@ -56,7 +56,7 @@ class ReviewProgressStart extends ReviewProgress
 	{
 		return "ورود اظهارنامه";
 	}
-	function Event()
+	function Manner()
 	{
 		$sgn = $this->StartGroup()->Title(); // startGroup Title
 		if(!isset($sgn))
@@ -167,6 +167,11 @@ class ReviewProgressStartRepository extends EntityRepository
 				$resMessage = " اظهارنامه از نامه حذف شد. ".$resMessage;
 				ORM::Delete($S);
 			}//---------------------
+			//===========Delete Asy=======
+				$asy = $File->Asy();
+				if($asy);
+					ORM::Delete($asy);
+			//-----------------------------
 			ORM::Delete($File);
 			$ret['result'] = true;
 			$ret['message'] = $resMessage." - ".$resLast;

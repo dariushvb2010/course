@@ -76,7 +76,13 @@ class ReviewTopic
 	*/
 	protected $MailSend;
 	function MailSend(){ return $this->MailSend; }
-
+	/**
+	 *@OneToMany(targetEntity="ReviewProcessForward", mappedBy="Setad")
+	 *@var ArrayCollection_of_ReviewProcessForward
+	 */
+	protected $ProcessForward;
+	function ProcessForward(){ return $this->ProcessForward; }
+	
 	function __construct($topic=null,$comment='',$type='', $GateCode=GateCode, $DeleteAccess=true)
 	{
 		if($topic)
@@ -88,6 +94,7 @@ class ReviewTopic
 		$this->DeleteAccess = $DeleteAccess;
 		$this->MailReceive= new ArrayCollection();
 		$this->MailSend= new ArrayCollection();
+		$this->ProcessForward = new ArrayCollection();
 	}
 	
 	static function TypeArray(){
@@ -97,6 +104,7 @@ class ReviewTopic
 	 				"iran"=>"گمرک ایران",
 	 				"other"=>"سایر(ارسال بایگانی بازبینی)",
 	 				"correspondent"=>"طرف مکاتبه",
+					'mokatebat'=>'مکاتبات دفاتر ستادی'
 	);		
 	}
 	static function GetPersianType($type)

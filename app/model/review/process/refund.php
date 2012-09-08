@@ -2,6 +2,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * استرداد
  * @Entity
  * @entity(repositoryClass="ReviewProcessRefundRepository")
  * */
@@ -34,7 +35,7 @@ class ReviewProcessRefund extends ReviewProgress
 	{
 		return 'استرداد';
 	}
-	function Event()
+	function Manner()
 	{
 		$R="Refund_";
 		if(!isset($this->RefundValue))

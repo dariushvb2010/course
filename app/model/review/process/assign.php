@@ -10,36 +10,33 @@ class ReviewProcessAssign extends ReviewProgress
 {
 	
 	/**
-	*
 	* @ManyToOne(targetEntity="MyUser");
 	* @JoinColumn(name="ExpertID",referencedColumnName="ID")
-	* @var unknown_type
+	* @var MyUser
 	*/
-	protected  $Reviewer;
-	function Reviewer()
-	{
-		return $this->Reviewer;
-	}
+	protected  $ProcessReviewer;
+	function ProcessReviewer(){ return $this->ProcessReviewer; }
 	
-	function __construct(ReviewFile $File=null,MyUser $User=null,MyUser $Reviewer=null)
+	function __construct(ReviewFile $File=null, MyUser $ProcessReviewer=null, MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		if($Reviewer)
-			$this->Reviewer=$Reviewer;
+		if($ProcessReviewer)
+			$this->ProcessReviewer=$ProcessReviewer;
 	}
 	
 	function  Summary()
 	{
-		if($this->Reviewer)
-			return "پرونده به کارشناس بازبینی ".v::b($this->Reviewer()->getFullName())."  تخصیص داده شد.";
+		if($this->ProcessReviewer())
+			return "پرونده به کارشناس بازبینی ".v::b($this->ProcessReviewer()->getFullName())."  تحویل داده شد.";
 		else 
 			return "خطا در گزارش گیری";
 	}
 	function Title()
 	{
-		return "تحویل به کارشناس";
+		$fsmp = FsmGraph::GetProgressByName($this->Manner());
+		return $fsmp->Label;
 	}
-	function Event()
+	function Manner()
 	{
 		return "ProcessAssign";
 	}
@@ -55,44 +52,21 @@ class ReviewProcessAssignRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null)
+	public function AddToFile(ReviewFile $File, $ProcessReviewerID, $Comment='')
 	{
-		$CurrentUser=MyUser::CurrentUser();
-		if($File)
-		{
-			if(FsmGraph::NextState($File->State(),"ProcessAssign"))
-			{
-				if($File->LastReviewer())
-				{
-					if($File->LastReviewer()->State()!="Retired")
-					$Reviewer=$File->LastReviewer();
-				}
-				else
-				{
-					$Reviewer=ORM::Query(new MyUser)->getRandomReviewer();
-					if(!$Reviewer)
-					{
-						$res['Error']="هیچ کارشناس بازبینی فعال در سیستم وجود ندارد.";
-						return $res;
-					}
-					$this->Reviewer=$Reviewer;
-				}
-
-				$p=new ReviewProcessAssign($File, $CurrentUser,$Reviewer);
-				$p->SetState($File,FsmGraph::NextState($File->State(),"ProcessAssign"));
-				ORM::Persist($File);
-				ORM::Persist($p);
-				$res['Class']=$p;
-			}
-			else
-			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان به کارشناس  تخصیص داد.";
-			}
-		}
-		else
-		{
-			$res['Error']="اظهارنامه وجود ندارد.";
-		}
-		return $res;
+		$reviewer = ORM::Find('MyUser', $ProcessReviewerID);
+		if(!$reviewer)
+			return v::Ernf();
+		if($reviewer->getState()!=MyUser::State_work)
+			return v::Erd();
+		$R=new ReviewProcessAssign($File,$reviewer);
+		$R->setComment($Comment);
+		$er = $R->Check();
+		if(is_string($er))
+			return $er;
+		
+		$R->Apply();
+		ORM::Persist($R);
+		return $R;
 	}
 }

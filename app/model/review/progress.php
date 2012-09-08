@@ -22,17 +22,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  *  "Receive"="ReviewProgressReceive",
  * 	"Remove"="ReviewProgressRemove",
  * 
- * 	"AssignProtest"="ReviewProcessAssign",
- * 	"Confirm"="ReviewProcessConfirm",
+ * 	"ProcessAssign"="ReviewProcessAssign",
+ * 	"ProcessConfirm"="ReviewProcessConfirm",
  * 	"Feedback"="ReviewProcessFeedback",
  * 	"Forward"="ReviewProcessForward",
- *  "Judgement"="ReviewProcessJudgement",
+ *  "ProcessReview"="ReviewProcessReview",
  *  "Payment"="ReviewProcessPayment",
+ *  "P7"="ReviewProcessP7",
  *  "Prophecy"="ReviewProcessProphecy",
  *  "Protest"="ReviewProcessProtest",
- *  "Refund"="ReviewProcessRefund",
- *  "RegisterClasse"="ReviewProcessRegister",
- *  "Senddemand"="ReviewProcessSenddemand",
+ *  "ProcessRegister"="ReviewProcessRegister",
+ *  "Address"="ReviewProcessAddress",
  *  "Clearance"="ReviewProcessClearance"
  * })
  * */
@@ -62,6 +62,14 @@ abstract class ReviewProgress
 	 */
 	protected $EditTimestamp;
 	function SetEditTimestamp($Timestamp){ $this->EditTimestamp=$Timestamp; }
+	/**
+	 * This field is used in the Process Progressed and can be used in other progresses 
+	 * @Column(type="string", length="50", nullable=true)
+	 * @var string
+	 */
+	protected $SubManner;
+	function SubManner(){ return $this->SubManner; }
+	function SetSubManner($val){ $this->SubManner = $val; }
 	/**
 	 * @ManyToOne(targetEntity="ReviewFile", inversedBy="Progress")
  	 * @JoinColumn(name="FileID", referencedColumnName="ID")
@@ -96,14 +104,14 @@ abstract class ReviewProgress
 	 */
 	protected $Comment;
 	function Comment(){ return $this->Comment; }
-	function setComment($value){ $this->Comment=$value;	}
+	function setComment($value){ $this->Comment=($value==null ? '': $value);	}
 	/**
 	 * @Column(type="string")
 	 * @var string
 	 */
 	protected $MailNum;
 	function MailNum(){ return $this->MailNum; }
-	function setMailNum($value){ $this->MailNum=$value;	}
+	function setMailNum($value){ $this->MailNum=($value==null ? '' : $value);	}
 	/**
 	 * 
 	 * @Column(type="integer") 
@@ -190,38 +198,36 @@ abstract class ReviewProgress
 	 * returns the final name of the progress
 	 * @return string
 	 */
-	abstract function Event();
+	abstract function Manner();
 	/**
 	 * Has to return a texual name of the progress depending on result of the progress
 	 * @return string
 	 */
 	private function MakeAlarm()
 	{
-		$ETitle=$this->Event();
-// 		if($ETitle==null OR $ETitle=="" OR !ETitle)
-// 			throw new Exception("EventTitle is empty!");
-		$Event=ORM::Find1("ConfigEvent", "EventName", $ETitle);
+		$ETitle=$this->Manner();
+		$Manner=ORM::Find1("ConfigEvent", "EventName", $ETitle);
 		
-		if(!$Event)
+		if(!$Manner)
 			return;
-		$ConfigAlarms=$Event->ChildConfigAlarm();
+		$ConfigAlarms=$Manner->ChildConfigAlarm();
 		if($ConfigAlarms)
 		foreach ($ConfigAlarms as $CA)
 		{
 			if($CA instanceof ConfigAlarm)
-			$AA=ORM::Query(new AlarmAuto())->Add($this->File(),$Event,$CA);
+			$AA=ORM::Query(new AlarmAuto())->Add($this->File(),$Manner,$CA);
 			if(!($AA instanceof AlarmAuto))
 				throw new Exception("Cannot create AlarmAuto at ReviewProgress class!");
 		}
 	}
 	private function KillAlarm()
 	{
-		$ETitle=$this->Event();
-		$Event=ORM::Find1("ConfigEvent", "EventName", $ETitle);
+		$ETitle=$this->Manner();
+		$Manner=ORM::Find1("ConfigEvent", "EventName", $ETitle);
 		
-		if(!$Event)
+		if(!$Manner)
 		return;
-		$ConfigAlarms=$Event->SlainConfigAlarm();
+		$ConfigAlarms=$Manner->SlainConfigAlarm();
 		if($ConfigAlarms)
 		foreach ($ConfigAlarms as $CA)
 		{
@@ -243,9 +249,9 @@ abstract class ReviewProgress
 	 */
 	private function DoFileState($Persist)
 	{
-		$EName=$this->Event();
+		$EName=$this->Manner();
 		if(!isset($EName))
-			throw new Exception("Event Not Set for Progress ".get_class($this));
+			throw new Exception("Manner Not Set for Progress ".get_class($this));
 		$CurrentState=$this->File->State();
 		$NewState=FsmGraph::NextState($CurrentState, $EName);
 		if(!isset($NewState))

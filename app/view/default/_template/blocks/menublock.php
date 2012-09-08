@@ -314,7 +314,7 @@
 			</a>
 		</li>
 		<li>
-			<a href='/review/dossier/select'>
+			<a href='/review/correspondence/main'>
 				<span class='ui-icon-circle-check ui-icon'></span>
 				کارشناسی پرونده
 			</a>
@@ -354,7 +354,38 @@
 				لیست مشمولین ماده ۱۴
 			</a>
 		</li>  
-		
+		<li>
+		<a href='#'>
+			<span class='ui-icon-arrowthick-1-n ui-icon'></span> 
+			ارسال اظهارنامه
+		</a>
+		<ul class='menu'>
+			<li>
+				<a href='/correspondence/transfer/toout?Taraf=mygate'>
+							<span class='ui-icon-extlink ui-icon'></span> 
+							سایر دوائر گمرگ <?php echo GateName;?>
+				</a>
+			</li>
+			<li>
+				<a href='/correspondence/transfer/toout?Taraf=iran'>
+							<span class='ui-icon-flag ui-icon'></span> 
+							گمرک ایران
+				</a>
+			</li>
+			<li>
+				<a href='/correspondence/transfer/toout?Taraf=othergates'>
+							<span class='ui-icon-arrow-4 ui-icon'></span> 
+							سایر گمرکات اجرایی
+				</a>
+			</li>
+			<li>
+				<a href='/correspondence/transfer/toout?Taraf=other'>
+							<span class='ui-icon-gripsmall-diagonal-se ui-icon'></span> 
+							سایر
+				</a>
+			</li>
+		</ul>
+		</li>
 		
 	</ul>
 <?php endif;?>

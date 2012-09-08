@@ -21,15 +21,15 @@ class ReviewProcessClearance extends ReviewProgress
 	
 	function  Summary()
 	{
-		return 'پرونده اظهارنامه مختومه شد و به بایگانی تحویل داده شد.';
+		return 'پرونده مختومه شد و به بایگانی تحویل داده شد.';
 	}
 	function Title()
 	{
 		return 'مختومه شد';
 	}
-	function Event()
+	function Manner()
 	{
-		return 'ProcessClearance';
+		return 'Clearance';
 	}
 
 }
@@ -46,26 +46,14 @@ class ReviewProcessClearanceRepository extends EntityRepository
 	public function AddToFile(ReviewFile $File=null,$Comment=null)
 	{
 
-		if ($File==null)
-		{
-			$Res['Error']=v::Ecnf();
-		}
-		else{
-			$R=new ReviewProcessClearance($File);
-			$R->setComment(($Comment==null?"":$Comment));
-			$er=$R->Check();
-			if(!is_string($er)){
-				$R->Apply();
-				echo 'F';	
-				ORM::Persist($R);
-				echo 'G';	
-				$Res['Class']=$R;
-			}else{
-				$Res['Error']=$er;
-			}
-		}
+		$R=new ReviewProcessClearance($File);
+		$R->setComment(($Comment==null?'':$Comment));
+		$er=$R->Check();
+		if(is_string($er))
+			return $er;
 		
-		return $Res;
-
+		$R->Apply();
+		ORM::Persist($R);
+		return $R;
 	}
 }

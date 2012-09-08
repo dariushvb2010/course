@@ -68,7 +68,7 @@ class ReviewProgressGive extends ReviewProgress
 	{
 		return "تحویل دادن ";
 	}
-	function Event()
+	function Manner()
 	{
 		if(!$this->MailGive)
 			throw new Exception("No MailGive provided!");

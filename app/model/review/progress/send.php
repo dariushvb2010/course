@@ -41,7 +41,7 @@ class ReviewProgressSend extends ReviewProgress
 	{
 		return "ارسال ";
 	}
-	function Event()
+	function Manner()
 	{
 		$r="Send_";
 		$Sender=$this->MailSend->SenderGroup()->Title();

@@ -33,31 +33,7 @@ class b
 	protected static $ClassNum109;
 
 	 
-	/**
-	 *
-	 *
-	 * @param integer $Num 528,248,109
-	 */
-	public static function GenerateClassNum($Num)
-	{
-		if(!$Num)
-			return;
-		 
-		$Num=$Num."";
-		$C="ClassNum{$Num}";
-		$CM=ORM::Query("ConfigMain")->GetObject($C);
-		if(!$CM)
-		{
-			ConfigMain::Add($C,1,false);
-			return 1;
-		}
-		else
-		{
-			$CM->SetValue($CM->Value()*1+1);
-			ORM::Persist($CM);
-			return $CM->Value();
-		}
-	}
+	
 	/**
 	 * @param string_or_int $Cotag
 	 * @return bool
@@ -70,7 +46,14 @@ class b
 		$res=preg_match($pattern,$Cotag);
 		return $res==0 ? false : true;
 	}
-	
+	/**
+	 * validates the input whether it is a Category(109, 248, 528)
+	 * @param string|integer $Cat
+	 */
+	public static function CatValidation($Cat){
+		$pattern = '/^(109|248|528)$/';
+		return preg_match($pattern,strval($Cat));
+	}
 	public static function CotagFilter($Cotag)
 	{
 		$Cotag=trim($Cotag);

@@ -23,7 +23,7 @@ class ReviewProgressScan extends ReviewProgress
 	{
 		return "اسکن";
 	}
-	function Event()
+	function Manner()
 	{
 		return "Scan";
 	}

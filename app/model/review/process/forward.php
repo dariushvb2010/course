@@ -2,63 +2,70 @@
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * ارسال اظهارنامه به دفاتر ستادی یا کمیسیون یا کمیسیون تجدید نظر
  * @Entity
  * @entity(repositoryClass="ReviewProcessForwardRepository")
  * */
 class ReviewProcessForward extends ReviewProgress
 {
-
+	///--------------------///
+	///protected $SubManner = 'setad', 'commission', 'appeals'
+	///-------------------///
 	/**
-	 * @Column(type="string")
+	 * ارسال به دفاتر ستادی
 	 * @var string
-	 *
 	 */
-	protected $ForwardOffice;// setad,commission,appeals
-	function ForwardOffice()
-	{
-		return $this->ForwardOffice;
-	}
+	const SubManner_setad = 'setad';
 	/**
-	 * @Column(type="string",name="Forward_Setad")
+	 * ارسال به کمیسیون
 	 * @var string
-	 *
+	 */
+	const SubManner_commission = 'commission';
+	/**
+	 * ارسال به کمیسیون تجدید نظر
+	 * @var string
+	 */
+	const SubManner_appeals = 'appeals';
+	
+	/**
+	 * @ManyToOne(targetEntity="ReviewTopic",inversedBy="ProcessForward")
+	 * @JoinColumn(name="TopicID",referencedColumnName="ID", nullable=false)
+	 * @var ReviewTopic
 	 */
 	protected $Setad;
-	function Setad()
-	{
-		return $this->Setad;
+	function Setad(){ return $this->Setad; }
+	function SetSetad($val){ $this->Setad = $val; }
+	
+	function SubMannerValidation(){
+		$val = $this->SubManner();
+		$r = false;
+		$r |= ($val == self::SubManner_setad );
+		$r |= ($val == self::SubManner_commission );
+		$r |= ($val == self::SubManner_appeals );
+		return $r;
 	}
-	function __construct(ReviewFile $File=null,$ForwardOffice=null,$Setad=null,$Indicator=null,MyUser $User=null)
+	function __construct(ReviewFile $File=null,$SubManner,$Indicator='', ReviewTopic $Setad,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->MailNum=$Indicator;
-		$this->ForwardOffice=$ForwardOffice;
-		$this->Setad=$Setad;
+		$this->SetMailNum($Indicator);
+		$this->SetSubManner($SubManner);
+		if($Setad)
+			$this->SetSetad($Setad);
 		
 	}
 
 	function  Summary()
 	{
-		$R="اظهارنامه به ";
-		$R.=FsmGraph::$Persian($this->ForwardOffice);
-		$R.="ارسال شد.";
-		return $R;
+		$t = $this->Setad()->Topic();
+		return 'پرونده به '.$t.' فرستاده شد.';
 	}
 	function Title()
 	{
-		switch($this->ForwardOffice){
-			case 'setad': return "ارسال به دفاتر ستادی";
-			case 'commission': return "ارسال به کمیسیون";
-			case 'appeals': return "ارسال به کمیسیون تجدید نظر";			
-		}
+		return 'ارسال پرونده';
 	}
-	function Event()
+	function Manner()
 	{
-		if(!issset($this->ForwardOffice))
-			throw new Exception("hoooo");
-		$R="Forward_";
-		$R.=$this->ForwardOffice;
-		return $R;
+		return 'Forward_'.$this->Manner();
 	}
 
 }
@@ -73,30 +80,19 @@ class ReviewProcessForwardRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null,$ForwardOffice=null,$Setad,$Indicator,$Comment="")
+	public function AddToFile(ReviewFile $File, $SubManner,$Indicator, $SetadID ,$Comment="")
 	{
-		$CurrentUser=MyUser::CurrentUser();
-
-
-		if ($File==null)
-		{
-			$res['Error']=v::Ecnf();
-		}
-		else{
-			if(FsmGraph::NextState($File->State(),"Forward"))
-			{
-				$R=new ReviewProcessForward($File,$Ofiice,$Setad,$Indicator,$CurrentUser);
-				$R->SetState($File,FsmGraph::NextState($File->State(),"Forward"));
-				ORM::Write($R);
-				ORM::Persist($File);
-				$res['Class']=$R;
-			}
-			else
-			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان درخواست  بررسی ایجاد کرد.";
-			}
-		}
+	
+		$Setad = ORM::Find('ReviewTopic', $SetadID);
+		if(!(!$Setad instanceof ReviewTopic))
+			return 'طرف مکاتبه مورد نظر یافت نشد.';
+		$R=new ReviewProcessForward($File,$SubManner, $Indicator, $Setad);
+		$R->setComment($Comment);
+		$R->SetState($File,FsmGraph::NextState($File->State(),"Forward"));
+		ORM::Write($R);
+		ORM::Persist($File);
+		$res['Class']=$R;
+			
 		
-		return $res;
 	}
 }

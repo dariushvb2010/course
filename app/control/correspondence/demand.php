@@ -59,8 +59,8 @@ class CorrespondenceDemandController extends JControl
 			}
 		}
 		switch ($types[0]){
-			case 'Senddemand':
-				$Res=ORM::Query("ReviewProcessSenddemand")->AddToFile($File,$types[1],$Indicator,$Comment);
+			case 'Address':
+				$Res=ORM::Query("ReviewProcessAddress")->AddToFile($File,$types[1],$Indicator,$Comment);
 				break;
 			case 'Protest':
 				$req_num=$_POST['request'];

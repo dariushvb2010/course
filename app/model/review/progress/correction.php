@@ -56,7 +56,7 @@ class ReviewProgressCorrection extends ReviewProgress
 	{
 		return "اصلاح";
 	}
-	function Event(){
+	function Manner(){
 		return "";
 	}
 }

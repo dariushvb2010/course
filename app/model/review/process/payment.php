@@ -34,7 +34,7 @@ class ReviewProcessPayment extends ReviewProgress
 	{
 		return 'پرداخت';
 	}
-	function Event()
+	function Manner()
 	{
 		if(!isset($this->PaymentValue))
 			throw new Exception("hooooooooooo");

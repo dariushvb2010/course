@@ -48,7 +48,7 @@ class ReviewProgressReceive extends ReviewProgress
 	{
 		return "دریافت ";
 	}
-	function Event()
+	function Manner()
 	{
 		$R=$this->MailReceive->ReceiverGroup()->Title();
 		$r="Receive_".strtolower($R)."_from_out";

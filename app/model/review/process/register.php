@@ -1,21 +1,35 @@
 <?php
+use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * 109 -> state(36)
+ * 248, 528 -> state(18)
  * @Entity
  * @entity(repositoryClass="ReviewProcessRegisterRepository")
  * */
 class ReviewProcessRegister extends ReviewProgress
 {
-	
-	private function GenerateClass($Pre)
-	{
-		
-		$Class=b::
-		$Class=ORM::Query($this)->GetMaxClass($Pre);
-		$Class++;
-		return $Class;
-	}
+	/// category will be stored in the 'SubManner' field of this class
+	///--------------------///
+	///protected SubManner = '109', '248', '528'
+	///-------------------///
+	/**
+	 * Category 109
+	 * @var string
+	 */
+	const Cat_109 = '109';
+	/**
+	 * Category 248
+	 * @var string
+	 */
+	const Cat_248 = '248';
+	/**
+	 * Category 528
+	 * @var string
+	 */
+	const Cat_528 = '528';
 	
 	/**
 	 * @Column(type="string")
@@ -30,27 +44,43 @@ class ReviewProcessRegister extends ReviewProgress
 	{
 		$this->Classe=$value;
 	}
-	
-	function __construct(ReviewFile $File=null,MyUser $User=null)
+	/**
+	 * 
+	 * @param ReviewFile $File
+	 * @param string $Cat like '109', '248', '528'
+	 * @param string $Classe
+	 * @param MyUser $User
+	 */
+	function __construct(ReviewFile $File=null, $Cat, MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		if($File)
-		{
-			if($File->LLP("Review"))
-			{
-				$Pre=$File->LLP("Review")->Provision();
-				$Classe=b::GenerateClassNum($Pre);
-				if($Classe==0){
-					$this->error='مشکلی در تخصیص شماره کلاسه پیش آمده است.';
-					return false;
-				}else{
-					$this->SetClasse($Classe);
-				}
-			}
+		$this->SetSubManner($Cat);
+	}
+	/**
+	 *
+	 *
+	 * @param integer $Num 528,248,109
+	 */
+	public static function GenerateClasse($Num)
+	{
+		if(!$Num)
+			return;
 			
+		$Num=$Num."";
+		$C="ClassNum{$Num}";
+		$CM=ORM::Query("ConfigMain")->GetObject($C);
+		if(!$CM)
+		{
+			ConfigMain::Add($C,1,false);
+			return 1;
+		}
+		else
+		{
+			$CM->SetValue($CM->Value()*1+1);
+			ORM::Persist($CM);
+			return $CM->Value();
 		}
 	}
-	
 	function  Summary()
 	{
 		$str="پرونده به شماره کوتاژ ".$this->File()->Cotag()." در مکاتبات با شماره کلاسه ".$this->File()->GetClass().'ثبت گردید .';
@@ -60,9 +90,9 @@ class ReviewProcessRegister extends ReviewProgress
 	{
 		return "ثبت کلاسه";
 	}
-	function Event()
+	function Manner()
 	{
-		return "ProcessRegister";
+		return 'ProcessRegister_'.$this->SubManner();
 	}
 }
 
@@ -73,29 +103,36 @@ class ReviewProcessRegisterRepository extends EntityRepository
 	/**
 	 * 
 	 * @param ReviewFile $File
+	 * @param String $cat like '109','248', '528'
+	 * @param String $classe like 23423
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File)
+	public function AddToFile($File, $cat, $classe=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
-			$R=new ReviewProcessRegister($File, $CurrentUser);
-			$err=$R->Check();
-			if(!is_string($err)){
-				//$R=new ReviewProcessRegister($File, $CurrentUser,true);
-				$R->Apply();
-				ORM::Persist($R);
-				//ORM::Persist($File);
-				$res['Class']=$R->Classe();
-			}else{
-				//ORM::Clear();
-				$res['Error']=$err;
-			}
-
-		return $res;
-	}
-	public function GetMaxClass()
-	{
-		$r=j::DQL("SELECT MAX(F.Class) AS Result FROM ReviewFile AS F");
-		return $r[0]['Result'];
+		if(!($File instanceof ReviewFile))
+			return v::Ecnf();
+		$vr = b::CatValidation($cat); 
+		if(!$vr){
+			return p::Cat.' یا شماره کلاسه اشتباه است.';
+		}
+		$lastReview = $File->LLP('Review');
+		if($lastReview)
+			$reviewCat = $lastReview->Provision(); // the category of last review like 109, 248 , 528
+		if(!empty($reviewCat))
+			if(trim($reviewCat)!=$cat) // review Category and input Category do not match
+				return p::Cat.' اشتباه وارد شده است.';
+		
+		$R=new ReviewProcessRegister($File, $cat);
+		$err=$R->Check();
+		if(is_string($err))
+			return $err;
+		//------------setclasse------
+		if(empty($classe))
+			$classe = ReviewProcessRegister::GenerateClasse($cat);
+		$R->setClasse($classe);
+		//===================
+		$R->Apply();
+		ORM::Persist($R);
+		return $R;
 	}
 }
