@@ -336,6 +336,9 @@ class ReviewFile
     	
     }
     function CheckUp(){
+    	if (reg("link/Asy/Fetch")==false)
+    		return false;
+    	
     	$p=$this->UpdateYear();
     	if(!$p)
     		return false;
