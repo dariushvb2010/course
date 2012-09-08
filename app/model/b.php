@@ -11,6 +11,7 @@ class b
 	//const Cotag_jsPattern="/^0{0,2}\d{7}$/";
 	const Cotag_jsPattern="/^[0]?(\d{2,6}-)?[1-9]\d{6}$/";
 
+	//const Protest_first_moratorium_default = '32';
 	static function upload_folder_relative_from_japp()
 	{
 		$jl=new CalendarPlugin();
@@ -53,6 +54,10 @@ class b
 	public static function CatValidation($Cat){
 		$pattern = '/^(109|248|528)$/';
 		return preg_match($pattern,strval($Cat));
+	}
+	static function DateValidation($d){
+		$pattern = '/^1\d{3}\/\d{1,2}\/\d{1,2}$/';
+		return preg_match($pattern, strval($d));
 	}
 	public static function CotagFilter($Cotag)
 	{

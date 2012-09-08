@@ -17,4 +17,6 @@ class p{
 	const commission = 'کمیسیون';
 	const appeals = 'کمیسیون تجدید نظر';
 	const desc = 'توضیحات';
+	const MailNum = 'شماره نامه';
+	const P7 = 'ماده ۷';
 }

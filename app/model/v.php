@@ -201,6 +201,17 @@ class v
 		return 'کارشناس غیرفعال است!';
 	}
 	/**
+	 * ERROR: Date Not Valid
+	 * تاریخ صحیح نیست
+	 * @param string $d
+	 */
+	static function Ednv($d = null){
+		if($d==null)
+			return 'تاریخ صحیح نیست!';
+		else
+			return 'تاریخ '.$d.' صحیح نیست!';
+	}
+	/**
 	 * 'a' tag
 	 * link with href and label
 	 * @param integer_string $Cot

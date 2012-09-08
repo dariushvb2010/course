@@ -57,12 +57,6 @@ abstract class ReviewProgress
 		return $jc->JalaliFullTime($this->CreateTimestamp);
 	}
 	/**
-	 * @Column(type="integer")
-	 * @var integer
-	 */
-	protected $EditTimestamp;
-	function SetEditTimestamp($Timestamp){ $this->EditTimestamp=$Timestamp; }
-	/**
 	 * This field is used in the Process Progressed and can be used in other progresses 
 	 * @Column(type="string", length="50", nullable=true)
 	 * @var string

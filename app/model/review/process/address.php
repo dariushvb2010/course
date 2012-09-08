@@ -44,16 +44,16 @@ class ReviewProcessAddress extends ReviewProgress
 		$r |= ($val == self::SubManner_commission );
 		return $r;
 	}
-	function __construct(ReviewFile $File=null,$SubManner,$Indicator=0,MyUser $User=null)
+	function __construct(ReviewFile $File=null,$SubManner,$MailNum=0,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->setMailNum($Indicator);
+		$this->setMailNum($MailNum);
 		$this->SetSubManner($SubManner);
 	}
 
 	function  Summary()
 	{
-		return $this->Title();
+		return $this->Title(). 'شماره نامه: '.v::b($this->MailNum());
 	}
 	function Title()
 	{
@@ -76,9 +76,9 @@ class ReviewProcessAddressRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File, $SubManner=null,$Indicator,$Comment=null)
+	public function AddToFile(ReviewFile $File, $SubManner=null,$MailNum,$Comment=null)
 	{
-		$R=new ReviewProcessAddress($File,$SubManner,$Indicator);
+		$R=new ReviewProcessAddress($File,$SubManner,$MailNum);
 		if(!$R->SubMannerValidation())
 			return v::Edb();
 		

@@ -443,7 +443,8 @@ class ReviewFileRepository extends EntityRepository
 			if($k=='State'){
 				$states=FsmGraph::Name2State($v);
 				$states=implode(',', $states);
-				$whereAr[]="F.State IN ({$states})";
+				if($states)
+					$whereAr[]="F.State IN ({$states})";
 			}elseif($k=='Gatecode'){
 				if($v!='all')
 					$whereAr[]="F.Gatecode={$v}";

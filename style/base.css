@@ -40,7 +40,9 @@ p {
 	text-align:justify;
 	text-indent: 1em;
 }
-
+input.date{
+	direction: ltr;
+}
 label {
 	float:right;
 	width:200px;

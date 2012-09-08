@@ -96,6 +96,20 @@ class ConfigMain extends Config
 		}
 		return $res;
 	}
+	public static function GetConfig($Name){
+		$r=ORM::Find1("ConfigMain", "Name",$Name);
+		if($r)
+			return $r;
+		else 
+			return null;
+	}
+	static function GetValue($Name){
+		$ob = self::GetConfig($Name);
+		if($ob)
+			return $ob->Value();
+		else
+			return null;
+	}
 	
 }
 

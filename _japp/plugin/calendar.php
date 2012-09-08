@@ -199,7 +199,11 @@ class JalaliCalendar extends BasePluginClass
 		$gDate=$this->JalaliToGregorian($year,$month, $day);
 		return strtotime($gDate[0]."/".$gDate[1]."/".$gDate[2]." ".$hour.":".$min);
 	}
-	
+	function JalaliStr2Timestamp($StrDate, $Delimiter='/'){
+		$dd = explode($Delimiter, $ProphecyDate);
+		$ret = $this->Jalali2Timestamp($dd[0], $dd[1], $dd[2]);
+		return $ret;
+	}
 	function ExtractElements($str){
 		$str=str_replace('-','/',$str);
 		$ar=explode('/',$str);

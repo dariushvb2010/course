@@ -12,14 +12,23 @@ class CorrespondenceProphecyController extends CorrespondenceAbstractController
 		{
 			$Error[] = v::Ecnf($_REQUEST['Cotag']);
 		}elseif(isset($_POST['submit'])){ // cotag is valid and file found
-			$sub = substr($this->input_class,9,30);
-			$indicator = $_POST['Indicator'];
-			$R = ORM::Query('ReviewProcessProphecy')->AddToFile($this->File,$sub, $indicator, $this->Comment);
-			if(is_string($R))
-				$Error[]= $R;
+			$ProphecyDate = $_POST['ProphecyDate'];
+			if(!b::DateValidation($ProphecyDate))
+				$Error[] = v::Ednv($ProphecyDate);
 			else{
-				$Result = 'ابلاغ به صاحب کالا ثبت شد.';
-				$this->IfRedirect = true;
+				$sub = substr($this->input_class,9,30);
+				$MailNum = $_POST['MailNum'];
+				$jc = new CalendarPlugin();
+				$dd = explode('/', $ProphecyDate);
+				var_dump($dd);
+				$ProphecyTimestamp = $jc->Jalali2Timestamp($dd[0], $dd[1], $dd[2]);
+				$R = ORM::Query('ReviewProcessProphecy')->AddToFile($this->File,$sub, $MailNum, $ProphecyTimestamp, $this->Comment);
+				if(is_string($R))
+					$Error[]= $R;
+				else{
+					$Result = 'ابلاغ به صاحب کالا ثبت شد.';
+					$this->IfRedirect = true;
+				}
 			}
 		}
 		
@@ -30,7 +39,15 @@ class CorrespondenceProphecyController extends CorrespondenceAbstractController
 		return $this->Present();
 	}
 	function makeForm(){
-		$f = $this->makeFormTemplate(true);
+		$f = $this->makeFormTemplate();
+		$f->AddElement(array(
+				'Name'=>'MailNum',
+				'Label'=>p::MailNum
+				));
+		$f->AddElement(array(
+				'Name'=>'ProphecyDate',
+				'Label'=>'تاریخ ثبت نسخه ابلاغ شده'
+				));
 		$f->AddElement(array(
 				"Type"=>"submit",
 				"Name"=>"submit",

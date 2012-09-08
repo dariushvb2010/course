@@ -13,7 +13,7 @@ class CorrespondenceAddressController extends CorrespondenceAbstractController
 			$Error[] = v::Ecnf($_REQUEST['Cotag']);
 		}elseif(isset($_POST['submit'])){ // cotag is valid and file found
 			$sub = substr($this->input_class,8,20);
-			$indicator = $_POST['Indicator'];
+			$indicator = $_POST['MailNum'];
 			$R = ORM::Query('ReviewProcessAddress')->AddToFile($this->File,$sub, $indicator, $this->Comment);
 			if(is_string($R))
 				$Error[]= $R;
@@ -38,8 +38,8 @@ class CorrespondenceAddressController extends CorrespondenceAbstractController
 		$f = $this->makeFormTemplate();
 		$f->AddElement(array(
 				"Type"=>"text",
-				"Name"=>"Indicator",
-				"Label"=>"اندیکاتور",
+				"Name"=>"MailNum",
+				"Label"=>p::MailNum,
 		));
 		$f->AddElement(array(
 				"Type"=>"submit",

@@ -11,6 +11,28 @@ class ReviewProcessProphecy extends ReviewProgress
 	///--------------------///
 	///protected SubManner = 
 	///-------------------///
+	
+	///--------------------///
+	///protected MailNum = شماره نامه مرجع ابلاغ کننده
+	///-------------------///
+	
+	/**
+	 * @Column(type="integer")
+	 * @var integer
+	 */
+	protected $ProphecyTimestamp;
+	function ProphecyTimestamp(){ return $this->ProphecyTimestamp; }
+	function ProphecyTime(){
+		$jc=new CalendarPlugin();
+		return $jc->JalaliFullTime($this->ProphecyTimestamp);
+	}
+	function SetProphecyTimestamp($Timestamp){ $this->ProphecyTimestamp=$Timestamp; }
+	function CheckProphecyTimestamp(){
+		if($this->ProphecyTimestamp > time())
+			return false;
+		else
+			return true;
+	}
 	/**
 	 * ثبت ابلاغ اولیه
 	 * @var string
@@ -32,6 +54,7 @@ class ReviewProcessProphecy extends ReviewProgress
 	 */
 	const SubManner_commission = 'commission';
 	
+	
 	function SubMannerValidation(){
 		$val = $this->SubManner();
 		$r = false;
@@ -41,21 +64,24 @@ class ReviewProcessProphecy extends ReviewProgress
 		$r |= ($val == self::SubManner_commission );
 		return $r;
 	}
-	function __construct(ReviewFile $File=null,$SubManner=null,$Indicator=null,MyUser $User=null)
+	
+	function __construct(ReviewFile $File=null,$SubManner=null,$MailNum=null, $ProphecyTimestamp, MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->setMailNum($Indicator);
+		$this->setMailNum($MailNum);
 		$this->SetSubManner($SubManner);
+		$this->SetProphecyTimestamp($ProphecyTimestamp);
 	}
 
 	function  Summary()
 	{
-		return '';
+		$jc = new JalaliCalendar();
+		$pd = $jc->JalaliFromTimestamp($this->ProphecyTimestamp);
+		return 'شماره نامه مرجع ابلاغ کننده: '.v::b($this->MailNum()).'. تاریخ ابلاغ نامه: '.v::b($pd);
 	}
 	function Title()
 	{
-		$fsmp = FsmGraph::GetProgressByName($this->Manner());
-		return $fsmp->Label;
+		return 'ثبت نسخه ابلاغ شده';
 	}
 	function Manner()
 	{
@@ -73,15 +99,15 @@ class ReviewProcessProphecyRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File, $SubManner ,$Indicator,$Comment=null)
+	public function AddToFile(ReviewFile $File, $SubManner ,$MailNum, $ProphecyTimestamp, $Comment=null)
 	{
-
-		$R=new ReviewProcessProphecy($File,$SubManner,$Indicator);
+		
+		$R=new ReviewProcessProphecy($File,$SubManner,$MailNum, $ProphecyTimestamp);
 		$R->setComment(($Comment==null?"":$Comment));
-		var_dump($R->SubManner());
 		if(!$R->SubMannerValidation())
 			return v::Edb();
-		var_dump($R->Manner());
+		if(!$R->CheckProphecyTimestamp())
+			return v::Ednv();
 		$er=$R->Check();
 		if(is_string($er))
 			return $er;
@@ -89,5 +115,12 @@ class ReviewProcessProphecyRepository extends EntityRepository
 		$R->Apply();
 		ORM::Persist($R);
 		return $R;
+	}
+	function GetLastProphecy(ReviewFile $File, $SubManner='first'){
+		$r = j::ODQL('SELECT P FROM ReviewProcessProphecy P join P.File F WHERE F=? AND P.SubManner=?',$File,$SubManner);
+		if(count($r))
+			return $r[0];
+		else 
+			return null;
 	}
 }
