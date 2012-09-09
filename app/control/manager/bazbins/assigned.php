@@ -117,6 +117,7 @@ class ManagerBazbinsAssignedController extends JControl
 		}
 		$al = new AutolistPlugin($ret, null, "Select");
 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
+				$al->SetHeader('Select', 'انتخاب',true);
 				$al->SetHeader('Cotag', 'کوتاژ');
 				$al->SetHeader('Masir','مسیر');
 				$al->SetHeader('RegTime','تاریخ');
@@ -127,6 +128,7 @@ class ManagerBazbinsAssignedController extends JControl
 				$al->SetHeader('Karshenas_salon','کارشناس سالن');
 				$al->SetHeader('Arzyab','ارزیاب');
 				$al->SetHeader('RialPrice','ارزش کل');
+				$al->SetFilter(array($this,"myfilter"));
 				$al->HasTier = true;
 				$al->TierLabel = 'ردیف';
 				$al->ObjectAccess=true;
