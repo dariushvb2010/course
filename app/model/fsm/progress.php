@@ -21,7 +21,6 @@ class FsmProgress extends FsmElement {
 	
 	function is_MokatebatViewable(){
 		$r = $this->getAttribute('is_MokatebatViewable');
-		var_dump($r);
 		if($r===false)
 			return false;
 		else

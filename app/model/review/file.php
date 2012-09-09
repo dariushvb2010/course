@@ -243,7 +243,13 @@ class ReviewFile
 	function AllProgress(){
 		return ORM::Query($this)->ProgressList($this);
 	}
-    
+	/**
+	 * شماره طبقه بندی
+	 * @example 109, 248, 528
+	 */
+    function Cat(){
+    	
+    }
     function killLLP($Comment){
     	$LLP=$this->LLP();
     	$res=ORM::Query("ReviewProgressRemove")->AddToFile($LLP,$Comment);

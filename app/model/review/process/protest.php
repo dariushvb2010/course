@@ -165,9 +165,7 @@ class ReviewProcessProtestRepository extends EntityRepository
 	 */
 	public function AddToFile(ReviewFile $File,$SubManner, $Indicator, $ProtestTimestamp, $Comment=null)
 	{
-		var_dump($ProtestTimestamp);
 		$R=new ReviewProcessProtest($File,$SubManner,$Indicator, $ProtestTimestamp);
-		var_dump($R->ProtestTimestamp());
 		$R->setComment($Comment);
 		if(!$R->SubMannerValidation())
 			return v::Edb();

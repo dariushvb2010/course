@@ -80,7 +80,10 @@ class ConnectionAsy extends JModel {
     function SetDeclarantCoding($w) {
         $this->DeclarantCoding = $w;
     }
-
+	/**
+	 * @Column(type="string")
+	 * @var string
+	 */
     protected $DeclarantName;
     public function DeclarantName() {
         return $this->DeclarantName;
@@ -325,7 +328,6 @@ class ConnectionAsy extends JModel {
         $this->RialPrice = $AsyArray->totalGheimatBehRial;
 
         $this->setMasir($this->getMasir($AsyArray->masir));
-        var_dump($this->Masir);
         $this->setDeclarantName($AsyArray->claimer->nameOfPerson);
         $this->TotalTexes = $AsyArray->totalTaxes;
         

@@ -46,7 +46,7 @@ form input[type='text'] {
 	<input type='submit' name="###<?php echo $p->Name;?>" value="<?php echo $p->Label;?>"  label="hi"/><br/>
 	<?php }	?>
 </form>
-<?php }else{?>
+<?php }elseif(isset($_POST['Cotag'])){?>
 	<form method='post' action="">
 		<div> در حال حاضر فرآیندی برای این پرونده تعریف نشده است.</div>
 	</form>

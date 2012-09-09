@@ -18,7 +18,6 @@ function Start()
 			else{
 				$jc = new CalendarPlugin();
 				$ProtestTimestamp = $jc->JalaliStr2Timestamp($ProtestDate);
-				var_dump($ProtestTimestamp);
 				$sub = substr($this->input_class,8,30);
 				$indicator = $_POST['Indicator'];
 				$R = ORM::Query('ReviewProcessProtest')->AddToFile($this->File,$sub, $indicator, $ProtestTimestamp, $this->Comment);
