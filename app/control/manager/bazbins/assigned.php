@@ -46,13 +46,16 @@ class ManagerBazbinsAssignedController extends JControl
 			$AUser=MyUser::getUser($_GET['id']);
 			$MyUnreviewedFiles=$AUser->AssignedReviewableFile();
 			if($MyUnreviewedFiles){
-				$al=new AutolistPlugin($MyUnreviewedFiles,null,"Select");
-				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
-				$al->SetHeader('Select', 'انتخاب',true);
-				$al->SetHeader('Cotag', 'کوتاژ');
-				$al->ObjectAccess=true;
-				$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
-				$al->SetFilter(array($this,"myfilter"));
+				$al = $this->GetData($MyUnreviewedFiles);
+// 				$al=new AutolistPlugin($data,null,"Select");
+// 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
+// 				$al->SetHeader('Select', 'انتخاب',true);
+// 				$al->SetHeader('Cotag', 'کوتاژ');
+// 				$al->HasTier = true;
+// 				$al->TierLabel = 'ردیف';
+// 				$al->ObjectAccess=true;
+// 				$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
+// 				$al->SetFilter(array($this,"myfilter"));
 				
 				$this->FileAutoList=$al;
 				
@@ -104,6 +107,33 @@ class ManagerBazbinsAssignedController extends JControl
 		{
 			return $v;
 		}
+	}
+	function GetData($Files){
+		$ret = array();
+		foreach ($Files as $File)
+		{
+			if($File->Asy())
+				$ret[]=$File->Asy();
+		}
+		ORM::Dump($ret);
+		$al = new AutolistPlugin($ret, null, "Select");
+				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
+				$al->SetHeader('Select', 'انتخاب',true);
+				$al->SetHeader('Cotag', 'کوتاژ');
+				$al->SetHeader('Masir','df');
+				$al->SetHeader('RegTime','df');
+				$al->SetHeader('OwnerName','df');
+				$al->SetHeader('OwnerCoding','df');
+				$al->SetHeader('DeclarantName','df');
+				$al->SetHeader('DeclarantCoding','df');
+				$al->SetHeader('Karshenas_salon','df');
+				$al->HasTier = true;
+				$al->TierLabel = 'ردیف';
+				$al->ObjectAccess=true;
+				$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
+				$al->SetFilter(array($this,"myfilter"));
+		
+		return $al;
 	}
 
 }

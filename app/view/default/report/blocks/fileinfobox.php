@@ -42,6 +42,7 @@
 		<img id="toggle-asy" src="/img/arrow2down-50.png" />
 		<?php
 		$this->Asy = $this->File->Asy(); 
+		if($this->Asy)
 		include 'asydatabox.php';?>
 	</div>
 	<script>

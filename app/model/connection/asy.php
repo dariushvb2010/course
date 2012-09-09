@@ -395,7 +395,6 @@ class ConnectionAsy extends JModel {
 
         return $arr2;
     }
-
     function getPersianTitles() {
         $titles = array(p::Cotag, p::RegTime, p::Masir, p::OwnerName, p::OwnerCoding,
             p::DeclarantName, p::DeclarantCoding, p::Karshenas_salon, p::Arzyab,
