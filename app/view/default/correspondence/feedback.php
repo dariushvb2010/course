@@ -4,7 +4,7 @@
 ?>
 </style>
 <h1>
-ثبت کلاسه
+دریافت از دفاتر ستادی
 </h1>
 <?php
 ViewResultPlugin::Show($this->Result, $this->Error);

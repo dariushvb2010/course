@@ -4,7 +4,7 @@
 ?>
 </style>
 <h1>
-ثبت اعتراضیه
+ثبت اعتراض
 </h1>
 <?php
 ViewResultPlugin::Show($this->Result, $this->Error);

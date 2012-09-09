@@ -68,6 +68,7 @@ class CorrespondenceAddprocessController extends JControl
 	function ManageProcesses(ReviewFile $File){
 		$input_class=$this->GetInputClass();
 		if($input_class!=''){
+			$getParams = "?Cotag={$File->Cotag()}&input_class={$input_class}";
 			switch ($input_class){
 				case 'ProcessRegister_109':
 				case 'ProcessRegister_248':
@@ -95,6 +96,9 @@ class CorrespondenceAddprocessController extends JControl
 				break;
 				case 'ProcessAssign':
 					$this->Redirect("./assign?Cotag={$File->Cotag()}&input_class={$input_class}");
+				break;
+				case 'P7':
+					$this->Redirect("./p7".$getParams);
 				break;
 				case 'Clearance':
 					$this->Redirect("./clearance?Cotag={$File->Cotag()}&input_class={$input_class}");

@@ -4,7 +4,7 @@
 ?>
 </style>
 <h1>
-ثبت کلاسه
+تمکین و پرداخت
 </h1>
 <?php
 ViewResultPlugin::Show($this->Result, $this->Error);

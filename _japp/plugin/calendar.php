@@ -200,7 +200,7 @@ class JalaliCalendar extends BasePluginClass
 		return strtotime($gDate[0]."/".$gDate[1]."/".$gDate[2]." ".$hour.":".$min);
 	}
 	function JalaliStr2Timestamp($StrDate, $Delimiter='/'){
-		$dd = explode($Delimiter, $ProphecyDate);
+		$dd = explode($Delimiter, $StrDate);
 		$ret = $this->Jalali2Timestamp($dd[0], $dd[1], $dd[2]);
 		return $ret;
 	}

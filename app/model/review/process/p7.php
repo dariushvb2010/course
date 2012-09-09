@@ -14,16 +14,16 @@ class ReviewProcessP7 extends ReviewProgress
 	}	
 	function  Summary()
 	{
-		$str="صاحب کالا در لیست ماده ۷ و ۸ ثبت شد.";
+		$str="صاحب کالا در لیست ماده ۷  ثبت شد.";
 		return $str;
 	}
 	function Title()
 	{
-		return "ماده ۷ و ۸";
+		return "ماده ۷ ";
 	}
 	function Manner()
 	{
-		return "ProcessP78";
+		return "P7";
 	}
 }
 
@@ -36,25 +36,16 @@ class ReviewProcessP7Repository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null)
+	public function AddToFile(ReviewFile $File)
 	{
-		$CurrentUser=MyUser::CurrentUser();
-		if($File)
-		{
-			$R=new ReviewProcessP78($File, $CurrentUser);
-			$err=$R->Apply();
-			if(is_string($err)){
-				$res['Error']=$err;
-				return $res;
-			}
-			ORM::Persist($File);
-			ORM::Write($R);
-			$res['Class']=$File->GetClass();
-		}
-		else 
-		{
-			$res['Error']="اظهارنامه وجود ندارد.";	
-		}
+		$R=new ReviewProcessP7($File);
+		$err=$R->Check();
+		if(is_string($err))
+			return $res;
+		
+		$R->Apply();
+		ORM::Persist($R);
+		
 		return $res;
 	}
 }

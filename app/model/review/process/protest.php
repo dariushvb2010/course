@@ -58,7 +58,10 @@ class ReviewProcessProtest extends ReviewProgress
 			return true;
 	}
 	/**
+	 * *ProphecyTimestamp*|---Moratorium---|---Provisory---|
 	 * چک می کند که آیا مهلت قانونی اعتراض گذشته است یا نه
+	 * اگر زمان حال در بین بازه مهلت و احتیاط باشد می تواند ثبت اعتراض کند وگرنه پرونده در لیست ماده ۷ است
+	 * با گذشتن از شرط بالا اگر تاریخ اعتراض در بین بازه مهلت باشد می تواند ثبت شود وگرنه پرونده به لیست ماده ۷ خواهد رفت
 	 * @uses Moratorium(), Provisory()
 	 */
 	function CheckIfPossible(){
@@ -71,9 +74,13 @@ class ReviewProcessProtest extends ReviewProgress
 		//ORM::Dump($lastProphecy);
 		if($lastProphecy){
 			$ProphecyTimestamp = $lastProphecy->ProphecyTimestamp();
-			var_dump($ProphecyTimestamp, $mora, $provisory, $this->ProtestTimestamp());
-			if($this->ProtestTimestamp() < $ProphecyTimestamp+$mora+$provisory)
-				return true;
+// 			var_dump($ProphecyTimestamp, $mora, $provisory, $this->ProtestTimestamp());
+			if(time() < $ProphecyTimestamp+$mora+$provisory){ // can register protest
+				if($this->ProtestTimestamp < $ProphecyTimestamp+$mora)
+					return true;
+				else 
+					return false;	
+			}
 			else
 				return false;
 		}else 
@@ -158,21 +165,22 @@ class ReviewProcessProtestRepository extends EntityRepository
 	 */
 	public function AddToFile(ReviewFile $File,$SubManner, $Indicator, $ProtestTimestamp, $Comment=null)
 	{
-		
+		var_dump($ProtestTimestamp);
 		$R=new ReviewProcessProtest($File,$SubManner,$Indicator, $ProtestTimestamp);
+		var_dump($R->ProtestTimestamp());
 		$R->setComment($Comment);
 		if(!$R->SubMannerValidation())
 			return v::Edb();
 		if(!$R->CheckProtestTimestamp())
 			return v::Ednv();
 		if(!$R->CheckIfPossible())
-			return 'مهلت اعتراض قانونی گذشته است. پرونده در لیست ماده ۷ قرار دارد.';
+			return 'مهلت اعتراض قانونی گذشته است. پرونده در لیست '.p::P7.' یا در لیست انتظار قرار دارد.';
 		$er=$R->Check();
 		if(is_string($er))
 			return $er;
 		
-		$R->Apply();
-		ORM::Persist($R);
+		//$R->Apply();
+		//ORM::Persist($R);
 		return $R;
 
 	}

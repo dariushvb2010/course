@@ -19,9 +19,11 @@ class CorrespondenceProphecyController extends CorrespondenceAbstractController
 				$sub = substr($this->input_class,9,30);
 				$MailNum = $_POST['MailNum'];
 				$jc = new CalendarPlugin();
-				$dd = explode('/', $ProphecyDate);
-				var_dump($dd);
-				$ProphecyTimestamp = $jc->Jalali2Timestamp($dd[0], $dd[1], $dd[2]);
+// 				$dd = explode('/', $ProphecyDate);
+// 				var_dump($dd);
+// 				$ProphecyTimestamp = $jc->Jalali2Timestamp($dd[0], $dd[1], $dd[2]);
+				$ProphecyTimestamp = $jc->JalaliStr2Timestamp($ProphecyDate);
+				var_dump($ProphecyTimestamp);
 				$R = ORM::Query('ReviewProcessProphecy')->AddToFile($this->File,$sub, $MailNum, $ProphecyTimestamp, $this->Comment);
 				if(is_string($R))
 					$Error[]= $R;
