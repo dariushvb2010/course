@@ -115,22 +115,22 @@ class ManagerBazbinsAssignedController extends JControl
 			if($File->Asy())
 				$ret[]=$File->Asy();
 		}
-		ORM::Dump($ret);
 		$al = new AutolistPlugin($ret, null, "Select");
 				$al->SetMetadata(array('CreateTimestamp'=>array('CData'=>'?')));
 				$al->SetHeader('Select', 'انتخاب',true);
 				$al->SetHeader('Cotag', 'کوتاژ');
-				$al->SetHeader('Masir','df');
-				$al->SetHeader('RegTime','df');
-				$al->SetHeader('OwnerName','df');
-				$al->SetHeader('OwnerCoding','df');
-				$al->SetHeader('DeclarantName','df');
-				$al->SetHeader('DeclarantCoding','df');
-				$al->SetHeader('Karshenas_salon','df');
+				$al->SetHeader('Masir','مسیر');
+				$al->SetHeader('RegTime','تاریخ');
+				$al->SetHeader('OwnerName','صاحب کالا');
+				$al->SetHeader('OwnerCoding','کدینک صاحب کالا');
+				$al->SetHeader('DeclarantName','نام اظهارکننده');
+				$al->SetHeader('DeclarantCoding','کدینک اظهارکننده');
+				$al->SetHeader('Karshenas_salon','کارشناس سالن');
+				$al->SetHeader('Arzyab','ارزیاب');
+				$al->SetHeader('RialPrice','ارزش کل');
 				$al->HasTier = true;
 				$al->TierLabel = 'ردیف';
 				$al->ObjectAccess=true;
-				$al->SetHeader('CreateTimestamp', 'زمان وصول',true);
 				$al->SetFilter(array($this,"myfilter"));
 		
 		return $al;
