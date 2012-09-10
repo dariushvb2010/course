@@ -67,7 +67,24 @@ class v
 	{
 		return "<span class='v-cotag v-blue v-big'>".$cot."</span>";
 	}
-
+	/**
+	 * Empty Cotag
+	 * used for classe
+	 * @param integer|string $cot
+	 * @return string
+	 */
+	public static function ec($cot){
+		return "<span class='v-cotag v-empty'>".$cot."</span>";
+	}
+	/**
+	 * Big Empty Cotag
+	 * used for classe
+	 * @param integer|string $cot
+	 * @return string
+	 */
+	public static function bec($cot){
+		return "<span class='v-cotag v-empty v-big'>".$cot."</span>";
+	}
 	/**
 	 * Custom Cotag Show
 	 * @param unknown_type $cot
@@ -210,6 +227,13 @@ class v
 			return 'تاریخ صحیح نیست!';
 		else
 			return 'تاریخ '.$d.' صحیح نیست!';
+	}
+	/**
+	 * ERROR: Not Assigned To U
+	 * این سند به شما تخصیص داده نشده است!
+	 */
+	static function Enatu(){
+		return 'این سند به شما تخصیص داده نشده است.';
 	}
 	/**
 	 * 'a' tag

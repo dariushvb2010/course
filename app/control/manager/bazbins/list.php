@@ -4,9 +4,8 @@ class ManagerBazbinsListController extends JControl
 	function Start()
 	{
 		j::Enforce("MasterHand");
-// 		$this->EnableReviewersCount=ORM::Query(new MyUser())->ReviewersCount(true);
-// 		$this->DisableReviewersCount=ORM::Query(new MyUser())->ReviewersCount(false);
-		// if checkboxes selected
+		
+		$this->MakeUserList();
 		if(isset($_POST['Work']))
 		{
 			$this->SetReviewersState("Work");
@@ -24,7 +23,6 @@ class ManagerBazbinsListController extends JControl
 				ORM::Persist($my_reviewer);
 			}
 		}
-		
 		if(MyUser::CurrentUser()->MainSetting())
 		{
 			if(MyUser::CurrentUser()->MainSetting()->ShowRetireds())
@@ -35,7 +33,7 @@ class ManagerBazbinsListController extends JControl
 		else
 			$reviewers = ORM::Query(new MyUser())->Reviewers();
 		
-		$this->SetReviewersCount();
+  		$this->SetReviewersCount();
 		
 		if(count($reviewers))
 		{
@@ -55,8 +53,8 @@ class ManagerBazbinsListController extends JControl
 			$al->SetFilter(array($this,"myfilter"));
 			$this->ReviewersList=$al;
 		}
-		$this->UserList=$this->MakeUserList();
 		
+ 		$this->UserList=$this->MakeUserList();
 		//--------------Disable Form -------------------
 		if(isset($_POST['DisableID']))
 		{
@@ -77,15 +75,18 @@ class ManagerBazbinsListController extends JControl
 				ORM::Persist($Reviewer);
 			}
 		}
-		$this->DisableForm=$this->MakeDisableForm();
-		//-----------------------D F----------------------
 		
+		$this->DisableForm=$this->MakeDisableForm();
+		
+		//-----------------------D F----------------------
 		$this->Error=$Error;
 		if (count($Error))
 			$this->Result=false;
 		return $this->Present();
 	}
-	
+	function get($r){
+		return $r[0];
+	}
 	function myfilter($k,$v,$D)
 	{
 		if($k=='View')
@@ -136,7 +137,7 @@ class ManagerBazbinsListController extends JControl
 	}
 	private function MakeUserList()
 	{
-		$Users=ORM::Query(new MyUser)->GetNotReviewers();
+		$Users=ORM::Query('MyUser')->GetNotReviewers();
 		$al=new AutolistPlugin($Users);
 		$al->ObjectAccess=true;
 		$al->Width="auto";
@@ -155,7 +156,6 @@ class ManagerBazbinsListController extends JControl
 	private function MakeDisableForm()
 	{
 		$reviewers = ORM::Query(new MyUser())->Reviewers();
-		//ORM::Dump($reviewers);
 		foreach($reviewers as $r){
 			$x[$r->ID]=$r->getFullName();
 		}

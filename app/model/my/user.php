@@ -136,7 +136,7 @@ class MyUser extends Xuser
 	}
 	/**
 	 * @ManyToOne(targetEntity="MyGroup", inversedBy="User")
-	 * @JoinColumn(name="Group1ID",referencedColumnName="ID")
+	 * @JoinColumn(name="Group1ID",referencedColumnName="ID", nullable=false)
 	 * @var MyGroup
 	 */
 	protected $Group;
@@ -149,10 +149,24 @@ class MyUser extends Xuser
 		$this->Group=$Group;
 		$Group->User()->add($this);
 	}
+	function GroupTitle(){
+		return $this->Group->Title();
+	}
 	function GroupRTitle()
 	{
 		if($this->Group)
 			return $this->Group->RTitle();
+	}
+	/**
+	 * if this user is in the group $groupTitle
+	 * @param string $groupTitle
+	 * @return boolean
+	 */
+	function Is($groupTitle){
+		$g = $this->Group();
+		if($g)
+			if($g->Title() == $groupTitle)
+				return true;
 	}
 	/**
 	* @Column(type="boolean")
@@ -301,6 +315,9 @@ class MyUser extends Xuser
 	function getFullName(){
 		return $this->Gender()." ".$this->Firstname." ".$this->Lastname();
 	}
+	/**
+	 * @return MyUser
+	 */
 	public static function CurrentUser()
 	{
 		return self::getUser(j::UserID());
@@ -324,7 +341,7 @@ class MyUser extends Xuser
 	}
 
 	function AssignedReviewableFileCount(){
-		return count($this->AssignedReviewableFile());
+		return ORM::Query($this)->AssignedReviewableFileCount($this);
 	}
 }
 
@@ -410,7 +427,6 @@ class MyUserRepository extends EntityRepository
 	public function GetNotReviewers()
 	{
 		$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=0");
-		
 		if(empty($r))
 			return null;
 		else
@@ -435,6 +451,7 @@ class MyUserRepository extends EntityRepository
 	{
 		$states=FsmGraph::Name2State('reviewing');
 		$stateString=implode(',', $states);
+		
 		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F 
 					WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString}) ORDER BY P.CreateTimestamp",$Reviewer);
 		
@@ -442,6 +459,13 @@ class MyUserRepository extends EntityRepository
 			$files[]=$item->File();
 		}
 		return $files;
+	}
+	public function AssignedReviewableFileCount($Reviewer){
+		$states=FsmGraph::Name2State('reviewing');
+		$stateString=implode(',', $states);
+		$r=j::DQL("SELECT count(F) as co FROM ReviewProgressAssign AS P JOIN P.File AS F
+				WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString}) ORDER BY P.CreateTimestamp",$Reviewer);
+		return $r[0]['co'];
 	}
 	public function AssignedReviewableDossier($Reviewer)
 	{

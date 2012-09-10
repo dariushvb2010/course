@@ -83,7 +83,7 @@ class ReviewProcessRegister extends ReviewProgress
 	}
 	function  Summary()
 	{
-		$str="پرونده به شماره کوتاژ ".$this->File()->Cotag()." در مکاتبات با شماره کلاسه ".$this->File()->GetClass().'ثبت گردید .';
+		$str="پرونده به شماره کوتاژ ".$this->File()->Cotag()." در مکاتبات با شماره کلاسه ".$this->File()->Classe().'ثبت گردید .';
 		return $str;
 	}
 	function Title()

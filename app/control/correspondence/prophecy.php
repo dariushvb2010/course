@@ -20,7 +20,6 @@ class CorrespondenceProphecyController extends CorrespondenceAbstractController
 				$MailNum = $_POST['MailNum'];
 				$jc = new CalendarPlugin();
 // 				$dd = explode('/', $ProphecyDate);
-// 				var_dump($dd);
 // 				$ProphecyTimestamp = $jc->Jalali2Timestamp($dd[0], $dd[1], $dd[2]);
 				$ProphecyTimestamp = $jc->JalaliStr2Timestamp($ProphecyDate);
 				$R = ORM::Query('ReviewProcessProphecy')->AddToFile($this->File,$sub, $MailNum, $ProphecyTimestamp, $this->Comment);
@@ -47,7 +46,8 @@ class CorrespondenceProphecyController extends CorrespondenceAbstractController
 				));
 		$f->AddElement(array(
 				'Name'=>'ProphecyDate',
-				'Label'=>'تاریخ ثبت نسخه ابلاغ شده'
+				'Label'=>p::ProphecyDate,
+				'Class'=>'date'
 				));
 		$f->AddElement(array(
 				"Type"=>"submit",

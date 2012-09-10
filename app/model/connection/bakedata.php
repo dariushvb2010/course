@@ -28,7 +28,6 @@ class ConnectionBakedata extends JModel
 		//GetData() must be in the first line
 		$d=$getdata->GetData();
 		//echo BR;
-		//var_dump($d);
 		//echo BR;
 		$this->Error=array();
 		
@@ -48,7 +47,6 @@ class ConnectionBakedata extends JModel
 			}
 			
 		}
-		//var_dump($d->messages);
 		return $ret;
 	}
 	
@@ -81,6 +79,21 @@ class ConnectionBakedata extends JModel
 				"year"=>$Year,
 		);
 		$c=new ConnectionGetdata($this->hoststring."/GetParvanehFromAsycuda", $RequestArray);
+		$this->Handle_DataError($c);
+	}
+	
+	/**
+	 * returns the asyquda data for a kootaj and year
+	 * it registers nothing and is accessible where exit door is installed
+	 * @param unknown_type $Cotag
+	 * @param unknown_type $Year
+	 */
+	public function GetParvanehFromAsycudaYearPuria($Cotag,$Year){
+		$RequestArray=array(
+				'codtag'=>$Cotag,
+				"year"=>$Year,
+		);
+		$c=new ConnectionGetdata(reg("link/puria/asy"), $RequestArray,'naked');
 		$this->Handle_DataError($c);
 	}
 	

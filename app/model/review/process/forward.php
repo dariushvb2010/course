@@ -29,12 +29,12 @@ class ReviewProcessForward extends ReviewProgress
 	
 	/**
 	 * @ManyToOne(targetEntity="ReviewTopic",inversedBy="ProcessForward")
-	 * @JoinColumn(name="TopicID",referencedColumnName="ID", nullable=false)
+	 * @JoinColumn(name="ForwardSetadID",referencedColumnName="ID", nullable=false)
 	 * @var ReviewTopic
 	 */
 	protected $Setad;
 	function Setad(){ return $this->Setad; }
-	function SetSetad($val){ $this->Setad = $val; }
+	function SetSetad($val){ $this->Setad = $val; ORM::Dump($this->Setad());}
 	
 	function SubMannerValidation(){
 		$val = $this->SubManner();
@@ -44,10 +44,10 @@ class ReviewProcessForward extends ReviewProgress
 		$r |= ($val == self::SubManner_appeals );
 		return $r;
 	}
-	function __construct(ReviewFile $File=null,$SubManner,$Indicator='', ReviewTopic $Setad,MyUser $User=null)
+	function __construct(ReviewFile $File=null,$SubManner,$MailNum='', ReviewTopic $Setad,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->SetMailNum($Indicator);
+		$this->SetMailNum($MailNum);
 		$this->SetSubManner($SubManner);
 		if($Setad)
 			$this->SetSetad($Setad);
@@ -56,8 +56,10 @@ class ReviewProcessForward extends ReviewProgress
 
 	function  Summary()
 	{
-		$t = $this->Setad()->Topic();
+		if($this->Setad())
+			$t = $this->Setad()->Topic();
 		return 'پرونده به '.$t.' فرستاده شد.';
+		
 	}
 	function Title()
 	{
@@ -65,7 +67,7 @@ class ReviewProcessForward extends ReviewProgress
 	}
 	function Manner()
 	{
-		return 'Forward_'.$this->Manner();
+		return 'Forward_'.$this->SubManner;
 	}
 
 }
@@ -80,18 +82,20 @@ class ReviewProcessForwardRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File, $SubManner,$Indicator, $SetadID ,$Comment="")
+	public function AddToFile(ReviewFile $File, $SubManner,$MailNum, $SetadID ,$Comment="")
 	{
 	
 		$Setad = ORM::Find('ReviewTopic', $SetadID);
-		if(!(!$Setad instanceof ReviewTopic))
+		if(!($Setad instanceof ReviewTopic))
 			return 'طرف مکاتبه مورد نظر یافت نشد.';
-		$R=new ReviewProcessForward($File,$SubManner, $Indicator, $Setad);
+		$R=new ReviewProcessForward($File,$SubManner, $MailNum, $Setad);
 		$R->setComment($Comment);
-		$R->SetState($File,FsmGraph::NextState($File->State(),"Forward"));
-		ORM::Write($R);
-		ORM::Persist($File);
-		$res['Class']=$R;
+		$er = $R->Check();
+		if(is_string($er))
+			return $er;
+		
+		$R->Apply();
+		ORM::Persist($R);
 			
 		
 	}

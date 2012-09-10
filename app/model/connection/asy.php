@@ -63,7 +63,7 @@ class ConnectionAsy extends JModel {
 
     function RegTime() {
         $jc = new CalendarPlugin();
-        return $jc->JalaliFromTimestamp($this->RegTimestamp()) . " " . date("H:i:s", $this->RegTimestamp());
+        return $jc->JalaliFromTimestamp($this->RegTimestamp());
     }
 
     /**
@@ -122,7 +122,15 @@ class ConnectionAsy extends JModel {
     function SetOwnerName($val) {
         $this->OwnerName = $val;
     }
-
+    
+    /**
+     * آدرس صاحب کالا
+     * @Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $OwnerAddress;
+    function OwnerAddress() { return $this->OwnerAddress; }
+    function SetOwnerAddress($val) { $this->OwnerAddress = $val; }
     /**
      * ارزیاب
      * @Column(type="string", length="150")
@@ -319,7 +327,7 @@ class ConnectionAsy extends JModel {
         $this->Karshenas_arzesh = $arzar[1];
         $this->OwnerName = $AsyArray->owner->nameOfPerson;
         $this->SetOwnerCoding($AsyArray->owner->personCode);
-
+		$this->SetOwnerAddress( $AsyArray->owner->adress );
         $this->SetDeclarantCoding($AsyArray->claimer->personCode);
 
         $this->ArzType = $AsyArray->arzType;
@@ -383,6 +391,7 @@ class ConnectionAsy extends JModel {
         $arr2[] = array("Value" => $this->Masir());
         $arr2[] = array("Value" => $this->OwnerName());
         $arr2[] = array("Value" => $this->OwnerCoding());
+        $arr2[] = array('Value' => $this->OwnerAddress());
         $arr2[] = array("Value" => $this->DeclarantName());
         $arr2[] = array("Value" => $this->DeclarantCoding());
         $arr2[] = array("Value" => $this->Karshenas_salon());
@@ -392,12 +401,11 @@ class ConnectionAsy extends JModel {
         $arr2[] = array("Value" => $this->ArzNerkh());
         $arr2[] = array("Value" => $this->RialPrice());
         $arr2[] = array("Value" => $this->TotalTaxes());
-
         return $arr2;
     }
     function getPersianTitles() {
         $titles = array(p::Cotag, p::RegTime, p::Masir, p::OwnerName, p::OwnerCoding,
-            p::DeclarantName, p::DeclarantCoding, p::Karshenas_salon, p::Arzyab,
+            p::OwnerAddress, p::DeclarantName, p::DeclarantCoding, p::Karshenas_salon, p::Arzyab,
             p::Karshenas_arzesh, p::ArzType, p::ArzNerkh, p::RialPrice, p::TotalTaxes);
         return $titles;
     }

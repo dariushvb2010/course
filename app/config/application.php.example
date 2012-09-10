@@ -90,7 +90,12 @@ else
 	reg("jf/setting/PresentErrors",false);
 
 //reg("jf/setting/ErrorHandler",true); //Enables jFramework's built-in error handler
-	
+/**
+ * Error Handling mode to show less or more
+ * if you choose more you will face some problem
+ * @example more, less
+ */
+reg('jf/setting/ErrorHandling/mode','less');
 	
 /**
  * Bandwidth Management

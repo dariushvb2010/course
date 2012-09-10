@@ -59,79 +59,44 @@ class AutoformPlugin extends JPlugin
 	}
 	function PresentCSS()
 	{
-	if($this->HasFormTag):
 	?>
-			form.autoform {
+			.autoform {
 				width:60%;
 				margin:auto;
 				padding:10px;
 				border:3px double;
 				text-align:center;
 			}
-			form.autoform input[type='submit'] {
+			.autoform input[type='submit'] {
 				width:200px;
 				margin:5px;
 			}
-			form.autoform input[type='text'] {
+			.autoform input[type='text'] {
 				width:150px;
 				text-align:center;
 			}
-			form.autoform label {
+			.autoform label {
 				width:200px;
 				float:right;
 				height:1em;
 			}
-			form.autoform input {
+			.autoform input {
 				text-align:center;
 			}
-			form.autoform .autoFormContainer {
-				margin:2px;
-				margin-bottom:5px;
-			}	
-			form.autoform .autoFormContainer select{
-				margin-top:8px;
+			.autoform input.date{
+				direction: ltr;
 			}
-			form.autoform .autoFormContainer textarea{
-				margin-top:8px;
-			}
-	<?php 
-	else:
-	?>
-			div.autoform {
-				width:60%;
-				margin:auto;
-				padding:10px;
-				border:3px double;
-				text-align:center;
-			}
-			div.autoform input[type='submit'] {
-				width:200px;
-				margin:5px;
-			}
-			div.autoform input[type='text'] {
-				width:150px;
-				text-align:center;
-			}
-			div.autoform label {
-				width:200px;
-				float:right;
-				height:1em;
-			}
-			div.autoform input {
-				text-align:center;
-			}
-			div.autoform .autoFormContainer {
+			.autoform .autoFormContainer {
 				margin:2px;
 				margin-bottom:5px;
 			}
-			div.autoform .autoFormContainer select{
+			.autoform .autoFormContainer select{
 				margin-top:8px;
 			}
-			div.autoform .autoFormContainer textarea{
+			.autoform .autoFormContainer textarea{
 				margin-top:8px;
 			}
-	<?php 
-	endif;
+	<?php
 	}
 	function PresentScript()
 	{
@@ -313,11 +278,14 @@ $(function(){
 			?>
 				<label><?php echo $E['Label'];?></label>
 				<input type='<?php echo $E['Type'];?>' name='<?php echo $E['Name'];?>' 
-				<?php if ($E['Direction']) echo " dir='{$E['Direction']}' ";?> 
-				<?php if ($E['Disabled']) echo " disabled='disabled' ";?> 
-				<?php if ($E['Style']) echo " style='{$E['Style']}' ";?> 
-				<?php if($E['Placeholder']) echo "placeholder='{$E['Placeholder']}'"; else echo "placeholder='{$E['Label']}'";?>
-				<?php if($E['Required']) echo "required='required'"; ?>
+			<?php 
+				if ($E['Direction']) echo " dir='{$E['Direction']}' "; 
+				 if ($E['Disabled']) echo " disabled='disabled' ";
+				 if ($E['Style']) echo " style='{$E['Style']}' "; 
+				echo " class='{$E['Class']}' ";
+				 if($E['Placeholder']) echo "placeholder='{$E['Placeholder']}'"; else echo "placeholder='{$E['Label']}'";
+				 if($E['Required']) echo "required='required'"; 
+			?>
 				value='<?php 
 				if (array_key_exists("Value",$E))
 					echo $E['Value'];

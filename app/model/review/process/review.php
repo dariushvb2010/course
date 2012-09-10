@@ -3,7 +3,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
- * @Table(name="ProcessReview")
  * @entity(repositoryClass="ReviewProcessReviewRepository")
  * */
 class ReviewProcessReview extends ReviewProgress
@@ -22,21 +21,16 @@ class ReviewProcessReview extends ReviewProgress
 	 */ 
 	const SubManner_deny = 'deny';
 	/**
-	 *	تایید مکاتبات
-	 * @var string
-	 */
-	const SubManner_ok = 'ok';
-	/**
 	 * کارشناسی و درخواست ارسال به دفاتر ستادی
 	 * @var string
 	 */
 	const SubManner_setad = 'setad';
 	
-	static $SubMannerArray=array('accept','deny','ok','setad');
+	static $SubMannerArray=array('accept','deny','setad');
 	
 	/**
 	 * @ManyToOne(targetEntity="ReviewTopic")
-	 * @JoinColumn(name="TopicID",referencedColumnName="ID")
+	 * @JoinColumn(name="ReviewSetadID",referencedColumnName="ID")
 	 * @var ReviewTopic
 	 */
 	protected $Setad;
@@ -48,7 +42,6 @@ class ReviewProcessReview extends ReviewProgress
 		$r |= ($val == self::SubManner_accept );
 		$r |= ($val == self::SubManner_deny );
 		$r |= ($val == self::SubManner_setad );
-		$r |= ($val == self::SubManner_ok );
 		return $r;
 	}
 	/**
@@ -57,9 +50,29 @@ class ReviewProcessReview extends ReviewProgress
 	function CheckConsistensy(){
 		if(($this->Setad() and $this->SubManner()!=self::SubManner_setad) or 
 				(!$this->Setad() and $this->SubManner()==self::SubManner_setad))
-			return false;
+			return 'برای ارسال به دفاتر ستادی یکی از موارد را انتخاب نمایید.';
 		else
 			return true;
+	}
+	function Check(){
+		//=======parent=======
+		$c = parent::Check();
+		if(is_string($c))
+			return $c;
+		//======consistency=====
+		$c = $this->CheckConsistensy();
+		if(is_string($c))
+			return $c;
+		//============check for processAssign reviewer = $thisUser or $thisUser is manager
+		$processAssign = $this->File->LLP('Assign', true);
+		$curUser = MyUser::CurrentUser();
+		if($processAssign){
+			$rev = $processAssign->ProcessReviewer(); 
+			if($rev)
+				if($processAssign->ProcessReviewer()->ID() != $curUser->ID() and $curUser->GroupTitle()!=MyGroup::Title_Admin)
+					return v::Enatu();
+		}
+		return true;
 	}
 	///--------------------///
 	///protected MailNum = شماره صورت جلسه فنی
@@ -80,7 +93,10 @@ class ReviewProcessReview extends ReviewProgress
 	}
 	function Title()
 	{
-		return 'رای کارشناس';
+		if($this->User->GroupTitle()==MyGroup::Title_Admin)
+			return 'رای مدیر';
+		else
+			return 'رای کارشناس';
 	}
 	function Manner()
 	{
@@ -94,16 +110,13 @@ class ReviewProcessReviewRepository extends EntityRepository
 {
 	/**
 	 * 
-	 * Enter description here ...
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File, $SubManner, $MailNum='', $Comment='', ReviewTopic $Setad=null)
+	public function AddToFile(ReviewFile $File, $SubManner, $MailNum='', ReviewTopic $Setad=null, $Comment)
 	{
 		$R=new ReviewProcessReview($File,$SubManner, $MailNum, $Setad);
 		$R->setComment($Comment);
-		if(!$R->CheckConsistensy())
-			return 'برای ارسال به دفاتر ستادی یکی از موارد را انتخاب نمایید.';
 		$er = $R->Check();
 		if(is_string($er))
 			return $er;

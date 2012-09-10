@@ -16,8 +16,6 @@ class ReviewCorrespondenceMainController extends JControl
 				$SetadID = $_POST['SetadID'];
 				if(!empty($SetadID))
 					$Setad = ORM::Find('ReviewTopic', $SetadID);
-				if(!($Setad instanceof ReviewTopic))
-					$Setad = null;
 				$R = ORM::Query('ReviewProcessReview')->AddToFile($File,$SubManner, $MailNum, $Setad);
 				if(is_string($R))
 					$Error[] = $R;
@@ -34,10 +32,6 @@ class ReviewCorrespondenceMainController extends JControl
 		}
 		$this->SubMannerArray = $sma;
 		
-		foreach (ReviewTopic::Topics('mokatebat') as $v){
-			$ta[$v['ID']] = $v['Topic'];
-		}
-		$this->TopicArray= $ta;
 		$this->Error=$Error;
 		$this->Result=$Result;
 		if (count($this->Error)) $this->Result=false;
@@ -53,7 +47,7 @@ class ReviewCorrespondenceMainController extends JControl
 				));
 		$f->AddElement(array(
 				'Name'=>'SubManner',
-				'Label'=>'تعیین مسیر',
+				'Label'=>'رای کارشناس',
 				'Vertical'=>true,
 				'ContainerStyle'=>'text-align:right; margin-right:50px; padding-right:50px; ',
 				'Type'=>'radio',
@@ -65,12 +59,12 @@ class ReviewCorrespondenceMainController extends JControl
 				'Label'=>'دفتر',
 				'Dependency'=>'SubManner',
 				'DependencyValue'=>'=="setad"',
-				'Options'=>$this->TopicArray
+				'Options'=>ReviewTopic::TopicsArray(ReviewTopic::Type_mokatebat)
 				));
 		$f->AddElement(array(
 				'Name'=>'Comment',
 				'Type'=>'textarea',
-				'Label'=>p::desc
+				'Label'=>p::Desc
 				));
 		$f->AddElement(array(
 				'Name'=>'submit',

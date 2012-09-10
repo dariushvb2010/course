@@ -79,29 +79,42 @@ class CorrespondenceAddprocessController extends JControl
 				case 'Address_second':
 				case 'Address_setad':
 				case 'Address_commission': // this case is not usefull in rajaie
-					$this->Redirect("./address?Cotag={$File->Cotag()}&input_class={$input_class}");			
+					$this->Redirect('./address'.$getParams);			
 				break;
 				case 'Prophecy_first':
 				case 'Prophecy_second':
 				case 'Prophecy_setad':
 				case 'Prophecy_commission':
-					$this->Redirect("./prophecy?Cotag={$File->Cotag()}&input_class={$input_class}");
+					$this->Redirect('./prophecy'.$getParams);
 				break;
 				case 'Protest_first':
 				case 'Protest_second':
 				case 'Protest_setad':
 				case 'Protest_commission':
 				case 'Protest_after_p7':
-					$this->Redirect("./protest?Cotag={$File->Cotag()}&input_class={$input_class}");
+					$this->Redirect('./protest'.$getParams);
 				break;
 				case 'ProcessAssign':
-					$this->Redirect("./assign?Cotag={$File->Cotag()}&input_class={$input_class}");
+					$this->Redirect('./assign'.$getParams);
 				break;
 				case 'P7':
-					$this->Redirect("./p7".$getParams);
+					$this->Redirect('./p7'.$getParams);
+				break;
+				case 'Forward_setad':
+				case 'Forward_commission':
+				case 'Forward_appeals';
+					$this->Redirect("./forward".$getParams);
+				break;
+				case 'Feedback_setad_gomrok':
+				case 'Feedback_commission_gomrok':
+				case 'Feedback_appeals_gomrok';
+				case 'Feedback_setad_owner':
+				case 'Feedback_commission_owner':
+				case 'Feedback_appeals_owner';
+				$this->Redirect("./feedback".$getParams);
 				break;
 				case 'Clearance':
-					$this->Redirect("./clearance?Cotag={$File->Cotag()}&input_class={$input_class}");
+					$this->Redirect('./clearance'.$getParams);
 					break;
 				default:
 					

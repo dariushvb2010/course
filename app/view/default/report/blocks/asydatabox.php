@@ -1,5 +1,4 @@
 <?php
-//var_dump($this->Asy->getPersianTitles());
 $AutoList = new AutolistPlugin($this->Asy->getAll(), null, "Select");
 $AutoList->SetHeader('Value', 'مشخصات کالا');
 $AutoList->HasLeftData = true;

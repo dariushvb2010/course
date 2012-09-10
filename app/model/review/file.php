@@ -123,6 +123,7 @@ class ReviewFile
     protected $Stock;
     function Stock(){ return $this->Stock;}
     function SetStock($Stock){ $this->Stock=$Stock; }
+    //======================ASY CUDA=========================================
     /**
      *
      * @OneToOne(targetEntity="ConnectionAsy", mappedBy="File")
@@ -132,10 +133,50 @@ class ReviewFile
     function Asy(){ return $this->Asy; }
     function SetAsy($val){ $this->Asy=$val; }
     
-    public function GetClass(){
+    public function Classe(){
     	$p = $this->LLP("Register",true);
     	return $p ? $p->Classe() : null;
     }
+    function OwnerCoding(){
+    	if($this->Asy)
+    		return $this->Asy->OwnerCoding();
+    }
+    function Karshenas_salon(){
+    	if($this->Asy)
+    		return $this->Asy->Karshenas_salon();
+    }
+    function Karshenas_arzesh(){
+    	if($this->Asy)
+    		return $this->Asy->Karshenas_arzesh();
+    }
+    //---------------------------------^^^asy cuda^^^^-----------
+    //================================ Mokatebat =================================
+    /**
+     * مبلغ تفاوت
+     */
+    function DifferenceAmount(){
+    	$R = $this->LastReview();
+    	if($R)
+    		return $R->Amount();
+    }
+    function DifferenceAmountHezar(){
+    	return round($this->DifferenceAmount()/1000);
+    }
+    /**
+     * شماره طبقه بندی
+     * @example 109, 248, 528
+     */
+    function Cat(){
+    	 $R = $this->LastReview();
+    	 if($R)
+    	 	return $R->Provision();
+    }
+    function ReviewerName(){
+    	$R = $this->LastReviewer();
+    	if($R)
+    		return $R->getFullName();
+    }
+    //--------------------^^^mokatebat^^^--------------------------------------
     /**
      * returns the recent file
      * @param  integer or string or ReviewFile
@@ -222,6 +263,12 @@ class ReviewFile
 	{
 		return ORM::Query($this)->GetLastProgress($this,$Type,$IsProcess);		
 	}
+	/**
+	 * 
+	 * @param string $Type
+	 * @param boolean $IsProcess
+	 * @return ReviewProgress
+	 */
     function LLP($Type='all',$IsProcess=false)
     {
     	return ORM::Query($this)->LastLiveProgress($this,$Type,$IsProcess);
@@ -232,7 +279,9 @@ class ReviewFile
 		if ($ProgAssign==null) return null;
 		return $ProgAssign->Reviewer();
 	}
-	
+	/**
+	 * @return ReviewProgressReview
+	 */
 	function LastReview()
 	{
 		$Prog= $this->LastProgress('Review');
@@ -243,13 +292,7 @@ class ReviewFile
 	function AllProgress(){
 		return ORM::Query($this)->ProgressList($this);
 	}
-	/**
-	 * شماره طبقه بندی
-	 * @example 109, 248, 528
-	 */
-    function Cat(){
-    	
-    }
+	
     function killLLP($Comment){
     	$LLP=$this->LLP();
     	$res=ORM::Query("ReviewProgressRemove")->AddToFile($LLP,$Comment);
@@ -489,7 +532,6 @@ class ReviewFileRepository extends EntityRepository
 			}
 			$r=j::ODQL($QueryStr);
 			//echo $QueryStr;
-			//var_dump($r);
 			return $r;
 		}
 	}

@@ -19,6 +19,14 @@ class MyGroup
 	{
 		return $this->ID;
 	}
+	const Title_Admin = 'Admin';
+	const Title_Archive = 'Archive';
+	const Title_CotagBook = 'CotagBook';
+	const Title_Raked = 'Raked';
+	const Title_Reviewer = 'Reviewer';
+	const Title_Correspondence = 'Correspondence';
+	const Title_Typist = 'Typist';
+	const Title_Nazer = 'Nazer';
 	/**
 	 * @Column(type="string", unique=true)
 	 * @var string

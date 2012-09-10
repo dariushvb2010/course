@@ -36,6 +36,12 @@ class ReviewTopic
 	{
 		return $this->Comment;
 	}
+	const Type_mokatebat = 'mokatebat';
+	const Type_archive = 'archive';
+	const Type_raked = 'raked';
+	const Type_iran = 'iran';
+	const Type_other = 'other';
+	const Type_othergates = 'othergates';
 	
 	/**
 	* @Column(type="string")
@@ -116,6 +122,18 @@ class ReviewTopic
 	{
 		return ORM::Query(new ReviewTopic())->GetTopics($type);
 	}
+	/**
+	 * returns an array convinient for making form  
+	 * @param stirng $type
+	 * @return array like: array([2]=>'kfjs', [24]=>'lkjdf')
+	 */
+	public static function TopicsArray($type='*'){
+		$topics = ORM::Query('ReviewTopic')->GetTopics($type);
+		foreach ($topics as $t){
+			$ret[$t['ID']] = $t['Topic'];
+		}
+		return $ret;
+	}	
 	public static function Raked()
 	{
 		$r=ORM::Find(new ReviewTopic,"Type","raked");

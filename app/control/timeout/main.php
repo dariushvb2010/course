@@ -10,7 +10,6 @@ class TimeoutMainController extends JControl
 		//'Prophecy_commission'=>63,
 		$DaySeconds=30*30*24;
 		$Files=ORM::Query(new ReviewFile)->ExpiredStateFiles('Prophecy_first',$DaySeconds*10);
-		var_dump($Files);
 		$this->Error=$Error;
 		if (count($Error)) $this->Result=false;
 		return $this->BarePresent();

@@ -75,7 +75,7 @@ class ReviewProcessPaymentRepository extends EntityRepository
 			}
 			else
 			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان پرداختی ثبت کرد.";
+				$res['Error']=" پرونده با شماره کلاسه ".$File->Classe()."در مرحله ای نیست که بتوان پرداختی ثبت کرد.";
 			}
 
 		}

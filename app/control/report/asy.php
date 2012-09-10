@@ -6,7 +6,6 @@ class ReportAsyController extends JControl {
         //j::Enforce("");
 
         if (count($_POST)) {
-            //var_dump($_POST);
             $Cotag=$_POST['Cotag'];
             $File=b::GetFile(B::CotagFilter($Cotag));
             $Asy=ConnectionAsy::GetAsyByFile($File);

@@ -14,7 +14,7 @@ class CorrespondenceClassController extends JControl
 				{
 					$Error[]=v::Ecnf($Cotag);
 				}else{
-					$class=$File->GetClass();
+					$class=$File->Classe();
 					if($class>0){
 						$this->file=$File;
 						$this->class=$class;

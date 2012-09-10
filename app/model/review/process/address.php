@@ -53,12 +53,11 @@ class ReviewProcessAddress extends ReviewProgress
 
 	function  Summary()
 	{
-		return $this->Title(). 'شماره نامه: '.v::b($this->MailNum());
+		return  'شماره نامه: '.v::b($this->MailNum());
 	}
 	function Title()
 	{
-		$fsmp = FsmGraph::GetProgressByName($this->Manner());
-		return $fsmp->Label;
+		return 'ارسال پرونده';
 	}
 	function Manner()
 	{

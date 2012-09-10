@@ -280,6 +280,7 @@ function PresentError($errno, $errstr, $errfile, $errline, $exception = null)
 				$Call = "<span class='StackCall'><span class='StackClass'><b>" . $v ["class"] . "</b></span> " . htmlspecialchars ( $v ["type"] ) . " <span class='StackFunction'><b>" . $v ["function"] . "</b></span></span>";
 				$Call .= "(<span class='StackArgs'>";
 				$flag = false;
+				if(reg('jf/setting/ErrorHandling/mode')=='more')
 				foreach ( $v ['args'] as $arg )
 				{
 					

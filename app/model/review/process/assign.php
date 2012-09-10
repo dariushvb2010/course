@@ -3,7 +3,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
- * @Table(name="ProcessAssign")
  * @entity(repositoryClass="ReviewProcessAssignRepository")
  * */
 class ReviewProcessAssign extends ReviewProgress

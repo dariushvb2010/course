@@ -23,7 +23,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * 	"Remove"="ReviewProgressRemove",
  * 
  * 	"ProcessAssign"="ReviewProcessAssign",
- * 	"ProcessConfirm"="ReviewProcessConfirm",
  * 	"Feedback"="ReviewProcessFeedback",
  * 	"Forward"="ReviewProcessForward",
  *  "ProcessReview"="ReviewProcessReview",

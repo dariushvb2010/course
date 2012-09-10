@@ -74,7 +74,6 @@ class ReviewProcessProtest extends ReviewProgress
 		//ORM::Dump($lastProphecy);
 		if($lastProphecy){
 			$ProphecyTimestamp = $lastProphecy->ProphecyTimestamp();
-// 			var_dump($ProphecyTimestamp, $mora, $provisory, $this->ProtestTimestamp());
 			if(time() < $ProphecyTimestamp+$mora+$provisory){ // can register protest
 				if($this->ProtestTimestamp < $ProphecyTimestamp+$mora)
 					return true;
@@ -177,8 +176,8 @@ class ReviewProcessProtestRepository extends EntityRepository
 		if(is_string($er))
 			return $er;
 		
-		//$R->Apply();
-		//ORM::Persist($R);
+		$R->Apply();
+		ORM::Persist($R);
 		return $R;
 
 	}

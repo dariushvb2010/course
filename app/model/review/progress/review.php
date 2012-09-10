@@ -333,7 +333,7 @@ class ReviewProgressReviewRepository extends EntityRepository
 		if ($File==null)
 			return "یافت نشد.";
 
-		if(!($File->GetClass()==0 OR $File->GetClass()==null))
+		if(!($File->Classe()==0 OR $File->Classe()==null))
 			return "این اظهارنامه کلاسه شده است. ویرایش ممکن نیست.";
 
 		$lastreviewer=$File->LastReviewer();
@@ -542,7 +542,6 @@ public function NotokedList($Offset=0,$Limit=100,$Sort="Cotag", $Order="ASC")
 						Group By U, R.Provision",$monthCount, $startMonth);
 			break;
 		}
-		//var_dump($oc);
 		$res["248"]=array();//----[0]->299000 [1]->40000
 		$res["109"]=array();
 		$res["528"]=array();

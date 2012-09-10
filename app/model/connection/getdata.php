@@ -13,19 +13,20 @@ class ConnectionGetdata extends JModel
 	private $RequestArray;
 	public $timeout;
 	public $error;
+	public $InputFormat;
 	
-	function __construct($url,$RequestArray)
+	function __construct($url,$RequestArray,$InputFormat='hex')
 	{
 		$this->url=$url;		 
 		$this->RequestArray=$RequestArray;
 		$this->timeout=2;
-		$this->error=null;		 
+		$this->error=null;
+		$this->InputFormat=$InputFormat;		 
 	}
 	
 	public function GetData(){
 		$url=$this->make_url();
 		//echo '<p>url: ';
-		//var_dump($url);
 		//echo '</p>';
 		$hexdata= $this->get_data($url);
 		$json=FPlugin::hex2str($hexdata);
@@ -37,7 +38,12 @@ class ConnectionGetdata extends JModel
 		$req=array();
 		foreach ($this->RequestArray as $par=>$val)
 		{
-			$req[]=$par."=".FPlugin::strToHex($val);
+			if($this->InputFormat=='hex'){
+				$FormattedValue=FPlugin::strToHex($val);
+			}else{
+				$FormattedValue=$val;
+			}
+			$req[]=$par."=".$FormattedValue;
 		}
 		
 		$req=implode('&',$req);

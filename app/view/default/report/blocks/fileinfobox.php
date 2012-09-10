@@ -1,3 +1,4 @@
+<?php if($this->File):?>
 <style>
 #fileinfo{
 	font-weight:bold;
@@ -32,7 +33,7 @@
 			<td>کد گمرک: <?php echo $this->File->GateCode();?></td>
 			<td>سریال اظهارنامه: <?php echo ($this->File->BarSerial()?$this->File->BarSerial():'-');?></td>
 		</tr><tr>
-			<td>شماره کلاسه: <span dir=ltr><?php echo ($this->File->GetClass()?$this->File->GetClass():'-');?></span></td>
+			<td>شماره کلاسه: <span dir=ltr><?php echo v::bec(($this->File->Classe()?$this->File->Classe():'-'));?></span></td>
 			<td>تاریخ وصول: <span dir=ltr><?php echo $this->File->CreateTime();?></span></td>
 		</tr><tr>
 			<td>سال: <span dir=ltr><?php echo ($this->File->RegYear()?$this->File->RegYear():'-');?></span></td>
@@ -61,3 +62,5 @@
 			});
 		})();
 	</script>
+	
+<?php endif;?>

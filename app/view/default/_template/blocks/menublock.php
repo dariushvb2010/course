@@ -347,13 +347,7 @@
 				<span class='ui-icon-image ui-icon'></span> 
 				ثبت فرآیندهای پرونده
 			</a>
-		</li>
-		<li>
-			<a href='/correspondence/blacklist'>
-				<span class='ui-icon-image ui-icon'></span> 
-				لیست مشمولین ماده ۱۴
-			</a>
-		</li>  
+		</li> 
 		<li>
 		<a href='#'>
 			<span class='ui-icon-arrowthick-1-n ui-icon'></span> 
@@ -382,6 +376,26 @@
 				<a href='/correspondence/transfer/toout?Taraf=other'>
 							<span class='ui-icon-gripsmall-diagonal-se ui-icon'></span> 
 							سایر
+				</a>
+			</li>
+		</ul>
+		</li>
+		<li>
+		<a href='#'>
+			<span class='ui-icon-arrowthick-1-n ui-icon'></span> 
+			گزارش
+		</a>
+		<ul class='menu'>
+			<li>
+				<a href='/correspondence/report/p7'>
+							<span class='ui-icon-extlink ui-icon'></span> 
+							مشمولین ماده ۷
+				</a>
+			</li>
+			<li>
+				<a href='/correspondence/report/p7/^Provisory'>
+							<span class='ui-icon-arrow-4 ui-icon'></span> 
+							ماده ۷ موقت
 				</a>
 			</li>
 		</ul>

@@ -10,6 +10,12 @@ class ReviewProcessFeedback extends ReviewProgress
 	///--------------------///
 	///protected $SubManner = 'setad', 'commission', 'appeals'
 	///-------------------///
+	
+	
+	///--------------------///
+	///protected $MailNum = شماره نامه
+	///-------------------///
+	
 	/**
 	 * دریافت از دفاتر ستادی
 	 * @var string
@@ -26,62 +32,53 @@ class ReviewProcessFeedback extends ReviewProgress
 	 */
 	const SubManner_appeals = 'appeals';
 	/**
-	 * togomrok=1(it is good and for us, thus it is 1)
-	 * toowner=0
-	 * @Column(type="boolean")
-	 * @var boolean
+	 * @Column(type="string", length="20")
+	 * @var string
 	 *
 	 */
-	protected $FeedbackResult; // togomrok=1,toowner=0
-	function FeedbackResult(){ return $this->FeedbackResult; }
+	protected $FeedbackTo; 
+	function FeedbackTo(){ return $this->FeedbackTo; }
+	/**
+	 * @OneToOne(targetEntity="ReviewProcessForward")
+	 * @JoinColumn(name="ForwardID", referencedColumnName="ID")
+	 * @var ReviewProcessForward
+	 */
+	protected $ProcessForward;
+	function ProcessForward(){ return $this->ProcessForward; }
+	function SetProcessForward($val){ $this->ProcessForward = $val; }
 	/**
 	 * به نفع صاحب کالا
 	 * @var integer
 	 */
-	const Result_ToOwner = 0;
+	const To_owner = 'owner';
 	/**
 	 *  به نفع گمرک
 	 * @var integer
 	 */
-	const Result_ToGomrok = 1;
+	const To_gomrok = 'gomrok';
 	
-	function __construct(ReviewFile $File=null,$FeedbackResult,$FeedbackOffice,$Indicator,MyUser $User=null)
+	function __construct(ReviewFile $File=null,$SubManner, $FeedbackTo,$MailNum, ReviewProcessForward $Forward,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->MailNum=$Indicator;
-		$this->FeedbackOffice=$FeedbackOffice;
-		$this->FeedbackResult=$FeedbackResult;
+		$this->setMailNum($value);
+		$this->FeedbackTo=$FeedbackTo;
+		$this->SetSubManner($SubManner);
+		$this->SetProcessForward($Forward);
 	}
 
 	function  Summary()
 	{
-		$R=" رای";
-		switch ($this->FeedbackOffice)
-		{
-			case "commission": $R.="کمیسیون";
-			case "setad": $R.="دفاتر ستادی";
-			case "appeals": $R.="کمیسیون تجدید نظر";
-		}
-		$R.="دریافت شد. نتیجه رای به نفع ";
-		$R.=$this->FeedbackResult ? "گمرک":
-				"صاحب کالا";
-		$R.="اعلام شد.";
-		return $R;
+		$submanner = p::$arr[$this->SubManner()];
+		$to = p::$arr[$this->FeedbackTo()];
+		return 'رای '.v::b($submanner).' دریافت شد. رای به نفع '.v::b($to). ' اعلام شد.';
 	}
 	function Title()
 	{
-		$E=ORM::Find1("ConfigEvent","EventName", $this->Event());
-		if($E)
-			return $E->PersianTitle();
+		return 'دریافت پرونده';
 	}
 	function Manner()
 	{
-		if(!isset($this->FeedbackResult) OR !isset($this->FeedbackOffice))
-			throw new Exception("hooooooooooo");
-		$R="Feedback_";
-		$R.=$this->FeedbackOffice."_";
-		$R.=$this->FeedbackResult ? "togomrok" : "toowner";
-		return $R;
+		return 'Feedback_'.$this->SubManner().'_'.$this->FeedbackTo;
 	}
 }
 
@@ -95,30 +92,19 @@ class ReviewProcessFeedbackRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null,$FeedbackResult,$FeedbackOffice=null,$Indicator,$Comment=null)
+	public function AddToFile(ReviewFile $File=null,$SubManner, $FeedbackTo, $MailNum, $Comment=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
+		$Forward = $File->LLP('Forward', true);
+		if(!$Forward or $Forward->SubManner()!=$SubManner)
+			return 'ارسال نشده است.';
+		$R=new ReviewProcessFeedback($File,$SubManner, $FeedbackTo,$MailNum, $Forward);
+		$R->setComment($Comment);
+		$er = $R->Check();
+		if(is_string($er))
+			return $er;
 
-
-		if ($File==null)
-		{
-			$res['Error']=v::Ecnf();
-		}
-		else{
-			if(FsmGraph::NextState($File->State(),"Feedback"))
-			{
-				$R=new ReviewProcessFeedback($File,$FeedbackResult,$FeedbackOffice,$Indicator,$CurrentUser);
-				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FsmGraph::NextState($File->State(),"Feedback"));
-				ORM::Write($R);
-				ORM::Persist($File);
-				$res['Class']=$R;
-			}
-			else
-			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->GetClass()."در مرحله ای نیست که بتوان نتیجه  بررسی را ثبت کرد.";
-			}
-		}
-		return $res;
+		$R->Apply();
+		ORM::Persist($R);
+		return $R;
 	}
 }
