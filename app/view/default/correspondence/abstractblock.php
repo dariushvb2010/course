@@ -32,6 +32,6 @@ function redirect(){
 	window.location = '<?php echo SiteRoot;?>/correspondence/addprocess?Cotag=<?php echo $this->Cotag;?>';
 } 
 <?php if($this->IfRedirect):?>
-	setTimeout(redirect,3000);
+	setTimeout(redirect,2000);
 <?php endif;?>
 </script>

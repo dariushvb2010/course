@@ -113,12 +113,15 @@ class CorrespondenceAddprocessController extends JControl
 				case 'Feedback_appeals_owner';
 				$this->Redirect("./feedback".$getParams);
 				break;
+				case 'Payment':
+					$this->Redirect('./payment'.$getParams);
+				break;
 				case 'Clearance':
 					$this->Redirect('./clearance'.$getParams);
 					break;
 				default:
 					
-						$this->Redirect("./demand?Cotag={$File->Cotag()}&input_class={$input_class}");
+						$this->Redirect("./addprocess?Cotag={$File->Cotag()}");
 			}
 		}
 		return (isset($Res['Error'])?$Res['Error']:null);

@@ -8,39 +8,35 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ReviewProcessPayment extends ReviewProgress
 {
 
+	///--------------------///
+	///protected MailNum = 
+	///-------------------///
 	/**
 	 * @Column(type="string")
 	 * @var string
 	 *
 	 */
-	protected $PaymentValue;// first,second,setad
-	function PaymentValue()
-	{
-		return $this->PaymentValue;
-	}
+	protected $PaymentValue;
+	function PaymentValue(){ return $this->PaymentValue; }
 	
-	function __construct(ReviewFile $File=null,$PaymentValue,$Indicator,MyUser $User=null)
+	function __construct(ReviewFile $File=null,$PaymentValue,$MailNum,MyUser $User=null)
 	{
 		parent::__construct($File,$User);
-		$this->MailNum=$Indicator;
+		$this->setMailNum($MailNum);
 		$this->PaymentValue=$PaymentValue;
 	}
 
 	function  Summary()
 	{
-		return ".";
+		return 'مبلغ پرداخت: '.$this->PaymentValue().' ریال.';
 	}
 	function Title()
 	{
-		return 'پرداخت';
+		return 'پرداخت و تمکین';
 	}
 	function Manner()
 	{
-		if(!isset($this->PaymentValue))
-			throw new Exception("hooooooooooo");
-		$R="Payment_";
-		$R.=$this->PaymentValue;
-		return $R;
+		return 'Payment';
 	}
 }
 
@@ -54,32 +50,19 @@ class ReviewProcessPaymentRepository extends EntityRepository
 	 * @param ReviewFile $File
 	 * @return string on error object on sucsess
 	 */
-	public function AddToFile(ReviewFile $File=null,$PaymentValue,$Indicator,$Comment=null)
+	public function AddToFile(ReviewFile $File=null,$PaymentValue,$MailNum,$Comment=null)
 	{
-		$CurrentUser=MyUser::CurrentUser();
 
-
-		if ($File==null)
-		{
-			$res['Error']=v::Ecnf();
-		}
-		else{
-			if(FsmGraph::NextState($File->State(),"Payment"))
-			{
-				$R=new ReviewProcessPayment($File,$PaymentValue,$Indicator,$CurrentUser);
-				$R->setComment(($Comment==null?"":$Comment));
-				$R->SetState($File,FsmGraph::NextState($File->State(),"Payment"));
-				ORM::Write($R);
-				ORM::Persist($File);
-				$res['Class']=$R;
-			}
-			else
-			{
-				$res['Error']=" پرونده با شماره کلاسه ".$File->Classe()."در مرحله ای نیست که بتوان پرداختی ثبت کرد.";
-			}
-
-		}
+		$R=new ReviewProcessPayment($File,$PaymentValue,$MailNum);
+		$R->setComment($Comment);
 		
-		return $res;
+		$er = $R->Check();
+		if(is_string($er))
+			return $er;
+		
+		$R->Apply();
+		ORM::Persist($R);
+
+		return $R;
 	}
 }
