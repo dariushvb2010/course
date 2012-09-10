@@ -29,7 +29,6 @@ class CorrespondenceReportP7Controller extends JControl
 		$this->ParamFilter();
 		
 		$files = ORM::Query('ReviewFile')->FilesByCondition(array('State'=>'P7'));
-		ORM::Dump($files);
 		
 		
 		$this->Result = $Result;

@@ -9,7 +9,6 @@ class ReportAsyController extends JControl {
             $Cotag=$_POST['Cotag'];
             $File=b::GetFile(B::CotagFilter($Cotag));
             $Asy=ConnectionAsy::GetAsyByFile($File);
-            //orm::Dump($Asy);
             $this->Asy=$Asy;
         }
 
