@@ -10,6 +10,7 @@
 <style>
 <?php $this->Autoform->PresentCSS();?>
 </style>
+<div style="text-align: center">نام کاربری و رمز عبور خود را به خاطر داشته باشید</div>
 <?php $this->Autoform->PresentHTML();?>
 <script>
 <?php $this->Autoform->PresentScript();?>

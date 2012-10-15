@@ -38,6 +38,7 @@ div#body{background:white;}
 </style>
 <div id="background_container" >
 <img src="/img/browsers.png" style="width:250px; float:right;"/>
+<h3><a href="/user/create">ثبت نام کلاس وب مقدماتی</a></h3>
 <div id="login_container" dir='rtl'>
 
 <form id="login" method="post">
