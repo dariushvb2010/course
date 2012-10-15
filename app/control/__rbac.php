@@ -14,7 +14,7 @@
 	{
 		$return=$j->URL();
 		$return=urlencode($return);
-		header("location: ".SiteRoot."/user/login?return={$return}");
+		header("location: ".SiteRoot."/user/create?return={$return}");
 		die();
 	}
 ?>
