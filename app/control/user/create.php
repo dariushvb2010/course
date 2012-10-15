@@ -13,7 +13,7 @@ class UserCreateController extends BaseControllerClass
 	    		$Error=$Errors;
 	    	else 
 	    	{
-	   			$user=$this->CreateUser($_POST['Username'],$_POST['Password'],"",$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Codemelli'],$_POST['Role']);
+	   			$user=$this->CreateUser($_POST['Username'],$_POST['Password'],$_POST['Email'],$_POST['gender'],$_POST['Firstname'],$_POST['Lastname'],$_POST['Codemelli'],$_POST['Role'], $_POST['SaleVorod']);
 	    		
 	    		if ($user)
 	    		{
@@ -44,7 +44,7 @@ class UserCreateController extends BaseControllerClass
     	$this->Autoform=$f;
     	return $this->Present();
     }
-    function CreateUser($Username,$Password,$Email,$Gender=0,$Firstname,$Lastname,$Codemelli,$Role='free')
+    function CreateUser($Username,$Password,$Email,$Gender=0,$Firstname,$Lastname,$Codemelli,$Role='free', $SaleVorod)
 	{
 		
 		if (ORM::Find("MyUser","Username",$Username))
@@ -56,7 +56,7 @@ class UserCreateController extends BaseControllerClass
 		{
 			return false;
 		}
-		$U=new MyUser($Username,$Password,$Gender,$Firstname,$Lastname,$Codemelli,$isReviewer,"",$Group);
+		$U=new MyUser($Username,$Password,$Gender,$Firstname,$Lastname,$Codemelli,$isReviewer,$Email,$Group, $SaleVorod);
 		
 		ORM::Write($U);
 		if ($U->ID())
@@ -70,7 +70,7 @@ class UserCreateController extends BaseControllerClass
 	}
     
 	
-    	function makeform(){
+    function makeform(){
 		$f=new AutoformPlugin("post");
 		$f->AddElement(
 				array(
@@ -121,6 +121,22 @@ class UserCreateController extends BaseControllerClass
 						"Name"=>"Codemelli",
 						'Value'=>$_POST['Codemelli']
 				));
+		$f->AddElement(
+				array(
+						"Type"=>"text",
+						"Label"=>"سال ورود",
+						"Name"=>"SaleVorod",
+						'Value'=>$_POST['SaleVorod']
+				));
+		$f->AddElement(
+				array(
+						"Type"=>"text",
+						"Label"=>"پست الکترونیک",
+						"Validation"=>"/^.+?@.+?$/",
+						"Name"=>"Email",
+						'Value'=>$_POST['Email']
+				));
+		
 		$f->AddElement(
 				array(
 						"Type"=>"select",

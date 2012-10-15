@@ -13,6 +13,7 @@ class Xuser extends User
 	 * @var string
 	 */
 	public $Email;	
+	function Email(){ return $this->Email; }
 	/**
 	 * @Column(type="integer")
 	 * @var integer

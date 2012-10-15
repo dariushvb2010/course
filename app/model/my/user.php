@@ -73,6 +73,12 @@ class MyUser extends Xuser
 	{
 		$this->gender=$iswoman;
 	}
+	/**
+	 * @Column(type="string")
+	 * @var string
+	 */
+	protected $SaleVorod;
+	function SaleVorod(){ return $this->SaleVorod; }
 	
 	/**
 	 * @OneToMany(targetEntity="CoursePoll", mappedBy="User")
@@ -134,7 +140,7 @@ class MyUser extends Xuser
 			return null;
 	}
 	
-	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$Codemelli="",$isReviewer=false,$Email="",$Group=null)
+	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$Codemelli="",$isReviewer=false,$Email="",$Group=null, $SaleVorod)
 	{
 		if ($Username)
 		{
@@ -142,6 +148,7 @@ class MyUser extends Xuser
 			$this->Firstname=$Firstname;
 			$this->gender=$Gender;
 			$this->Lastname=$Lastname;
+			$this->SaleVorod = $SaleVorod;
 			$this->SetGroup($Group);
 			$this->SetCodemelli($Codemelli);
 			$this->Setting= new ArrayCollection();

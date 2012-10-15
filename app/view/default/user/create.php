@@ -12,6 +12,7 @@
 </style>
 <div style="text-align: center">نام کاربری و رمز عبور خود را به خاطر داشته باشید</div>
 <?php $this->Autoform->PresentHTML();?>
+<div style="text-align: center">زمان کلاس بین یک ساعت تا یک و نیم ساعت می باشد</div>
 <script>
 <?php $this->Autoform->PresentScript();?>
 </script>
