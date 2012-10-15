@@ -12,11 +12,10 @@
 		if ($Extra)
 			echo $Extra;
 		?>
-		<link rel="shortcut icon" href="/img/logo2.png" />
+		<link rel="shortcut icon" href="/img/jlogo.png" />
 		<link rel="stylesheet" href="/style/base.css" />
 		<link rel="stylesheet" href="/style/print.css" />
 		
-		<link rel="stylesheet" href="/style/fileuploader.css" />
 		
 		<link rel="stylesheet" href="/script/calendar/skins/calendar-blue.css" />
 		
@@ -38,9 +37,7 @@
 		<script src='/script/jqueryui/ui/jquery.ui.progressbar.js'></script>
 		<script src='/script/jqueryui/ui/jquery.ui.tabs.js'></script>
 		<script src='/script/jqueryui/ui/jquery.ui.slider.js'></script>
-		<!--uploader-->
-		<script src='/script/fileuploader.js'></script>
-		<!--calender-->
+		
 		<script src='/script/calendar/calendar.js'></script>
 		<script src='/script/calendar/calendar-setup.js'></script>
 		<script src='/script/calendar/jalali.js'></script>
@@ -49,9 +46,6 @@
 	</head>
 	<body>
 		<a name='top'></a>
-		<?php  require_once 'blocks/inlinestyle.php';?>
-		<?php  require_once 'blocks/toptoolbar.php';?>
-		<?php CotagflowPlugin::PresentHTML();?>
 		<div id="body" class="bazbox">
 			<?php  require_once 'blocks/script.php';?>
 			<?php  require_once 'blocks/menublock.php';?>

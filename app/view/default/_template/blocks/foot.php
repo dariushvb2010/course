@@ -27,9 +27,5 @@
 					vertical-align: middle;"/>
 			 </a>
 	 </div>
-	 <div id="sherkat" >
-		کلیه حقوق معنوی این نرم افزار متعلق به 
-		<?php echo v::b(reg("app/sherkat/title"))?>
-		می باشد.
-	</div>
+	 
  </div>

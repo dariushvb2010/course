@@ -1,4 +1,6 @@
 <?php
+use Doctrine\Common\Cache\ArrayCache;
+
 use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity 
@@ -73,67 +75,11 @@ class MyUser extends Xuser
 	}
 	
 	/**
-	* @Column(type="integer")
-	* @var integer
-	* 0: Vacation: morakhasi
-	* 1: Work
-	* 2: Retired: بازنشست شده
-	*/
-	protected $State;
-	public function State()
-	{
-		$Real=array(0=>"Vacation",1=>"Work",2=>"Retired");
-		return $Real[$this->State];
-	}
-	public function getState(){ return $this->State; }
-	/**
-	 * کارشناس مرخصی است
-	 * @var integer
+	 * @OneToMany(targetEntity="CoursePoll", mappedBy="User")
+	 * @var CoursePoll
 	 */
-	const State_vacation = 0;
-	/**
-	 * کارشناس مشغول کار است
-	 * @var string
-	 */
-	const State_work = 1;
-	/**
-	 * کارشناس بازنشست شده و غیر فعال است
-	 * @var string
-	 */
-	const State_retired = 2;
-	/**
-	 * 
-	 * returns the state as a number
-	 * @return number
-	 */
-	public function Enabled()
-	{
-		return $this->State;
-	}
-	/**
-	 * 
-	 * set the state of the reviewer
-	 * @param string or integer $State
-	 */
-	public function SetState($State)
-	{
-		$Numeric=array("Vacation"=>0,"Work"=>1,"Retired"=>2);
-		if($this->State()!="Retired")
-		{
-			if(is_string($State))
-				$this->State=$Numeric[$State];
-			else 
-				$this->State=$State;
-		}
-	}
-	public function Enable()
-	{
-		$this->State=1;
-	}
-	public function Disable()
-	{
-		$this->State=2;
-	}
+	protected $CoursePoll;
+	function CoursePoll(){ return $this->CoursePoll;	}
 	/**
 	 * @ManyToOne(targetEntity="MyGroup", inversedBy="User")
 	 * @JoinColumn(name="Group1ID",referencedColumnName="ID", nullable=false)
@@ -168,68 +114,7 @@ class MyUser extends Xuser
 			if($g->Title() == $groupTitle)
 				return true;
 	}
-	/**
-	* @Column(type="boolean")
-	* @var boolean
-	*/
-	protected $isReviewer;
-	public function isReviewer()
-	{
-		return $this->isReviewer;
-	}
-	public function SetisReviewer($value)
-	{
-		$this->isReviewer=$value;
-	}
-	/**
-	 * @OneToMany(targetEntity="ReviewProgress", mappedBy="User")
-	 * @var ArrayCollection
-	 */
-	protected $Progress;
-	public function Progress()
-	{
-		return $this->Progress;
-	}
-	/**
-	 * 
-	 * @ManyToMany(targetEntity="AlarmFree", mappedBy="User")
-	 * All of the Alarms related to this user
-	 * @var ArrayCollection
-	 */
-	protected $AlarmFree;
-	public function AlarmFree()
-	{
-		return $this->AlarmFree;
-	}
-	public function AddAlarmFree($AlarmFree)
-	{
-		$this->AlarmFree[]=$AlarmFree;
-	}
-	/**
-	*
-	* @ManyToMany(targetEntity="ConfigAlarm", mappedBy="User")
-	* All of the Alarms related to this user
-	* @var ArrayCollection
-	*/
-	protected $ConfigAlarm;
-	public function ConfigAlarm()
-	{
-		return $this->ConfigAlarm;
-	}
-	public function AddConfigAlarm(ConfigAlarm $ConfigAlarm)
-	{
-		$this->ConfigAlarm[]=$ConfigAlarm;
-	}
-	/**
-	 * 
-	 * @OneToMany(targetEntity="Alarm", mappedBy="MotherUser")
-	 * @var ArrayCollectionOfAlarm
-	 */
-	protected $ChildAlarm;
-	public function ChildAlarm()
-	{
-		return $this->ChildAlarm;
-	}
+	
 	/**
 	*
 	* @OneToMany(targetEntity="MySetting", mappedBy="User")
@@ -248,46 +133,9 @@ class MyUser extends Xuser
 		else 
 			return null;
 	}
-	public function LegalGroups()
-	{
-		$Groups=ORM::Query("MyGroup")->GetAll();
-		if($Groups)
-		foreach($Groups as $G)
-		{
-			$t=$G->Title();
-			$per="AlarmTo".$t;
-			if(j::Check($per,$this->ID))
-			{
-				$res[]=$G;
-			}
-		}
-		return $res;
-	}
-	/**
-	*
-	* @param array_of_MyGroup $Groups
-	* @return all of users in Group param
-	*/
-	public static function UsersOfGroups($Groups)
-	{
-		if($Groups)
-		foreach($Groups as $G)
-		{
-			$t=$G->Title();
-			$per="AlarmTo".$t;
-			if(j::Check($per))
-			{
-				$Users=$G->User();
-				if($Users)
-				foreach ($Users as $User)
-				$res[]=$User;
-			}
-		}
-		return $res;
-	}
+	
 	public function __construct($Username=null,$Password=null,$Gender=0,$Firstname="",$Lastname="",$Codemelli="",$isReviewer=false,$Email="",$Group=null)
 	{
-		$this->Progress=new ArrayCollection();
 		if ($Username)
 		{
 			parent::__construct($Username,$Password,$Email);
@@ -295,22 +143,11 @@ class MyUser extends Xuser
 			$this->gender=$Gender;
 			$this->Lastname=$Lastname;
 			$this->SetGroup($Group);
-			$this->SetisReviewer($isReviewer);
 			$this->SetCodemelli($Codemelli);
-			$this->State=1;
 			$this->Setting= new ArrayCollection();
+			$this->CoursePoll = new ArrayCollection();
 		}
 	}	
-	public static $PersianRoles=array(
-		"root"=>"مدیر اصلی",
-		"Review"=>"بازبینی",
-		"Review_CotagBook"=>"دفتر کوتاژ",
-		"Review_Raked"=>"بایگانی راکد",
-		"Review_Correspondence"=>"مکاتبات",
-		"Review_Archive"=>"بایگانی بازبینی",
-		"Review_Reviewer"=>"کارشناسان",
-		"Review_Admin"=>"مدیر"
-	);
 	
 	function getFullName(){
 		return $this->Gender()." ".$this->Firstname." ".$this->Lastname();
@@ -327,21 +164,6 @@ class MyUser extends Xuser
 	{
 		$s = ORM::Find("MyUser",$UserID);
 		return $s;
-	}
-	
-	function RecentProgresses($count){
-		return ORM::Query($this)->RecentProgresses($this,$count);
-	}
-	
-	/**
-	 * @return array of ReviewFile
-	 */
-	function AssignedReviewableFile(){
-		return ORM::Query(new MyUser)->AssignedReviewableFile($this);
-	}
-
-	function AssignedReviewableFileCount(){
-		return ORM::Query($this)->AssignedReviewableFileCount($this);
 	}
 }
 
@@ -361,155 +183,6 @@ class MyUserRepository extends EntityRepository
 	public function getUserByID($ID)
 	{
 		return j::ODQL("SELECT U FROM MyUser U WHERE U.ID=?",$ID);
-	}
-	public function getReviewerCount()
-	{
-		$r=j::DQL("SELECT COUNT(U) AS Result FROM MyUser AS U WHERE U.isReviewer=1 AND U.State=1");
-		return $r[0]['Result'];
-	}
-	public function getRandomReviewer()
-	{
-		$Reviewers=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=1");
-		if($Reviewers)
-			foreach($Reviewers as $R)
-			{
-				$ar[]=$R->AssignedReviewableFileCount();
-			}
-		$test=array();
-		for($t=0;$t<300;$t++){
-			$ind=$this->chooseRandom($ar);
-			$test[$ind]++;
-		}
-		//foreach ($test as $key=>$vlue){
-		//	echo $Reviewers[$key]->getFullName().' '.$vlue.'   #'.$ar[$key].'  ^'.round($ar[$key]*$vlue/100).BR;
-		//}
-		$Chosen=$Reviewers[$ind];
-		return $Chosen;		
-	}
-	
-	private function chooseRandom($Input){
-		$pivot=max($Input);
-		$sorted=$Input;
-		rsort($sorted);
-		$VIP=array_slice($sorted,0,round(count($sorted)/3));
-		foreach($Input as $W){
-			$W2=pow(($pivot-$W),2);
-			if(in_array($W,$VIP))
-				$W2=1;
-			
-			$RS[]=$W2;
-		}
-		$sum=array_sum($RS);
-		$Rand=mt_rand(0,$sum);
-		foreach ($RS as $k=>$v){
-			$Rand-=$v;
-			if($Rand<=0){
-				return $k;
-			}
-		}
-		return -1;
-	}
-
-	public function Reviewers($State1="*",$State2=".")
-	{
-		if($State1==='*'){
-			$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1");
-		}elseif($State2==='.'){
-			$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND U.State=?",$State1);
-		}else{
-			$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=1 AND (U.State=? OR U.State=?)",$State1, $State2);
-		}
-		if(empty($r))
-			return null;
-		else
-			return $r;
-	}
-	public function GetNotReviewers()
-	{
-		$r=j::ODQL("SELECT U FROM MyUser U WHERE U.isReviewer=0");
-		if(empty($r))
-			return null;
-		else
-			return $r;
-	}
-	public function ReviewersCount($State="*")
-	{
-		if($State==='*'){
-			$c=j::ODQL("SELECT COUNT(U) FROM MyUser U WHERE U.isReviewer=1");
-		}else{
-			$c=j::ODQL("SELECT COUNT(U) FROM MyUser U WHERE U.isReviewer=1 AND U.State=?",$State);
-		}
-		return $c[0][1];
-	}
-	
-	/**
-	 * 
-	 * @param MyUser $Reviewer
-	 * @return array of ReviewFile
-	 */
-	public function AssignedReviewableFile($Reviewer)
-	{
-		$states=FsmGraph::Name2State('reviewing');
-		$stateString=implode(',', $states);
-		
-		$r=j::ODQL("SELECT F,P FROM ReviewProgressAssign AS P JOIN P.File AS F 
-					WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString}) ORDER BY P.CreateTimestamp",$Reviewer);
-		
-		foreach($r as $item){
-			$files[]=$item->File();
-		}
-		return $files;
-	}
-	public function AssignedReviewableFileCount($Reviewer){
-		$states=FsmGraph::Name2State('reviewing');
-		$stateString=implode(',', $states);
-		$r=j::DQL("SELECT count(F) as co FROM ReviewProgressAssign AS P JOIN P.File AS F
-				WHERE P.Reviewer=? AND P.Dead=0 AND F.State IN ({$stateString}) ORDER BY P.CreateTimestamp",$Reviewer);
-		return $r[0]['co'];
-	}
-	public function AssignedReviewableDossier($Reviewer)
-	{
-		$r=j::ODQL("SELECT F,P FROM ReviewProcessAssign AS P JOIN P.File AS F WHERE P.Reviewer=? AND
-			P.CreateTimestamp=(SELECT MAX(P2.CreateTimestamp) FROM ReviewProgress AS P2 WHERE P2.File=F)
-			",$Reviewer);
-		foreach($r as $item){
-			$files[]=$item->File();
-		}
-		return $files;
-	}
-	
-	/**
-	 * 
-	 * all Progresses user created
-	 * @param MyUser $User
-	 * @return array of ReviewProgress
-	 * @author Morteza Kavakebi
-	 */
-	public function RecentProgresses(MyUser $User,$count)
-	{
-		//TODO think more
-		//TODO: where file and type must be added
-		$r=j::ODQL("SELECT P FROM ReviewProgress AS P WHERE P.User=? ORDER BY P.ID DESC LIMIT {$count}",$User);
-		return $r;
-	}
-	
-	/**
-	 * 
-	 * Count of Progresses user created
-	 * @param MyUser $User
-	 * @return integer
-	 * @author Morteza Kavakebi
-	 */
-	public function CountProgresses(MyUser $User)
-	{
-		//TODO think more
-		//TODO: where file and type must be added
-		$r=j::ODQL("SELECT Count(P) as co FROM ReviewProgress AS P WHERE P.User=?",$User);
-		if(isset($r[0]['co'])){
-			return $r[0]['co'];
-		}else{
-			return null;
-		}
 	}
 	
 }

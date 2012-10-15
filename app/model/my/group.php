@@ -20,13 +20,6 @@ class MyGroup
 		return $this->ID;
 	}
 	const Title_Admin = 'Admin';
-	const Title_Archive = 'Archive';
-	const Title_CotagBook = 'CotagBook';
-	const Title_Raked = 'Raked';
-	const Title_Reviewer = 'Reviewer';
-	const Title_Correspondence = 'Correspondence';
-	const Title_Typist = 'Typist';
-	const Title_Nazer = 'Nazer';
 	/**
 	 * @Column(type="string", unique=true)
 	 * @var string
@@ -71,60 +64,6 @@ class MyGroup
     {
         return $this->User;
     }
-	/**
-	*
-	* @ManyToMany(targetEntity="AlarmFree", mappedBy="Group")
-	* @var AlarmFree
-	*/
-	protected $AlarmFree;
-	function AlarmFree()
-	{
-		return $this->AlarmFree;
-	}
-	public function AddAlarmFree($AlarmFree)
-	{
-		$this->AlarmFree[]=$AlarmFree;
-	}
-	/**
-	*
-	* @ManyToMany(targetEntity="ConfigAlarm", mappedBy="Group")
-	* @var ConfigAlarm
-	*/
-	protected $ConfigAlarm;
-	function ConfigAlarm()
-	{
-		return $this->ConfigAlarm;
-	}
-	public function AddConfigAlarm(ConfigAlarm $ConfigAlarm)
-	{
-		$this->ConfigAlarm[]=$ConfigAlarm;
-	}
-	/**
-	 * Mails given by this group
-	* @OneToMany(targetEntity="MailGive", mappedBy="GiverGroup")
-	* @var arrayCollectionOfMailGive
-	*/
-	protected $MailGive;
-	function MailGive(){ return $this->MailGive;}
-	/**
-	 * Mails got by this group
-	* @OneToMany(targetEntity="MailGive", mappedBy="GetterGroup")
-	* @var arrayCollectionOfMailGive
-	*/
-	protected $MailGet;
-	function MailGet(){ return $this->MailGet;}
-	/**
-	* @OneToMany(targetEntity="MailReceive", mappedBy="ReceiverGroup")
-	* @var arrayCollectionOfMailReceive
-	*/
-	protected $MailReceive;
-	function MailReceive(){ return $this->MailReceive; }
-	/**
-	* @OneToMany(targetEntity="MailSend", mappedBy="SenderGroup")
-	* @var arrayCollectionOfMailSend
-	*/
-	protected $MailSend;
-	function MailSend(){ return $this->MailSend; }
 	
 	function __construct($Title=null, $PersianTitle=null, $Description=null)
 	{
@@ -132,26 +71,6 @@ class MyGroup
 			$this->PersianTitle=$PersianTitle;
 			$this->Description=$Description;
 			$this->User=new ArrayCollection();
-			$this->MailReceive=new ArrayCollection();
-			$this->MailSend=new ArrayCollection();
-			$this->MailGive=new ArrayCollection();
-			$this->MailGet= new ArrayCollection();
-	}
-	static function Archive()
-	{
-		return ORM::Find1("MyGroup", "Title", "Archive");
-	}
-	static function CotagBook()
-	{
-		return ORM::Find1("MyGroup", "Title", "CotagBook");
-	}
-	static function Raked()
-	{
-		return ORM::Find1("MyGroup", "Title", "Raked");
-	}
-	static function Correspondence()
-	{
-		return ORM::Find1("MyGroup", "Title", "Correspondence");
 	}
 	static function GetGroup($GroupName)
 	{
@@ -185,13 +104,6 @@ class MyGroupRepository extends EntityRepository
 			return $G;
 		}
 	
-	}
-	/**
-	 * get the roles from rbac_role table
-	 */
-	public function Refresh()
-	{
-		
 	}
 	public function GetAll()
 	{

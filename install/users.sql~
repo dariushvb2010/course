@@ -33,8 +33,8 @@ INSERT INTO `app_MyGroup` (`ID`, `Title`, `PersianTitle`, `Description`) VALUES
 --
 -- Dumping data for table `app_MyUser`
 --
-INSERT INTO `app_MyUser` (`Firstname`, `Lastname`, `Group1ID`, `ID`, `gender`, `Codemelli`) VALUES
-('عباس', 'نادری', 1, 2, 0, '');
+INSERT INTO `app_MyUser` (`Firstname`, `Lastname`, `State`, `isReviewer`, `Group1ID`, `ID`, `gender`, `Codemelli`) VALUES
+('عباس', 'نادری', 1, 1, 1, 2, 0, '');
 
 
 

@@ -21,6 +21,7 @@ input[type="text"],input[type="password"] {
 	margin:auto;
 	text-align:center;
 	width:300px;
+	background:#ccc;
 }
 #body{
 	background-image:url('/img/Iran_flag2.png');
@@ -33,14 +34,14 @@ form#login {
 	background-image:url('/img/bg_login_form.png');
 	-moz-border-radius:5px;
 }
-
+div#body{background:white;}
 </style>
-<div id="background_container">
-<img src="/img/logo2.png" style="width:70px; float:right;"/>
+<div id="background_container" >
+<img src="/img/browsers.png" style="width:250px; float:right;"/>
 <div id="login_container" dir='rtl'>
 
 <form id="login" method="post">
-	<strong>ورود به <?php echo reg("app/title");?></strong>
+	<strong>ورود به سامانه</strong>
 	<br/>
 	<?php if (isset($this->Result) and !$this->Result)
 	{

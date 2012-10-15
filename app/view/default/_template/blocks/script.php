@@ -1,5 +1,4 @@
 <script>
-<?php CotagflowPlugin::PresentScript();?>
 $("div#top>div#topright span").mouseover(function(){
 	$(this).find("img.off").hide();
 	$(this).find("img.on").show();
@@ -28,57 +27,9 @@ $(function() {
 		}
 	});
 	$("#homeMenu").click(function(){ document.location='<?php echo SiteRoot;?>';});
-	$("#archiveMenu").button({
+	$("#serviceMenu").button({
 		icons: {
-			secondary: "ui-icon-folder-collapsed",
-				primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#cotagMenu").button({
-		icons: {
-			secondary: "ui-icon-grip-dotted-vertical",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#scanMenu").button({
-		icons: {
-			secondary: "ui-icon-grip-dotted-vertical",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#reviewMenu").button({
-		icons: {
-			secondary: "ui-icon-search",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#correspondenceMenu").button({
-		icons: {
-			secondary: "ui-icon-note",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#TypistMenu").button({
-		icons: {
-			secondary: "ui-icon-note",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#staticArchiveMenu").button({
-		icons: {
-			secondary: "ui-icon-trash",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#ManagerMenu").button({
-		icons: {
-			secondary: "ui-icon-star",
-			primary: "ui-icon-triangle-1-s"
-		}
-	});
-	$("#reportMenu").button({
-		icons: {
-			secondary: "ui-icon-gear",
+			secondary: "ui-icon-help",
 			primary: "ui-icon-triangle-1-s"
 		}
 	});

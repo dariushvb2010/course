@@ -7,9 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="Type", type="string")
  * @DiscriminatorMap({"Base"="Config",
- * 	"Main"="ConfigMain",
- * 	"Alarm"="ConfigAlarm",
- * 	"Event"="ConfigEvent"
+ * 	"Main"="ConfigMain"
  * })
  * */
 abstract class Config

@@ -121,7 +121,6 @@ class ApplicationController extends BasejFrameworkApplicationController
 		$this->LoadCustomSystemModule ( "model.j", "." ); //j:: helper
 		j::__Initialize ( $this );
 		$this->LoadCustomSystemModule ( "model.functions", "." ); //functions helper
-		b::__Initialize();
 		
 	}
 	protected function LoadFundamentalConfiguration()
