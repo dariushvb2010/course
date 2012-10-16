@@ -76,6 +76,7 @@
 			</a>
 		</li>
 	</ul>
+<?php if (j::Check("MasterHand")) :?>
 	<button class='mymenu' id='managerMenu'>مدیریت</button>
 	<ul class='menu' style='width:160px;display: none;'>
 		<li>
@@ -85,6 +86,7 @@
 			</a>
 		</li>
 	</ul>
+<?php endif;?>
 	<button class='mymenu' id='helpMenu'>راهنما</button>
 	<ul class='menu' style='width:160px;display: none;'>
 		<li>
