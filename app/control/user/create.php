@@ -126,6 +126,7 @@ class UserCreateController extends BaseControllerClass
 						"Type"=>"text",
 						"Label"=>"سال ورود",
 						"Name"=>"SaleVorod",
+						'Validation'=>'/^(13)?\d{2}$/',
 						'Value'=>$_POST['SaleVorod']
 				));
 		$f->AddElement(
