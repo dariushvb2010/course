@@ -76,6 +76,15 @@
 			</a>
 		</li>
 	</ul>
+	<button class='mymenu' id='managerMenu'>مدیریت</button>
+	<ul class='menu' style='width:160px;display: none;'>
+		<li>
+			<a href='/report/users'>
+				<span class='ui-icon-help ui-icon'></span>
+				کاربران
+			</a>
+		</li>
+	</ul>
 	<button class='mymenu' id='helpMenu'>راهنما</button>
 	<ul class='menu' style='width:160px;display: none;'>
 		<li>

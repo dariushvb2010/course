@@ -39,6 +39,12 @@ $(function() {
 			primary: "ui-icon-triangle-1-s"
 		}
 	});
+	$("#managerMenu").button({
+		icons: {
+			secondary: "ui-icon-help",
+			primary: "ui-icon-triangle-1-s"
+		}
+	});
 	$("#extraMenu").button({
 		icons: {
 			secondary: "ui-icon-locked",
