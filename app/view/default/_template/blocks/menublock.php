@@ -85,6 +85,12 @@
 				کاربران
 			</a>
 		</li>
+		<li>
+			<a href='/manager/news'>
+				<span class='ui-icon-help ui-icon'></span>
+			مدیریت اخبار
+			</a>
+		</li>
 	</ul>
 <?php endif;?>
 	<button class='mymenu' id='helpMenu'>راهنما</button>

@@ -11,7 +11,7 @@ class ReportUsersController extends BaseControllerClass
     	//$al->SetHeader('Select', 'انتخاب');
     	$al->SetHeader('FirstName', 'نام');
     	$al->SetHeader('LastName', 'نام خانوادگی');
-    	$al->SetHeader('SaleVorod', 'سال ورود');
+    	$al->SetHeader('CodeMelli', 'شماره دانشجویی');
     	$al->SetHeader('Email', 'پست الکترونیک');
     	$this->List = $al;
     	return $this->Present();
